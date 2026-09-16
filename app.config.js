@@ -60,6 +60,7 @@ export default {
                     extraProguardRules:
                         "-keep class com.facebook.hermes.unicode.** { *; }",
                     enable16KbPageSizes: true,
+                    enableMinifyInReleaseBuilds: true,
                 },
             },
         ],
@@ -101,3 +102,4 @@ export default {
     owner: "kolybrilab",
     githubUrl: "https://github.com/Kolybri-Lab/EcoleDirectePlus-Mobile",
 };
+
