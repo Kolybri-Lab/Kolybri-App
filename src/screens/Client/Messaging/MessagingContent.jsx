@@ -309,7 +309,7 @@ const MessageItem = memo(({ item, index, navigation, messages, token }) => {
                 })
             }
             style={{
-                backgroundColor: colors.secondary,
+                backgroundColor: colors.surface.card,
                 paddingVertical: 16,
                 paddingHorizontal: 18,
                 flexDirection: "row",

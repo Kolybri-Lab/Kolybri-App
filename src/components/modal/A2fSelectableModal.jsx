@@ -36,10 +36,10 @@ export default function A2fSelectableModal({
                 <View
                     style={[
                         styles.renderItemRadioButton,
-                        { borderColor: colors.border },
+                        { borderColor: colors.border.strong },
                         selectedItem === item && {
-                            backgroundColor: colors.secondary,
-                            borderColor: colors.secondary,
+                            backgroundColor: colors.surface.card,
+                            borderColor: colors.surface.card,
                         },
                     ]}
                 />
@@ -47,7 +47,7 @@ export default function A2fSelectableModal({
             <Text
                 size={16}
                 weight={selectedItem === item && "bold"}
-                color={colors.main}
+                color={colors.brand.primary}
             >
                 {item}
             </Text>
@@ -66,7 +66,7 @@ export default function A2fSelectableModal({
                     style={[
                         styles.modalContent,
                         {
-                            backgroundColor: colors.bg.bg3,
+                            backgroundColor: colors.surface.raised,
                         },
                     ]}
                 >
@@ -75,7 +75,7 @@ export default function A2fSelectableModal({
                             styles.a2fText,
                             {
                                 backgroundColor: addOpacityToCssRgb(
-                                    colors.bg.bg1,
+                                    colors.surface.muted,
                                     0.5
                                 ),
                             },
@@ -87,7 +87,7 @@ export default function A2fSelectableModal({
                         style={[
                             styles.a2fTextInfo,
                             {
-                                color: colors.main,
+                                color: colors.brand.primary,
                             },
                         ]}
                     >
@@ -113,7 +113,7 @@ export default function A2fSelectableModal({
                             styles.buttonsContainer,
                             {
                                 backgroundColor: addOpacityToCssRgb(
-                                    colors.bg.bg1,
+                                    colors.surface.muted,
                                     0.5
                                 ),
                             },
@@ -127,7 +127,10 @@ export default function A2fSelectableModal({
                             style={styles.button}
                         >
                             <Text
-                                style={[styles.buttonText, { color: colors.main }]}
+                                style={[
+                                    styles.buttonText,
+                                    { color: colors.brand.primary },
+                                ]}
                             >
                                 Annuler
                             </Text>
@@ -140,7 +143,7 @@ export default function A2fSelectableModal({
                                 style={[
                                     styles.buttonSubmit,
                                     {
-                                        backgroundColor: colors.border,
+                                        backgroundColor: colors.brand.primary,
                                     },
                                 ]}
                             >

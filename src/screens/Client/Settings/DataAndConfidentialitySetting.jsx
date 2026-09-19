@@ -2,7 +2,9 @@ import { DropDownMenu, Section, Text } from "@/components";
 import { Key } from "@/components/svg";
 import { downloadCustomData } from "@/helpers/documents/customDataAction";
 import { useCustomDataStore } from "@/hooks/useCustomDataStore";
+import { useTheme } from "@/hooks/useThemeStore";
 import { useUserStore } from "@/hooks/useUserStore";
+import { withAlpha } from "@/themes/color";
 import { Check, Download } from "lucide-react-native";
 import { useCallback, useState } from "react";
 import { Alert, Pressable, View } from "react-native";
@@ -21,7 +23,7 @@ export default function DataAndConfidentialityScreen({ route }) {
         name: "Devoirs personnalisés",
     });
     const [buttonState, setButtonState] = useState(BUTTON_STATE.IDLE);
-
+    const { colors } = useTheme();
     const customHomeworks = useCustomDataStore((state) => state.customHomeworks);
     const simulatedGrades = useCustomDataStore((state) => state.simulatedGrades);
     const token = useUserStore((state) => state.token);
@@ -160,10 +162,16 @@ export default function DataAndConfidentialityScreen({ route }) {
                         label={
                             token.slice(0, Math.ceil(token.length / 2)) + "********"
                         }
-                        icon={<Key fill={"white"} size={26} />}
+                        icon={
+                            <Key
+                                fill={withAlpha(colors.text.primary, 0.3)}
+                                size={26}
+                            />
+                        }
                     />
                 </View>
             </View>
         </SettingSectionLayout>
     );
 }
+

@@ -78,7 +78,7 @@ const GradeCard = ({ disciplineColor, disciplineName, data, index, count }) => {
         <View
             style={[
                 {
-                    backgroundColor: colors.secondary,
+                    backgroundColor: colors.surface.card,
                     borderRadius: 4,
                     width: 120,
                     height: 70,

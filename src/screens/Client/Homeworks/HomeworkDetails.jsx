@@ -64,9 +64,9 @@ export default function HomeworkDetails({ route }) {
 
     const baseStyle = useMemo(
         () => ({
-            color: colors.contrast,
+            color: colors.text.primary,
         }),
-        [colors.contrast]
+        [colors.text.primary]
     );
 
     const HomeworkHTML = useMemo(
@@ -96,7 +96,7 @@ export default function HomeworkDetails({ route }) {
     );
 
     return (
-        <View style={{ backgroundColor: colors.background.gradient[1], flex: 1 }}>
+        <View style={{ backgroundColor: colors.background.base, flex: 1 }}>
             <DocumentModal
                 visible={modalsHander.document[0]}
                 setVisible={modalsHander.document[1]}
@@ -112,9 +112,6 @@ export default function HomeworkDetails({ route }) {
             <View
                 style={{
                     flex: 1,
-                    /*backgroundColor: Array.isArray(colors.background.gradient)
-                        ? colors.background.gradient[0]
-                        : colors.background.gradient,*/
                     marginHorizontal: 20,
                     marginBottom: 110,
                 }}
@@ -144,7 +141,7 @@ export default function HomeworkDetails({ route }) {
 
                     <View
                         style={{
-                            backgroundColor: colors.secondary,
+                            backgroundColor: colors.surface.card,
                             flex: 1,
                             padding: 25,
                             borderRadius: 21,
@@ -198,7 +195,7 @@ export default function HomeworkDetails({ route }) {
                                     <TouchableOpacity
                                         style={{
                                             flex: 1,
-                                            backgroundColor: colors.secondary,
+                                            backgroundColor: colors.surface.card,
                                             borderRadius: 12,
                                             justifyContent: "center",
                                         }}
@@ -209,7 +206,7 @@ export default function HomeworkDetails({ route }) {
                                         <Text
                                             align="center"
                                             preset="label2"
-                                            color={colors.bg.bg5}
+                                            color={colors.brand.accent}
                                         >
                                             Documents (
                                             {
@@ -223,7 +220,7 @@ export default function HomeworkDetails({ route }) {
                                 <TouchableOpacity
                                     style={{
                                         flex: 1,
-                                        backgroundColor: colors.secondary,
+                                        backgroundColor: colors.surface.card,
                                         borderRadius: 12,
                                         justifyContent: "center",
                                     }}
@@ -234,7 +231,7 @@ export default function HomeworkDetails({ route }) {
                                     <Text
                                         align="center"
                                         preset="label2"
-                                        color={colors.bg.bg5}
+                                        color={colors.brand.accent}
                                     >
                                         Contenu séance
                                     </Text>

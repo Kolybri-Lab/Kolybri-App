@@ -98,7 +98,7 @@ export default function DocumentModal({
                     <View
                         style={{
                             backgroundColor:
-                                prog !== null ? "transparent" : colors.bg?.bg1,
+                                prog !== null ? "transparent" : colors.surface.card,
                             padding: 10,
                             borderRadius: 9,
                             flexDirection: "row",
@@ -109,12 +109,12 @@ export default function DocumentModal({
                             <Text preset="label2">{libelle}</Text>
                             <Text preset="label3">{assignUnit(size)}</Text>
                         </View>
-                        <File fill={colors.contrast} size={25} extention={ext} />
+                        <File fill={colors.text.primary} size={25} extention={ext} />
                     </View>
                 </TouchableOpacity>
             );
         },
-        [colors.bg?.bg1, colors.contrast, downloadProgress, userAccessToken]
+        [colors.surface.card, colors.text.primary, downloadProgress, userAccessToken]
     );
 
     const onClose = () => {
@@ -132,7 +132,7 @@ export default function DocumentModal({
             </Text>
             <Text
                 preset="label3"
-                color={colors?.txt?.txt3}
+                color={colors?.text?.secondary}
                 style={{ marginBottom: 6 }}
             >
                 Note du dev: maintenir pour télécharger

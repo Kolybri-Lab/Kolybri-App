@@ -9,7 +9,7 @@ export default function Separation({ color }) {
             <View
                 style={[
                     UiStyles.separationChildren,
-                    { backgroundColor: color ? color : colors.contrast },
+                    { backgroundColor: color ? color : colors.text.primary },
                 ]}
             />
         </View>

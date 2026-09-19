@@ -1,3 +1,5 @@
+import { useTheme } from "@/hooks/useThemeStore";
+import { withAlpha } from "@/themes/color";
 import { useEffect } from "react";
 import { Pressable } from "react-native";
 import Animated, {
@@ -10,7 +12,7 @@ import Animated, {
 
 export default function Switch({ value, onValueChange }) {
     const transitionProgress = useSharedValue(value ? 1 : 0);
-
+    const { colors } = useTheme();
     useEffect(() => {
         transitionProgress.value = withTiming(value ? 1 : 0, {
             duration: 200,
@@ -18,11 +20,14 @@ export default function Switch({ value, onValueChange }) {
         });
     }, [value]);
 
+    const trackColorInactive = withAlpha(colors.surface.simpleOpacity, 0.1);
+    const trackColorActive = withAlpha(colors.surface.simpleOpacity, 0.4);
+
     const trackStyle = useAnimatedStyle(() => ({
         backgroundColor: interpolateColor(
             transitionProgress.value,
             [0, 1],
-            ["hsla(0, 0%, 100%, 0.1)", "hsla(0, 0%, 100%, .4)"]
+            [trackColorInactive, trackColorActive]
         ),
     }));
 
@@ -59,3 +64,4 @@ export default function Switch({ value, onValueChange }) {
         </Pressable>
     );
 }
+

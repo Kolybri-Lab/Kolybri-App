@@ -22,7 +22,7 @@ export default function ActiveCourseCard({
     const { inClass, nextCourseKnown } = activeStatus || {};
 
     const message = nextCourseKnown ? "EN COURS" : "DERNIER COURS CONNU";
-    const color = nextCourseKnown ? colors.main : "hsla(295, 64%, 71%, 1)";
+    const color = nextCourseKnown ? colors.brand.primary : "hsla(295, 64%, 71%, 1)";
     const extras = inClass ? [] : [{ resizeBars: true }];
 
     return (
@@ -40,7 +40,7 @@ export default function ActiveCourseCard({
                         <View
                             style={{
                                 backgroundColor: addOpacityToCssRgb(
-                                    colors.main,
+                                    colors.brand.primary,
                                     0.9
                                 ),
                                 width: 6,
@@ -49,7 +49,7 @@ export default function ActiveCourseCard({
                             }}
                         />
                         <Text
-                            color={addOpacityToCssRgb(colors.main, 0.9)}
+                            color={addOpacityToCssRgb(colors.brand.primary, 0.9)}
                             style={{ fontFamily: "SemiBold", fontSize: 16 }}
                         >
                             {isLast ? "DERNIER COURS DE LA JOURNÉE !" : message}
@@ -87,7 +87,7 @@ export default function ActiveCourseCard({
                             }}
                         >
                             <Text
-                                color={addOpacityToCssRgb(colors.main, 0.9)}
+                                color={addOpacityToCssRgb(colors.brand.primary, 0.9)}
                                 style={{ fontFamily: "SemiBold", fontSize: 16 }}
                             >
                                 PROCHAIN COURS
@@ -136,7 +136,7 @@ const Course = ({ data }) => {
                     padding: 10,
                     alignItems: "center",
                     width: 65,
-                    backgroundColor: colors.secondary,
+                    backgroundColor: colors.surface.card,
                     borderTopLeftRadius: 16,
                     borderTopRightRadius: 4,
                     borderBottomLeftRadius: 0,
@@ -151,7 +151,7 @@ const Course = ({ data }) => {
                         flex: 1,
                         width: 2,
                         borderRadius: 2,
-                        backgroundColor: colors.contrast,
+                        backgroundColor: colors.text.primary,
                         marginVertical: -2,
                     }}
                 />
@@ -161,7 +161,7 @@ const Course = ({ data }) => {
             </View>
             <View
                 style={{
-                    backgroundColor: colors.secondary,
+                    backgroundColor: colors.surface.card,
                     flex: 1,
                     paddingHorizontal: 18,
                     paddingVertical: 10,
@@ -179,7 +179,7 @@ const Course = ({ data }) => {
                     }}
                 >
                     <Text
-                        color={addOpacityToCssRgb(colors.contrast, 0.9)}
+                        color={addOpacityToCssRgb(colors.text.primary, 0.9)}
                         oneLine
                         style={{ flexShrink: 1, fontFamily: "Bold", fontSize: 18 }}
                     >
@@ -194,13 +194,13 @@ const Course = ({ data }) => {
                     >
                         <BackArrow
                             props={{ transform: [{ rotate: "180deg" }] }}
-                            fill={addOpacityToCssRgb(colors.contrast, 0.9)}
+                            fill={addOpacityToCssRgb(colors.text.primary, 0.9)}
                             size={22}
                         />
                         <Text
                             style={{
                                 flexShrink: 1,
-                                color: addOpacityToCssRgb(colors.contrast, 0.9),
+                                color: addOpacityToCssRgb(colors.text.primary, 0.9),
                                 fontFamily: "SemiBold",
                                 fontSize: 16,
                             }}
@@ -212,9 +212,9 @@ const Course = ({ data }) => {
                 <View style={{ justifyContent: "space-between", marginBottom: 7 }}>
                     <ProgressBar
                         progression={progression}
-                        color={addOpacityToCssRgb(colors.main, 0.85)}
+                        color={addOpacityToCssRgb(colors.brand.primary, 0.85)}
                         style={{
-                            backgroundColor: addOpacityToCssRgb(colors.main, 0.25),
+                            backgroundColor: addOpacityToCssRgb(colors.brand.primary, 0.25),
                             height: 10,
                         }}
                     />
@@ -242,7 +242,7 @@ const NextCourse = ({ data }) => {
                     paddingVertical: 10,
                     alignItems: "center",
                     width: 65,
-                    backgroundColor: colors.secondary,
+                    backgroundColor: colors.surface.card,
                     borderTopLeftRadius: inClass ? 0 : 16,
                     borderTopRightRadius: inClass ? 0 : 4,
                     borderBottomLeftRadius: 16,
@@ -257,7 +257,7 @@ const NextCourse = ({ data }) => {
                         flex: 1,
                         width: 2,
                         borderRadius: 2,
-                        backgroundColor: colors.contrast,
+                        backgroundColor: colors.text.primary,
                         marginVertical: -2,
                     }}
                 />
@@ -271,7 +271,7 @@ const NextCourse = ({ data }) => {
                     paddingLeft: 16,
                     paddingRight: 14,
                     flex: 1,
-                    backgroundColor: colors.secondary,
+                    backgroundColor: colors.surface.card,
                     borderTopLeftRadius: inClass ? 0 : 4,
                     borderTopRightRadius: inClass ? 0 : 16,
                     borderBottomLeftRadius: 4,
@@ -334,7 +334,7 @@ const AnyCourse = () => {
             style={{
                 width: "100%",
                 minHeight: 90,
-                backgroundColor: colors.secondary,
+                backgroundColor: colors.surface.card,
                 borderRadius: 16,
                 paddingVertical: 18,
                 paddingHorizontal: 20,
@@ -348,7 +348,7 @@ const AnyCourse = () => {
                     width: 48,
                     height: 48,
                     borderRadius: 24,
-                    backgroundColor: addOpacityToCssRgb(colors.main, 0.15),
+                    backgroundColor: addOpacityToCssRgb(colors.brand.primary, 0.15),
                     alignItems: "center",
                     justifyContent: "center",
                     flexShrink: 0,
@@ -367,7 +367,7 @@ const AnyCourse = () => {
                     Aucun cours pour le moment
                 </Text>
                 <Text
-                    color={addOpacityToCssRgb(colors.contrast, 0.6)}
+                    color={addOpacityToCssRgb(colors.text.primary, 0.6)}
                     style={{ fontFamily: "Medium", fontSize: 14 }}
                 >
                     Profites-en pour souffler un peu 😌

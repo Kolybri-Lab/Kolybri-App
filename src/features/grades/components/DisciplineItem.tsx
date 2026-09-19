@@ -117,9 +117,9 @@ export default function DisciplineItem({
         { label: "Min", value: discipline.averageDatas?.minAverage },
     ];
 
-    const mainColor = colors?.secondary ?? "hsla(240, 11%, 20%, 1.00)";
-    const secondaryColor = colors?.secondary ?? "hsl(240, 27%, 16%)";
-    const txt1Color = colors?.contrast ?? colors?.txt?.txt1 ?? "#FFFFFF";
+    const mainColor = colors?.surface?.card ?? "hsla(240, 11%, 20%, 1.00)";
+    const secondaryColor = colors?.surface?.card ?? "hsl(240, 27%, 16%)";
+    const txt1Color = colors?.text?.primary ?? colors?.text?.primary ?? "#FFFFFF";
 
     const boxStyle = {
         backgroundColor: addOpacityToCssRgb(mainColor, 0.3),

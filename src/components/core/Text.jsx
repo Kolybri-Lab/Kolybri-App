@@ -182,7 +182,7 @@ export default function Text({
             align,
             decoration || "",
             inline ? "inline" : "",
-            colors.txt?.txt1 || colors.text || "#000",
+            colors.text.primary || "#000000",
         ]
             .filter(Boolean)
             .join("-");
@@ -194,7 +194,6 @@ export default function Text({
         align,
         decoration,
         inline,
-        colors.txt,
         colors.text,
         styleProp,
     ]);
@@ -206,7 +205,7 @@ export default function Text({
         }
 
         const flattenedProp = StyleSheet.flatten(styleProp) || {};
-        const defaultColor = colors.txt?.txt1 || colors.text || "#000000";
+        const defaultColor = colors.text.primary || "#000000";
 
         let dynamicStyle;
 
@@ -254,7 +253,6 @@ export default function Text({
         decoration,
         inline,
         styleProp,
-        colors.txt,
         colors.text,
     ]);
 

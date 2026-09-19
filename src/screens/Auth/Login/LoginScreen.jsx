@@ -31,7 +31,7 @@ import { EyeClosedIcon, EyeIcon } from "lucide-react-native";
 export default function LoginScreen() {
     const navigation = useNavigation();
     const theme = useTheme();
-    const caseColor = addOpacityToCssRgb(theme.colors.case, 0.3);
+    const caseColor = addOpacityToCssRgb(theme.colors.surface.raised, 0.3);
 
     const styles = createStyles(theme, caseColor); //Temporary
     const { signIn, mcqDatas, setChoice, setMcqDatas, apiError, setApiError } =
@@ -98,13 +98,13 @@ export default function LoginScreen() {
         <SafeAreaView style={[styles.container]}>
             <SafeAreaView style={styles.logos}>
                 <LinkButton url={"https://discord.gg/AKAqXfTgvE"}>
-                    <Discord fill={theme.colors.main} size={28} />
+                    <Discord fill={theme.colors.brand.primary} size={28} />
                 </LinkButton>
 
                 <LinkButton
                     url={"https://github.com/as2pick/EcoleDirectePlus-Mobile"}
                 >
-                    <Github fill={theme.colors.main} size={28} />
+                    <Github fill={theme.colors.brand.primary} size={28} />
                 </LinkButton>
             </SafeAreaView>
             <OverLoader
@@ -122,7 +122,7 @@ export default function LoginScreen() {
                     </View>
                     <MaskedView maskElement={<Text preset="h1">Kolybri</Text>}>
                         <LinearGradient
-                            colors={theme.colors.edptext}
+                            colors={[theme.colors.logo.textFrom, theme.colors.logo.textTo]}
                             start={{ x: 1, y: 0 }}
                             end={{ x: 0, y: 0 }}
                         >
@@ -138,7 +138,7 @@ export default function LoginScreen() {
                             <TextInput
                                 ref={usernameInputRef}
                                 placeholder="Identifiant"
-                                placeholderTextColor={theme.colors.main}
+                                placeholderTextColor={theme.colors.brand.primary}
                                 onChangeText={(data) => {
                                     setApiError(null);
                                     setUsername(data);
@@ -155,8 +155,8 @@ export default function LoginScreen() {
                                 style={[
                                     styles.input.case,
                                     {
-                                        borderColor: theme.colors.border,
-                                        backgroundColor: theme.colors.background,
+                                        borderColor: theme.colors.border.strong,
+                                        backgroundColor: theme.colors.background.screen,
                                     },
                                 ]}
                             />
@@ -168,7 +168,7 @@ export default function LoginScreen() {
                             <TextInput
                                 ref={passwordInputRef}
                                 placeholder="Mot de passe"
-                                placeholderTextColor={theme.colors.main}
+                                placeholderTextColor={theme.colors.brand.primary}
                                 onChangeText={(data) => {
                                     setApiError(null);
                                     setPassword(data);
@@ -185,8 +185,8 @@ export default function LoginScreen() {
                                 style={[
                                     styles.input.case,
                                     {
-                                        borderColor: theme.colors.border,
-                                        backgroundColor: theme.colors.background,
+                                        borderColor: theme.colors.border.strong,
+                                        backgroundColor: theme.colors.background.screen,
                                     },
                                 ]}
                             />
@@ -229,7 +229,7 @@ export default function LoginScreen() {
                         borderRadius: 12,
                         paddingVertical: 7,
                         paddingHorizontal: 16,
-                        borderColor: theme.colors.border,
+                        borderColor: theme.colors.border.strong,
                         transform: [{ scale: 1.2 }],
                     }}
                 >
@@ -237,7 +237,7 @@ export default function LoginScreen() {
                 </TouchableOpacity>
             </View>
             {apiError && (
-                <Text style={styles.error} color={theme.colors.error}>
+                <Text style={styles.error} color={theme.colors.state.danger}>
                     {apiError}
                 </Text>
             )}
@@ -257,7 +257,7 @@ export default function LoginScreen() {
                     <Text
                         style={[styles.privacyPolicy]}
                         align="center"
-                        color={theme.colors.main}
+                        color={theme.colors.brand.primary}
                         preset="body2"
                     >
                         Politique de confidentialité et Conditions d'utilisation
@@ -284,7 +284,7 @@ const createStyles = (theme, caseColor) =>
         container: {
             flex: 1,
             alignItems: "center",
-            backgroundColor: theme.colors.background.login,
+            backgroundColor: theme.colors.background.auth,
         },
         logos: {
             flexDirection: "row",
@@ -293,7 +293,7 @@ const createStyles = (theme, caseColor) =>
             left: 8,
             marginLeft: 12,
             gap: 16,
-            color: theme.colors.main,
+            color: theme.colors.brand.primary,
         },
         checkBox: {
             marginLeft: "5%",
@@ -346,8 +346,8 @@ const createStyles = (theme, caseColor) =>
                 paddingRight: 42, // 30(logo size)+12(right 12)
                 fontSize: 16,
                 overflow: "hidden",
-                borderColor: theme.colors.accent,
-                color: theme.colors.main,
+                borderColor: theme.colors.brand.accent,
+                color: theme.colors.brand.primary,
                 backgroundColor: caseColor,
             },
             logos: {
@@ -362,13 +362,13 @@ const createStyles = (theme, caseColor) =>
 
         button: {
             //borderWidth: 1,
-            //borderColor: theme.colors.accent,
+            //borderColor: theme.colors.brand.accent,
             //transform: [{ scale: 1.2 }],
             borderRadius: 12,
             paddingVertical: 7,
             paddingHorizontal: 16,
-            color: theme.colors.theme,
-            //backgroundColor: theme.colors.accent,
+            color: theme.colors.text.onPrimary,
+            //backgroundColor: theme.colors.brand.accent,
         },
         buttonWrapper: {
             borderRadius: 12,
@@ -381,8 +381,8 @@ const createStyles = (theme, caseColor) =>
         },
         error: {
             padding: 12,
-            backgroundColor: theme.colors.bg.bg2,
-            borderColor: theme.colors.error,
+            backgroundColor: theme.colors.surface.card,
+            borderColor: theme.colors.state.danger,
             borderWidth: 0.9,
             borderRadius: 12,
         },

@@ -85,9 +85,7 @@ const NavigationBottomBar = ({ state, descriptors, navigation }) => {
         moveIndicatorTo(state.index, true);
     }, [state.index, moveIndicatorTo]);
 
-    const navbarBackgroundColor = Array.isArray(theme.colors.background.gradient)
-        ? theme.colors.background.gradient[1] || theme.colors.background.gradient[0]
-        : theme.colors.background.gradient;
+    const navbarBackgroundColor = theme.colors.background.base;
 
     return (
         <SafeAreaView
@@ -108,7 +106,7 @@ const NavigationBottomBar = ({ state, descriptors, navigation }) => {
                         width: BAR_WIDTH,
                         height: 2,
                         borderRadius: 6,
-                        backgroundColor: theme.colors.accent,
+                        backgroundColor: theme.colors.tabBar.active,
                     },
                     animatedIndicatorStyle,
                 ]}
@@ -218,13 +216,17 @@ const TabButton = memo(
                         <IconComponent
                             width={BASE_ICON_SIZE}
                             height={BASE_ICON_SIZE}
-                            color={isFocused ? colors.accent : colors.inactive}
+                            color={
+                                isFocused
+                                    ? colors.tabBar.active
+                                    : colors.tabBar.inactive
+                            }
                         />
                     </Animated.View>
                     <MorphingText
                         preset="label3"
                         weight={isFocused ? "bold" : "medium"}
-                        color={colors.accent}
+                        color={colors.tabBar.active}
                         value={isFocused ? (ROUTES_NAMES[route.name] ?? "N/A") : ""}
                         style={{ letterSpacing: 0.8, width: "100%" }}
                     />

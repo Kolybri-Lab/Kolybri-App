@@ -75,10 +75,10 @@ export default function OverLoader({
                     style={[
                         loadingOpacityDynamicStyle,
                         {
-                            backgroundColor: colors.bg.bg1,
+                            backgroundColor: colors.surface.card,
                             borderRadius: 12,
                             padding: 8,
-                            borderColor: colors.border,
+                            borderColor: colors.border.strong,
                             borderWidth: 1.1,
                         },
                     ]}

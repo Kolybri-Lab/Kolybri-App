@@ -58,6 +58,9 @@ export function rgbToHsl(r, g, b) {
 
     s = delta === 0 ? 0 : delta / (1 - Math.abs(2 * l - 1));
 
+    // Gris pur (blanc, noir, gris) : pas de teinte. Évite NaN (0/0).
+    if (delta === 0) return [0, 0, Math.round(l * 100)];
+
     switch (cmax) {
         case r:
             h = 60 * (((g - b) / delta) % 6);
@@ -183,14 +186,25 @@ export const isDarkColor = (hsl) => {
     return lightness < 50;
 };
 
-export const addOpacityToCssRgb = (text, a) => {
+const HSL_PARTS_RE = /^hsla?\(\s*([\d.]+)\s*,\s*([\d.]+)%\s*,\s*([\d.]+)%/i;
+
+// Applique une opacité à n'importe quelle couleur et renvoie du hsla().
+// - hsl()/hsla() : on garde les valeurs telles quelles (aucune perte).
+// - autre format (rgb, hex, nom) : converti en HSL.
+export const addOpacity = (text, a) => {
     if (a === undefined || a === null) a = 1;
     const opacity = a > 1 ? Math.min(1, a / 100) : Math.max(0, a);
+
+    const m = typeof text === "string" ? HSL_PARTS_RE.exec(text.trim()) : null;
+    if (m) return `hsla(${m[1]}, ${m[2]}%, ${m[3]}%, ${opacity})`;
+
     const [r, g, b] = parseToRgb(text);
-    return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+    const [h, s, l] = rgbToHsl(r, g, b);
+    return `hsla(${h}, ${s}%, ${l}%, ${opacity})`;
 };
 
-export const addOpacity = addOpacityToCssRgb;
+// Ancien nom conservé pour ne pas toucher aux imports existants.
+export const addOpacityToCssRgb = addOpacity;
 
 export const adjustLightness = (hslString, amount) => {
     if (!hslString) return "hsl(0, 0%, 50%)";

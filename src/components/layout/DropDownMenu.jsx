@@ -1,3 +1,5 @@
+import { useTheme } from "@/hooks/useThemeStore";
+import { withAlpha } from "@/themes/color";
 import { useCallback, useState } from "react";
 import { Pressable, View } from "react-native";
 import Animated, {
@@ -38,7 +40,7 @@ export default function DropDownMenu({
 }) {
     const [isDeployed, setIsDeployed] = useState(false);
     const [internalSelected, setInternalSelected] = useState(value);
-
+    const { colors } = useTheme();
     const transitionProgress = useSharedValue(0);
     const opacityProgress = useSharedValue(0);
     const pressScale = useSharedValue(1);
@@ -139,7 +141,10 @@ export default function DropDownMenu({
                     }}
                     style={[
                         {
-                            backgroundColor: "hsla(0, 0%, 100%, 0.12)",
+                            backgroundColor: withAlpha(
+                                colors.surface.simpleOpacity,
+                                0.12
+                            ),
                             paddingHorizontal: 18,
                             paddingVertical: 10,
                             borderRadius: 12,
@@ -155,7 +160,7 @@ export default function DropDownMenu({
                         {selectedName ?? placeholder}
                     </Text>
                     <Animated.View style={chevronStyle}>
-                        <Chevron size={13} fill="#FFFFFF" />
+                        <Chevron size={13} fill={colors.text.primary} />
                     </Animated.View>
                 </Pressable>
             </Animated.View>

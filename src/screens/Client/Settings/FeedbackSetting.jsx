@@ -1,7 +1,9 @@
 import { Switch, Text } from "@/components";
+import { useTheme } from "@/hooks/useThemeStore";
 import { useUserStore } from "@/hooks/useUserStore";
 import { routesNames } from "@/router/config/routesNames";
 import { sendDevReport } from "@/services/feedbackService";
+import { withAlpha } from "@/themes/color";
 import { useNavigation } from "@react-navigation/native";
 import * as Application from "expo-application";
 import * as Device from "expo-device";
@@ -53,7 +55,7 @@ export default function FeedbackScreen({ route }) {
     const colorScheme = useUserStore((state) => state.preferences.theme);
     const navigation = useNavigation();
     const [error, setError] = useState("");
-
+    const { colors } = useTheme();
     const [activeChip, setActiveChip] = useState(FEEDBACK_OPT[0]);
     const [isSending, setIsSending] = useState(false);
     const [isSent, setIsSent] = useState(false);
@@ -191,7 +193,7 @@ export default function FeedbackScreen({ route }) {
                     </Text>
                     <Text
                         preset="body1"
-                        color="hsla(0, 0%, 100%, .6)"
+                        color={withAlpha(colors.text.primary, 0.6)}
                         align="center"
                     >
                         Votre message a bien été envoyé à l'équipe. On y jette un œil
@@ -246,20 +248,20 @@ export default function FeedbackScreen({ route }) {
                                         paddingVertical: 6,
                                         borderRadius: 25,
                                         borderColor: isActive
-                                            ? "hsl(236, 74%, 70%)"
+                                            ? colors.brand.primary
                                             : "transparent",
                                         borderWidth: 1.5,
                                         backgroundColor: isActive
-                                            ? "hsla(237, 76%, 71%, .16)"
-                                            : "hsla(0, 0%, 100%, .12)",
+                                            ? withAlpha(colors.brand.primary, 0.16)
+                                            : withAlpha(colors.text.primary, 0.12),
                                     }}
                                 >
                                     <Text
                                         preset="body1"
                                         color={
                                             isActive
-                                                ? "hsl(236, 74%, 70%)"
-                                                : "hsla(0, 0%, 100%, .6)"
+                                                ? colors.brand.primary
+                                                : withAlpha(colors.text.primary, 0.6)
                                         }
                                     >
                                         {option.name}
@@ -291,15 +293,24 @@ export default function FeedbackScreen({ route }) {
                             onChangeText={(text) => updateField("title", text)}
                             autoCapitalize="sentences"
                             style={{
-                                backgroundColor: "hsla(0, 0%, 100%, .12)",
-                                borderColor: "hsla(0, 0%, 100%, .16)",
+                                backgroundColor: withAlpha(
+                                    colors.surface.simpleOpacity,
+                                    0.12
+                                ),
+                                borderColor: withAlpha(
+                                    colors.surface.simpleOpacity,
+                                    0.16
+                                ),
                                 borderWidth: 1.5,
                                 borderRadius: 12,
                                 paddingVertical: 13,
                                 paddingHorizontal: 14,
-                                color: "white",
+                                color: colors.text.primary,
                             }}
-                            placeholderTextColor={"hsla(0, 0%, 100%, .4)"}
+                            placeholderTextColor={withAlpha(
+                                colors.text.primary,
+                                0.4
+                            )}
                         />
                         <Text preset="body3" align="right">
                             {formValues.message.length}/{TITLE_MAX_LENGTH}
@@ -329,16 +340,25 @@ export default function FeedbackScreen({ route }) {
                             maxLength={MESSAGE_MAX_LENGTH}
                             onChangeText={(text) => updateField("message", text)}
                             style={{
-                                backgroundColor: "hsla(0, 0%, 100%, .12)",
-                                borderColor: "hsla(0, 0%, 100%, .16)",
+                                backgroundColor: withAlpha(
+                                    colors.surface.simpleOpacity,
+                                    0.12
+                                ),
+                                borderColor: withAlpha(
+                                    colors.surface.simpleOpacity,
+                                    0.16
+                                ),
                                 borderWidth: 1.5,
                                 borderRadius: 12,
                                 paddingVertical: 13,
                                 paddingHorizontal: 14,
                                 height: 110,
-                                color: "white",
+                                color: colors.text.primary,
                             }}
-                            placeholderTextColor={"hsla(0, 0%, 100%, .4)"}
+                            placeholderTextColor={withAlpha(
+                                colors.text.primary,
+                                0.4
+                            )}
                         />
                         <View style={{ flexDirection: "row" }}>
                             <Text preset="body3" style={{ flexShrink: 1 }}>
@@ -371,10 +391,16 @@ export default function FeedbackScreen({ route }) {
                 >
                     <View
                         style={{
-                            backgroundColor: "hsla(0, 0%, 100%, .09)",
+                            backgroundColor: withAlpha(
+                                colors.surface.simpleOpacity,
+                                0.09
+                            ),
                             padding: 16,
                             borderRadius: 20,
-                            borderColor: "hsla(0, 0%, 100%, .13)",
+                            borderColor: withAlpha(
+                                colors.surface.simpleOpacity,
+                                0.13
+                            ),
                             borderWidth: 1,
                         }}
                     >
@@ -405,7 +431,7 @@ export default function FeedbackScreen({ route }) {
                         onPress={sendFeedback}
                         disabled={isSending}
                         style={{
-                            backgroundColor: "#7C83EB",
+                            backgroundColor: colors.surface.card,
                             paddingVertical: 14,
                             borderRadius: 14,
                             alignItems: "center",
@@ -430,13 +456,17 @@ function Option({
     locked = false,
     isFirst = false,
 }) {
+    const { colors } = useTheme();
     return (
         <View>
             {!isFirst && (
                 <View
                     style={{
                         height: 1,
-                        backgroundColor: "hsla(0, 0%, 100%, .1)",
+                        backgroundColor: withAlpha(
+                            colors.surface.simpleOpacity,
+                            0.1
+                        ),
                         marginVertical: 12,
                     }}
                 />
@@ -451,7 +481,7 @@ function Option({
             >
                 <View style={{ gap: 2, flex: 1 }}>
                     <Text preset="body1">{title}</Text>
-                    <Text preset="body3" color="hsla(0, 0%, 100%, .5)">
+                    <Text preset="body3" color={withAlpha(colors.text.primary, 0.5)}>
                         {subtitle}
                     </Text>
                 </View>
@@ -461,13 +491,16 @@ function Option({
                         style={{
                             flexDirection: "row",
                             alignItems: "center",
-                            backgroundColor: "hsla(0, 0%, 100%, .1)",
+                            backgroundColor: withAlpha(
+                                colors.surface.simpleOpacity,
+                                0.1
+                            ),
                             paddingHorizontal: 10,
                             paddingVertical: 5,
                             borderRadius: 8,
                         }}
                     >
-                        <Text preset="body3" color="hsla(0, 0%, 100%, .5)">
+                        <Text preset="body3" opacity={0.5}>
                             🔒 toujours incluse
                         </Text>
                     </View>

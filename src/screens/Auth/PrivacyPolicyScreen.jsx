@@ -30,7 +30,7 @@ const Link = ({ href, isPeople = false, children }) => {
     return (
         <LinkText
             href={String(href)}
-            color={isPeople ? colors.accent : colors.main}
+            color={isPeople ? colors.brand.accent : colors.brand.primary}
             underline={isPeople}
         >
             {children}
@@ -97,7 +97,7 @@ export default function PrivacyPolicyScreen() {
     const dependenciesList = Object.keys(packageJson.dependencies);
 
     return (
-        <ScreenStack style={{ flex: 1, backgroundColor: colors.background.login }}>
+        <ScreenStack style={{ flex: 1, backgroundColor: colors.background.auth }}>
             <View style={{ marginHorizontal: 20 }}>
                 <GoBackHeader />
             </View>

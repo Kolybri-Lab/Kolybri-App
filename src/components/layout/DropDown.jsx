@@ -69,7 +69,7 @@ export default function DropDown({
                 <TouchableOpacity onPress={toggleDropdown} activeOpacity={0.8}>
                     <View style={styles.buttonContent}>
                         <Animated.View style={arrowStyle}>
-                            <SimpleArrow fill={colors.txt.txt1} />
+                            <SimpleArrow fill={colors.text.primary} />
                         </Animated.View>
 
                         <Text style={styles.buttonText}>

@@ -197,7 +197,7 @@ export default function HomeworksContent() {
                             style={{
                                 paddingHorizontal: 6,
                                 backgroundColor: addOpacityToCssRgb(
-                                    colors.main,
+                                    colors.brand.primary,
                                     0.7
                                 ),
                                 borderRadius: 12,

@@ -76,7 +76,7 @@ export default function HomeworkCard({
             activeOpacity={1}
             disabled={!enabled}
             style={{
-                backgroundColor: colors.secondary,
+                backgroundColor: colors.surface.card,
                 width: "100%",
                 borderRadius: 20,
                 overflow: "hidden",
@@ -144,7 +144,7 @@ export default function HomeworkCard({
                         style={{
                             fontSize: 12,
                             fontFamily: "Medium",
-                            color: colors.contrast,
+                            color: colors.text.primary,
                         }}
                     >
                         {homework.discipline.teacher}
@@ -171,14 +171,14 @@ export default function HomeworkCard({
                         height: 1.5,
                         width: "95%",
                         borderRadius: 2,
-                        backgroundColor: addOpacity(colors.contrast, 0.4),
+                        backgroundColor: addOpacity(colors.text.primary, 0.4),
                         marginTop: 12,
                     }}
                 />
 
                 <Text
                     style={{
-                        color: colors.contrast,
+                        color: colors.text.primary,
                         padding: 12,
                         fontSize: 14,
                         fontFamily: "Lexend-Regular",
@@ -192,7 +192,7 @@ export default function HomeworkCard({
                         height: 1.5,
                         width: "95%",
                         borderRadius: 2,
-                        backgroundColor: addOpacity(colors.contrast, 0.4),
+                        backgroundColor: addOpacity(colors.text.primary, 0.4),
                         marginBottom: 12,
                     }}
                 />
@@ -207,14 +207,14 @@ export default function HomeworkCard({
                     flexDirection: "row",
                     justifyContent: "space-between",
                     alignItems: "center",
-                    backgroundColor: colors.secondary,
+                    backgroundColor: colors.surface.card,
                 }}
             >
                 <Text
                     style={{
                         fontSize: 12,
                         fontFamily: "Medium",
-                        color: colors.contrast,
+                        color: colors.text.primary,
                     }}
                 >
                     Donnée le {formatShortDate(homework.givenOn)}
@@ -232,7 +232,7 @@ export default function HomeworkCard({
                             style={{ margin: -2 }}
                             hitSlop={8}
                         >
-                            <Maximize2 size={20} color={colors.contrast} />
+                            <Maximize2 size={20} color={colors.text.primary} />
                         </TouchableOpacity>
                         {homework.homeworksContent.joinedDocuments?.length > 0 && (
                             <TouchableOpacity
@@ -240,7 +240,7 @@ export default function HomeworkCard({
                                 style={{ margin: -2 }}
                                 hitSlop={8}
                             >
-                                <FolderOpen size={20} color={colors.contrast} />
+                                <FolderOpen size={20} color={colors.text.primary} />
                             </TouchableOpacity>
                         )}
                         {homework.isCustom && (

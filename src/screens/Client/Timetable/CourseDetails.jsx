@@ -76,7 +76,7 @@ export default function CourseDetails({ route }) {
                     style={{
                         width: "85%",
                         height: 2,
-                        backgroundColor: colors.bg.bg4,
+                        backgroundColor: colors.border.subtle,
                     }}
                 />
             </View>
@@ -134,7 +134,7 @@ export default function CourseDetails({ route }) {
         timing = "Erreur lors de la lecture du temps";
     }
     return (
-        <View style={{ flex: 1, backgroundColor: colors.background }}>
+        <View style={{ flex: 1, backgroundColor: colors.background.screen }}>
             <View style={{ paddingHorizontal: 15 }}>
                 <GoBackHeader fallbackRoute={routesNames.client.timetable.content} />
             </View>
@@ -330,7 +330,7 @@ export default function CourseDetails({ route }) {
                 >
                     <Pressable
                         style={{
-                            backgroundColor: colors.bg.bg6,
+                            backgroundColor: colors.brand.soft,
                             paddingHorizontal: 18,
                             paddingVertical: 12,
                             borderRadius: 50,
@@ -348,7 +348,7 @@ export default function CourseDetails({ route }) {
                     </Pressable>
                     <Pressable
                         style={{
-                            backgroundColor: colors.bg.bg6,
+                            backgroundColor: colors.brand.soft,
                             paddingHorizontal: 21,
                             paddingVertical: 12,
                             borderRadius: 50,

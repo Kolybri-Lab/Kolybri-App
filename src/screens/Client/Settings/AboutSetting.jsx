@@ -3,7 +3,9 @@ import { Chevron, Info, Link, Person } from "@/components/svg";
 import DiscordLogo from "@/components/svg/logos/Discord";
 import EDPLogo from "@/components/svg/logos/EDP";
 import GithubLogo from "@/components/svg/logos/Github";
+import { useTheme } from "@/hooks/useThemeStore";
 import { routesNames } from "@/router/config/routesNames";
+import { withAlpha } from "@/themes/color";
 import { openUrl } from "@/utils/url";
 import { useNavigation } from "@react-navigation/native";
 import { Heart } from "lucide-react-native";
@@ -14,7 +16,7 @@ import SettingSectionLayout from "./components/SettingSectionLayout";
 export default function AboutScreen({ route }) {
     const { label } = route.params;
     const navigation = useNavigation();
-
+    const { colors } = useTheme();
     return (
         <SettingSectionLayout label={label}>
             <View style={{ gap: 28 }}>
@@ -73,7 +75,9 @@ export default function AboutScreen({ route }) {
                             index={0}
                             totalLength={1}
                             label={"Github"}
-                            icon={<GithubLogo size={24} />}
+                            icon={
+                                <GithubLogo size={24} fill={colors.text.primary} />
+                            }
                             height={48}
                             onPress={() =>
                                 openUrl(
@@ -81,7 +85,10 @@ export default function AboutScreen({ route }) {
                                 )
                             }
                         >
-                            <Link size={24} fill="hsla(0, 0%, 100%, 0.3)" />
+                            <Link
+                                size={24}
+                                fill={withAlpha(colors.text.primary, 0.3)}
+                            />
                         </Section>
                     </View>
                     <View style={{ flex: 1 }}>
@@ -89,7 +96,7 @@ export default function AboutScreen({ route }) {
                             index={0}
                             totalLength={1}
                             label={"Contributeurs"}
-                            icon={<Person size={22} />}
+                            icon={<Person size={22} fill={colors.text.primary} />}
                             height={48}
                             onPress={() =>
                                 navigation.navigate(
@@ -98,7 +105,10 @@ export default function AboutScreen({ route }) {
                                 )
                             }
                         >
-                            <Chevron size={16} fill="hsla(0, 0%, 100%, 0.3)" />
+                            <Chevron
+                                size={16}
+                                fill={withAlpha(colors.text.primary, 0.3)}
+                            />
                         </Section>
                     </View>
                 </View>
@@ -107,17 +117,17 @@ export default function AboutScreen({ route }) {
                         index={0}
                         totalLength={2}
                         label={"Discord"}
-                        icon={<DiscordLogo size={24} />}
+                        icon={<DiscordLogo size={24} fill={colors.text.primary} />}
                         height={48}
                         onPress={() => openUrl("https://discord.gg/AKAqXfTgvE")}
                     >
-                        <Link size={24} fill="hsla(0, 0%, 100%, 0.3)" />
+                        <Link size={24} fill={withAlpha(colors.text.primary, 0.3)} />
                     </Section>
                     <Section
                         index={1}
                         totalLength={2}
                         label={"Plus..."}
-                        icon={<Info size={24} />}
+                        icon={<Info size={24} fill={colors.text.primary} />}
                         height={48}
                         onPress={() =>
                             navigation.navigate(
@@ -126,7 +136,10 @@ export default function AboutScreen({ route }) {
                             )
                         }
                     >
-                        <Chevron size={16} fill="hsla(0, 0%, 100%, 0.3)" />
+                        <Chevron
+                            size={16}
+                            fill={withAlpha(colors.text.primary, 0.3)}
+                        />
                     </Section>
                 </View>
             </View>
@@ -144,10 +157,15 @@ export default function AboutScreen({ route }) {
                     étudiant français avec
                 </Text>
                 <Heart fill={"hsl(0, 70%, 60%)"} color={"transparent"} size={30} />
-                <Text weight="light" size={7} color="hsla(0, 0%, 100%, .14)">
+                <Text
+                    weight="light"
+                    size={7}
+                    color={withAlpha(colors.text.primary, 0.14)}
+                >
                     mais genre vrm ;-)
                 </Text>
             </SafeAreaView>
         </SettingSectionLayout>
     );
 }
+

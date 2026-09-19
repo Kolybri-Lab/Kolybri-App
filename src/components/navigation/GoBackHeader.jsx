@@ -1,11 +1,13 @@
 import { BackArrow } from "@/components/svg";
+import { useTheme } from "@/hooks/useThemeStore";
+import { withAlpha } from "@/themes/color";
 import { useNavigation } from "@react-navigation/native";
 import { Pressable, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function GoBackHeader({ onPress, fallbackRoute } = {}) {
     const navigation = useNavigation();
-
+    const { colors } = useTheme();
     const handleGoBack = () => {
         if (onPress) {
             onPress();
@@ -57,7 +59,10 @@ export default function GoBackHeader({ onPress, fallbackRoute } = {}) {
                         width: 38,
                         height: 38,
                         borderRadius: 19,
-                        backgroundColor: "hsla(0, 0%, 100%, 0.25)",
+                        backgroundColor: withAlpha(
+                            colors.surface.simpleOpacity,
+                            0.25
+                        ),
                         alignItems: "center",
                         justifyContent: "center",
                     }}
@@ -68,3 +73,4 @@ export default function GoBackHeader({ onPress, fallbackRoute } = {}) {
         </SafeAreaView>
     );
 }
+

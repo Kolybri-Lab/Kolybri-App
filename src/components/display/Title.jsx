@@ -7,7 +7,7 @@ export default function Title({ children, ...props }) {
     return (
         <Text
             style={UiStyles.title}
-            color={theme.colors.accent}
+            color={theme.colors.brand.accent}
             preset="h3"
             {...props}
         >

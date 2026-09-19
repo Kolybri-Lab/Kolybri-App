@@ -7,8 +7,13 @@ export type Theme = {
     name: ThemeName;
     isDark: boolean;
     colors: {
+        overlay: {
+            white: string;
+            black: string;
+        };
         background: {
             screen: string; // fond des écrans
+            base: string; // fond UNI de référence (bas du dégradé) : barre de navigation, écrans plats
             auth: string; // fond de l'écran de connexion
             // null = pas de dégradé, on utilise `screen`
             gradient: {
@@ -17,8 +22,10 @@ export type Theme = {
             } | null;
         };
         surface: {
-            card: string; // cartes, listes, modales
+            card: string; // cartes, listes
+            raised: string; // panneaux au-dessus des cartes (modales, encarts)
             muted: string; // zones secondaires, champs
+            simpleOpacity: string;
         };
         text: {
             primary: string;
@@ -31,7 +38,10 @@ export type Theme = {
             accent: string; // liens, chiffres mis en avant
             soft: string; // fonds teintés (badges, pastilles)
         };
-        border: string;
+        border: {
+            subtle: string; // séparateurs, contours discrets (translucide)
+            strong: string; // contours visibles (champs, boutons)
+        };
         state: {
             danger: string;
             success: string;
@@ -63,46 +73,59 @@ export const lightTheme: Theme = {
     name: "light",
     isDark: false,
     colors: {
+        overlay: {
+            white: "hsl(0, 0%, 100%)",
+            black: "hsl(0, 0%, 0%)",
+        },
         background: {
-            screen: "rgb(222, 222, 250)", // ancien pastel / background.gradient
-            auth: "rgb(230, 230, 255)", // ancien background.login
-            gradient: null,
+            screen: "hsl(240, 74%, 93%)", // ancien pastel / background.gradient
+            base: "hsl(240, 74%, 93%)", // pas de dégradé en clair : identique à screen
+            auth: "hsl(240, 100%, 95%)", // ancien background.login
+            gradient: {
+                colors: ["hsl(248, 73%, 29%)", "hsl(240, 50%, 8%)"],
+                locations: [0, 0.28],
+            },
         },
         surface: {
-            card: "rgb(255, 255, 255)", // ancien case
-            muted: "rgb(238, 238, 255)", // à ajuster
+            card: "hsl(240, 95%, 85%)", // ancien secondary (utilisé comme fond de carte)
+            raised: "hsl(0, 0%, 100%)", // ancien case
+            muted: "hsl(240, 100%, 97%)", // à ajuster
+            simpleOpacity: "hsl(0, 0%, 0%)",
         },
         text: {
-            primary: "rgb(0, 0, 0)", // ancien contrast
-            secondary: "rgb(70, 70, 140)", // à ajuster (contraste ≥ 4.5:1)
-            muted: "rgb(140, 140, 215)", // ancien inactive
-            onPrimary: "rgb(255, 255, 255)",
+            primary: "hsl(0, 0%, 0%)", // ancien contrast
+            secondary: "hsl(240, 33%, 41%)", // à ajuster (contraste ≥ 4.5:1)
+            muted: "hsl(240, 48%, 70%)", // ancien inactive
+            onPrimary: "hsl(0, 0%, 100%)",
         },
         brand: {
-            primary: "rgb(119, 119, 247)", // ancien main
-            accent: "rgb(62, 62, 221)", // ancien accent
-            soft: "rgb(180, 180, 253)", // ancien secondary
+            primary: "hsl(240, 89%, 72%)", // ancien main
+            accent: "hsl(240, 70%, 55%)", // ancien accent
+            soft: "hsl(240, 95%, 85%)", // ancien secondary
         },
-        border: "rgba(80, 80, 214, 0.2)",
+        border: {
+            subtle: "hsla(240, 62%, 58%, 0.2)",
+            strong: "hsl(240, 62%, 58%)", // ancien border
+        },
         state: {
-            danger: "rgb(240, 90, 90)", // ancien error
-            success: "#0F8A5F",
-            warning: "#C2570C",
+            danger: "hsl(0, 83%, 65%)", // ancien error
+            success: "hsl(159, 80%, 30%)",
+            warning: "hsl(25, 88%, 40%)",
         },
         tabBar: {
-            background: "rgb(255, 255, 255)",
-            border: "rgba(80, 80, 214, 0.12)",
-            active: "rgb(62, 62, 221)",
-            inactive: "rgb(70, 70, 140)",
+            background: "hsl(0, 0%, 100%)",
+            border: "hsla(240, 62%, 58%, 0.12)",
+            active: "hsl(240, 70%, 55%)",
+            inactive: "hsl(240, 33%, 41%)",
         },
         logo: {
-            from: "#6691fc",
-            to: "#8572ff",
-            textFrom: "rgb(158, 164, 215)",
-            textTo: "rgb(83, 98, 215)",
+            from: "hsl(223, 96%, 69%)",
+            to: "hsl(248, 100%, 72%)",
+            textFrom: "hsl(234, 42%, 73%)",
+            textTo: "hsl(233, 62%, 58%)",
         },
     },
-    shadow: { opacity: 0.14, color: "#000000" },
+    shadow: { opacity: 0.14, color: "hsl(0, 0%, 0%)" },
     ...shared,
 };
 
@@ -111,50 +134,60 @@ export const darkTheme: Theme = {
     name: "dark",
     isDark: true,
     colors: {
+        overlay: {
+            white: "hsl(0, 0%, 100%)",
+            black: "hsl(0, 0%, 0%)",
+        },
         background: {
-            screen: "#0E101A", // ancien fond
-            auth: "rgb(19, 19, 34)", // ancien background.login
+            screen: "hsl(230, 30%, 8%)", // ancien fond
+            base: "hsl(240, 50%, 8%)", // ancien background.gradient[1]
+            auth: "hsl(240, 28%, 10%)", // ancien background.login
             // J'ai supposé que 0.28 est la position de fin du dégradé : à vérifier.
             gradient: {
-                colors: ["rgb(35, 20, 130)", "rgb(10, 10, 30)"],
+                colors: ["hsl(248, 73%, 29%)", "hsl(240, 50%, 8%)"],
                 locations: [0, 0.28],
             },
         },
         surface: {
-            card: "rgb(31, 30, 60)", // ancien secondary
-            muted: "rgb(21, 25, 69)", // ancien pastel
+            card: "hsl(242, 33%, 18%)", // ancien secondary
+            raised: "hsl(240, 18%, 45%)", // ancien case / bg3
+            muted: "hsl(235, 53%, 18%)", // ancien pastel
+            simpleOpacity: "hsl(0, 0%, 100%)",
         },
         text: {
-            primary: "rgb(255, 255, 255)", // ancien contrast
-            secondary: "rgb(180, 180, 240)",
-            muted: "rgb(118, 125, 211)", // ancien inactive
-            onPrimary: "rgb(255, 255, 255)",
+            primary: "hsl(0, 0%, 100%)", // ancien contrast
+            secondary: "hsl(240, 67%, 82%)",
+            muted: "hsl(235, 51%, 65%)", // ancien inactive
+            onPrimary: "hsl(0, 0%, 0%)", // ancien theme (noir sur le bleu clair)
         },
         brand: {
-            primary: "rgb(97, 129, 255)", // ancien main
-            accent: "rgb(199, 204, 253)", // ancien accent
-            soft: "rgb(64, 64, 130)",
+            primary: "hsl(228, 100%, 69%)", // ancien main
+            accent: "hsl(234, 93%, 89%)", // ancien accent
+            soft: "hsl(240, 34%, 38%)",
         },
-        border: "rgba(92, 113, 250, 0.25)",
+        border: {
+            subtle: "hsla(232, 94%, 67%, 0.25)",
+            strong: "hsl(232, 94%, 67%)", // ancien border
+        },
         state: {
-            danger: "rgb(240, 90, 90)",
-            success: "#34D399",
-            warning: "#FB923C",
+            danger: "hsl(0, 83%, 65%)",
+            success: "hsl(158, 64%, 52%)",
+            warning: "hsl(27, 96%, 61%)",
         },
         tabBar: {
-            background: "rgb(12, 12, 32)",
-            border: "rgb(23, 23, 41)",
-            active: "rgb(199, 204, 253)",
-            inactive: "rgb(118, 125, 211)",
+            background: "hsl(240, 45%, 9%)",
+            border: "hsl(240, 28%, 13%)",
+            active: "hsl(234, 93%, 89%)",
+            inactive: "hsl(235, 51%, 65%)",
         },
         logo: {
-            from: "#B4C9FF",
-            to: "#C1B7FF",
-            textFrom: "rgb(186, 193, 255)",
-            textTo: "rgb(77, 85, 149)",
+            from: "hsl(223, 100%, 85%)",
+            to: "hsl(248, 100%, 86%)",
+            textFrom: "hsl(234, 100%, 86%)",
+            textTo: "hsl(233, 32%, 44%)",
         },
     },
-    shadow: { opacity: 0.3, color: "#000000" },
+    shadow: { opacity: 0.3, color: "hsl(0, 0%, 0%)" },
     ...shared,
 };
 

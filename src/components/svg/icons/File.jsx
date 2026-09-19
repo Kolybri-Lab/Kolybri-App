@@ -9,7 +9,7 @@ export default function FileIcon({
 }) {
     const theme = useTheme();
 
-    fill = fill || theme.colors.textMain;
+    fill = fill || theme.colors.text.primary;
     return (
         <Svg
             width={size}

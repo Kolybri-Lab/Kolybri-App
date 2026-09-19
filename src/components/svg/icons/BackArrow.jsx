@@ -4,7 +4,7 @@ import Svg, { Path } from "react-native-svg";
 export default function BackArrow({ size = 30, fill, props = {} }) {
     const theme = useTheme();
 
-    fill = fill || theme.colors.contrast;
+    fill = fill || theme.colors.text.primary;
     return (
         <Svg width={size} height={size} viewBox="0 0 24 24" fill={"none"} {...props}>
             <Path

@@ -3,7 +3,7 @@ import { useTheme } from "@/hooks/useThemeStore";
 
 export default function CopyLeft({ size = 30, fill, props = {} }) {
     const theme = useTheme();
-    fill = theme.colors.contrast;
+    fill = theme.colors.text.primary;
     return (
         <Svg
             // ariaLabel="Copyleft"

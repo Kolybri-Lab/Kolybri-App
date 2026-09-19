@@ -1,3 +1,5 @@
+import { useTheme } from "@/hooks/useThemeStore";
+import { withAlpha } from "@/themes/color";
 import dynamicBorderRadius from "@/utils/borderRadius";
 import { Pressable, View } from "react-native";
 import { Text } from "../core";
@@ -8,7 +10,7 @@ export default function Section({
     index = 0,
     totalLength = 0,
     radiusExt = 12,
-    backgroundColor = "hsla(0, 0%, 100%, .1)",
+    backgroundColor,
     radiusInt = 5,
     label,
     subtitle,
@@ -16,12 +18,14 @@ export default function Section({
     height = 54,
     children,
 }) {
+    const { colors } = useTheme();
     return (
         <Pressable
             onPress={onPress}
             disabled={disabled}
             style={({ pressed }) => ({
-                backgroundColor,
+                backgroundColor:
+                    backgroundColor ?? withAlpha(colors.surface.simpleOpacity, 0.1),
                 height,
                 paddingHorizontal: 14,
                 flexDirection: "row",
@@ -42,7 +46,10 @@ export default function Section({
                 <View>
                     <Text preset="title2">{label}</Text>
                     {subtitle ? (
-                        <Text preset="label2" color="hsla(0, 0%, 100%, .5)">
+                        <Text
+                            preset="label2"
+                            color={withAlpha(colors.text.primary, 0.5)}
+                        >
                             {subtitle}
                         </Text>
                     ) : null}
@@ -52,3 +59,4 @@ export default function Section({
         </Pressable>
     );
 }
+

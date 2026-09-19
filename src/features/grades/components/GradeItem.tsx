@@ -30,7 +30,7 @@ const UI_BADGES: Record<string, any> = {
 
 export default function GradeItem({ grade, dispatch }: GradeItemProps) {
     const { colors } = useTheme() as any;
-    const mainColor = colors?.main ?? "hsl(240, 50%, 50%)";
+    const mainColor = colors?.brand?.primary ?? "hsl(240, 50%, 50%)";
 
     let backgroundColor = addOpacityToCssRgb(mainColor, 0.15);
     switch (grade.actionOnStreak) {

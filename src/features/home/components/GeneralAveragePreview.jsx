@@ -34,7 +34,7 @@ export default function GeneralAveragePreview({ gradesData }) {
             }}
             style={{
                 width: "100%",
-                backgroundColor: colors.secondary,
+                backgroundColor: colors.surface.card,
                 ...(gradesData?.lastGrades.length >= 1
                     ? {
                           borderTopLeftRadius: 16,
@@ -53,7 +53,7 @@ export default function GeneralAveragePreview({ gradesData }) {
             <View style={{}}>
                 <Text
                     style={{
-                        color: colors.main,
+                        color: colors.brand.primary,
                         fontSize: 18,
                         fontFamily: "Bold",
                     }}

@@ -72,7 +72,7 @@ const File = memo(({ item, progress, colors, onOpen, onDownload }) => {
                         borderRadius: 10,
                     }}
                 >
-                    <FileIcon fill={colors.contrast} size={23} extention={ext} />
+                    <FileIcon fill={colors.text.primary} size={23} extention={ext} />
                 </View>
                 <View style={{ flex: 1 }}>
                     <Text preset="label2" decoration="underline">
@@ -124,9 +124,9 @@ export default function MessagingDetails({ route }) {
 
     const baseStyle = useMemo(
         () => ({
-            color: colors.contrast,
+            color: colors.text.primary,
         }),
-        [colors.contrast]
+        [colors.text.primary]
     );
 
     const MessageHTML = useMemo(
@@ -184,9 +184,9 @@ export default function MessagingDetails({ route }) {
         <ScreenStack horizontalSpacing={14}>
             <GoBackHeader
                 headerTitle={"Retour aux messages"}
-                backArrow={{ color: colors.contrast, size: 24 }}
+                backArrow={{ color: colors.text.primary, size: 24 }}
                 height={33}
-                backgroundColor={colors.background.gradient}
+                backgroundColor={colors.background.base}
                 fallbackRoute={routesNames.client.messaging.content}
             />
             <ScrollView showsVerticalScrollIndicator={false}>

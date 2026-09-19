@@ -88,7 +88,7 @@ const DateHeader = ({ date, meta, countForDate }) => {
             <Text style={{ fontSize: 18, fontFamily: "SemiBold" }}>
                 {(meta?.long ?? `POUR ${formatFrenchDate(date)}`).toUpperCase()}
             </Text>
-            <Text style={{ fontSize: 18, fontFamily: "Bold", color: colors.main }}>
+            <Text style={{ fontSize: 18, fontFamily: "Bold", color: colors.brand.primary }}>
                 {countForDate} restant{countForDate > 1 ? "s" : null}
             </Text>
         </View>
@@ -108,7 +108,7 @@ const Homework = ({ homework, index, countForDate }) => {
                     flex: 1,
                     backgroundColor: homework.isCustom
                         ? "hsl(235, 28%, 30%)"
-                        : colors.secondary,
+                        : colors.surface.card,
                     marginVertical: 1.5,
                     alignItems: "center",
                     flexDirection: "row",
@@ -149,7 +149,7 @@ const Homework = ({ homework, index, countForDate }) => {
                     {homework.isCustom ? (
                         <Text
                             style={{
-                                color: addOpacityToCssRgb(colors.contrast, 0.55),
+                                color: addOpacityToCssRgb(colors.text.primary, 0.55),
                                 fontSize: 14,
                                 fontFamily: "Medium",
                                 flexShrink: 1,
@@ -171,8 +171,8 @@ const Homework = ({ homework, index, countForDate }) => {
                 <View
                     style={{
                         flexShrink: 1,
-                        backgroundColor: addOpacityToCssRgb(colors.main, 0.7),
-                        borderColor: colors.main,
+                        backgroundColor: addOpacityToCssRgb(colors.brand.primary, 0.7),
+                        borderColor: colors.brand.primary,
                         borderWidth: 1,
                         borderRadius: 10,
                         paddingHorizontal: 8,
@@ -183,7 +183,7 @@ const Homework = ({ homework, index, countForDate }) => {
                 >
                     <Text
                         style={{
-                            color: colors.contrast,
+                            color: colors.text.primary,
                             fontFamily: "SemiBold",
                             fontSize: 13,
                         }}

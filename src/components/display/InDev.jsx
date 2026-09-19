@@ -8,9 +8,9 @@ import LinkText from "./LinkText";
 export default function InDev({}) {
     const { colors } = useTheme();
     const { shadow } = useTheme();
-    const mainColor = addOpacityToCssRgb(colors.main, 0.7);
-    const shadowColor = addOpacityToCssRgb("rgb(0, 0, 0)", shadow.opacity);
-    const caseColor = addOpacityToCssRgb(colors.case, 0.8);
+    const mainColor = addOpacityToCssRgb(colors.brand.primary, 0.7);
+    const shadowColor = addOpacityToCssRgb(shadow.color, shadow.opacity);
+    const caseColor = addOpacityToCssRgb(colors.surface.raised, 0.8);
     return (
         <View style={[styles.parent]}>
             <View

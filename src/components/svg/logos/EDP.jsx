@@ -1,5 +1,5 @@
-import Svg, { LinearGradient, Path, Stop } from "react-native-svg";
 import { useTheme } from "@/hooks/useThemeStore";
+import Svg, { LinearGradient, Path, Stop } from "react-native-svg";
 
 export default function EDPLogo({ size = 30, fill = "white", props = {} }) {
     const theme = useTheme();
@@ -22,8 +22,16 @@ export default function EDPLogo({ size = 30, fill = "white", props = {} }) {
                 d="M90.0017 55V31.5H27.0016C-9.00047 31.5 -9.00055 86 27.0016 86H90.0017V62.5H27.0016C22.0011 62.5 22.0013 55 27.0016 55H90.0017Z"
             ></Path>
             <LinearGradient id="gradient-">
-                <Stop class="start" offset="0%" stopColor={theme.colors.edplogo.c1}></Stop>
-                <Stop class="end" offset="100%" stopColor={theme.colors.edplogo.c2}></Stop>
+                <Stop
+                    class="start"
+                    offset="0%"
+                    stopColor={theme.colors.logo.from}
+                ></Stop>
+                <Stop
+                    class="end"
+                    offset="100%"
+                    stopColor={theme.colors.logo.to}
+                ></Stop>
             </LinearGradient>
         </Svg>
     );

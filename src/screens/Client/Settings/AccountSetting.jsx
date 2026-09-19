@@ -1,5 +1,7 @@
 import { Text } from "@/components";
+import { useTheme } from "@/hooks/useThemeStore";
 import { useUserStore } from "@/hooks/useUserStore";
+import { withAlpha } from "@/themes/color";
 import { useEffect, useRef, useState } from "react";
 import { Pressable, TextInput, View } from "react-native";
 import SettingSectionLayout from "./components/SettingSectionLayout";
@@ -10,6 +12,7 @@ export default function AccountScreen({ route }) {
     const setProfile = useUserStore((state) => state.setProfile);
     const nameInputRef = useRef(null);
     const surnameInputRef = useRef(null);
+    const { colors } = useTheme();
 
     const [profileDatas, setProfileDatas] = useState({
         name: profile?.name ?? "",
@@ -33,7 +36,10 @@ export default function AccountScreen({ route }) {
             <View style={{ gap: 4 }}>
                 <Pressable
                     style={{
-                        backgroundColor: "hsla(0, 0%, 100%, .1)",
+                        backgroundColor: withAlpha(
+                            colors.surface.simpleOpacity,
+                            0.1
+                        ),
                         padding: 5,
                         borderRadius: 99,
                         flexDirection: "row",
@@ -49,8 +55,8 @@ export default function AccountScreen({ route }) {
                         ref={nameInputRef}
                         value={profileDatas.name}
                         placeholder={profileDatas.name}
-                        placeholderTextColor="hsla(0, 0%, 100%, .7)"
-                        style={{ color: "hsla(0, 0%, 100%, 1)", fontSize: 18 }}
+                        placeholderTextColor={withAlpha(colors.text.primary, 0.7)}
+                        style={{ color: colors.text.primary, fontSize: 18 }}
                         onChangeText={(text) =>
                             setProfileDatas((prev) => ({
                                 ...prev,
@@ -61,7 +67,10 @@ export default function AccountScreen({ route }) {
                 </Pressable>
                 <Pressable
                     style={{
-                        backgroundColor: "hsla(0, 0%, 100%, .1)",
+                        backgroundColor: withAlpha(
+                            colors.surface.simpleOpacity,
+                            0.1
+                        ),
                         padding: 5,
                         borderRadius: 99,
                         flexDirection: "row",
@@ -77,8 +86,8 @@ export default function AccountScreen({ route }) {
                         ref={surnameInputRef}
                         value={profileDatas.surname}
                         placeholder={profileDatas.surname}
-                        placeholderTextColor="hsla(0, 0%, 100%, .7)"
-                        style={{ color: "hsla(0, 0%, 100%, 1)", fontSize: 18 }}
+                        placeholderTextColor={withAlpha(colors.text.primary, 0.7)}
+                        style={{ color: colors.text.primary, fontSize: 18 }}
                         onChangeText={(text) =>
                             setProfileDatas((prev) => ({
                                 ...prev,
@@ -120,3 +129,4 @@ export default function AccountScreen({ route }) {
         </SettingSectionLayout>
     );
 }
+

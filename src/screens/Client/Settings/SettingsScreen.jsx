@@ -14,9 +14,10 @@ import {
     Sun,
 } from "@/components/svg";
 import { useSignIn } from "@/hooks/useSignIn";
-import { useThemeStore } from "@/hooks/useThemeStore";
+import { useTheme } from "@/hooks/useThemeStore";
 import { useUserStore } from "@/hooks/useUserStore";
 import { routesNames } from "@/router/config/routesNames";
+import { withAlpha } from "@/themes/color";
 import { useNavigation } from "@react-navigation/native";
 import { useCallback } from "react";
 import { ActivityIndicator, Image, Pressable, ScrollView, View } from "react-native";
@@ -31,6 +32,7 @@ const formatPhoneNumber = (input) =>
 
 function SettingsSection({ options }) {
     const navigation = useNavigation();
+    const { colors } = useTheme();
     return (
         <View style={{ gap: 3, marginTop: 8 }}>
             {options.map((opt, index) => (
@@ -42,13 +44,14 @@ function SettingsSection({ options }) {
                             label: opt.label,
                         })
                     }
+                    backgroundColor={withAlpha(colors.surface.simpleOpacity, 0.1)}
                     index={index}
                     totalLength={options.length}
                     radiusExt={RADIUS_EXT}
                     radiusInt={RADIUS_INT}
                     key={opt.label}
                 >
-                    <Chevron size={16} fill="hsla(0, 0%, 100%, 0.3)" />
+                    <Chevron size={16} fill={withAlpha(colors.text.primary, 0.3)} />
                 </Section>
             ))}
         </View>
@@ -56,46 +59,54 @@ function SettingsSection({ options }) {
 }
 
 export default function SettingsScreen({}) {
-    const themeMode = useThemeStore((state) => state.themeMode);
-    const setThemeMode = useThemeStore((state) => state.setThemeMode);
     const { signOut } = useSignIn();
-
+    const { colors } = useTheme();
     const navigation = useNavigation();
     const profile = useUserStore((state) => state.profile);
 
     const accountOptions = [
         {
             label: "Compte",
-            icon: <Person size={ICON_SIZE} opacity={0.6} />,
+            icon: (
+                <Person size={ICON_SIZE} opacity={0.6} fill={colors.text.primary} />
+            ),
             route: routesNames.settings.account_settings.account,
         },
         {
             label: "Données et confidentialité",
-            icon: <SafetyShield size={ICON_SIZE} opacity={0.6} />,
+            icon: (
+                <SafetyShield
+                    size={ICON_SIZE}
+                    opacity={0.6}
+                    fill={colors.text.primary}
+                />
+            ),
             route: routesNames.settings.account_settings.data_and_confidentiality,
         },
     ];
     const appOptions = [
         {
             label: "Thème",
-            icon: <Sun size={ICON_SIZE} opacity={0.6} />,
+            icon: <Sun size={ICON_SIZE} opacity={0.6} fill={colors.text.primary} />,
             route: routesNames.settings.app_settings.theme,
         },
     ];
     const aboutOptions = [
         {
             label: "Notes de version",
-            icon: <Merge size={ICON_SIZE} opacity={0.6} />,
+            icon: (
+                <Merge size={ICON_SIZE} opacity={0.6} fill={colors.text.primary} />
+            ),
             route: routesNames.settings.about_settings.release_notes,
         },
         {
             label: "Donnez votre avis !",
-            icon: <Star size={ICON_SIZE} opacity={0.6} />,
+            icon: <Star size={ICON_SIZE} opacity={0.6} fill={colors.text.primary} />,
             route: routesNames.settings.about_settings.feedback,
         },
         {
             label: "À propos",
-            icon: <Info size={ICON_SIZE} opacity={0.6} />,
+            icon: <Info size={ICON_SIZE} opacity={0.6} fill={colors.text.primary} />,
             route: routesNames.settings.about_settings.about,
         },
     ];
@@ -112,7 +123,7 @@ export default function SettingsScreen({}) {
         return (
             <ScreenStack
                 horizontalSpacing={30}
-                style={{ backgroundColor: "hsl(230, 30%, 8%)" }}
+                style={{ backgroundColor: colors.background.screen }}
             >
                 <View
                     style={{
@@ -130,7 +141,7 @@ export default function SettingsScreen({}) {
     return (
         <ScreenStack
             horizontalSpacing={30}
-            style={{ backgroundColor: "hsl(230, 30%, 8%)" }}
+            style={{ backgroundColor: colors.background.screen }}
         >
             <ScrollView
                 showsVerticalScrollIndicator={false}
@@ -151,13 +162,13 @@ export default function SettingsScreen({}) {
                         }}
                         onPress={() => navigation.goBack()}
                     >
-                        <Cross size={ICON_SIZE} />
+                        <Cross size={ICON_SIZE} fill={colors.text.primary} />
                         <Text preset="h4">Paramètres</Text>
                     </Pressable>
                 </SafeAreaView>
                 <View
                     style={{
-                        backgroundColor: "hsl(231, 21%, 28%)",
+                        backgroundColor: colors.surface.card,
                         padding: 14,
                         borderRadius: 26,
                         marginBottom: 6,
@@ -201,7 +212,7 @@ export default function SettingsScreen({}) {
 
                     <View
                         style={{
-                            backgroundColor: "hsla(0, 0%, 100%, .22)",
+                            backgroundColor: withAlpha(colors.overlay.white, 0.22),
                             paddingHorizontal: 16,
                             borderRadius: 16,
                         }}
@@ -214,7 +225,10 @@ export default function SettingsScreen({}) {
                                 paddingVertical: 10,
                                 borderBottomWidth: 1,
                                 overflow: "hidden",
-                                borderBottomColor: "hsla(0, 0%, 100%, .25)",
+                                borderBottomColor: withAlpha(
+                                    colors.surface.simpleOpacity,
+                                    0.25
+                                ),
                             }}
                         >
                             <View
@@ -225,7 +239,11 @@ export default function SettingsScreen({}) {
                                     // maxWidth: "100%",
                                 }}
                             >
-                                <At opacity={0.75} size={20} />
+                                <At
+                                    opacity={0.75}
+                                    size={20}
+                                    fill={colors.text.primary}
+                                />
                                 <Text style={{ opacity: 0.75 }}>E-mail</Text>
                             </View>
                             <Text weight="medium" oneLine align="right">
@@ -240,7 +258,10 @@ export default function SettingsScreen({}) {
                                 justifyContent: "space-between",
                                 paddingVertical: 10,
                                 borderBottomWidth: 1,
-                                borderBottomColor: "hsla(0, 0%, 100%, .25)",
+                                borderBottomColor: withAlpha(
+                                    colors.overlay.white,
+                                    0.25
+                                ),
                             }}
                         >
                             <View
@@ -250,7 +271,11 @@ export default function SettingsScreen({}) {
                                     gap: 12,
                                 }}
                             >
-                                <Phone opacity={0.75} size={20} />
+                                <Phone
+                                    opacity={0.75}
+                                    size={20}
+                                    fill={colors.text.primary}
+                                />
                                 <Text style={{ opacity: 0.75 }}>Téléphone</Text>
                             </View>
                             <Text weight="medium">
@@ -274,7 +299,11 @@ export default function SettingsScreen({}) {
                                     gap: 12,
                                 }}
                             >
-                                <GraduationCap opacity={0.75} size={22} />
+                                <GraduationCap
+                                    opacity={0.75}
+                                    size={22}
+                                    fill={colors.text.primary}
+                                />
                                 <Text style={{ opacity: 0.75 }}>Classe</Text>
                             </View>
                             <Text weight="medium">
@@ -288,7 +317,7 @@ export default function SettingsScreen({}) {
                     <Text
                         preset="label2"
                         style={{ marginTop: 26 }}
-                        color="hsla(0, 0%, 100%, .6)"
+                        color={colors.text.primary}
                     >
                         Paramètres de compte
                     </Text>
@@ -296,7 +325,7 @@ export default function SettingsScreen({}) {
                     <Text
                         preset="label2"
                         style={{ marginTop: 26 }}
-                        color="hsla(0, 0%, 100%, .6)"
+                        color={colors.text.primary}
                     >
                         Paramètres de l'app
                     </Text>
@@ -304,7 +333,7 @@ export default function SettingsScreen({}) {
                     <Text
                         preset="label2"
                         style={{ marginTop: 26 }}
-                        color="hsla(0, 0%, 100%, .6)"
+                        color={colors.text.primary}
                     >
                         À propos
                     </Text>
@@ -312,7 +341,13 @@ export default function SettingsScreen({}) {
                     <View style={{ marginTop: 28, marginBottom: 18 }}>
                         <Section
                             label={"Se déconnecter"}
-                            icon={<Power size={18} opacity={0.6} />}
+                            icon={
+                                <Power
+                                    size={18}
+                                    opacity={0.6}
+                                    fill={colors.text.primary}
+                                />
+                            }
                             onPress={signOut}
                             index={0}
                             totalLength={1}
@@ -323,7 +358,7 @@ export default function SettingsScreen({}) {
                 <SafeAreaView edges={["bottom"]} style={{ marginBottom: 20 }}>
                     <View
                         style={{
-                            backgroundColor: "hsla(0, 0%, 35%, .3)",
+                            backgroundColor: withAlpha(colors.overlay.black, 0.25),
                             paddingVertical: 12,
                             paddingHorizontal: 14,
                             alignItems: "center",
