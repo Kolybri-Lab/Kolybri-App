@@ -1,6 +1,8 @@
 import { Switch, Text } from "@/components";
 import { useUserStore } from "@/hooks/useUserStore";
+import { routesNames } from "@/router/config/routesNames";
 import { sendDevReport } from "@/services/feedbackService";
+import { useNavigation } from "@react-navigation/native";
 import * as Application from "expo-application";
 import * as Device from "expo-device";
 import LottieView from "lottie-react-native";
@@ -49,7 +51,7 @@ const TITLE_MAX_LENGTH = 50;
 export default function FeedbackScreen({ route }) {
     const { label } = route.params;
     const colorScheme = useUserStore((state) => state.preferences.theme);
-
+    const navigation = useNavigation();
     const [error, setError] = useState("");
 
     const [activeChip, setActiveChip] = useState(FEEDBACK_OPT[0]);
@@ -196,7 +198,13 @@ export default function FeedbackScreen({ route }) {
                         très vite.
                     </Text>
                     <Pressable
-                        onPress={() => setIsSent(false)}
+                        onPress={() => {
+                            navigation.navigate(routesNames.settings.home);
+                            navigation.addListener("transitionEnd", () => {
+                                // to go back first and reset feedback screen after
+                                setIsSent(false);
+                            });
+                        }}
                         style={{
                             backgroundColor: "#7C83EB",
                             paddingVertical: 14,
