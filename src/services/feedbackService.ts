@@ -5,7 +5,7 @@ import { logger } from "@/utils/logger";
 import { fetch } from "expo/fetch";
 
 let lastSentTimestamp = 0;
-const RATE_LIMIT_DELAY_MS = 1000 * 30; // 30s
+const RATE_LIMIT_DELAY_MS = 1000 * 60 * 5; // 5min
 
 const TECH_FIELD_LABELS: Record<string, string> = {
     appVersion: "📦 Version de l'app",
@@ -22,12 +22,17 @@ export const sendDevReport = async ({
     // Anti-spam
     const now = Date.now();
     if (now - lastSentTimestamp < RATE_LIMIT_DELAY_MS) {
-        const waitSeconds = Math.ceil(
-            (RATE_LIMIT_DELAY_MS - (now - lastSentTimestamp)) / 1000
-        );
+        const remainingMs = RATE_LIMIT_DELAY_MS - (now - lastSentTimestamp);
+
+        const totalSeconds = Math.ceil(remainingMs / 1000);
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+
+        const time = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+
         return {
             success: false,
-            message: `Veuillez patienter ${waitSeconds}s avant d'envoyer un autre rapport.`,
+            message: `Veuillez patienter ${time} avant d'envoyer un autre rapport.`,
         };
     }
 
