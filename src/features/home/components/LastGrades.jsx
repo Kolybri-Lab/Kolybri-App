@@ -1,9 +1,10 @@
 import { Text } from "@/components";
 import { formatGradeText } from "@/features/grades/utils/helpers";
 import { useHaptic } from "@/hooks/useHaptics";
+import { useTheme } from "@/hooks/useThemeStore";
 import { routesNames } from "@/router/config/routesNames";
 import { blendWithWhite } from "@/utils/colorGenerator";
-import { useNavigation, useTheme } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { useMemo } from "react";
 import { FlatList, TouchableOpacity, View } from "react-native";
 export default function LastGrades({ lastGradesObject }) {
@@ -142,3 +143,4 @@ const GradeCard = ({ disciplineColor, disciplineName, data, index, count }) => {
         </View>
     );
 };
+

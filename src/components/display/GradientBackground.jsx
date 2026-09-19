@@ -1,9 +1,10 @@
-import { useTheme } from "@react-navigation/native";
+import { useTheme } from "@/hooks/useThemeStore";
 import { LinearGradient } from "expo-linear-gradient";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 export default function GradientBackground({ children }) {
     const { colors } = useTheme();
+    const g = colors.background.gradient;
 
     let gradientColors = ["#000000", "#000000"];
     let locations = undefined;
@@ -34,14 +35,21 @@ export default function GradientBackground({ children }) {
         gradientColors = [rawGradient, rawGradient];
     }
 
-    return (
+    return g ? (
         <LinearGradient
-            colors={gradientColors}
-            locations={locations}
-            style={styles.gradient}
+            colors={g.colors}
+            locations={g.locations}
+            style={StyleSheet.absoluteFill}
         >
             {children}
         </LinearGradient>
+    ) : (
+        <View
+            style={[
+                StyleSheet.absoluteFill,
+                { backgroundColor: colors.background.screen },
+            ]}
+        />
     );
 }
 

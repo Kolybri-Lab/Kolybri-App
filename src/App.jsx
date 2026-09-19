@@ -4,6 +4,8 @@ import { useEffect } from "react";
 import RootProviders from "./provider";
 import AuthNavigator from "./router/AuthNavigator";
 
+import { Appearance } from "react-native";
+import { useThemeStore } from "./hooks/useThemeStore";
 import { setupDevMenu } from "./mock/guest/setupDevMenu";
 import {
     initNetworkListeners,
@@ -26,6 +28,14 @@ export default function App() {
         Bold: require("assets/fonts/Baloo2-Bold.ttf"),
         ExtraBold: require("assets/fonts/Baloo2-ExtraBold.ttf"),
     });
+    const setSystemTheme = useThemeStore((s) => s.setSystemTheme);
+
+    useEffect(() => {
+        const sub = Appearance.addChangeListener(({ colorScheme }) => {
+            setSystemTheme(colorScheme ?? "dark");
+        });
+        return () => sub.remove();
+    }, [setSystemTheme]);
 
     useEffect(() => {
         initNetworkListeners();
@@ -43,6 +53,8 @@ export default function App() {
             SplashScreen.hideAsync();
         }
     }, [fontLoaded]);
+    // const setFollowSystem = useThemeStore((state) => state.setFollowSystem);
+    // setFollowSystem(true);
     if (!fontLoaded) return null;
 
     return (
@@ -52,3 +64,4 @@ export default function App() {
         </RootProviders>
     );
 }
+

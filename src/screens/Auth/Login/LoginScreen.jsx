@@ -1,4 +1,6 @@
-import { useNavigation, useTheme } from "@react-navigation/native";
+import { useTheme } from "@/hooks/useThemeStore";
+import { useNavigation } from "@react-navigation/native";
+
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
     Pressable,

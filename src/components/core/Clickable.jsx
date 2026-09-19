@@ -1,6 +1,6 @@
 // not tested, maybe usefull
 
-import { useTheme } from "@react-navigation/native";
+import { useTheme } from "@/hooks/useThemeStore";
 import React from "react";
 import { ActivityIndicator, StyleSheet, Text, TouchableOpacity } from "react-native";
 
@@ -145,3 +145,4 @@ function Button({
 }
 
 export default Button;
+

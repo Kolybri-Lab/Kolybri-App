@@ -2,9 +2,10 @@ import { Text } from "@/components";
 import { ProgressBar } from "@/components/progression/ProgressBar";
 import { BackArrow } from "@/components/svg";
 import { useHaptic } from "@/hooks/useHaptics";
+import { useTheme } from "@/hooks/useThemeStore";
 import { routesNames } from "@/router/config/routesNames";
 import { addOpacityToCssRgb } from "@/utils/colorGenerator";
-import { useNavigation, useTheme } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity, View } from "react-native";
 
 export default function ActiveCourseCard({

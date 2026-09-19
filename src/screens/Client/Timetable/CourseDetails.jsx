@@ -1,5 +1,7 @@
-import { useFocusEffect, useTheme } from "@react-navigation/native";
+import { useTheme } from "@/hooks/useThemeStore";
+import { useFocusEffect } from "@react-navigation/native";
 import dayjs from "dayjs";
+
 import { useCallback, useEffect, useState } from "react";
 import { View } from "react-native";
 
@@ -14,8 +16,8 @@ import {
     Person,
     Trash,
 } from "@/components/svg";
-import { toHoursMinutes, toMilliseconds } from "@/utils/time";
 import { routesNames } from "@/router/config/routesNames";
+import { toHoursMinutes, toMilliseconds } from "@/utils/time";
 import { GoBackHeader, SwipeBackWrapper } from "../../../components";
 
 export default function CourseDetails({ route }) {
@@ -367,3 +369,4 @@ export default function CourseDetails({ route }) {
         </View>
     );
 }
+

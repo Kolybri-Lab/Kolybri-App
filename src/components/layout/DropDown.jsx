@@ -1,4 +1,5 @@
-import { useTheme } from "@react-navigation/native";
+import { SimpleArrow } from "@/components/svg";
+import { useTheme } from "@/hooks/useThemeStore";
 import { useState } from "react";
 import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
 import Animated, {
@@ -7,7 +8,6 @@ import Animated, {
     useSharedValue,
     withTiming,
 } from "react-native-reanimated";
-import { SimpleArrow } from "@/components/svg";
 import { Text } from "../core";
 
 export default function DropDown({

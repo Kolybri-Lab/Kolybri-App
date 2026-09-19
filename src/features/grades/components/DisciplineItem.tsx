@@ -1,4 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { Text as CoreText } from "@/components/core";
+import { formatGradeText } from "@/features/grades/utils/helpers";
+import { useTheme } from "@/hooks/useThemeStore";
+import { addOpacityToCssRgb } from "@/utils/colorGenerator";
+import { useEffect, useState } from "react";
 import { TouchableOpacity, View } from "react-native";
 import Animated, {
     Extrapolation,
@@ -8,16 +12,12 @@ import Animated, {
     useSharedValue,
     withTiming,
 } from "react-native-reanimated";
-import { useTheme } from "@react-navigation/native";
-import { Text as CoreText } from "@/components/core";
-const Text = CoreText as any;
-import { addOpacityToCssRgb } from "@/utils/colorGenerator";
-import { formatGradeText } from "@/features/grades/utils/helpers";
 import Discipline from "../models/Discipline";
 import Grade from "../models/Grade";
 import GradeItem from "./GradeItem";
-import SimulatedGradeItem from "./SimulatedGradeItem";
 import SimpleFlamme from "./SimpleFlamme";
+import SimulatedGradeItem from "./SimulatedGradeItem";
+const Text = CoreText as any;
 
 interface DisciplineItemProps {
     discipline: Discipline;

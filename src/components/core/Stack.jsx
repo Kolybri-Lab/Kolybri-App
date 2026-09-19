@@ -1,4 +1,4 @@
-import { useTheme } from "@react-navigation/native";
+import { useTheme } from "@/hooks/useThemeStore";
 import React from "react";
 import { StyleSheet, View } from "react-native";
 

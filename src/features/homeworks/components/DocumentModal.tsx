@@ -1,17 +1,17 @@
-import React, { useCallback, useState } from "react";
-import { ListRenderItemInfo, TouchableOpacity, View } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
-import { useTheme } from "@react-navigation/native";
 import { Modal } from "@/components";
 import { Text as CoreText } from "@/components/core";
-const Text = CoreText as any;
 import { File } from "@/components/svg";
-import { useUserStore } from "@/hooks/useUserStore";
 import {
     downloadDocument,
     openDocument,
 } from "@/features/homeworks/utils/documents";
 import { assignUnit } from "@/features/homeworks/utils/homeworks";
+import { useTheme } from "@/hooks/useThemeStore";
+import { useUserStore } from "@/hooks/useUserStore";
+import React, { useCallback, useState } from "react";
+import { ListRenderItemInfo, TouchableOpacity, View } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
+const Text = CoreText as any;
 
 export interface HomeworkDocument {
     id: number | string;
@@ -23,9 +23,12 @@ export interface HomeworkDocument {
 
 export interface DocumentModalProps {
     visible: boolean;
-    setVisible?: React.Dispatch<React.SetStateAction<boolean>> | ((visible: boolean) => void);
+    setVisible?:
+        React.Dispatch<React.SetStateAction<boolean>> | ((visible: boolean) => void);
     documents?: HomeworkDocument[];
-    renderDocuments?: (info: ListRenderItemInfo<HomeworkDocument>) => React.ReactElement | null;
+    renderDocuments?: (
+        info: ListRenderItemInfo<HomeworkDocument>
+    ) => React.ReactElement | null;
     extras?: {
         colors?: any;
         [key: string]: any;
@@ -44,7 +47,9 @@ export default function DocumentModal({
     const theme = useTheme();
     const colors = extras?.colors || (theme.colors as any);
     const userAccessToken = useUserStore((state) => state.token);
-    const [downloadProgress, setDownloadProgress] = useState<Record<string | number, number>>({});
+    const [downloadProgress, setDownloadProgress] = useState<
+        Record<string | number, number>
+    >({});
 
     const defaultRenderItem = useCallback(
         ({ item }: ListRenderItemInfo<HomeworkDocument>) => {
@@ -135,9 +140,12 @@ export default function DocumentModal({
             <FlatList
                 data={documents}
                 renderItem={renderDocuments || defaultRenderItem}
-                keyExtractor={(item) => item?.id?.toString() ?? Math.random().toString()}
+                keyExtractor={(item) =>
+                    item?.id?.toString() ?? Math.random().toString()
+                }
                 contentContainerStyle={{ gap: 7 }}
             />
         </Modal>
     );
 }
+

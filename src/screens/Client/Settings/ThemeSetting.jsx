@@ -32,93 +32,79 @@ export default function ThemeScreen({ route }) {
 
     return (
         <SettingSectionLayout label={label}>
-            <View style={{ position: "relative", opacity: 0.4 }}>
-                <Pressable
-                    style={{
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        zIndex: 10,
-                    }}
-                    onPress={() => {}}
-                />
-
-                <View style={{ gap: 2 }}>
-                    <Section
-                        label={"Thème"}
-                        icon={<Sun size={18} opacity={0.6} />}
-                        index={0}
-                        totalLength={2}
+            <View style={{ gap: 2 }}>
+                <Section
+                    label={"Thème"}
+                    icon={<Sun size={18} opacity={0.6} />}
+                    index={0}
+                    totalLength={2}
+                >
+                    <View
+                        style={{
+                            alignItems: "center",
+                            flexDirection: "row",
+                            gap: 16,
+                            borderColor: "hsla(0, 0%, 100%, .3)",
+                            borderWidth: 1,
+                            paddingVertical: 2,
+                            paddingHorizontal: 4,
+                            borderRadius: 50,
+                        }}
                     >
-                        <View
+                        <Pressable
+                            onPress={() => handleChange("dark")}
                             style={{
-                                alignItems: "center",
-                                flexDirection: "row",
-                                gap: 16,
-                                borderColor: "hsla(0, 0%, 100%, .3)",
-                                borderWidth: 1,
-                                paddingVertical: 2,
-                                paddingHorizontal: 4,
+                                padding: 6,
                                 borderRadius: 50,
+                                backgroundColor:
+                                    value === "dark"
+                                        ? "hsla(0, 0%, 100%, .4)"
+                                        : "transparent",
                             }}
                         >
-                            <Pressable
-                                onPress={() => handleChange("dark")}
-                                style={{
-                                    padding: 6,
-                                    borderRadius: 50,
-                                    backgroundColor:
-                                        value === "dark"
-                                            ? "hsla(0, 0%, 100%, .4)"
-                                            : "transparent",
-                                }}
-                            >
-                                <Moon size={18} />
-                            </Pressable>
+                            <Moon size={18} />
+                        </Pressable>
 
-                            <Pressable
-                                style={{
-                                    padding: 6,
-                                    borderRadius: 50,
-                                    backgroundColor:
-                                        value === "system"
-                                            ? "hsla(0, 0%, 100%, .4)"
-                                            : "transparent",
-                                }}
-                                onPress={() => handleChange("system")}
-                            >
-                                <Text preset="label2">Auto</Text>
-                            </Pressable>
+                        <Pressable
+                            style={{
+                                padding: 6,
+                                borderRadius: 50,
+                                backgroundColor:
+                                    value === "system"
+                                        ? "hsla(0, 0%, 100%, .4)"
+                                        : "transparent",
+                            }}
+                            onPress={() => handleChange("system")}
+                        >
+                            <Text preset="label2">Auto</Text>
+                        </Pressable>
 
-                            <Pressable
-                                onPress={() => handleChange("light")}
-                                style={{
-                                    padding: 6,
-                                    borderRadius: 50,
-                                    backgroundColor:
-                                        value === "light"
-                                            ? "hsla(0, 0%, 100%, .4)"
-                                            : "transparent",
-                                }}
-                            >
-                                <Sun size={21} opacity={1} />
-                            </Pressable>
-                        </View>
-                    </Section>
-                    <Section
-                        label={"Jouer les animations"}
-                        icon={<Lightning size={18} opacity={0.6} />}
-                        index={1}
-                        totalLength={2}
-                    >
-                        <Switch
-                            value={tempState}
-                            onValueChange={(toSet) => setTempStateValue(toSet)}
-                        />
-                    </Section>
-                </View>
+                        <Pressable
+                            onPress={() => handleChange("light")}
+                            style={{
+                                padding: 6,
+                                borderRadius: 50,
+                                backgroundColor:
+                                    value === "light"
+                                        ? "hsla(0, 0%, 100%, .4)"
+                                        : "transparent",
+                            }}
+                        >
+                            <Sun size={21} opacity={1} />
+                        </Pressable>
+                    </View>
+                </Section>
+                <Section
+                    label={"Jouer les animations"}
+                    icon={<Lightning size={18} opacity={0.6} />}
+                    index={1}
+                    totalLength={2}
+                >
+                    <Switch
+                        value={tempState}
+                        onValueChange={(toSet) => setTempStateValue(toSet)}
+                    />
+                </Section>
             </View>
 
             <Text
@@ -132,3 +118,4 @@ export default function ThemeScreen({ route }) {
         </SettingSectionLayout>
     );
 }
+

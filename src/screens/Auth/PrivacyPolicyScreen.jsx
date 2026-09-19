@@ -1,13 +1,13 @@
 import { Text } from "@/components/core";
 import { CopyLeft } from "@/components/svg";
 import { CONFIG } from "@/constants/config";
-import { useTheme } from "@react-navigation/native";
+import { useTheme } from "@/hooks/useThemeStore";
+import { logger } from "@/utils/logger";
 import { fetch } from "expo/fetch";
 import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { logger } from "@/utils/logger";
 import packageJson from "../../../package.json";
 import {
     GoBackHeader,

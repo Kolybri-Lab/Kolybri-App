@@ -1,7 +1,7 @@
-import { useTheme } from "@react-navigation/native";
+import { Check } from "@/components/svg";
+import { useTheme } from "@/hooks/useThemeStore";
 import { useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { Check } from "@/components/svg";
 import { Text } from "../core";
 
 export default function CheckBox({

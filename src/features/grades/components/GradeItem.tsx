@@ -1,6 +1,4 @@
-import React from "react";
-import { TouchableOpacity, View } from "react-native";
-import { useTheme } from "@react-navigation/native";
+import { Text as CoreText } from "@/components/core";
 import {
     BestGrade,
     EqualToDisciplineAverage,
@@ -9,11 +7,12 @@ import {
     UpperThanDisciplineAverage,
     UpTheStreak,
 } from "@/components/svg";
-import { Text as CoreText } from "@/components/core";
-const Text = CoreText as any;
-import { addOpacityToCssRgb } from "@/utils/colorGenerator";
 import { formatGradeText } from "@/features/grades/utils/helpers";
+import { useTheme } from "@/hooks/useThemeStore";
+import { addOpacityToCssRgb } from "@/utils/colorGenerator";
+import { TouchableOpacity, View } from "react-native";
 import Grade from "../models/Grade";
+const Text = CoreText as any;
 
 interface GradeItemProps {
     grade: Grade;
@@ -87,10 +86,7 @@ export default function GradeItem({ grade, dispatch }: GradeItemProps) {
                             const BadgeComponent = UI_BADGES[badge];
                             if (!BadgeComponent) return null;
                             return (
-                                <BadgeComponent
-                                    key={`${badge}-${i}`}
-                                    size={22}
-                                />
+                                <BadgeComponent key={`${badge}-${i}`} size={22} />
                             );
                         })}
                 </View>
@@ -101,12 +97,11 @@ export default function GradeItem({ grade, dispatch }: GradeItemProps) {
                     {grade.data?.outOf !== 20 &&
                         grade.data?.outOf !== null &&
                         grade.data?.outOf !== undefined && (
-                            <Text preset="label3">
-                                {`/${grade.data.outOf}`}
-                            </Text>
+                            <Text preset="label3">{`/${grade.data.outOf}`}</Text>
                         )}
                 </Text>
             </View>
         </TouchableOpacity>
     );
 }
+

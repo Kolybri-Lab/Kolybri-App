@@ -1,4 +1,4 @@
-import { useFocusEffect, useNavigation, useTheme } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import {
     memo,
     useCallback,
@@ -25,6 +25,7 @@ import { routesNames } from "@/router/config/routesNames";
 import { addOpacityToCssRgb } from "@/utils/colorGenerator";
 
 import { useTimetable } from "@/features/timetable";
+import { useTheme } from "@/hooks/useThemeStore";
 import { useUserStore } from "@/hooks/useUserStore";
 
 let {
@@ -312,7 +313,7 @@ const CourseBox = memo(({ course, navigation, theme, timetableViewDims }) => {
     };
 
     const { shadow } = useTheme();
-    const shadowColor = addOpacityToCssRgb("rgb(0, 0, 0)", shadow.oppacity);
+    const shadowColor = addOpacityToCssRgb("rgb(0, 0, 0)", shadow.opacity);
 
     return (
         <Animated.View

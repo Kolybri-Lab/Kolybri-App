@@ -1,5 +1,5 @@
 import { NavigationContainer } from "@react-navigation/native";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import StyleMask from "@/components/display/StyleMask";
@@ -7,14 +7,14 @@ import ErrorBoundary from "@/components/error/ErrorBoundary";
 import ErrorToast from "@/components/error/ErrorToast";
 import NetworkBanner from "@/components/error/NetworkBanner";
 import { useAuthStore } from "@/hooks/useAuthStore";
-import { useActiveThemeMode } from "@/hooks/useThemeStore";
+import { useActiveThemeMode, useTheme } from "@/hooks/useThemeStore";
 import SplashScreen from "@/screens/Splash/SplashScreen";
 import authService from "@/services/login/authService";
 import {
     tryLoginWithStoredCreds,
     tryRestoreToken,
 } from "@/services/login/tools/bootstrapAsync";
-import { THEMES_ASSOCIATIONS } from "@/themes/themes";
+import { toNavigationTheme } from "@/themes/navigation";
 import Auth from "./display/auth/Auth";
 import Client from "./display/client/Client";
 
@@ -54,10 +54,13 @@ export default function AuthNavigator() {
         bootstrapAsync();
     }, []);
 
+    const theme = useTheme();
+    const navTheme = useMemo(() => toNavigationTheme(theme), [theme]);
+
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <ErrorBoundary>
-                <NavigationContainer theme={THEMES_ASSOCIATIONS[activeMode]}>
+                <NavigationContainer theme={navTheme}>
                     {isBooting ? (
                         <SplashScreen />
                     ) : isAuthenticated ? (
@@ -78,3 +81,4 @@ export default function AuthNavigator() {
         </GestureHandlerRootView>
     );
 }
+

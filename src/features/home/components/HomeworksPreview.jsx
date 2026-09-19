@@ -1,12 +1,14 @@
 import { Text } from "@/components";
 import { injectHomeworksIntoModel } from "@/features/homeworks/utils/homeworks";
 import { useHaptic } from "@/hooks/useHaptics";
+import { useTheme } from "@/hooks/useThemeStore";
 import { routesNames } from "@/router/config/routesNames";
 import dynamicBorderRadius from "@/utils/borderRadius";
 
 import { addOpacityToCssRgb } from "@/utils/colorGenerator";
 import { formatFrenchDate } from "@/utils/date";
-import { useNavigation, useTheme } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
+
 import { useMemo } from "react";
 import { TouchableOpacity, View, useWindowDimensions } from "react-native";
 
@@ -193,3 +195,4 @@ const Homework = ({ homework, index, countForDate }) => {
         </View>
     );
 };
+

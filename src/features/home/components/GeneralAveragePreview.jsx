@@ -3,8 +3,9 @@ import Period from "@/features/grades/models/Period";
 import { formatGradeText } from "@/features/grades/utils/helpers";
 import { useCurrentTime } from "@/hooks/useCurrentTime";
 import { useHaptic } from "@/hooks/useHaptics";
+import { useTheme } from "@/hooks/useThemeStore";
 import { routesNames } from "@/router/config/routesNames";
-import { useNavigation, useTheme } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { useMemo } from "react";
 import { TouchableOpacity, View } from "react-native";
 
@@ -91,3 +92,4 @@ export default function GeneralAveragePreview({ gradesData }) {
         </TouchableOpacity>
     );
 }
+

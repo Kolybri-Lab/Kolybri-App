@@ -8,9 +8,11 @@ import {
     decodeHomeworkContent,
     serializeHomework,
 } from "@/features/homeworks/utils/homeworks";
+import { useTheme } from "@/hooks/useThemeStore";
 import { useUserStore } from "@/hooks/useUserStore";
+import { routesNames } from "@/router/config/routesNames";
 import { formatFrenchDate } from "@/utils/date";
-import { useNavigation, useTheme } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { useMemo, useState } from "react";
 import {
     ScrollView,
@@ -19,7 +21,6 @@ import {
     View,
 } from "react-native";
 import RenderHTML from "react-native-render-html";
-import { routesNames } from "@/router/config/routesNames";
 import { GoBackHeader, Modal } from "../../../components";
 
 export default function HomeworkDetails({ route }) {
@@ -246,8 +247,6 @@ export default function HomeworkDetails({ route }) {
         </View>
     );
 }
-
-
 
 const CourseContentModal = ({ visible, setVisible, courseHTML }) => {
     return (

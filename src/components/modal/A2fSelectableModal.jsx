@@ -1,7 +1,7 @@
-import { useTheme } from "@react-navigation/native";
+import { useTheme } from "@/hooks/useThemeStore";
+import { addOpacityToCssRgb } from "@/utils/colorGenerator";
 import { useState } from "react";
 import { FlatList, Modal, StyleSheet, TouchableOpacity, View } from "react-native";
-import { addOpacityToCssRgb } from "@/utils/colorGenerator";
 import { Text } from "../core";
 
 export default function A2fSelectableModal({
