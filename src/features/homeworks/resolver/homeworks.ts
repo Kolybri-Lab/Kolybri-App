@@ -135,12 +135,12 @@ export async function toggleHomeworkInApi({
         }),
         ...(!state && { idDevoirsNonEffectues: [id] }),
     };
-    fetchApi(
+    return await fetchApi(
         `https://api.ecoledirecte.com/v3/Eleves/{USER_ID}/cahierdetexte.awp?verbe=put&{API_VERSION}`,
         {
             body,
             headers: { "X-Token": token },
             method: "POST",
         }
-    ).catch((e) => console.log("An error expected in toggleHomework, ", e));
+    );
 }

@@ -91,3 +91,5 @@ ios/
 
 # builds
 dist/
+credentials.json
+credentials/

@@ -8,6 +8,7 @@ import HomeworkCard from "@/features/homeworks/components/HomeworkCard";
 import HomeworkDatesRow from "@/features/homeworks/components/HomeworkDatesRow";
 import HomeworkProgress from "@/features/homeworks/components/HomeworkProgress";
 
+import DocumentModal from "@/features/homeworks/components/DocumentModal";
 import NewHomeworkModal from "@/features/homeworks/components/NewHomeworkModal";
 import { useHomework } from "@/features/homeworks/context/HomeworkContext";
 import { useHomeworksHandler } from "@/features/homeworks/hooks/useHomeworksHandler";
@@ -68,6 +69,10 @@ export default function HomeworksContent() {
 
     const [activeDate, setActiveDate] = useState("");
     const [modalOpen, setModalOpen] = useState(false);
+    const [documentModal, setDocumentModal] = useState({
+        open: false,
+        documents: [],
+    });
     const [expandedHomeworkId, setExpandedHomeworkId] = useState(null);
 
     const handleItemPress = useCallback((id) => {
@@ -81,6 +86,7 @@ export default function HomeworksContent() {
     useHomeworksHandler({
         setModalOpen,
         toggleHomework,
+        setDocumentModal,
     });
 
     const homeworksDates = mergedHomeworks?.formatedDates;
@@ -129,6 +135,13 @@ export default function HomeworksContent() {
     return (
         <>
             <NewHomeworkModal visible={modalOpen} defaultDate={activeDate} />
+            <DocumentModal
+                visible={documentModal.open}
+                setVisible={(open) =>
+                    setDocumentModal((prev) => ({ ...prev, open }))
+                }
+                documents={documentModal.documents}
+            />
             <ScreenStack>
                 <ScrollView
                     showsVerticalScrollIndicator={false}
@@ -174,6 +187,9 @@ export default function HomeworksContent() {
                                 homework={homework}
                                 isExpanded={expandedHomeworkId === homework.id}
                                 onToggleExpand={() => handleItemPress(homework.id)}
+                                onOpenDocuments={(documents) =>
+                                    setDocumentModal({ open: true, documents })
+                                }
                             />
                         ))}
                         <AnimatedTouchableOpacity

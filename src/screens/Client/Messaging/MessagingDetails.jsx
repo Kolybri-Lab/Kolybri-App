@@ -133,7 +133,6 @@ export default function MessagingDetails({ route }) {
         () => (
             <RenderHTML
                 contentWidth={width}
-                defaultTextProps={{ selectable: true }}
                 source={{ html: messageContent?.content ?? "" }}
                 ignoredDomTags={["script", "iframe", "object", "o:p"]}
                 baseStyle={baseStyle}
@@ -283,7 +282,9 @@ export default function MessagingDetails({ route }) {
                         </View>
                     )}
                 </View>
+                <View style={{ height: 25 }} />
             </ScrollView>
         </ScreenStack>
     );
 }
+

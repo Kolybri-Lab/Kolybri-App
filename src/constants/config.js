@@ -2,7 +2,6 @@ import dayjs from "dayjs";
 
 export const CONFIG = {
     tabBarHeight: 87,
-    tabBarScrollPadding: 105,
     upper: 26,
     dateNow: dayjs().format("YYYY-MM-DD"),
     preciseDateNow: dayjs().format("YYYY-MM-DD_HH:mm"),
@@ -14,8 +13,7 @@ export const CONFIG = {
 };
 
 export const GUEST_CREDENTIALS = {
-    username: process.env.EXPO_PUBLIC_GUEST_USERNAME,
-    password: process.env.EXPO_PUBLIC_GUEST_PASSWORD,
+    username: "guest",
+    password: "guestauth",
 };
-export const WEBHOOK_URL = process.env.EXPO_PUBLIC_WEBHOOK_URL;
-
+export const WEBHOOK_URL = process.env.EXPO_PUBLIC_WEBHOOK_URL ?? "";

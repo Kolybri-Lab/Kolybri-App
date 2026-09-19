@@ -6,6 +6,7 @@ const defaultState = {
     homeworksData: null,
     toggle: null,
     new: { modalOpen: null, discipline: null, id: null, date: null, content: null },
+    documentModal: { open: false, documents: [] },
 };
 
 const homeworksReducer = (state, action) => {
@@ -23,6 +24,16 @@ const homeworksReducer = (state, action) => {
             };
         case "CLOSE_NEW_HOMEWORK_MODAL":
             return { ...state, new: { modalOpen: false } };
+        case "OPEN_DOCUMENT_MODAL":
+            return {
+                ...state,
+                documentModal: { open: true, documents: action.payload || [] },
+            };
+        case "CLOSE_DOCUMENT_MODAL":
+            return {
+                ...state,
+                documentModal: { open: false, documents: [] },
+            };
         case "CREATE_NEW_HOMEWORK":
             return { ...state, new: { ...action.payload, modalOpen: false } }; // discipline (int), date (YYYY-MM-DD), content (int)
         case "REMOVE_CUSTOM_HOMEWORK":

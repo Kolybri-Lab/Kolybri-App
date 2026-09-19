@@ -3,3 +3,4 @@ export { default as HomeworkDatesRow, HomeworkDateItem } from "./HomeworkDatesRo
 export { default as HomeworkProgress } from "./HomeworkProgress";
 export { default as NewHomeworkModal } from "./NewHomeworkModal";
 export { default as AnimatedToggle } from "./AnimatedToggle";
+export { default as DocumentModal } from "./DocumentModal";

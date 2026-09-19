@@ -1,20 +1,23 @@
 {
     "cli": {
         "version": ">= 18.9.1",
-        "appVersionSource": "remote"
+        "appVersionSource": "remote",
+        "requireCommit": true
     },
     "build": {
         "development": {
-            "node": "22.11.0",
+            "node": "24.16.0",
             "developmentClient": true,
             "distribution": "internal",
+            "channel": "development",
             "env": {
                 "APP_ENV": "development"
             }
         },
         "preview": {
-            "node": "22.11.0",
+            "node": "24.16.0",
             "distribution": "internal",
+            "channel": "preview",
             "android": {
                 "buildType": "apk"
             },
@@ -23,15 +26,19 @@
             }
         },
         "production": {
-            "node": "22.11.0",
+            "node": "24.16.0",
             "autoIncrement": true,
+            "channel": "production",
             "env": {
                 "APP_ENV": "production"
             }
         }
     },
     "submit": {
-        "production": {}
+        "production": {
+            "android": {
+                "track": "alpha"
+            }
+        }
     }
 }
-

@@ -5,7 +5,11 @@ import { useNavigation } from "@react-navigation/native";
 import { useEffect } from "react";
 import { useHomework } from "../context/HomeworkContext";
 
-export const useHomeworksHandler = ({ setModalOpen, toggleHomework }) => {
+export const useHomeworksHandler = ({
+    setModalOpen,
+    toggleHomework,
+    setDocumentModal,
+}) => {
     const navigation = useNavigation();
     const addCustomHomework = useCustomDataStore((state) => state.addCustomHomework);
     const removeCustomHomework = useCustomDataStore(
@@ -44,6 +48,12 @@ export const useHomeworksHandler = ({ setModalOpen, toggleHomework }) => {
             setModalOpen(state.new.modalOpen);
         }
     }, [setModalOpen, state.new.modalOpen]);
+
+    useEffect(() => {
+        if (state.documentModal?.open !== undefined && setDocumentModal) {
+            setDocumentModal(state.documentModal);
+        }
+    }, [setDocumentModal, state.documentModal]);
 
     useEffect(() => {
         const { discipline, date, content, md5Key, isEvaluation } = state.new;

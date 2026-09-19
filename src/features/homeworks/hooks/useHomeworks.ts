@@ -2,7 +2,28 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import homeworksResolver, {
     toggleHomeworkInApi,
 } from "@/features/homeworks/resolver/homeworks";
-import { ResolvedHomeworks } from "../types";
+import { Homework, ResolvedHomeworks } from "../types";
+
+const updateHomeworkInCache = (
+    queryClient: ReturnType<typeof useQueryClient>,
+    id: number,
+    updater: (hw: Homework) => Homework
+) => {
+    const currentData = queryClient.getQueryData<ResolvedHomeworks>(["homeworks"]);
+    if (!currentData) return;
+
+    const updated = JSON.parse(JSON.stringify(currentData)) as ResolvedHomeworks;
+    for (const date of Object.keys(updated)) {
+        if (date === "formatedDates") continue;
+        const dayHomeworks = updated[date];
+        if (Array.isArray(dayHomeworks)) {
+            updated[date] = dayHomeworks.map((hw) =>
+                hw.id === id ? updater(hw) : hw
+            );
+        }
+    }
+    queryClient.setQueryData(["homeworks"], updated);
+};
 
 export function useHomeworks(token: string) {
     const queryClient = useQueryClient();
@@ -23,70 +44,35 @@ export function useHomeworks(token: string) {
             toggleHomeworkInApi({ token, id, state }),
         onMutate: async ({ id }) => {
             await queryClient.cancelQueries({ queryKey: ["homeworks"] });
-            const previousHomeworks = queryClient.getQueryData<ResolvedHomeworks>(["homeworks"]);
+            const previousHomeworks =
+                queryClient.getQueryData<ResolvedHomeworks>(["homeworks"]);
 
-            if (previousHomeworks) {
-                const updatedHomeworks = JSON.parse(
-                    JSON.stringify(previousHomeworks)
-                ) as ResolvedHomeworks;
-                for (const date of Object.keys(updatedHomeworks)) {
-                    if (date === "formatedDates") continue;
-                    const dayHomeworks = updatedHomeworks[date];
-                    if (Array.isArray(dayHomeworks)) {
-                        updatedHomeworks[date] = dayHomeworks.map(
-                            (hw) => {
-                                if (hw.id === id) {
-                                    const nextIsDone =
-                                        hw.isDone === "done" ? "todo" : "done";
-                                    return {
-                                        ...hw,
-                                        isDone: nextIsDone,
-                                        loadingState: "loading",
-                                    };
-                                }
-                                return hw;
-                            }
-                        );
-                    }
-                }
-                queryClient.setQueryData(["homeworks"], updatedHomeworks);
-            }
+            updateHomeworkInCache(queryClient, id, (hw) => ({
+                ...hw,
+                isDone: hw.isDone === "done" ? "todo" : "done",
+                loadingState: "loading",
+            }));
 
             return { previousHomeworks };
         },
-        onError: (err, variables, context) => {
-            const { id } = variables;
+        onSuccess: (_data, { id }) => {
+            updateHomeworkInCache(queryClient, id, (hw) => ({
+                ...hw,
+                loadingState: "idle",
+            }));
+        },
+        onError: (_err, { id }, context) => {
             const previousHomeworks = context?.previousHomeworks;
 
             if (previousHomeworks) {
-                const updatedHomeworks = JSON.parse(
-                    JSON.stringify(previousHomeworks)
-                ) as ResolvedHomeworks;
-                for (const date of Object.keys(updatedHomeworks)) {
-                    if (date === "formatedDates") continue;
-                    const dayHomeworks = updatedHomeworks[date];
-                    if (Array.isArray(dayHomeworks)) {
-                        updatedHomeworks[date] = dayHomeworks.map(
-                            (hw) => {
-                                if (hw.id === id) {
-                                    return { ...hw, loadingState: "error" };
-                                }
-                                return hw;
-                            }
-                        );
-                    }
-                }
-                queryClient.setQueryData(["homeworks"], updatedHomeworks);
+                updateHomeworkInCache(queryClient, id, (hw) => ({
+                    ...hw,
+                    loadingState: "error",
+                }));
 
                 setTimeout(() => {
                     queryClient.setQueryData(["homeworks"], previousHomeworks);
-                    queryClient.invalidateQueries({ queryKey: ["homeworks"] });
                 }, 3000);
-            }
-        },
-        onSettled: (data, error) => {
-            if (!error) {
-                queryClient.invalidateQueries({ queryKey: ["homeworks"] });
             }
         },
     });

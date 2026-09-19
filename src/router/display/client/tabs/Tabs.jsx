@@ -17,6 +17,7 @@ export default function Tabs() {
             tabBar={renderTabBar}
 
             initialRouteName={routesNames.client.home}
+            backBehavior="initialRoute"
             screenOptions={{
                 headerShown: false,
                 animation: "fade",
@@ -28,3 +29,4 @@ export default function Tabs() {
         </Tab.Navigator>
     );
 }
+

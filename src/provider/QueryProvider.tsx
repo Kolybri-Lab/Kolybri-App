@@ -28,8 +28,8 @@ export const queryClient = new QueryClient({
     }),
     defaultOptions: {
         queries: {
-            staleTime: 1000 * 60 * 60, // 30 min
-            gcTime: 1000 * 60 * 60 * 24, // 1j
+            staleTime: 1000 * 60 * 60, // 1h
+            gcTime: 1000 * 60 * 60 * 24 * 7, // 1 week
             placeholderData: (previousData) => previousData,
             retry: (failureCount, error: any) => {
                 if (
@@ -87,3 +87,4 @@ export function QueryProvider({ children }: { children: React.ReactNode }) {
         </PersistQueryClientProvider>
     );
 }
+

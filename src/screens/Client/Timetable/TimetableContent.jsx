@@ -35,6 +35,28 @@ height -= CONFIG.upper + 24; // ??? but works fine
 
 const screenHeight = height;
 
+const hasCourses = (day) => Array.isArray(day?.courses) && day.courses.length > 0;
+
+export const getTargetTimetableIndex = (timetableData) => {
+    if (!Array.isArray(timetableData) || timetableData.length === 0) return -1;
+
+    const targetIndex = timetableData.findIndex(
+        (day) => day.date >= CONFIG.dateNow && hasCourses(day)
+    );
+
+    if (targetIndex !== -1) {
+        return targetIndex;
+    }
+
+    for (let i = timetableData.length - 1; i >= 0; i--) {
+        if (hasCourses(timetableData[i])) {
+            return i;
+        }
+    }
+
+    return 0;
+};
+
 export default function TimetableContent() {
     const navigation = useNavigation();
     const theme = useTheme();
@@ -108,14 +130,12 @@ export default function TimetableContent() {
             return;
 
         if (!currentDateRef.current || !prevFirstDateRef.current) {
-            const todayIndex = timetableData.findIndex(
-                (day) => day.date === CONFIG.dateNow
-            );
+            const targetIndex = getTargetTimetableIndex(timetableData);
 
-            if (todayIndex !== -1) {
-                scrollViewRef.current?.scrollToIndex(todayIndex, false);
-                setCurrentIndex(todayIndex);
-                currentDateRef.current = timetableData[todayIndex].date;
+            if (targetIndex !== -1) {
+                scrollViewRef.current?.scrollToIndex(targetIndex, false);
+                setCurrentIndex(targetIndex);
+                currentDateRef.current = timetableData[targetIndex]?.date;
             }
 
             prevFirstDateRef.current = timetableData[0]?.date;
@@ -181,11 +201,10 @@ export default function TimetableContent() {
                         }}
                         onLongPress={() => {
                             if (!Array.isArray(timetableData)) return;
-                            const todayIndex = timetableData.findIndex(
-                                (day) => day.date === CONFIG.dateNow
-                            );
-                            if (todayIndex !== -1) {
-                                scrollViewRef.current.scrollToIndex(todayIndex);
+                            const targetIndex =
+                                getTargetTimetableIndex(timetableData);
+                            if (targetIndex !== -1) {
+                                scrollViewRef.current?.scrollToIndex(targetIndex);
                             }
                         }}
                     >

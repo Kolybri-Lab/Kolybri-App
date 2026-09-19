@@ -7,8 +7,8 @@ import storeDatas from "@/services/login/tools/storeLoginDatas";
 import { useCallback, useEffect } from "react";
 import { useAuthStore } from "./useAuthStore";
 import { useCustomDataStore } from "./useCustomDataStore";
-import { useUserStore } from "./useUserStore";
 import { useErrorStore } from "./useErrorStore";
+import { useUserStore } from "./useUserStore";
 
 export const useSignIn = () => {
     const error = useAuthStore((state) => state.error);
@@ -103,8 +103,13 @@ export const useSignIn = () => {
                         break;
                     }
                 }
-            } catch (err) {
-                setError("Une erreur inattendue est survenue");
+            } catch (err: any) {
+                const code = typeof err?.code === "number" ? err.code : undefined;
+                const message = code ? getApiMessage(code) : undefined;
+
+                setError(
+                    message || err?.message || "Une erreur inattendue est survenue"
+                );
             }
         },
         [setKeepConnected, setA2fInfos, setMcqDatas, setA2fToken, setError]
@@ -143,3 +148,4 @@ export const useSignIn = () => {
         setApiError: setError,
     };
 };
+

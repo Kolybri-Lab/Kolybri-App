@@ -19,8 +19,20 @@ export default function HomeworkCard({
     enabled = true,
     isExpanded = false,
     onToggleExpand,
+    onOpenDocuments,
 }) {
     const haptics = useHaptic("success");
+    const handleOpenDocuments = () => {
+        if (typeof onOpenDocuments === "function") {
+            onOpenDocuments(homework.homeworksContent?.joinedDocuments, homework);
+        } else if (typeof dispatch === "function") {
+            dispatch({
+                type: "OPEN_DOCUMENT_MODAL",
+                payload: homework.homeworksContent?.joinedDocuments,
+            });
+        }
+    };
+
     const handlePress = () => {
         dispatch({
             type: "SEE_HOMEWORK_DETAILS",
@@ -223,7 +235,11 @@ export default function HomeworkCard({
                             <Maximize2 size={20} color={colors.contrast} />
                         </TouchableOpacity>
                         {homework.homeworksContent.joinedDocuments?.length > 0 && (
-                            <TouchableOpacity style={{ margin: -2 }} hitSlop={8}>
+                            <TouchableOpacity
+                                onPress={handleOpenDocuments}
+                                style={{ margin: -2 }}
+                                hitSlop={8}
+                            >
                                 <FolderOpen size={20} color={colors.contrast} />
                             </TouchableOpacity>
                         )}

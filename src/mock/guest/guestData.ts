@@ -8,7 +8,6 @@ import { GUEST_CREDENTIALS } from "@/constants/config";
 import {
     mockGrades,
     mockHomeworks,
-    mockHomeworksPreciseDay,
     mockLogin,
     mockMessageDetail,
     mockMessagesFolder,
@@ -201,7 +200,8 @@ const getGuestHomeworksForDate = (date: string) => {
         nbJourMaxRenduDevoir: 0,
         aFaire: {
             idDevoir: hw.idDevoir,
-            contenu: "Vm9pY2kgbGUgdHJhdmFpbCDDoCBmYWlyZSwgaWwgZXN0IHRyw6hzIGRyw7RsZQ==",
+            contenu:
+                "Vm9pY2kgbGUgdHJhdmFpbCDDoCBmYWlyZSwgaWwgZXN0IHRyw6hzIGRyw7RsZQ==",
             rendreEnLigne: hw.rendreEnLigne ?? false,
             donneLe: hw.donneLe || date,
             effectue: hw.effectue ?? false,
@@ -261,24 +261,6 @@ const handleToggleHomework = (body?: any) => {
                             hk.effectue = false;
                         }
                     });
-                }
-            });
-        }
-
-        // Mettre à jour le détail du jour (mockHomeworksPreciseDay)
-        if (mockHomeworksPreciseDay?.data?.matieres) {
-            mockHomeworksPreciseDay.data.matieres.forEach((item: any) => {
-                const ids = [item.id, item.idDevoir, item.aFaire?.idDevoir]
-                    .filter((x) => x != null)
-                    .map(Number);
-
-                if (ids.some((id) => doneIds.includes(id))) {
-                    if (item.aFaire) item.aFaire.effectue = true;
-                    item.effectue = true;
-                }
-                if (ids.some((id) => notDoneIds.includes(id))) {
-                    if (item.aFaire) item.aFaire.effectue = false;
-                    item.effectue = false;
                 }
             });
         }

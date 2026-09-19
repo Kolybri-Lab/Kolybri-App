@@ -282,8 +282,10 @@ export default function HomeScreen() {
                         />
                     </View>
                     {token === "guest_token" && <GuestTestButtons />}
+                    <View style={{ height: 25 }} />
                 </ScrollView>
             </View>
         </ScreenStack>
     );
 }
+

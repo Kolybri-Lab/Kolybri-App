@@ -1,14 +1,9 @@
 import { Text } from "@/components/core";
-import { File } from "@/components/svg";
 import { useHomeworks } from "@/features/homeworks";
+import DocumentModal from "@/features/homeworks/components/DocumentModal";
 import HomeworkCard from "@/features/homeworks/components/HomeworkCard";
 import { useHomework } from "@/features/homeworks/context/HomeworkContext";
 import {
-    downloadDocument,
-    openDocument,
-} from "@/features/homeworks/utils/documents";
-import {
-    assignUnit,
     createHomework,
     decodeHomeworkContent,
     serializeHomework,
@@ -16,14 +11,13 @@ import {
 import { useUserStore } from "@/hooks/useUserStore";
 import { formatFrenchDate } from "@/utils/date";
 import { useNavigation, useTheme } from "@react-navigation/native";
-import { useCallback, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
     ScrollView,
     TouchableOpacity,
     useWindowDimensions,
     View,
 } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
 import RenderHTML from "react-native-render-html";
 import { routesNames } from "@/router/config/routesNames";
 import { GoBackHeader, Modal } from "../../../components";
@@ -57,8 +51,6 @@ export default function HomeworkDetails({ route }) {
     const homeworkContent = homework.isCustom
         ? homework.homeworksContent.content
         : homework.homeworksContent.renderHtml || homework.decodedHTMLHomework;
-
-    const [downloadProgress, setDownloadProgress] = useState({});
 
     const tagsStyles = useMemo(
         () => ({
@@ -102,80 +94,12 @@ export default function HomeworkDetails({ route }) {
         [homework.decodedHTMLCourseContent, baseStyle, tagsStyles, width]
     );
 
-    const renderDocuments = useCallback(
-        ({ item }) => {
-            const { id, libelle, type, taille: size } = item;
-
-            const prog = downloadProgress[id] ?? null;
-            const ext = libelle.slice(libelle.lastIndexOf(".") + 1).toLowerCase();
-
-            return (
-                <TouchableOpacity
-                    style={{
-                        overflow: "hidden",
-                        borderRadius: 9,
-                        marginBottom: 4,
-                    }}
-                    key={id}
-                    onPress={() =>
-                        openDocument(
-                            { fileName: libelle, fileType: type, fileId: id },
-                            userAccesToken,
-                            setDownloadProgress
-                        )
-                    }
-                    onLongPress={() =>
-                        downloadDocument(
-                            { fileName: libelle, fileType: type, fileId: id },
-                            userAccesToken,
-                            setDownloadProgress
-                        )
-                    }
-                    disabled={prog !== null}
-                >
-                    {prog !== null && (
-                        <View
-                            style={{
-                                position: "absolute",
-                                left: 0,
-                                top: 0,
-                                bottom: 0,
-                                width: `${prog}%`,
-                                backgroundColor: "#4CAF5066",
-                                borderRadius: 9,
-                            }}
-                        />
-                    )}
-                    <View
-                        style={{
-                            backgroundColor:
-                                prog !== null ? "transparent" : colors.bg.bg1,
-                            padding: 10,
-                            borderRadius: 9,
-                            flexDirection: "row",
-                            alignItems: "center",
-                        }}
-                    >
-                        <View style={{ flex: 1 }}>
-                            <Text preset="label2">{libelle}</Text>
-                            <Text preset="label3">{assignUnit(size)}</Text>
-                        </View>
-                        <File fill={colors.contrast} size={25} extention={ext} />
-                    </View>
-                </TouchableOpacity>
-            );
-        },
-        [colors.bg.bg1, colors.contrast, downloadProgress]
-    );
-
     return (
         <View style={{ backgroundColor: colors.background.gradient[1], flex: 1 }}>
             <DocumentModal
                 visible={modalsHander.document[0]}
                 setVisible={modalsHander.document[1]}
-                documents={homework.homeworksContent.joinedDocuments}
-                renderDocuments={renderDocuments}
-                extras={{ colors }}
+                documents={homework.homeworksContent?.joinedDocuments}
             />
 
             <CourseContentModal
@@ -213,6 +137,7 @@ export default function HomeworkDetails({ route }) {
                             dispatch={dispatch}
                             enabled={false}
                             homework={homework}
+                            onOpenDocuments={() => modalsHander.document[1](true)}
                         />
                     </TouchableOpacity>
 
@@ -322,35 +247,7 @@ export default function HomeworkDetails({ route }) {
     );
 }
 
-const DocumentModal = ({
-    visible,
-    setVisible,
-    documents,
-    renderDocuments,
-    extras,
-}) => {
-    const { colors } = extras;
-    return (
-        <Modal visible={visible} handleClose={() => setVisible(false)}>
-            <Text preset="title1" style={{ marginBottom: 12 }}>
-                Documents associés
-            </Text>
-            <Text
-                preset="label3"
-                color={colors.txt.txt3}
-                style={{ marginBottom: 6 }}
-            >
-                Note du dev: maintenir pour télécharger
-            </Text>
-            <FlatList
-                data={documents}
-                renderItem={renderDocuments}
-                keyExtractor={(item) => item.id.toString()}
-                contentContainerStyle={{ gap: 7 }}
-            />
-        </Modal>
-    );
-};
+
 
 const CourseContentModal = ({ visible, setVisible, courseHTML }) => {
     return (

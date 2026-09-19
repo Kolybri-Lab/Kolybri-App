@@ -42,7 +42,7 @@ export const convertData = (arrayData = []) => {
             room: salle && salle.trim() === "" ? undefined : salle,
             classGroup: classe && classe.trim() === "" ? undefined : classe,
             group: groupe && groupe.trim() === "" ? undefined : groupe,
-            libelle: text.toUpperCase(),
+            libelle: text.toUpperCase() || "Sans nom",
             codeMatiere: codeMatiere || text,
         };
 

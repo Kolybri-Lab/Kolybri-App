@@ -6,7 +6,7 @@ sidebar_label: 12. Errors
 
 # 12. Gestion et Centralisation des Erreurs
 
-Ce document détaille le système centralisé de gestion, normalisation et affichage des erreurs de l'application Ecole Directe Plus.
+Ce document détaille le système centralisé de gestion, normalisation et affichage des erreurs de l'application Kolybri.
 
 ---
 

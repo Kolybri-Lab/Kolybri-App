@@ -1,9 +1,11 @@
 import { Section, Text } from "@/components";
 import { Link } from "@/components/svg";
 import { openUrl } from "@/utils/url";
+import { fetch } from "expo/fetch";
 import { memo, useEffect, useState } from "react";
 import { ActivityIndicator, Image, View } from "react-native";
 import SettingSectionLayout from "../components/SettingSectionLayout";
+import { logger } from "@/utils/logger";
 
 export default function ContributorsScreen({ route }) {
     const { label } = route.params;
@@ -12,9 +14,10 @@ export default function ContributorsScreen({ route }) {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        fetch(
-            "https://api.github.com/repos/Kolybri-Lab/EcoleDirectePlus-Mobile/contributors?per_page=100"
-        )
+        const url =
+            "https://api.github.com/repos/Kolybri-Lab/EcoleDirectePlus-Mobile/contributors?per_page=100";
+        logger.log(`[FETCH] GET ${url}`);
+        fetch(url)
             .then((res) => {
                 if (!res.ok) throw new Error("Erreur GitHub API");
                 return res.json();

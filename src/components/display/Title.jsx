@@ -1,6 +1,6 @@
 import { useTheme } from "@/hooks/useThemeStore";
-import { UiStyles } from "./UiStyles";
 import { Text } from "../core";
+import { UiStyles } from "./UiStyles";
 
 export default function Title({ children, ...props }) {
     const theme = useTheme();
@@ -9,7 +9,6 @@ export default function Title({ children, ...props }) {
             style={UiStyles.title}
             color={theme.colors.accent}
             preset="h3"
-            oneLine
             {...props}
         >
             {children}

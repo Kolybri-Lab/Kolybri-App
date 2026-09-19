@@ -1,6 +1,8 @@
 import { WEBHOOK_URL } from "@/constants/config";
 import { useErrorStore } from "@/hooks/useErrorStore";
 import { ReportOptions } from "@/types/feedback";
+import { logger } from "@/utils/logger";
+import { fetch } from "expo/fetch";
 
 let lastSentTimestamp = 0;
 const RATE_LIMIT_DELAY_MS = 1000 * 30; // 30s
@@ -91,6 +93,7 @@ export const sendDevReport = async ({
     };
 
     try {
+        logger.log("[FETCH] POST Discord Webhook");
         const res = await fetch(WEBHOOK_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },

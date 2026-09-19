@@ -1,6 +1,6 @@
 import { splitCookiesString } from "set-cookie-parser";
 
-export const getCookiesFromResponse = (response: Response): string => {
+export const getCookieFromResponse = (response: ApiResponseWithHeaders): string => {
     const setCookieHeader = getHeaderFromResponse({ response, item: "set-cookie" });
     if (!setCookieHeader) return "";
 
@@ -11,20 +11,29 @@ export const getCookiesFromResponse = (response: Response): string => {
     );
 };
 
+type ApiResponseWithHeaders = {
+    responseHeaders?: Record<string, string>;
+    [key: string]: any;
+};
+
 export const getHeaderFromResponse = ({
     response,
     item,
 }: {
-    response: Response;
+    response: ApiResponseWithHeaders;
     item: string;
 }): string | null => {
-    const headers = response.headers;
+    const headers = response.responseHeaders;
 
-    return isHeaderInstance(headers) ? headers.get(item) : item;
+    if (!headers) return null;
+
+    const normalizedItem = item.toLowerCase();
+    const match = Object.keys(headers).find(
+        (key) => key.toLowerCase() === normalizedItem
+    );
+
+    return match ? headers[match] : null;
 };
-
-const isHeaderInstance = (headers: any): boolean =>
-    typeof headers?.get === "function";
 
 export const convertApiResponse = async (response: Response): Promise<any> => {
     const stringifyResponse = await response.text();

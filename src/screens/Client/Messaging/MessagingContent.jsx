@@ -29,6 +29,7 @@ import Animated, {
     withTiming,
 } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { runOnJS } from "react-native-worklets";
 
 export default function MessagingContent() {
     const token = useUserStore((state) => state.token);
@@ -58,7 +59,7 @@ export default function MessagingContent() {
     const inputRef = useRef(null);
 
     const messages = useMemo(() => {
-        const flat = data?.pages.flatMap((page) => page.received) ?? [];
+        const flat = data?.pages.flatMap((page) => page[displayGroup.id]) ?? [];
         const deduped = dedupeById(flat);
 
         const query = searchQuery.trim().toLowerCase();
@@ -88,7 +89,7 @@ export default function MessagingContent() {
     const pressScale = useSharedValue(1);
 
     const containerStyle = useAnimatedStyle(() => ({
-        width: isSearchOpen ? "90%" : undefined,
+        flexShrink: 1,
         borderRadius: interpolate(transitionProgress.value, [0, 1], [30, 10]),
         transform: [{ scale: pressScale.value }],
     }));
@@ -107,10 +108,13 @@ export default function MessagingContent() {
         transitionProgress.value = withTiming(1, { duration: 250 });
     };
     const closeSearch = () => {
-        setIsSearchOpen(false);
-        setSearchQuery("");
         inputRef.current?.blur();
-        transitionProgress.value = withTiming(0, { duration: 250 });
+        setSearchQuery("");
+        transitionProgress.value = withTiming(0, { duration: 250 }, (finished) => {
+            if (finished) {
+                runOnJS(setIsSearchOpen)(false);
+            }
+        });
     };
 
     const handleLoadMore = () => {
@@ -155,11 +159,12 @@ export default function MessagingContent() {
                                 justifyContent: "center",
                                 flexDirection: "row",
                                 gap: 8,
+                                maxWidth: "100%",
                             }}
                             onPress={openSearch}
                             disabled={isSearchOpen}
                             onPressIn={() => {
-                                pressScale.value = withSpring(0.9, {
+                                pressScale.value = withSpring(0.82, {
                                     damping: 10,
                                     stiffness: 140,
                                     mass: 0.7,
@@ -174,8 +179,14 @@ export default function MessagingContent() {
                             }}
                         >
                             <Search size={18} />
-                            <Text preset="label1" oneLine>
-                                Rechercher dans les message
+                            <Text
+                                preset="label1"
+                                numberOfLines={1}
+                                adjustsFontSizeToFit
+                                minimumFontScale={0.8}
+                                style={{ flexShrink: 1 }}
+                            >
+                                Rechercher dans les messages
                             </Text>
                         </Pressable>
                     </Animated.View>
@@ -271,7 +282,12 @@ export default function MessagingContent() {
                     </View>
                 }
                 ListFooterComponent={
-                    isFetchingNextPage ? <ActivityIndicator size="small" /> : null
+                    <View>
+                        {isFetchingNextPage ? (
+                            <ActivityIndicator size="small" />
+                        ) : null}
+                        <View style={{ height: 25 }} />
+                    </View>
                 }
             />
         </ScreenStack>

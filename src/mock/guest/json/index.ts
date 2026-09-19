@@ -1,6 +1,5 @@
 import mockGrades from "./grades.json";
 import mockHomeworks from "./homeworks.json";
-import mockHomeworksPreciseDay from "./homeworks_precise_day.json";
 import mockLogin from "./login.json";
 import mockMessageDetail from "./message_detail.json";
 import mockMessagesFolder from "./messages_folder.json";
@@ -16,7 +15,6 @@ import mockViescolaireGet from "./viescolaire_get.json";
 export {
     mockGrades,
     mockHomeworks,
-    mockHomeworksPreciseDay,
     mockLogin,
     mockMessageDetail,
     mockMessagesFolder,

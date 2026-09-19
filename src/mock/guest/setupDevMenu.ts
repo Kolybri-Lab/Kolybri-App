@@ -3,6 +3,7 @@ import { useThemeStore } from "@/hooks/useThemeStore";
 import { queryClient } from "@/provider/QueryProvider";
 import { registerDevMenuItems } from "expo-dev-menu";
 import { resetAllGuestTests } from "./guestData";
+import { isLogsEnabled, toggleLogs } from "@/utils/logger";
 
 export async function setupDevMenu() {
     if (!__DEV__) return;
@@ -58,6 +59,17 @@ export async function setupDevMenu() {
                     useErrorStore.getState().clearAll();
                     resetAllGuestTests();
                     queryClient.invalidateQueries();
+                },
+            },
+            {
+                name: `6. Logs : ${isLogsEnabled() ? "🟢 ON" : "🔴 OFF"}`,
+                shouldCollapse: true,
+                callback: () => {
+                    const active = toggleLogs();
+                    console.log(
+                        `[DevMenu] Logs ${active ? "activés (ON)" : "désactivés (OFF)"}`
+                    );
+                    setupDevMenu();
                 },
             },
         ]);

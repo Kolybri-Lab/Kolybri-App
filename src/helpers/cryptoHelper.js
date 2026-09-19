@@ -1,8 +1,12 @@
-import CryptoJS from "crypto-js";
+import { CONFIG } from "@/constants/config";
+import AES from "crypto-js/aes";
+import encHex from "crypto-js/enc-hex";
+import encUtf8 from "crypto-js/enc-utf8";
+import WordArray from "crypto-js/lib-typedarrays";
+import Pkcs7 from "crypto-js/pad-pkcs7";
+import dayjs from "dayjs";
 import * as Crypto from "expo-crypto";
 import * as SecureStore from "expo-secure-store";
-import dayjs from "dayjs";
-import { CONFIG } from "@/constants/config";
 
 const { localSecretKeyStoreName, totalTokenExpirationTime } = CONFIG;
 
@@ -15,11 +19,10 @@ export async function getEncryptionKey() {
 
         if (!key) {
             const randomBytes = await Crypto.getRandomBytesAsync(32); // 256 bits = 32 bytes
-            const wordArray = CryptoJS.lib.WordArray.create(randomBytes);
+            const wordArray = WordArray.create(randomBytes);
             key = wordArray.toString(); // hex string
             await SecureStore.setItemAsync(localSecretKeyStoreName, key);
             console.log("New encryption key generated and stored.");
-        } else {
         }
 
         return key;
@@ -31,7 +34,7 @@ export async function getEncryptionKey() {
 
 export const payloadHelper = {
     /**
-     * Crypt payload with AES-256 + random IV (CBC)
+     * Crypt payload with AES-256 + random IV (CBC — default mode)
      * @param {Object} payload
      * @returns {Promise<string>} IV + encrypted text (hex)
      */
@@ -40,31 +43,33 @@ export const payloadHelper = {
             const keyHex = await getEncryptionKey();
             if (!keyHex) throw new Error("Missing encryption key");
 
-            const key = CryptoJS.enc.Hex.parse(keyHex);
+            const key = encHex.parse(keyHex);
 
             const now = dayjs();
             const payload = JSON.stringify({
                 userId: userId,
                 superSecretUserToken: connectionToken,
                 creationDate: now.format("YYYY-MM-DD_HH:mm"),
-                expirationDate: connectionToken === "guest_token"
-                    ? now.add(99, "years").format("YYYY-MM-DD_HH:mm")
-                    : now.add(totalTokenExpirationTime / 60, "minutes").format("YYYY-MM-DD_HH:mm"),
+                expirationDate:
+                    connectionToken === "guest_token"
+                        ? now.add(99, "years").format("YYYY-MM-DD_HH:mm")
+                        : now
+                              .add(totalTokenExpirationTime / 60, "minutes")
+                              .format("YYYY-MM-DD_HH:mm"),
             });
 
             // IV generated with expo-crypto for compatibility
             const randomIvBytes = await Crypto.getRandomBytesAsync(16);
-            const iv = CryptoJS.lib.WordArray.create(randomIvBytes);
+            const iv = WordArray.create(randomIvBytes);
 
-            const encrypted = CryptoJS.AES.encrypt(payload, key, {
+            const encrypted = AES.encrypt(payload, key, {
                 iv,
-                mode: CryptoJS.mode.CBC,
-                padding: CryptoJS.pad.Pkcs7,
+                padding: Pkcs7,
+                // mode: CBC by default
             });
 
             const cipherHex =
-                iv.toString(CryptoJS.enc.Hex) +
-                encrypted.ciphertext.toString(CryptoJS.enc.Hex);
+                iv.toString(encHex) + encrypted.ciphertext.toString(encHex);
 
             return cipherHex;
         } catch (error) {
@@ -87,21 +92,21 @@ export const payloadHelper = {
             const keyHex = await getEncryptionKey();
             if (!keyHex) throw new Error("Missing encryption key");
 
-            const key = CryptoJS.enc.Hex.parse(keyHex);
+            const key = encHex.parse(keyHex);
 
             const ivHex = cipherHex.slice(0, 32); // 16 bytes IV = 32 hex chars
             const ciphertextHex = cipherHex.slice(32);
 
-            const iv = CryptoJS.enc.Hex.parse(ivHex);
-            const ciphertext = CryptoJS.enc.Hex.parse(ciphertextHex);
+            const iv = encHex.parse(ivHex);
+            const ciphertext = encHex.parse(ciphertextHex);
 
-            const decrypted = CryptoJS.AES.decrypt({ ciphertext }, key, {
+            const decrypted = AES.decrypt({ ciphertext }, key, {
                 iv,
-                mode: CryptoJS.mode.CBC,
-                padding: CryptoJS.pad.Pkcs7,
+                padding: Pkcs7,
+                // mode: CBC by default
             });
 
-            const stringPayload = decrypted.toString(CryptoJS.enc.Utf8);
+            const stringPayload = decrypted.toString(encUtf8);
             try {
                 const parsedPayload = JSON.parse(stringPayload);
                 return parsedPayload;
@@ -114,4 +119,3 @@ export const payloadHelper = {
         }
     },
 };
-

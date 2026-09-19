@@ -325,7 +325,54 @@ const NextCourse = ({ data }) => {
     );
 };
 
-const AnyCourse = ({}) => {
-    return <Text>Et non ta pas cours</Text>;
+const AnyCourse = () => {
+    const { colors } = useTheme();
+
+    return (
+        <View
+            style={{
+                width: "100%",
+                minHeight: 90,
+                backgroundColor: colors.secondary,
+                borderRadius: 16,
+                paddingVertical: 18,
+                paddingHorizontal: 20,
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 14,
+            }}
+        >
+            <View
+                style={{
+                    width: 48,
+                    height: 48,
+                    borderRadius: 24,
+                    backgroundColor: addOpacityToCssRgb(colors.main, 0.15),
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexShrink: 0,
+                }}
+            >
+                <Text style={{ fontSize: 24 }}>🎉</Text>
+            </View>
+            <View style={{ flex: 1 }}>
+                <Text
+                    style={{
+                        fontFamily: "Bold",
+                        fontSize: 17,
+                        marginBottom: 2,
+                    }}
+                >
+                    Aucun cours pour le moment
+                </Text>
+                <Text
+                    color={addOpacityToCssRgb(colors.contrast, 0.6)}
+                    style={{ fontFamily: "Medium", fontSize: 14 }}
+                >
+                    Profites-en pour souffler un peu 😌
+                </Text>
+            </View>
+        </View>
+    );
 };
 

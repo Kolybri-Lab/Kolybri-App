@@ -52,10 +52,10 @@ export default function AboutScreen({ route }) {
                     }}
                 >
                     <Text preset="body1" align="center">
-                        Ecole Directe Plus simplifie l'accès à vos données École
-                        Directe grâce à une interface moderne, rapide et respectueuse
-                        de votre vie privée. Aucune donnée n'est collectée ni
-                        revendue : votre confidentialité est notre priorité.
+                        Kolybri simplifie l'accès à vos données École Directe grâce à
+                        une interface moderne, rapide et respectueuse de votre vie
+                        privée. Aucune donnée n'est collectée ni revendue : votre
+                        confidentialité est notre priorité.
                     </Text>
                 </View>
             </View>
@@ -151,4 +151,3 @@ export default function AboutScreen({ route }) {
         </SettingSectionLayout>
     );
 }
-

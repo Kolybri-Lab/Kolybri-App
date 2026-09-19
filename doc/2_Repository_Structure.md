@@ -6,7 +6,7 @@ sidebar_label: 02. Repository Structure
 
 # 02. Structure du Depot
 
-Ce document definit l'organisation des fichiers et dossiers de l'application Ecole Directe Plus. Tout contributeur doit respecter cette arborescence pour maintenir le projet homogene et lisible.
+Ce document definit l'organisation des fichiers et dossiers de l'application Kolybri. Tout contributeur doit respecter cette arborescence pour maintenir le projet homogene et lisible.
 
 ---
 

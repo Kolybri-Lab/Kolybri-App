@@ -143,6 +143,7 @@ const cleanupCache = () => {
 
 /**
  * @param {Object} props
+ * @param {import("react").ReactNode} [props.children]
  * @param {"label1"|"label2"|"label3"|"title1"|"body1"|"h1"|"h2"|"h3"|"caption"|"button"} [props.preset]
  * @param {string} [props.color]
  * @param {number} [props.size=14]
