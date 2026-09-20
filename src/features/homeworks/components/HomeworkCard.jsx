@@ -94,7 +94,7 @@ export default function HomeworkCard({
                     height: 50,
                 }}
             >
-                <View style={{ flex: 1 }}>
+                <View style={{ flex: 1, marginRight: 80 }}>
                     <View
                         style={{
                             flexDirection: "row",
@@ -125,7 +125,7 @@ export default function HomeworkCard({
                                     borderRadius: 7,
                                     borderColor: addOpacity("#F87171", 0.2),
                                     backgroundColor: addOpacity("#F87171", 0.12),
-                                    flexShrink: 1,
+                                    flexShrink: 0,
                                 }}
                             >
                                 <Text
