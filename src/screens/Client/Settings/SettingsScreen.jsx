@@ -189,7 +189,12 @@ export default function SettingsScreen({}) {
                             }}
                         >
                             {!profile?.localPhotoUri ? (
-                                <Text preset="h4">{profile?.name?.[0] ?? ""}</Text>
+                                <Text
+                                    preset="h4"
+                                    style={{ fontFamily: "Petrona-SemiBold" }}
+                                >
+                                    {profile?.name?.[0] ?? ""}
+                                </Text>
                             ) : (
                                 <Image
                                     source={getProfileImageSource()}
@@ -203,7 +208,10 @@ export default function SettingsScreen({}) {
                             )}
                         </View>
                         <View>
-                            <Text preset="label1" weight="bold">
+                            <Text
+                                preset="label1"
+                                style={{ fontFamily: "Petrona-ExtraBold" }}
+                            >
                                 {profile?.name} {profile?.surname}
                             </Text>
                             <Text preset="label2">{profile?.schoolName}</Text>

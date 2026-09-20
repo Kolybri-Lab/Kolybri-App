@@ -149,7 +149,7 @@ const Course = ({ data }) => {
                 }}
             >
                 <Text
-                    color={colors.text.mutedContrast}
+                    color={colors.text.secondaryContrast}
                     style={{ fontFamily: "Medium", fontSize: 14, lineHeight: 18 }}
                 >
                     {courseData.startCourse.time}
@@ -163,7 +163,7 @@ const Course = ({ data }) => {
                     }}
                 />
                 <Text
-                    color={colors.text.mutedContrast}
+                    color={colors.text.secondaryContrast}
                     style={{ fontFamily: "Medium", fontSize: 14, lineHeight: 18 }}
                 >
                     {courseData.endCourse.time}
@@ -212,11 +212,11 @@ const Course = ({ data }) => {
                     >
                         <BackArrow
                             props={{ transform: [{ rotate: "180deg" }] }}
-                            fill={colors.text.mutedContrast}
+                            fill={colors.text.secondaryContrast}
                             size={22}
                         />
                         <Text
-                            color={colors.text.mutedContrast}
+                            color={colors.text.secondaryContrast}
                             style={{
                                 fontFamily: "Medium",
                                 fontSize: 16,
@@ -234,7 +234,6 @@ const Course = ({ data }) => {
                     style={{
                         backgroundColor: colors.progressBar.primary.back,
                         height: 10,
-                        marginRight: 12, // la barre s'arrête avant le bord de l'heure
                     }}
                 />
             </View>
@@ -270,7 +269,7 @@ const NextCourse = ({ data }) => {
                 }}
             >
                 <Text
-                    color={withAlpha(colors.text.mutedContrast, 0.7)}
+                    color={withAlpha(colors.text.secondaryContrast, 0.7)}
                     style={{ fontFamily: "Medium", fontSize: 14, lineHeight: 18 }}
                 >
                     {courseData.course.startCourse.time}
@@ -284,7 +283,7 @@ const NextCourse = ({ data }) => {
                     }}
                 />
                 <Text
-                    color={withAlpha(colors.text.mutedContrast, 0.7)}
+                    color={withAlpha(colors.text.secondaryContrast, 0.7)}
                     style={{ fontFamily: "Medium", fontSize: 14, lineHeight: 18 }}
                 >
                     {courseData.course.endCourse.time}
@@ -319,7 +318,7 @@ const NextCourse = ({ data }) => {
                 >
                     <Text
                         oneLine
-                        color={withAlpha(colors.text.mutedContrast, 0.7)}
+                        color={withAlpha(colors.text.secondaryContrast, 0.7)}
                         style={{
                             flexShrink: 1,
                             fontSize: 15,
@@ -331,7 +330,7 @@ const NextCourse = ({ data }) => {
                     </Text>
                     <Text
                         oneLine
-                        color={withAlpha(colors.text.mutedContrast, 0.7)}
+                        color={withAlpha(colors.text.secondaryContrast, 0.7)}
                         style={{
                             flexShrink: 0,
                             fontSize: 15,

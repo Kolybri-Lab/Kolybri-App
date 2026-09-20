@@ -52,6 +52,7 @@ export default function MessagingContent() {
         typeOfRecovery: displayGroup.id,
         itemsPerPage: 20,
     });
+    const { colors } = useTheme();
 
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
@@ -140,7 +141,7 @@ export default function MessagingContent() {
                     layout={LinearTransition.duration(250)}
                     style={[
                         {
-                            backgroundColor: "hsla(0, 0%, 0%, .4)",
+                            backgroundColor: colors.surface.raised,
                             alignSelf: "center",
                             paddingVertical: 12,
                             paddingHorizontal: 18,
@@ -261,6 +262,12 @@ export default function MessagingContent() {
                         onSelect={(item) => setDisplayGroup(item)}
                         minWidth="180"
                         selectorPosition={"right"}
+                        customButtonStyle={{
+                            backgroundColor: colors.surface.card,
+                        }}
+                        customDropDownStyle={{
+                            backgroundColor: colors.surface.raised,
+                        }}
                     />
                 </View>
             </View>

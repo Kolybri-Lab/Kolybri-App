@@ -180,15 +180,17 @@ export default function DropDownMenu({
                             zIndex: 2,
                         },
                         dropDownStyle,
-                        customDropDownStyle,
                     ]}
                 >
                     <View
-                        style={{
-                            backgroundColor: "hsl(235, 28%, 22%)",
-                            borderRadius: 15,
-                            overflow: "hidden",
-                        }}
+                        style={[
+                            {
+                                backgroundColor: "hsl(235, 28%, 22%)",
+                                borderRadius: 15,
+                                overflow: "hidden",
+                            },
+                            customDropDownStyle,
+                        ]}
                     >
                         {options.map((item, index) => {
                             const itemId = getItemId(item) ?? index;

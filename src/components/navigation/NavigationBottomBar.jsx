@@ -29,10 +29,9 @@ const SPRING_CONFIG = {
 const NavigationBottomBar = ({ state, descriptors, navigation }) => {
     const tabLayouts = useRef({});
     const hasMeasuredActive = useRef(false);
-    const theme = useTheme();
     const indicatorX = useSharedValue(0);
     const haptics = useHaptic("medium");
-
+    const { colors } = useTheme();
     const animatedIndicatorStyle = useAnimatedStyle(() => ({
         transform: [{ translateX: indicatorX.value }],
     }));
@@ -85,18 +84,16 @@ const NavigationBottomBar = ({ state, descriptors, navigation }) => {
         moveIndicatorTo(state.index, true);
     }, [state.index, moveIndicatorTo]);
 
-    const navbarBackgroundColor = theme.colors.background.base;
-
     return (
         <SafeAreaView
             edges={["bottom"]}
-            style={{ backgroundColor: navbarBackgroundColor }}
+            style={{ backgroundColor: colors.tabBar.background }}
         >
             <View
                 style={{
                     width: "100%",
-                    height: 2,
-                    backgroundColor: "hsla(240, 19%, 27%, 0.57)",
+                    height: 3,
+                    backgroundColor: colors.tabBar.border,
                 }}
             />
             <Animated.View
@@ -104,9 +101,9 @@ const NavigationBottomBar = ({ state, descriptors, navigation }) => {
                     {
                         position: "absolute",
                         width: BAR_WIDTH,
-                        height: 2,
+                        height: 3,
                         borderRadius: 6,
-                        backgroundColor: theme.colors.tabBar.active,
+                        backgroundColor: colors.tabBar.active,
                     },
                     animatedIndicatorStyle,
                 ]}

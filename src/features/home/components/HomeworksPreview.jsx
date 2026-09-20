@@ -1,8 +1,10 @@
 import { Text } from "@/components";
+import { ProgressBar } from "@/components/progression/ProgressBar";
 import { injectHomeworksIntoModel } from "@/features/homeworks/utils/homeworks";
 import { useHaptic } from "@/hooks/useHaptics";
 import { useTheme } from "@/hooks/useThemeStore";
 import { routesNames } from "@/router/config/routesNames";
+import { withAlpha } from "@/themes/color";
 import dynamicBorderRadius from "@/utils/borderRadius";
 
 import { addOpacityToCssRgb } from "@/utils/colorGenerator";
@@ -25,12 +27,19 @@ export default function HomeworksPreview({ homeworksDatas, customHomeworks }) {
 
         return Object.entries(dateGroups)
             .sort(([a], [b]) => new Date(a) - new Date(b))
-            .map(([date, homeworks]) => ({
-                date,
-                homeworks: homeworks.filter((item) => item.isDone === "todo"),
-                meta: formatedDates[date],
-            }))
-            .filter(({ homeworks }) => homeworks.length > 0);
+            .map(([date, all]) => {
+                const todo = all.filter((item) => item.isDone === "todo");
+                return {
+                    date,
+                    homeworks: todo,
+                    meta: formatedDates[date],
+                    total: all.length,
+                    progress: all.length
+                        ? (all.length - todo.length) / all.length
+                        : 0,
+                };
+            })
+            .filter(({ total }) => total > 0);
     }, [mergedHomeworks]);
 
     return (
@@ -40,7 +49,9 @@ export default function HomeworksPreview({ homeworksDatas, customHomeworks }) {
                     <DateHeader
                         date={date}
                         meta={meta}
-                        countForDate={homeworks.length}
+                        progress={
+                            1 - homeworks?.length / mergedHomeworks[date].length ?? 0
+                        }
                     />
 
                     {homeworks.map((item, index) => (
@@ -73,7 +84,7 @@ export default function HomeworksPreview({ homeworksDatas, customHomeworks }) {
     );
 }
 
-const DateHeader = ({ date, meta, countForDate }) => {
+const DateHeader = ({ date, meta, progress }) => {
     const { colors } = useTheme();
     return (
         <View
@@ -82,15 +93,30 @@ const DateHeader = ({ date, meta, countForDate }) => {
                 paddingHorizontal: 6,
                 flexDirection: "row",
                 justifyContent: "space-between",
-                alignItems: "flex-end",
+                alignItems: "center",
             }}
         >
             <Text style={{ fontSize: 18, fontFamily: "SemiBold" }}>
                 {(meta?.long ?? `POUR ${formatFrenchDate(date)}`).toUpperCase()}
             </Text>
-            <Text style={{ fontSize: 18, fontFamily: "Bold", color: colors.brand.primary }}>
+            {/* <Text style={{ fontSize: 18, fontFamily: "Bold", color: colors.brand.primary }}>
                 {countForDate} restant{countForDate > 1 ? "s" : null}
-            </Text>
+            </Text> */}
+            {/* {console.log(progress)} */}
+            <ProgressBar
+                progression={progress}
+                delay={700}
+                color={
+                    progress === 1
+                        ? "hsl(149, 64%, 52%)"
+                        : withAlpha(colors.progressBar.secondary.progress, 0.4)
+                }
+                style={{
+                    backgroundColor: colors.progressBar.secondary.back,
+                    width: 70,
+                    height: 8,
+                }}
+            />
         </View>
     );
 };
@@ -171,7 +197,10 @@ const Homework = ({ homework, index, countForDate }) => {
                 <View
                     style={{
                         flexShrink: 1,
-                        backgroundColor: addOpacityToCssRgb(colors.brand.primary, 0.7),
+                        backgroundColor: addOpacityToCssRgb(
+                            colors.brand.primary,
+                            0.7
+                        ),
                         borderColor: colors.brand.primary,
                         borderWidth: 1,
                         borderRadius: 10,

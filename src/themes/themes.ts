@@ -33,7 +33,7 @@ export type Theme = {
             primary: string;
             secondary: string;
             muted: string; // désactivé, placeholders
-            mutedContrast: string;
+            secondaryContrast: string;
             onPrimary: string; // texte sur fond brand.primary
         };
         brand: {
@@ -100,7 +100,7 @@ export const lightTheme: Theme = {
             primary: "hsl(0, 0%, 0%)", // ancien contrast
             secondary: "hsl(0, 0%, 38%)", // à ajuster (contraste ≥ 4.5:1)
             muted: "hsl(213, 98%, 61%)", // à ajuster (contraste ≥ 4.5:1)
-            mutedContrast: "hsl(217, 42%, 40%)",
+            secondaryContrast: "hsl(217, 42%, 40%)",
             onPrimary: "hsl(0, 0%, 100%)",
         },
         brand: {
@@ -123,10 +123,10 @@ export const lightTheme: Theme = {
             success: { progress: "hsl(221, 83%, 53%)", back: "hsl(0, 0%, 100%)" },
         },
         tabBar: {
-            background: "hsl(0, 0%, 100%)",
-            border: "hsla(240, 62%, 58%, 0.12)",
-            active: "hsl(240, 70%, 55%)",
-            inactive: "hsl(240, 33%, 41%)",
+            background: "hsl(211, 74%, 94%)",
+            border: "hsla(213, 98%, 61%, .15)",
+            active: "hsl(213, 98%, 61%)",
+            inactive: "hsla(213, 98%, 61%, .6)",
         },
         logo: {
             from: "hsl(223, 96%, 69%)",
@@ -168,7 +168,7 @@ export const darkTheme: Theme = {
             primary: "hsl(0, 0%, 100%)", // ancien contrast
             secondary: "hsl(240, 67%, 82%)",
             muted: "hsl(235, 51%, 65%)", // ancien inactive
-            mutedContrast: "hsl(217, 42%, 40%)",
+            secondaryContrast: "hsl(217, 42%, 40%)",
             onPrimary: "hsl(0, 0%, 0%)", // ancien theme (noir sur le bleu clair)
         },
         brand: {
