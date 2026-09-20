@@ -264,6 +264,7 @@ export default function HomeScreen() {
                                 <Text
                                     size={26}
                                     color={withAlpha(colors.text.primary, 0.4)}
+                                    style={{ fontFamily: "Medium", lineHeight: 25 }}
                                 >
                                     {greetingMessage}
                                 </Text>

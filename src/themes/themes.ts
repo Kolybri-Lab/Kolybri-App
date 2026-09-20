@@ -2,6 +2,8 @@ import { radius, spacing, typography } from "./tokens";
 
 export type ThemeName = "light" | "dark";
 
+type ProgressBar = { progress: string; back: string };
+type ProgressBarKeys = "primary" | "secondary" | "success";
 // Le type est LA source de vérité : un thème qui oublie une clé ne compile pas.
 export type Theme = {
     name: ThemeName;
@@ -31,6 +33,7 @@ export type Theme = {
             primary: string;
             secondary: string;
             muted: string; // désactivé, placeholders
+            mutedContrast: string;
             onPrimary: string; // texte sur fond brand.primary
         };
         brand: {
@@ -47,6 +50,7 @@ export type Theme = {
             success: string;
             warning: string;
         };
+        progressBar: Record<ProgressBarKeys, ProgressBar>;
         tabBar: {
             background: string;
             border: string;
@@ -78,7 +82,7 @@ export const lightTheme: Theme = {
             black: "hsl(0, 0%, 0%)",
         },
         background: {
-            screen: "hsl(240, 74%, 93%)", // ancien pastel / background.gradient
+            screen: "hsl(211, 74%, 94%)", // ancien pastel / background.gradient
             base: "hsl(240, 74%, 93%)", // pas de dégradé en clair : identique à screen
             auth: "hsl(240, 100%, 95%)", // ancien background.login
             gradient: {
@@ -87,15 +91,16 @@ export const lightTheme: Theme = {
             },
         },
         surface: {
-            card: "hsl(240, 95%, 85%)", // ancien secondary (utilisé comme fond de carte)
-            raised: "hsl(0, 0%, 100%)", // ancien case
+            card: "hsl(0, 0%, 100%)", // ancien secondary (utilisé comme fond de carte)
+            raised: "hsl(215, 100%, 91%)", // ancien case
             muted: "hsl(240, 100%, 97%)", // à ajuster
             simpleOpacity: "hsl(0, 0%, 0%)",
         },
         text: {
             primary: "hsl(0, 0%, 0%)", // ancien contrast
-            secondary: "hsl(240, 33%, 41%)", // à ajuster (contraste ≥ 4.5:1)
-            muted: "hsl(240, 48%, 70%)", // ancien inactive
+            secondary: "hsl(0, 0%, 38%)", // à ajuster (contraste ≥ 4.5:1)
+            muted: "hsl(213, 98%, 61%)", // à ajuster (contraste ≥ 4.5:1)
+            mutedContrast: "hsl(217, 42%, 40%)",
             onPrimary: "hsl(0, 0%, 100%)",
         },
         brand: {
@@ -111,6 +116,11 @@ export const lightTheme: Theme = {
             danger: "hsl(0, 83%, 65%)", // ancien error
             success: "hsl(159, 80%, 30%)",
             warning: "hsl(25, 88%, 40%)",
+        },
+        progressBar: {
+            primary: { progress: "hsl(221, 83%, 53%)", back: "hsl(0, 0%, 100%)" },
+            secondary: { progress: "hsl(221, 83%, 53%)", back: "hsl(0, 0%, 100%)" },
+            success: { progress: "hsl(221, 83%, 53%)", back: "hsl(0, 0%, 100%)" },
         },
         tabBar: {
             background: "hsl(0, 0%, 100%)",
@@ -158,6 +168,7 @@ export const darkTheme: Theme = {
             primary: "hsl(0, 0%, 100%)", // ancien contrast
             secondary: "hsl(240, 67%, 82%)",
             muted: "hsl(235, 51%, 65%)", // ancien inactive
+            mutedContrast: "hsl(217, 42%, 40%)",
             onPrimary: "hsl(0, 0%, 0%)", // ancien theme (noir sur le bleu clair)
         },
         brand: {
@@ -173,6 +184,11 @@ export const darkTheme: Theme = {
             danger: "hsl(0, 83%, 65%)",
             success: "hsl(158, 64%, 52%)",
             warning: "hsl(27, 96%, 61%)",
+        },
+        progressBar: {
+            primary: { progress: "hsl(221, 83%, 53%)", back: "hsl(0, 0%, 100%)" },
+            secondary: { progress: "hsl(221, 83%, 53%)", back: "hsl(0, 0%, 100%)" },
+            success: { progress: "hsl(221, 83%, 53%)", back: "hsl(0, 0%, 100%)" },
         },
         tabBar: {
             background: "hsl(240, 45%, 9%)",

@@ -85,15 +85,6 @@ const GradeCard = ({ disciplineColor, disciplineName, data, index, count }) => {
                     paddingHorizontal: 14,
                     paddingVertical: 10,
                     justifyContent: "space-between",
-
-                    boxShadow: [
-                        {
-                            blurRadius: 6,
-                            offsetY: 6,
-                            spreadDistance: 0,
-                            color: "hsla(0, 0%, 0%, 0.25)",
-                        },
-                    ],
                 },
                 borderRadiusStyleLeft,
                 borderRadiusStyleRight,
@@ -123,16 +114,14 @@ const GradeCard = ({ disciplineColor, disciplineName, data, index, count }) => {
                     {formatGradeText(data.grade)}
                     <Text
                         style={{ fontFamily: "Medium", fontSize: 12 }}
-                        color="hsla(1, 0%, 100%, .55)"
+                        color={colors.text.secondary}
                     >
                         /{data.outOf}
                     </Text>
                 </Text>
                 <Text
-                    color="hsla(1, 0%, 100%, .55)"
+                    color={colors.text.secondary}
                     style={{
-                        marginLeft: -2,
-                        marginTop: -2,
                         fontFamily: "Medium",
                         fontSize: 12,
                     }}

@@ -4,6 +4,7 @@ import { BackArrow } from "@/components/svg";
 import { useHaptic } from "@/hooks/useHaptics";
 import { useTheme } from "@/hooks/useThemeStore";
 import { routesNames } from "@/router/config/routesNames";
+import { withAlpha } from "@/themes/color";
 import { addOpacityToCssRgb } from "@/utils/colorGenerator";
 import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity, View } from "react-native";
@@ -26,7 +27,7 @@ export default function ActiveCourseCard({
     const extras = inClass ? [] : [{ resizeBars: true }];
 
     return (
-        <View style={{ width: "100%" }}>
+        <View style={{ width: "100%", gap: 8 }}>
             {inClass && (
                 <View>
                     <View
@@ -121,104 +122,121 @@ export default function ActiveCourseCard({
 const Course = ({ data }) => {
     const { colors } = useTheme();
     const { courseData, color, message, progression, isLast } = data;
+    const textColor = addOpacityToCssRgb(colors.text.primary, 0.9);
+
     return (
+        // Une seule carte : fond + arrondis sur le conteneur
         <View
             style={{
-                gap: 3,
                 width: "100%",
                 height: 70,
-                flexDirection: "row",
                 flex: 1,
+                flexDirection: "row",
+                backgroundColor: colors.surface.raised,
+                borderTopLeftRadius: 16,
+                borderTopRightRadius: 16,
+                // collée à la carte suivante, sauf s'il n'y en a pas
+                borderBottomLeftRadius: isLast ? 4 : 16,
+                borderBottomRightRadius: isLast ? 4 : 16,
             }}
         >
+            {/* Horaires : centrés verticalement, séparateur court */}
             <View
                 style={{
-                    padding: 10,
+                    width: 64,
                     alignItems: "center",
-                    width: 65,
-                    backgroundColor: colors.surface.card,
-                    borderTopLeftRadius: 16,
-                    borderTopRightRadius: 4,
-                    borderBottomLeftRadius: 0,
-                    borderBottomRightRadius: 0,
+                    justifyContent: "center",
                 }}
             >
-                <Text style={{ flexShrink: 0, fontFamily: "Medium", fontSize: 14 }}>
+                <Text
+                    color={colors.text.mutedContrast}
+                    style={{ fontFamily: "Medium", fontSize: 14, lineHeight: 18 }}
+                >
                     {courseData.startCourse.time}
                 </Text>
                 <View
                     style={{
-                        flex: 1,
                         width: 2,
+                        height: 8,
                         borderRadius: 2,
-                        backgroundColor: colors.text.primary,
-                        marginVertical: -2,
+                        backgroundColor: colors.border.subtle,
                     }}
                 />
-                <Text style={{ flexShrink: 0, fontFamily: "Medium", fontSize: 14 }}>
+                <Text
+                    color={colors.text.mutedContrast}
+                    style={{ fontFamily: "Medium", fontSize: 14, lineHeight: 18 }}
+                >
                     {courseData.endCourse.time}
                 </Text>
             </View>
+
+            {/* Contenu : titre + heure de fin, puis la barre */}
             <View
                 style={{
-                    backgroundColor: colors.surface.card,
                     flex: 1,
-                    paddingHorizontal: 18,
-                    paddingVertical: 10,
-                    borderTopLeftRadius: 4,
-                    borderTopRightRadius: 16,
-                    borderBottomLeftRadius: 0,
-                    borderBottomRightRadius: 0,
+                    paddingTop: 12,
+                    paddingLeft: 24,
+                    paddingRight: 16,
+                    gap: 4,
                 }}
             >
                 <View
                     style={{
-                        justifyContent: "space-between",
                         flexDirection: "row",
-                        marginBottom: 2,
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        gap: 8,
                     }}
                 >
                     <Text
-                        color={addOpacityToCssRgb(colors.text.primary, 0.9)}
                         oneLine
-                        style={{ flexShrink: 1, fontFamily: "Bold", fontSize: 18 }}
+                        color={textColor}
+                        style={{
+                            flexShrink: 1,
+                            fontFamily: "Bold",
+                            fontSize: 18,
+                            lineHeight: 24,
+                        }}
                     >
                         {courseData?.libelle}
                     </Text>
+
+                    {/* flexShrink 0 : c'est le titre qui se tronque, pas l'heure */}
                     <View
                         style={{
+                            flexShrink: 0,
                             flexDirection: "row",
                             alignItems: "center",
-                            gap: 4,
+                            gap: 12,
                         }}
                     >
                         <BackArrow
                             props={{ transform: [{ rotate: "180deg" }] }}
-                            fill={addOpacityToCssRgb(colors.text.primary, 0.9)}
+                            fill={colors.text.mutedContrast}
                             size={22}
                         />
                         <Text
+                            color={colors.text.mutedContrast}
                             style={{
-                                flexShrink: 1,
-                                color: addOpacityToCssRgb(colors.text.primary, 0.9),
-                                fontFamily: "SemiBold",
+                                fontFamily: "Medium",
                                 fontSize: 16,
+                                lineHeight: 20,
                             }}
                         >
                             {courseData?.endCourse?.time}
                         </Text>
                     </View>
                 </View>
-                <View style={{ justifyContent: "space-between", marginBottom: 7 }}>
-                    <ProgressBar
-                        progression={progression}
-                        color={addOpacityToCssRgb(colors.brand.primary, 0.85)}
-                        style={{
-                            backgroundColor: addOpacityToCssRgb(colors.brand.primary, 0.25),
-                            height: 10,
-                        }}
-                    />
-                </View>
+
+                <ProgressBar
+                    progression={progression}
+                    color={colors.progressBar.primary.progress}
+                    style={{
+                        backgroundColor: colors.progressBar.primary.back,
+                        height: 10,
+                        marginRight: 12, // la barre s'arrête avant le bord de l'heure
+                    }}
+                />
             </View>
         </View>
     );
@@ -227,99 +245,102 @@ const NextCourse = ({ data }) => {
     const { courseData, extras, inClass } = data;
     const { colors } = useTheme();
     const resizeBars = !Boolean(extras.find((e) => e?.resizeBars)?.resizeBars);
+
     return (
+        // Une seule carte : fond + arrondis sur le conteneur
         <View
             style={{
-                gap: 3,
                 width: "100%",
                 height: 70,
-                flexDirection: "row",
                 flex: 1,
+                flexDirection: "row",
+                backgroundColor: colors.surface.card,
+                borderTopLeftRadius: inClass ? 4 : 16,
+                borderTopRightRadius: inClass ? 4 : 16,
+                borderBottomLeftRadius: 16,
+                borderBottomRightRadius: 16,
             }}
         >
+            {/* Horaires : centrés verticalement, séparateur court */}
             <View
                 style={{
-                    paddingVertical: 10,
+                    width: 64,
                     alignItems: "center",
-                    width: 65,
-                    backgroundColor: colors.surface.card,
-                    borderTopLeftRadius: inClass ? 0 : 16,
-                    borderTopRightRadius: inClass ? 0 : 4,
-                    borderBottomLeftRadius: 16,
-                    borderBottomRightRadius: 4,
+                    justifyContent: "center",
                 }}
             >
-                <Text style={{ flexShrink: 0, fontFamily: "Medium", fontSize: 14 }}>
+                <Text
+                    color={withAlpha(colors.text.mutedContrast, 0.7)}
+                    style={{ fontFamily: "Medium", fontSize: 14, lineHeight: 18 }}
+                >
                     {courseData.course.startCourse.time}
                 </Text>
                 <View
                     style={{
-                        flex: 1,
                         width: 2,
+                        height: 8,
                         borderRadius: 2,
-                        backgroundColor: colors.text.primary,
-                        marginVertical: -2,
+                        backgroundColor: colors.border.subtle,
                     }}
                 />
-                <Text style={{ flexShrink: 0, fontFamily: "Medium", fontSize: 14 }}>
+                <Text
+                    color={withAlpha(colors.text.mutedContrast, 0.7)}
+                    style={{ fontFamily: "Medium", fontSize: 14, lineHeight: 18 }}
+                >
                     {courseData.course.endCourse.time}
                 </Text>
             </View>
+
+            {/* Contenu : titre en haut, prof / salle en bas */}
             <View
                 style={{
-                    padding: 10,
-                    paddingLeft: 16,
-                    paddingRight: 14,
                     flex: 1,
-                    backgroundColor: colors.surface.card,
-                    borderTopLeftRadius: inClass ? 0 : 4,
-                    borderTopRightRadius: inClass ? 0 : 16,
-                    borderBottomLeftRadius: 4,
-                    borderBottomRightRadius: 16,
+                    paddingVertical: 12,
+                    paddingLeft: 24,
+                    paddingRight: 16,
                     justifyContent: "space-between",
-                    flexDirection: "row",
                 }}
             >
-                <View style={{ flex: 1, justifyContent: "center" }}>
+                <Text
+                    oneLine
+                    color={colors.text.primary}
+                    style={{ fontSize: 18, fontFamily: "Bold" }}
+                >
+                    {courseData.course.libelle}
+                </Text>
+
+                <View
+                    style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        gap: 8,
+                    }}
+                >
                     <Text
                         oneLine
-                        style={{ fontSize: 18, fontFamily: "Bold" }}
-                        color="hsla(1, 0%, 100%, .9)"
-                    >
-                        {courseData.course.libelle}
-                    </Text>
-                    <View
+                        color={withAlpha(colors.text.mutedContrast, 0.7)}
                         style={{
-                            flexShrink: 0,
-                            flexDirection: "row",
-                            justifyContent: "space-between",
+                            flexShrink: 1,
+                            fontSize: 15,
+                            fontFamily: "Medium",
+                            lineHeight: 15,
                         }}
                     >
-                        <Text
-                            color="hsla(1, 0%, 100%, .9)"
-                            oneLine
-                            style={{
-                                fontSize: 15,
-                                opacity: 0.6,
-                                fontFamily: "Medium",
-                                lineHeight: 15,
-                            }}
-                        >
-                            {courseData.course.teacher ?? "Pas de prof."}
-                        </Text>
-                        <Text
-                            color="hsla(1, 0%, 100%, .9)"
-                            oneLine
-                            style={{
-                                fontSize: 15,
-                                opacity: 0.6,
-                                fontFamily: "Medium",
-                                lineHeight: 15,
-                            }}
-                        >
-                            {courseData.course.room ?? "Aucune salle"}
-                        </Text>
-                    </View>
+                        {courseData.course.teacher ?? "Pas de prof."}
+                    </Text>
+                    <Text
+                        oneLine
+                        color={withAlpha(colors.text.mutedContrast, 0.7)}
+                        style={{
+                            flexShrink: 0,
+                            fontSize: 15,
+                            fontFamily: "Medium",
+                            lineHeight: 15,
+                        }}
+                    >
+                        {courseData.course.room ?? "Aucune salle"}
+                    </Text>
                 </View>
             </View>
         </View>
