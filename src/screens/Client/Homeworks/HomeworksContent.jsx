@@ -197,10 +197,7 @@ export default function HomeworksContent() {
                             style={{
                                 paddingHorizontal: 6,
                                 paddingVertical: 3,
-                                backgroundColor: addOpacityToCssRgb(
-                                    colors.surface.button,
-                                    0.7
-                                ),
+                                backgroundColor: colors.surface.button,
                                 borderRadius: 12,
                                 width: 55,
                                 alignItems: "center",
