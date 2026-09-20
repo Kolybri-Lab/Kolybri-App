@@ -186,7 +186,7 @@ const Homework = ({ homework, index, countForDate }) => {
                             {homework.homeworksContent.content}
                         </Text>
                     ) : (
-                        <Text oneLine color="hsla(0, 0%, 100%, .6)">
+                        <Text oneLine color={colors.text.muted}>
                             {homework.plainText}
                         </Text>
                     )}
