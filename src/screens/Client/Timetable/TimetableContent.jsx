@@ -190,8 +190,8 @@ export default function TimetableContent() {
                 >
                     <TouchableOpacity
                         style={{
-                            backgroundColor: theme.colors.brand.primary,
-                            width: "80%", // Otherwise "Dimanche 16 Novembre" won't fit
+                            backgroundColor: theme.colors.surface.button,
+                            width: "80%",
                             position: "absolute",
                             height: "65%",
                             borderRadius: 50,
@@ -209,7 +209,11 @@ export default function TimetableContent() {
                             }
                         }}
                     >
-                        <Text preset="title1" oneLine color={theme.colors.text.onPrimary}>
+                        <Text
+                            preset="title1"
+                            oneLine
+                            color={theme.colors.text.onPrimary}
+                        >
                             {activeDate}
                         </Text>
                     </TouchableOpacity>

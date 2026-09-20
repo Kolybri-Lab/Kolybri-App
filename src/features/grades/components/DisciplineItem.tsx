@@ -180,11 +180,12 @@ export default function DisciplineItem({
                             />
                             <Text
                                 align="center"
-                                preset="h3"
+                                color={"white"}
                                 style={{
                                     marginTop: -43,
                                     marginLeft: -2,
                                     fontSize: 22,
+                                    fontFamily: "SemiBold",
                                 }}
                             >
                                 {discipline.streakCount}
