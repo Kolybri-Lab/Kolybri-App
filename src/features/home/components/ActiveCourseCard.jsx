@@ -40,17 +40,14 @@ export default function ActiveCourseCard({
                     >
                         <View
                             style={{
-                                backgroundColor: addOpacityToCssRgb(
-                                    colors.brand.primary,
-                                    0.9
-                                ),
+                                backgroundColor: colors.text.secondary,
                                 width: 6,
                                 height: 6,
                                 borderRadius: 5,
                             }}
                         />
                         <Text
-                            color={addOpacityToCssRgb(colors.brand.primary, 0.9)}
+                            color={colors.text.secondary}
                             style={{ fontFamily: "SemiBold", fontSize: 16 }}
                         >
                             {isLast ? "DERNIER COURS DE LA JOURNÉE !" : message}

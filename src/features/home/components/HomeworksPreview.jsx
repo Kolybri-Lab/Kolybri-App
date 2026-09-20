@@ -109,7 +109,7 @@ const DateHeader = ({ date, meta, progress }) => {
                 color={
                     progress === 1
                         ? "hsl(149, 64%, 52%)"
-                        : withAlpha(colors.progressBar.secondary.progress, 0.4)
+                        : colors.progressBar.secondary.progress
                 }
                 style={{
                     backgroundColor: colors.progressBar.secondary.back,
@@ -198,11 +198,9 @@ const Homework = ({ homework, index, countForDate }) => {
                     style={{
                         flexShrink: 1,
                         backgroundColor: addOpacityToCssRgb(
-                            colors.brand.primary,
-                            0.7
+                            colors.surface.button,
+                            0.9
                         ),
-                        borderColor: colors.brand.primary,
-                        borderWidth: 1,
                         borderRadius: 10,
                         paddingHorizontal: 8,
                         paddingVertical: 2,
@@ -212,7 +210,7 @@ const Homework = ({ homework, index, countForDate }) => {
                 >
                     <Text
                         style={{
-                            color: colors.text.primary,
+                            color: colors.text.onPrimary,
                             fontFamily: "SemiBold",
                             fontSize: 13,
                         }}

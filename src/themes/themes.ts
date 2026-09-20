@@ -28,6 +28,7 @@ export type Theme = {
             raised: string; // panneaux au-dessus des cartes (modales, encarts)
             muted: string; // zones secondaires, champs
             simpleOpacity: string;
+            button: string; // boutons ou les zone d'information marquante (la main color)
         };
         text: {
             primary: string;
@@ -95,15 +96,17 @@ export const lightTheme: Theme = {
             raised: "hsl(215, 100%, 87%)", // ancien case
             muted: "hsl(240, 100%, 97%)", // à ajuster
             simpleOpacity: "hsl(0, 0%, 0%)",
+            button: "hsl(213, 98%, 61%)",
         },
         text: {
-            primary: "hsl(0, 0%, 0%)", // ancien contrast
-            secondary: "hsl(213, 98%, 61%)", // à ajuster (contraste ≥ 4.5:1)
-            muted: "hsl(0, 0%, 38%)", // à ajuster (contraste ≥ 4.5:1)
-            secondaryContrast: "hsl(217, 42%, 40%)",
+            primary: "hsl(0, 0%, 0%)", // ancien contrast pour les titres
+            secondary: "hsl(213, 98%, 61%)", // à ajuster (contraste ≥ 4.5:1) penser a renommer c'est la couleur main (l'identité de l'app)
+            muted: "hsl(0, 0%, 38%)", // à ajuster (contraste ≥ 4.5:1) la vraie secondaire
+            secondaryContrast: "hsl(217, 42%, 40%)", // un peu inutile car la main est forte
             onPrimary: "hsl(0, 0%, 100%)",
         },
         brand: {
+            // a supprimer a terme c ca ?
             primary: "hsl(240, 89%, 72%)", // ancien main
             accent: "hsl(240, 70%, 55%)", // ancien accent
             soft: "hsl(240, 95%, 85%)", // ancien secondary
@@ -118,8 +121,8 @@ export const lightTheme: Theme = {
             warning: "hsl(25, 88%, 40%)",
         },
         progressBar: {
-            primary: { progress: "hsl(221, 83%, 53%)", back: "hsl(0, 0%, 100%)" },
-            secondary: { progress: "hsl(221, 83%, 53%)", back: "hsl(0, 0%, 100%)" },
+            primary: { progress: "hsl(213, 98%, 61%)", back: "hsl(0, 0%, 100%)" },
+            secondary: { progress: "hsl(213, 98%, 61%)", back: "hsl(0, 0%, 100%)" },
             success: { progress: "hsl(221, 83%, 53%)", back: "hsl(0, 0%, 100%)" },
         },
         tabBar: {
@@ -163,6 +166,7 @@ export const darkTheme: Theme = {
             raised: "hsl(240, 18%, 45%)", // ancien case / bg3
             muted: "hsl(235, 53%, 18%)", // ancien pastel
             simpleOpacity: "hsl(0, 0%, 100%)",
+            button: "hsl(240, 67%, 82%)",
         },
         text: {
             primary: "hsl(0, 0%, 100%)", // ancien contrast
