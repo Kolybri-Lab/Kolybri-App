@@ -10,9 +10,11 @@ import { useTimetable } from "@/features/timetable";
 import { useCurrentTime } from "@/hooks/useCurrentTime";
 import { useCustomDataStore } from "@/hooks/useCustomDataStore";
 import { useSignIn } from "@/hooks/useSignIn";
+import { useTheme } from "@/hooks/useThemeStore";
 import { useUserStore } from "@/hooks/useUserStore";
 import { GuestTestButtons } from "@/mock/guest/components";
 import { routesNames } from "@/router/config/routesNames";
+import { withAlpha } from "@/themes/color";
 import { getTodayDateString } from "@/utils/date";
 import { objectsEqual } from "@/utils/json";
 import {
@@ -31,7 +33,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function HomeScreen() {
     const { signOut } = useSignIn();
     const navigation = useNavigation();
-
+    const { colors } = useTheme();
     const token = useUserStore((state) => state.token);
     const profile = useUserStore((state) => state.profile);
     const name = profile?.name ?? "";
@@ -232,7 +234,13 @@ export default function HomeScreen() {
                             }
                         >
                             {localPhotoUri == undefined ? (
-                                <Text preset="h4">{name[0]}</Text>
+                                <Text
+                                    preset="h4"
+                                    size={26}
+                                    style={{ fontFamily: "Petrona-SemiBold" }}
+                                >
+                                    {name[0]}
+                                </Text>
                             ) : (
                                 <Image
                                     source={getProfileImageSource()}
@@ -253,10 +261,21 @@ export default function HomeScreen() {
                             }}
                         >
                             <View style={{ flex: 1, marginRight: 10 }}>
-                                <Text size={26} color="hsla(1, 0%, 100%, 0.4)">
+                                <Text
+                                    size={26}
+                                    color={withAlpha(colors.text.primary, 0.4)}
+                                >
                                     {greetingMessage}
                                 </Text>
-                                <Text size={38}>{name} 👋</Text>
+                                <Text
+                                    size={38}
+                                    style={{
+                                        fontFamily: "Petrona-SemiBold",
+                                        letterSpacing: 0.3,
+                                    }}
+                                >
+                                    {name} 👋
+                                </Text>
                             </View>
                         </View>
                     </SafeAreaView>
