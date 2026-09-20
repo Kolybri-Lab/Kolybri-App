@@ -122,7 +122,10 @@ export default function LoginScreen() {
                     </View>
                     <MaskedView maskElement={<Text preset="h1">Kolybri</Text>}>
                         <LinearGradient
-                            colors={[theme.colors.logo.textFrom, theme.colors.logo.textTo]}
+                            colors={[
+                                theme.colors.logo.textFrom,
+                                theme.colors.logo.textTo,
+                            ]}
                             start={{ x: 1, y: 0 }}
                             end={{ x: 0, y: 0 }}
                         >
@@ -156,7 +159,8 @@ export default function LoginScreen() {
                                     styles.input.case,
                                     {
                                         borderColor: theme.colors.border.strong,
-                                        backgroundColor: theme.colors.background.screen,
+                                        backgroundColor:
+                                            theme.colors.background.screen,
                                     },
                                 ]}
                             />
@@ -186,7 +190,8 @@ export default function LoginScreen() {
                                     styles.input.case,
                                     {
                                         borderColor: theme.colors.border.strong,
-                                        backgroundColor: theme.colors.background.screen,
+                                        backgroundColor:
+                                            theme.colors.background.screen,
                                     },
                                 ]}
                             />
@@ -284,7 +289,7 @@ const createStyles = (theme, caseColor) =>
         container: {
             flex: 1,
             alignItems: "center",
-            backgroundColor: theme.colors.background.auth,
+            backgroundColor: theme.colors.background.primary,
         },
         logos: {
             flexDirection: "row",

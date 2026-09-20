@@ -92,14 +92,14 @@ export const lightTheme: Theme = {
         },
         surface: {
             card: "hsl(0, 0%, 100%)", // ancien secondary (utilisé comme fond de carte)
-            raised: "hsl(215, 100%, 91%)", // ancien case
+            raised: "hsl(215, 100%, 87%)", // ancien case
             muted: "hsl(240, 100%, 97%)", // à ajuster
             simpleOpacity: "hsl(0, 0%, 0%)",
         },
         text: {
             primary: "hsl(0, 0%, 0%)", // ancien contrast
-            secondary: "hsl(0, 0%, 38%)", // à ajuster (contraste ≥ 4.5:1)
-            muted: "hsl(213, 98%, 61%)", // à ajuster (contraste ≥ 4.5:1)
+            secondary: "hsl(213, 98%, 61%)", // à ajuster (contraste ≥ 4.5:1)
+            muted: "hsl(0, 0%, 38%)", // à ajuster (contraste ≥ 4.5:1)
             secondaryContrast: "hsl(217, 42%, 40%)",
             onPrimary: "hsl(0, 0%, 100%)",
         },

@@ -1,8 +1,11 @@
+import { useTheme } from "@/hooks/useThemeStore";
 import Svg, { Path } from "react-native-svg";
 
 export default function PersonIcon({ size = 30, fill = "white", ...props }) {
+    const theme = useTheme();
+    fill = fill || theme.colors.text.primary;
     return (
-        <Svg width={size} height={size} viewBox="0 0 16 18" fill={fill} {...props}>
+        <Svg width={size} height={size} viewBox="0 0 16 18" color={fill} {...props}>
             <Path
                 d="M8 0C6.69432 0 5.44211 0.541835 4.51886 1.50631C3.5956 2.47078 3.07692 3.77889 3.07692 5.14286C3.07692 6.50683 3.5956 7.81493 4.51886 8.77941C5.44211 9.74388 6.69432 10.2857 8 10.2857C9.30568 10.2857 10.5579 9.74388 11.4811 8.77941C12.4044 7.81493 12.9231 6.50683 12.9231 5.14286C12.9231 3.77889 12.4044 2.47078 11.4811 1.50631C10.5579 0.541835 9.30568 0 8 0ZM4.92308 5.14286C4.92308 4.29038 5.24725 3.47281 5.82429 2.87001C6.40132 2.26722 7.18395 1.92857 8 1.92857C8.81605 1.92857 9.59868 2.26722 10.1757 2.87001C10.7527 3.47281 11.0769 4.29038 11.0769 5.14286C11.0769 5.99534 10.7527 6.8129 10.1757 7.4157C9.59868 8.0185 8.81605 8.35714 8 8.35714C7.18395 8.35714 6.40132 8.0185 5.82429 7.4157C5.24725 6.8129 4.92308 5.99534 4.92308 5.14286Z"
                 fillRule="evenodd"
@@ -12,3 +15,4 @@ export default function PersonIcon({ size = 30, fill = "white", ...props }) {
         </Svg>
     );
 }
+

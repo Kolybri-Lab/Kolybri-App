@@ -11,11 +11,12 @@ import { useGrades } from "@/features/grades";
 import Discipline from "@/features/grades/models/Discipline";
 import Grade from "@/features/grades/models/Grade";
 import { formatGradeText } from "@/features/grades/utils/helpers";
+import { useTheme } from "@/hooks/useThemeStore";
 import { useUserStore } from "@/hooks/useUserStore";
+import { routesNames } from "@/router/config/routesNames";
 import { formatFrenchDate } from "@/utils/date";
 import { useMemo } from "react";
 import { FlatList, View } from "react-native";
-import { routesNames } from "@/router/config/routesNames";
 import { GoBackHeader } from "../../../components";
 
 const UI_BADGES = {
@@ -37,16 +38,13 @@ const SKILLS_COLORS = {
 export default function GradeDetails({ route }) {
     const token = useUserStore((state) => state.token);
     const { data: gradesData } = useGrades(token);
-    const { gradeData, disciplineData: initialDisciplineData } =
-        route?.params || {};
+    const { colors } = useTheme();
+    const { gradeData, disciplineData: initialDisciplineData } = route?.params || {};
 
     const grade = useMemo(() => new Grade(gradeData), [gradeData]);
 
     const disciplineData = useMemo(() => {
-        if (
-            initialDisciplineData &&
-            Object.keys(initialDisciplineData).length > 0
-        ) {
+        if (initialDisciplineData && Object.keys(initialDisciplineData).length > 0) {
             return initialDisciplineData;
         }
 
@@ -125,12 +123,12 @@ export default function GradeDetails({ route }) {
     );
 
     return (
-        <View style={{ flex: 1, backgroundColor: "hsl(240, 28%, 10%)" }}>
+        <View style={{ flex: 1 }}>
             <View style={{ marginHorizontal: 22, flex: 1 }}>
                 <GoBackHeader fallbackRoute={routesNames.client.grades.content} />
                 <View
                     style={{
-                        backgroundColor: "hsl(240, 27%, 16%)",
+                        backgroundColor: colors.surface.card,
                         flexDirection: "row",
                         padding: 24,
                         borderRadius: 10,
@@ -144,7 +142,7 @@ export default function GradeDetails({ route }) {
                     </View>
                     <View
                         style={{
-                            backgroundColor: "hsla(240, 24%, 29%, .35)",
+                            backgroundColor: colors.surface.raised,
                             borderRadius: 12,
                             paddingHorizontal: 12,
                             paddingVertical: 4,
@@ -165,7 +163,7 @@ export default function GradeDetails({ route }) {
 
                 <View
                     style={{
-                        backgroundColor: "hsl(240, 27%, 16%)",
+                        backgroundColor: colors.surface.card,
                         borderRadius: 22,
                         flex: 1,
                         marginVertical: 14,
@@ -173,7 +171,9 @@ export default function GradeDetails({ route }) {
                         padding: 14,
                     }}
                 >
-                    <Text preset="h2">Informations</Text>
+                    <Text preset="h2" color={colors.text.secondary}>
+                        Informations
+                    </Text>
 
                     {grade.badges?.length > 0 && (
                         <View
@@ -181,7 +181,7 @@ export default function GradeDetails({ route }) {
                                 flexDirection: "row",
                                 gap: 10,
                                 marginHorizontal: 10,
-                                backgroundColor: "hsla(230, 24%, 50%, .4)",
+                                backgroundColor: colors.surface.muted,
                                 paddingVertical: 10,
                                 paddingHorizontal: 12,
                                 borderRadius: 8,
@@ -209,7 +209,8 @@ export default function GradeDetails({ route }) {
                         }}
                     >
                         <Text preset="label2">
-                            · Type d'évaluation : {grade.homeworkType || "Non spécifié"}
+                            · Type d'évaluation :{" "}
+                            {grade.homeworkType || "Non spécifié"}
                         </Text>
                         <Text preset="label2">
                             · Date : {formatFrenchDate(grade.date)}
@@ -232,14 +233,14 @@ export default function GradeDetails({ route }) {
 
 const Teachers = ({ teachers = [] }) => {
     const safeTeachers = Array.isArray(teachers) ? teachers : [];
-
+    const { colors } = useTheme();
     if (safeTeachers.length > 1) {
         return safeTeachers.map((teacher, i) => (
             <Text
                 key={i}
                 oneLine
                 preset="label2"
-                color={"hsl(240, 27%, 76%)"} /* EDIT */
+                color={colors.text.secondaryContrast}
             >
                 - {teacher}
             </Text>
@@ -248,7 +249,7 @@ const Teachers = ({ teachers = [] }) => {
 
     if (safeTeachers.length === 1) {
         return (
-            <Text oneLine preset="label2" color={"hsl(240, 27%, 76%)"} /* EDIT */>
+            <Text oneLine preset="label2" color={colors.text.secondaryContrast}>
                 {safeTeachers[0]}
             </Text>
         );
@@ -263,7 +264,7 @@ const Teachers = ({ teachers = [] }) => {
 
 const Cards = ({ datas }) => {
     const { grade = null, coef = 0, outOf = 20 } = datas || {};
-
+    const { colors } = useTheme();
     const cards = [
         { label: "Note obtenue", value: formatGradeText(grade) },
         { label: "Coefficient", value: formatGradeText(coef, "auto") },
@@ -276,7 +277,7 @@ const Cards = ({ datas }) => {
                 <View
                     key={index}
                     style={{
-                        backgroundColor: "hsl(240, 24%, 29%)",
+                        backgroundColor: colors.surface.card,
                         flex: 1,
                         flexShrink: 0,
                         aspectRatio: 1,
@@ -288,7 +289,7 @@ const Cards = ({ datas }) => {
                     <Text
                         preset="label2"
                         numberOfLines={2}
-                        color="hsl(240, 27%, 76%)" // EDIT
+                        color={colors.text.secondary} // EDIT
                     >
                         {card.label}
                     </Text>
@@ -298,3 +299,4 @@ const Cards = ({ datas }) => {
         </>
     );
 };
+

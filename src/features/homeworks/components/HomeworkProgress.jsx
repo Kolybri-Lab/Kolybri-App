@@ -1,7 +1,8 @@
-import { View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { Text } from "@/components/core";
 import { ProgressBar } from "@/components/progression/ProgressBar";
+import { useTheme } from "@/hooks/useThemeStore";
+import { View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HomeworkProgress({
     completedCount = 0,
@@ -11,6 +12,7 @@ export default function HomeworkProgress({
     sentence,
     style,
 }) {
+    const { colors } = useTheme();
     const computedProgression =
         progression !== undefined
             ? progression
@@ -35,7 +37,7 @@ export default function HomeworkProgress({
         >
             <View
                 style={{
-                    backgroundColor: "hsl(240, 19%, 38%)",
+                    backgroundColor: colors.surface.card,
                     alignSelf: "center",
                     paddingHorizontal: 12,
                     paddingVertical: 3,
@@ -50,7 +52,6 @@ export default function HomeworkProgress({
                 progression={computedProgression}
                 style={{
                     marginHorizontal: 50,
-                    backgroundColor: "hsl(240, 15%, 33%)",
                 }}
             />
 

@@ -179,7 +179,7 @@ export default function MessagingContent() {
                                 });
                             }}
                         >
-                            <Search size={18} />
+                            <Search size={18} fill={colors.text.primary} />
                             <Text
                                 preset="label1"
                                 numberOfLines={1}
@@ -262,12 +262,6 @@ export default function MessagingContent() {
                         onSelect={(item) => setDisplayGroup(item)}
                         minWidth="180"
                         selectorPosition={"right"}
-                        customButtonStyle={{
-                            backgroundColor: colors.surface.card,
-                        }}
-                        customDropDownStyle={{
-                            backgroundColor: colors.surface.raised,
-                        }}
                     />
                 </View>
             </View>

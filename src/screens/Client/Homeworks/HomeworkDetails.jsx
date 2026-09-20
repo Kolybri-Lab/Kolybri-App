@@ -96,7 +96,7 @@ export default function HomeworkDetails({ route }) {
     );
 
     return (
-        <View style={{ backgroundColor: colors.background.base, flex: 1 }}>
+        <View style={{ flex: 1 }}>
             <DocumentModal
                 visible={modalsHander.document[0]}
                 setVisible={modalsHander.document[1]}

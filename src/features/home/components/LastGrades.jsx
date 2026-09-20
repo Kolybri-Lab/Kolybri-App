@@ -114,13 +114,13 @@ const GradeCard = ({ disciplineColor, disciplineName, data, index, count }) => {
                     {formatGradeText(data.grade)}
                     <Text
                         style={{ fontFamily: "Medium", fontSize: 12 }}
-                        color={colors.text.secondary}
+                        color={colors.text.muted}
                     >
                         /{data.outOf}
                     </Text>
                 </Text>
                 <Text
-                    color={colors.text.secondary}
+                    color={colors.text.muted}
                     style={{
                         fontFamily: "Medium",
                         fontSize: 12,

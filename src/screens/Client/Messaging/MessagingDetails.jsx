@@ -196,7 +196,7 @@ export default function MessagingDetails({ route }) {
 
                 <View
                     style={{
-                        backgroundColor: "hsl(235, 28%, 15%)",
+                        backgroundColor: colors.surface.card,
                         padding: 14,
                         borderRadius: 16,
                     }}
@@ -259,7 +259,7 @@ export default function MessagingDetails({ route }) {
                         style={{
                             height: 1.5,
                             borderRadius: 4,
-                            backgroundColor: "hsla(0, 0%, 100%, 0.15)",
+                            backgroundColor: colors.border.subtle,
                             marginTop: 14,
                             marginBottom: 24,
                         }}

@@ -1,3 +1,4 @@
+import { useTheme } from "@/hooks/useThemeStore";
 import { useEffect, useRef } from "react";
 import { View } from "react-native";
 import Animated, {
@@ -30,7 +31,7 @@ export const ProgressBar = ({
     const trackWidth = useSharedValue(0);
     const progress = useSharedValue(0);
     const isFirstRun = useRef(true);
-
+    const { colors } = useTheme();
     useEffect(() => {
         const d = isFirstRun.current ? delay : 0;
         isFirstRun.current = false;
@@ -67,7 +68,15 @@ export const ProgressBar = ({
             onLayout={(e) => {
                 trackWidth.value = e.nativeEvent.layout.width;
             }}
-            style={[{ height: 20, borderRadius: 20, overflow: "hidden" }, style]}
+            style={[
+                {
+                    height: 20,
+                    borderRadius: 20,
+                    overflow: "hidden",
+                    backgroundColor: colors.surface.card,
+                },
+                style,
+            ]}
         >
             <Animated.View
                 style={[
@@ -75,7 +84,6 @@ export const ProgressBar = ({
                         width: "100%",
                         height: "100%",
                         borderRadius: 20,
-                        // couleur fixe : statique, aucun coût par image
                         ...(isAuto ? null : { backgroundColor: color }),
                     },
                     fillStyle,

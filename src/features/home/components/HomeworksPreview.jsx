@@ -133,7 +133,7 @@ const Homework = ({ homework, index, countForDate }) => {
                 {
                     flex: 1,
                     backgroundColor: homework.isCustom
-                        ? "hsl(235, 28%, 30%)"
+                        ? withAlpha(colors.surface.simpleOpacity, 0.08)
                         : colors.surface.card,
                     marginVertical: 1.5,
                     alignItems: "center",

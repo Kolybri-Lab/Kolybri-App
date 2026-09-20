@@ -67,7 +67,7 @@ export default function GeneralAveragePreview({ gradesData }) {
                         gap: 8,
                     }}
                 >
-                    <Text preset="label2" color={colors.text.secondary}>
+                    <Text preset="label2" color={colors.text.muted}>
                         {gradesData.activePeriod.periodName}
                     </Text>
                     <View
@@ -75,20 +75,20 @@ export default function GeneralAveragePreview({ gradesData }) {
                             width: 4,
                             height: 4,
                             borderRadius: 10,
-                            backgroundColor: colors.text.secondary,
+                            backgroundColor: colors.text.muted,
                         }}
                     />
-                    <Text preset="label2" color={colors.text.secondary}>
+                    <Text preset="label2" color={colors.text.muted}>
                         {currentTime.date.split("-")[0]}
                     </Text>
                 </View>
             </View>
             <Text
                 style={{ fontFamily: "Bold", fontSize: 32, marginTop: 3 }}
-                color={colors.text.muted}
+                color={colors.text.secondary}
             >
                 {formatGradeText(generalAverage)}
-                <Text size={16} color={colors.text.secondary} fontFamily="Medium">
+                <Text size={16} color={colors.text.muted} fontFamily="Medium">
                     /20
                 </Text>
             </Text>

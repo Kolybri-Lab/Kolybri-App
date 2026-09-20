@@ -1,5 +1,4 @@
 import { useTheme } from "@/hooks/useThemeStore";
-import { withAlpha } from "@/themes/color";
 import { useCallback, useState } from "react";
 import { Pressable, View } from "react-native";
 import Animated, {
@@ -141,10 +140,7 @@ export default function DropDownMenu({
                     }}
                     style={[
                         {
-                            backgroundColor: withAlpha(
-                                colors.surface.simpleOpacity,
-                                0.12
-                            ),
+                            backgroundColor: colors.surface.card,
                             paddingHorizontal: 18,
                             paddingVertical: 10,
                             borderRadius: 12,
@@ -185,7 +181,7 @@ export default function DropDownMenu({
                     <View
                         style={[
                             {
-                                backgroundColor: "hsl(235, 28%, 22%)",
+                                backgroundColor: colors.surface.raised,
                                 borderRadius: 15,
                                 overflow: "hidden",
                             },
