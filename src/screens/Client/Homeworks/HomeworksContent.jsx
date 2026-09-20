@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { ScrollView, TouchableOpacity, View } from "react-native";
 
 import { Text } from "@/components/core";
-import { Plus } from "@/components/svg";
+import { Plus } from "lucide-react-native";
 import { motivationSentences } from "@/constants/features/homeworksConfig";
 import HomeworkCard from "@/features/homeworks/components/HomeworkCard";
 import HomeworkDatesRow from "@/features/homeworks/components/HomeworkDatesRow";
@@ -196,8 +196,9 @@ export default function HomeworksContent() {
                             layout={LinearTransition.springify()}
                             style={{
                                 paddingHorizontal: 6,
+                                paddingVertical: 3,
                                 backgroundColor: addOpacityToCssRgb(
-                                    colors.brand.primary,
+                                    colors.surface.button,
                                     0.7
                                 ),
                                 borderRadius: 12,
@@ -209,7 +210,11 @@ export default function HomeworksContent() {
                                 dispatch({ type: "OPEN_NEW_HOMEWORK_MODAL" })
                             }
                         >
-                            <Plus size={30} />
+                            <Plus
+                                size={24}
+                                color={colors.text.onPrimary}
+                                strokeWidth={3}
+                            />
                         </AnimatedTouchableOpacity>
                     </View>
                 </ScrollView>
