@@ -77,7 +77,7 @@ const NavigationBottomBar = ({ state, descriptors, navigation }) => {
                 navigation.navigate(routeName);
             }
         },
-        [navigation]
+        [navigation, haptics]
     );
 
     useEffect(() => {
@@ -234,4 +234,3 @@ const TabButton = memo(
 );
 
 export default NavigationBottomBar;
-

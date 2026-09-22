@@ -1,11 +1,14 @@
 import * as Haptics from "expo-haptics";
 import { useCallback } from "react";
+import { useThemeStore } from "./useThemeStore";
 
 type FeedbackType =
     "light" | "medium" | "heavy" | "selection" | "success" | "warning" | "error";
 
 export const useHaptic = (feedbackType: FeedbackType = "selection") => {
+    const hapticsEnabled = useThemeStore((state) => state.hapticsEnabled);
     return useCallback(() => {
+        if (!hapticsEnabled) return null;
         switch (feedbackType) {
             case "light":
                 return Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -28,5 +31,5 @@ export const useHaptic = (feedbackType: FeedbackType = "selection") => {
                     Haptics.NotificationFeedbackType.Error
                 );
         }
-    }, [feedbackType]);
+    }, [feedbackType, hapticsEnabled]);
 };

@@ -395,11 +395,12 @@ const CourseBox = memo(({ course, navigation, theme, timetableViewDims }) => {
                                     : timetableConfig.dispensedColor,
                                 borderRadius: 50,
 
-                                borderColor: theme.colors.text.primary,
+                                borderColor: colors.border.subtle,
                                 borderWidth: 1.2,
                                 elevation: 14,
                                 transform: [{ rotate: "-6deg" }],
                             }}
+                            color={colors.text.onPrimary}
                             preset="title1"
                         >
                             {isCancelled ? "Annulé" : "Dispensé"}
@@ -581,4 +582,3 @@ const styles = StyleSheet.create({
         backgroundColor: "rgb(10, 10, 10)",
     },
 });
-

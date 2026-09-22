@@ -220,7 +220,7 @@ export default function SettingsScreen({}) {
 
                     <View
                         style={{
-                            backgroundColor: withAlpha(colors.overlay.white, 0.22),
+                            backgroundColor: withAlpha(colors.surface.raised, 0.22),
                             paddingHorizontal: 16,
                             borderRadius: 16,
                         }}
@@ -267,7 +267,7 @@ export default function SettingsScreen({}) {
                                 paddingVertical: 10,
                                 borderBottomWidth: 1,
                                 borderBottomColor: withAlpha(
-                                    colors.overlay.white,
+                                    colors.surface.simpleOpacity,
                                     0.25
                                 ),
                             }}
@@ -383,4 +383,3 @@ export default function SettingsScreen({}) {
         </ScreenStack>
     );
 }
-

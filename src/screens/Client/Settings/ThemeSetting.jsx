@@ -1,14 +1,10 @@
 import { Section, Switch, Text } from "@/components";
 import { Lightning, Moon, Sun } from "@/components/svg";
-import { useThemeStore } from "@/hooks/useThemeStore";
+import { useTheme, useThemeStore } from "@/hooks/useThemeStore";
+import { Vibrate } from "lucide-react-native";
 import { useState } from "react";
 import { Pressable, View } from "react-native";
 import SettingSectionLayout from "./components/SettingSectionLayout";
-
-const THEMES_OPT = [
-    { id: "dark", name: "Sombre" },
-    { id: "light", name: "Clair" },
-];
 
 export default function ThemeScreen({ route }) {
     const { label } = route.params;
@@ -18,6 +14,10 @@ export default function ThemeScreen({ route }) {
     const setThemeMode = useThemeStore((state) => state.setThemeMode);
     const followSystem = useThemeStore((state) => state.followSystem);
     const setFollowSystem = useThemeStore((state) => state.setFollowSystem);
+    const hapticsEnabled = useThemeStore((state) => state.hapticsEnabled);
+    const setHapticsEnabled = useThemeStore((state) => state.setHapticsEnabled);
+
+    const { colors } = useTheme();
 
     const value = followSystem ? "system" : themeMode;
 
@@ -35,9 +35,9 @@ export default function ThemeScreen({ route }) {
             <View style={{ gap: 2 }}>
                 <Section
                     label={"Thème"}
-                    icon={<Sun size={18} opacity={0.6} />}
+                    icon={<Sun fill={colors.text.primary} size={18} opacity={0.6} />}
                     index={0}
-                    totalLength={2}
+                    totalLength={3}
                 >
                     <View
                         style={{
@@ -96,13 +96,36 @@ export default function ThemeScreen({ route }) {
                 </Section>
                 <Section
                     label={"Jouer les animations"}
-                    icon={<Lightning size={18} opacity={0.6} />}
+                    icon={
+                        <Lightning
+                            stroke={colors.text.primary}
+                            size={18}
+                            opacity={0.6}
+                        />
+                    }
                     index={1}
-                    totalLength={2}
+                    totalLength={3}
                 >
                     <Switch
                         value={tempState}
                         onValueChange={(toSet) => setTempStateValue(toSet)}
+                    />
+                </Section>
+                <Section
+                    label={"Retours haptiques"}
+                    icon={
+                        <Vibrate
+                            stroke={colors.text.primary}
+                            size={18}
+                            opacity={0.6}
+                        />
+                    }
+                    index={2}
+                    totalLength={3}
+                >
+                    <Switch
+                        value={hapticsEnabled}
+                        onValueChange={(toSet) => setHapticsEnabled(toSet)}
                     />
                 </Section>
             </View>
@@ -118,4 +141,3 @@ export default function ThemeScreen({ route }) {
         </SettingSectionLayout>
     );
 }
-

@@ -59,41 +59,50 @@ const GradeCard = ({ disciplineColor, disciplineName, data, index, count }) => {
     const { colors } = useTheme();
 
     if (!disciplineName || !data) return null;
-    let borderRadiusStyleLeft = {};
-    let borderRadiusStyleRight = {};
-    if (index === 0) {
-        borderRadiusStyleLeft = {
-            borderTopLeftRadius: 8,
+
+    let borderBottomRadius = {};
+
+    if (index === 0 && count > 1) {
+        borderBottomRadius = {
             borderBottomLeftRadius: 16,
+            borderBottomRightRadius: 4,
         };
-    }
-    if (index === count - 1) {
-        borderRadiusStyleRight = {
-            borderBottomLeftRadius: 8,
+    } else if (count === 1) {
+        borderBottomRadius = {
+            borderBottomLeftRadius: 16,
+            borderBottomRightRadius: 16,
+        };
+    } else if (index === count - 1 && count > 1) {
+        borderBottomRadius = {
+            borderBottomLeftRadius: 4,
             borderBottomRightRadius: 16,
         };
     }
-
     return (
         <View
             style={[
                 {
                     backgroundColor: colors.surface.card,
-                    borderRadius: 4,
+                    // borderRadius: 4,
+                    borderTopRightRadius: 4,
+                    borderTopLeftRadius: 4,
                     width: 120,
                     height: 70,
                     paddingHorizontal: 14,
                     paddingVertical: 10,
                     justifyContent: "space-between",
                 },
-                borderRadiusStyleLeft,
-                borderRadiusStyleRight,
+                borderBottomRadius,
             ]}
         >
             <Text
                 align="left"
                 oneLine
-                style={{ color: disciplineColor, fontSize: 14, fontFamily: "Bold" }}
+                style={{
+                    color: disciplineColor,
+                    fontSize: 14,
+                    fontFamily: "Bold",
+                }}
             >
                 {disciplineName.toUpperCase()}
             </Text>
@@ -132,4 +141,3 @@ const GradeCard = ({ disciplineColor, disciplineName, data, index, count }) => {
         </View>
     );
 };
-
