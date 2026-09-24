@@ -123,8 +123,8 @@ export default function LoginScreen() {
                     <MaskedView maskElement={<Text preset="h1">Kolybri</Text>}>
                         <LinearGradient
                             colors={[
-                                theme.colors.logo.textFrom,
-                                theme.colors.logo.textTo,
+                                theme.logo.textFrom,
+                                theme.logo.textTo,
                             ]}
                             start={{ x: 1, y: 0 }}
                             end={{ x: 0, y: 0 }}
@@ -141,7 +141,7 @@ export default function LoginScreen() {
                             <TextInput
                                 ref={usernameInputRef}
                                 placeholder="Identifiant"
-                                placeholderTextColor={theme.colors.brand.primary}
+                                placeholderTextColor={theme.colors.text.secondary}
                                 onChangeText={(data) => {
                                     setApiError(null);
                                     setUsername(data);
@@ -160,7 +160,7 @@ export default function LoginScreen() {
                                     {
                                         borderColor: theme.colors.border.strong,
                                         backgroundColor:
-                                            theme.colors.background.screen,
+                                            theme.colors.surface.muted,
                                     },
                                 ]}
                             />
@@ -172,7 +172,7 @@ export default function LoginScreen() {
                             <TextInput
                                 ref={passwordInputRef}
                                 placeholder="Mot de passe"
-                                placeholderTextColor={theme.colors.brand.primary}
+                                placeholderTextColor={theme.colors.text.secondary}
                                 onChangeText={(data) => {
                                     setApiError(null);
                                     setPassword(data);
@@ -191,7 +191,7 @@ export default function LoginScreen() {
                                     {
                                         borderColor: theme.colors.border.strong,
                                         backgroundColor:
-                                            theme.colors.background.screen,
+                                            theme.colors.surface.muted,
                                     },
                                 ]}
                             />
@@ -262,7 +262,7 @@ export default function LoginScreen() {
                     <Text
                         style={[styles.privacyPolicy]}
                         align="center"
-                        color={theme.colors.brand.primary}
+                        color={theme.colors.text.brand}
                         preset="body2"
                     >
                         Politique de confidentialité et Conditions d'utilisation
@@ -298,7 +298,7 @@ const createStyles = (theme, caseColor) =>
             left: 8,
             marginLeft: 12,
             gap: 16,
-            color: theme.colors.brand.primary,
+            color: theme.colors.text.brand,
         },
         checkBox: {
             marginLeft: "5%",
@@ -351,8 +351,8 @@ const createStyles = (theme, caseColor) =>
                 paddingRight: 42, // 30(logo size)+12(right 12)
                 fontSize: 16,
                 overflow: "hidden",
-                borderColor: theme.colors.brand.accent,
-                color: theme.colors.brand.primary,
+                borderColor: theme.colors.border.strong,
+                color: theme.colors.text.primary,
                 backgroundColor: caseColor,
             },
             logos: {
@@ -367,13 +367,13 @@ const createStyles = (theme, caseColor) =>
 
         button: {
             //borderWidth: 1,
-            //borderColor: theme.colors.brand.accent,
+            //borderColor: theme.colors.border.strong,
             //transform: [{ scale: 1.2 }],
             borderRadius: 12,
             paddingVertical: 7,
             paddingHorizontal: 16,
-            color: theme.colors.text.onPrimary,
-            //backgroundColor: theme.colors.brand.accent,
+            color: theme.colors.text.onBrand,
+            //backgroundColor: theme.colors.brand.primary,
         },
         buttonWrapper: {
             borderRadius: 12,
@@ -386,7 +386,7 @@ const createStyles = (theme, caseColor) =>
         },
         error: {
             padding: 12,
-            backgroundColor: theme.colors.surface.card,
+            backgroundColor: theme.colors.surface.default,
             borderColor: theme.colors.state.danger,
             borderWidth: 0.9,
             borderRadius: 12,

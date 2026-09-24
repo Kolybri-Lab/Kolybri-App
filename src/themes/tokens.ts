@@ -26,6 +26,13 @@ export const fontFamily = {
     bodyMedium: "Lexend-Regular",
 } as const;
 
+// Ombres : le noir est le même dans les deux thèmes, seule l'intensité change.
+// (`shadow` ne fait plus partie de `Theme`, on le dérive de `theme.isDark`.)
+export const getShadow = (isDark: boolean) => ({
+    color: "hsl(0, 0%, 0%)",
+    opacity: isDark ? 0.3 : 0.14,
+});
+
 // Variantes de texte : on choisit un rôle, pas une taille.
 export const typography = {
     display: { fontFamily: fontFamily.heading, fontSize: 40, lineHeight: 48 },

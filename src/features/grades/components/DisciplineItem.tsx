@@ -117,8 +117,8 @@ export default function DisciplineItem({
         { label: "Min", value: discipline.averageDatas?.minAverage },
     ];
 
-    const mainColor = colors?.surface?.card ?? "hsla(240, 11%, 20%, 1.00)";
-    const secondaryColor = colors?.surface?.card ?? "hsl(240, 27%, 16%)";
+    const mainColor = colors?.surface?.default ?? "hsla(240, 11%, 20%, 1.00)";
+    const secondaryColor = colors?.surface?.default ?? "hsl(240, 27%, 16%)";
     const txt1Color = colors?.text?.primary ?? colors?.text?.primary ?? "#FFFFFF";
 
     const boxStyle = {

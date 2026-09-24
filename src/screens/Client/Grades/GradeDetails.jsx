@@ -128,7 +128,7 @@ export default function GradeDetails({ route }) {
                 <GoBackHeader fallbackRoute={routesNames.client.grades.content} />
                 <View
                     style={{
-                        backgroundColor: colors.surface.card,
+                        backgroundColor: colors.surface.default,
                         flexDirection: "row",
                         padding: 24,
                         borderRadius: 10,
@@ -163,7 +163,7 @@ export default function GradeDetails({ route }) {
 
                 <View
                     style={{
-                        backgroundColor: colors.surface.card,
+                        backgroundColor: colors.surface.default,
                         borderRadius: 22,
                         flex: 1,
                         marginVertical: 14,
@@ -171,7 +171,7 @@ export default function GradeDetails({ route }) {
                         padding: 14,
                     }}
                 >
-                    <Text preset="h2" color={colors.text.secondary}>
+                    <Text preset="h2" color={colors.text.accent}>
                         Informations
                     </Text>
 
@@ -240,7 +240,7 @@ const Teachers = ({ teachers = [] }) => {
                 key={i}
                 oneLine
                 preset="label2"
-                color={colors.text.secondaryContrast}
+                color={colors.text.secondary}
             >
                 - {teacher}
             </Text>
@@ -249,7 +249,7 @@ const Teachers = ({ teachers = [] }) => {
 
     if (safeTeachers.length === 1) {
         return (
-            <Text oneLine preset="label2" color={colors.text.secondaryContrast}>
+            <Text oneLine preset="label2" color={colors.text.secondary}>
                 {safeTeachers[0]}
             </Text>
         );
@@ -277,7 +277,7 @@ const Cards = ({ datas }) => {
                 <View
                     key={index}
                     style={{
-                        backgroundColor: colors.surface.card,
+                        backgroundColor: colors.surface.default,
                         flex: 1,
                         flexShrink: 0,
                         aspectRatio: 1,

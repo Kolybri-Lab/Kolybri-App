@@ -76,7 +76,7 @@ export default function HomeworkCard({
             activeOpacity={1}
             disabled={!enabled}
             style={{
-                backgroundColor: colors.surface.card,
+                backgroundColor: colors.surface.default,
                 width: "100%",
                 borderRadius: 20,
                 overflow: "hidden",
@@ -207,7 +207,7 @@ export default function HomeworkCard({
                     flexDirection: "row",
                     justifyContent: "space-between",
                     alignItems: "center",
-                    backgroundColor: colors.surface.card,
+                    backgroundColor: colors.surface.default,
                 }}
             >
                 <Text

@@ -17,7 +17,7 @@ import { useUserStore } from "@/hooks/useUserStore";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function GradesContent() {
-    const { colors, shadow } = useTheme();
+    const { colors } = useTheme();
 
     const token = useUserStore((state) => state.token);
     const { data: gradesData, isLoading, isError } = useGrades(token);
@@ -106,7 +106,7 @@ export default function GradesContent() {
         setExpandedChain((prev) => (prev === chain ? null : chain));
     }, []);
 
-    const styles = createStyles(colors, shadow);
+    const styles = createStyles(colors);
 
     return (
         <View style={{ flex: 1 }}>
@@ -198,7 +198,7 @@ function flattenDisciplines(groups) {
     return result;
 }
 
-const createStyles = (colors, shadow) =>
+const createStyles = (colors) =>
     StyleSheet.create({
         flammesContainer: {
             zIndex: -1,

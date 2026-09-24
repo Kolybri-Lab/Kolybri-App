@@ -37,7 +37,7 @@ export default function AccountScreen({ route }) {
                 <Pressable
                     style={{
                         backgroundColor: withAlpha(
-                            colors.surface.simpleOpacity,
+                            colors.text.primary,
                             0.1
                         ),
                         padding: 5,
@@ -68,7 +68,7 @@ export default function AccountScreen({ route }) {
                 <Pressable
                     style={{
                         backgroundColor: withAlpha(
-                            colors.surface.simpleOpacity,
+                            colors.text.primary,
                             0.1
                         ),
                         padding: 5,

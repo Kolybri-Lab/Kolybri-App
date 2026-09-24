@@ -40,7 +40,7 @@ export const HomeworkDateItem = memo(
                             width: 65,
                             alignItems: "center",
                             justifyContent: "center",
-                            backgroundColor: colors.surface.card,
+                            backgroundColor: colors.surface.default,
                             borderRadius: 16,
                             borderWidth: allTasksCompleted ? 1.5 : 0,
                             borderColor: "#129e43",

@@ -73,7 +73,7 @@ export const ProgressBar = ({
                     height: 20,
                     borderRadius: 20,
                     overflow: "hidden",
-                    backgroundColor: colors.surface.card,
+                    backgroundColor: colors.surface.default,
                 },
                 style,
             ]}

@@ -32,7 +32,7 @@ export default function CheckBox({
                     )}
                 </View>
             </TouchableOpacity>
-            <Text style={styles.text} color={colors.brand.primary} preset="body2">
+            <Text style={styles.text} color={colors.text.brand} preset="body2">
                 {libelle}
             </Text>
         </View>

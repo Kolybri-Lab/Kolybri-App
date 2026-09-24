@@ -25,12 +25,12 @@ export default function EDPLogo({ size = 30, fill = "white", props = {} }) {
                 <Stop
                     class="start"
                     offset="0%"
-                    stopColor={theme.colors.logo.from}
+                    stopColor={theme.logo.from}
                 ></Stop>
                 <Stop
                     class="end"
                     offset="100%"
-                    stopColor={theme.colors.logo.to}
+                    stopColor={theme.logo.to}
                 ></Stop>
             </LinearGradient>
         </Svg>

@@ -140,7 +140,7 @@ export default function DropDownMenu({
                     }}
                     style={[
                         {
-                            backgroundColor: colors.surface.card,
+                            backgroundColor: colors.surface.default,
                             paddingHorizontal: 18,
                             paddingVertical: 10,
                             borderRadius: 12,

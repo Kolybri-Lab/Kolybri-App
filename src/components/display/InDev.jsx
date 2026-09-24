@@ -1,14 +1,15 @@
 import { CONFIG } from "@/constants/config";
 import { useTheme } from "@/hooks/useThemeStore";
+import { getShadow } from "@/themes/tokens";
 import { addOpacityToCssRgb } from "@/utils/colorGenerator";
 import { StyleSheet, View } from "react-native";
 import { Text } from "../core";
 import LinkText from "./LinkText";
 
 export default function InDev({}) {
-    const { colors } = useTheme();
-    const { shadow } = useTheme();
-    const mainColor = addOpacityToCssRgb(colors.brand.primary, 0.7);
+    const { colors, isDark } = useTheme();
+    const shadow = getShadow(isDark);
+    const mainColor = addOpacityToCssRgb(colors.text.brand, 0.7);
     const shadowColor = addOpacityToCssRgb(shadow.color, shadow.opacity);
     const caseColor = addOpacityToCssRgb(colors.surface.raised, 0.8);
     return (

@@ -82,7 +82,7 @@ const GradeCard = ({ disciplineColor, disciplineName, data, index, count }) => {
         <View
             style={[
                 {
-                    backgroundColor: colors.surface.card,
+                    backgroundColor: colors.surface.default,
                     // borderRadius: 4,
                     borderTopRightRadius: 4,
                     borderTopLeftRadius: 4,
@@ -123,13 +123,13 @@ const GradeCard = ({ disciplineColor, disciplineName, data, index, count }) => {
                     {formatGradeText(data.grade)}
                     <Text
                         style={{ fontFamily: "Medium", fontSize: 12 }}
-                        color={colors.text.muted}
+                        color={colors.text.secondary}
                     >
                         /{data.outOf}
                     </Text>
                 </Text>
                 <Text
-                    color={colors.text.muted}
+                    color={colors.text.secondary}
                     style={{
                         fontFamily: "Medium",
                         fontSize: 12,

@@ -197,7 +197,7 @@ export default function HomeworksContent() {
                             style={{
                                 paddingHorizontal: 6,
                                 paddingVertical: 3,
-                                backgroundColor: colors.surface.button,
+                                backgroundColor: colors.brand.primary,
                                 borderRadius: 12,
                                 width: 55,
                                 alignItems: "center",
@@ -209,7 +209,7 @@ export default function HomeworksContent() {
                         >
                             <Plus
                                 size={24}
-                                color={colors.text.onPrimary}
+                                color={colors.text.onBrand}
                                 strokeWidth={3}
                             />
                         </AnimatedTouchableOpacity>

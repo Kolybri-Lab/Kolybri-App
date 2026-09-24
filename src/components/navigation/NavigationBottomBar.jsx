@@ -31,7 +31,7 @@ const NavigationBottomBar = ({ state, descriptors, navigation }) => {
     const hasMeasuredActive = useRef(false);
     const indicatorX = useSharedValue(0);
     const haptics = useHaptic("medium");
-    const { colors } = useTheme();
+    const { colors, components } = useTheme();
     const animatedIndicatorStyle = useAnimatedStyle(() => ({
         transform: [{ translateX: indicatorX.value }],
     }));
@@ -87,13 +87,13 @@ const NavigationBottomBar = ({ state, descriptors, navigation }) => {
     return (
         <SafeAreaView
             edges={["bottom"]}
-            style={{ backgroundColor: colors.tabBar.background }}
+            style={{ backgroundColor: components.tabBar.background }}
         >
             <View
                 style={{
                     width: "100%",
                     height: 3,
-                    backgroundColor: colors.tabBar.border,
+                    backgroundColor: components.tabBar.border,
                 }}
             />
             <Animated.View
@@ -103,7 +103,7 @@ const NavigationBottomBar = ({ state, descriptors, navigation }) => {
                         width: BAR_WIDTH,
                         height: 3,
                         borderRadius: 6,
-                        backgroundColor: colors.tabBar.active,
+                        backgroundColor: components.tabBar.active,
                     },
                     animatedIndicatorStyle,
                 ]}
@@ -141,7 +141,7 @@ const TabButton = memo(
         const FOCUSED_SCALE = 1;
         const UNFOCUSED_SCALE = 1.3;
 
-        const { colors } = useTheme();
+        const { colors, components } = useTheme();
 
         const iconScale = useSharedValue(
             isFocused ? FOCUSED_SCALE : UNFOCUSED_SCALE
@@ -215,15 +215,15 @@ const TabButton = memo(
                             height={BASE_ICON_SIZE}
                             color={
                                 isFocused
-                                    ? colors.tabBar.active
-                                    : colors.tabBar.inactive
+                                    ? components.tabBar.active
+                                    : components.tabBar.inactive
                             }
                         />
                     </Animated.View>
                     <MorphingText
                         preset="label3"
                         weight={isFocused ? "bold" : "medium"}
-                        color={colors.tabBar.active}
+                        color={components.tabBar.active}
                         value={isFocused ? (ROUTES_NAMES[route.name] ?? "N/A") : ""}
                         style={{ letterSpacing: 0.8, width: "100%" }}
                     />

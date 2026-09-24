@@ -30,7 +30,7 @@ const Link = ({ href, isPeople = false, children }) => {
     return (
         <LinkText
             href={String(href)}
-            color={isPeople ? colors.brand.accent : colors.brand.primary}
+            color={colors.text.brand}
             underline={isPeople}
         >
             {children}

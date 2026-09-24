@@ -38,8 +38,8 @@ export default function A2fSelectableModal({
                         styles.renderItemRadioButton,
                         { borderColor: colors.border.strong },
                         selectedItem === item && {
-                            backgroundColor: colors.surface.card,
-                            borderColor: colors.surface.card,
+                            backgroundColor: colors.surface.default,
+                            borderColor: colors.surface.default,
                         },
                     ]}
                 />
@@ -47,7 +47,7 @@ export default function A2fSelectableModal({
             <Text
                 size={16}
                 weight={selectedItem === item && "bold"}
-                color={colors.brand.primary}
+                color={colors.text.brand}
             >
                 {item}
             </Text>
@@ -87,7 +87,7 @@ export default function A2fSelectableModal({
                         style={[
                             styles.a2fTextInfo,
                             {
-                                color: colors.brand.primary,
+                                color: colors.text.brand,
                             },
                         ]}
                     >
@@ -129,7 +129,7 @@ export default function A2fSelectableModal({
                             <Text
                                 style={[
                                     styles.buttonText,
-                                    { color: colors.brand.primary },
+                                    { color: colors.text.brand },
                                 ]}
                             >
                                 Annuler
@@ -144,6 +144,7 @@ export default function A2fSelectableModal({
                                     styles.buttonSubmit,
                                     {
                                         backgroundColor: colors.brand.primary,
+                                        color: colors.text.onBrand,
                                     },
                                 ]}
                             >

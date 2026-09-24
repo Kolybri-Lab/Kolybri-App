@@ -37,7 +37,7 @@ export default function HomeworkProgress({
         >
             <View
                 style={{
-                    backgroundColor: colors.surface.card,
+                    backgroundColor: colors.surface.default,
                     alignSelf: "center",
                     paddingHorizontal: 12,
                     paddingVertical: 3,

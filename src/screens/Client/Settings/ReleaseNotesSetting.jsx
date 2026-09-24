@@ -14,7 +14,7 @@ export default function ReleaseNotesScreen({ route }) {
                     style={{
                         flex: 1,
                         backgroundColor: withAlpha(
-                            colors.surface.simpleOpacity,
+                            colors.text.primary,
                             0.24
                         ),
                         borderRadius: 32,

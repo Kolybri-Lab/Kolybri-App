@@ -98,7 +98,9 @@ export default function DocumentModal({
                     <View
                         style={{
                             backgroundColor:
-                                prog !== null ? "transparent" : colors.surface.card,
+                                prog !== null
+                                    ? "transparent"
+                                    : colors.surface.default,
                             padding: 10,
                             borderRadius: 9,
                             flexDirection: "row",
@@ -114,7 +116,12 @@ export default function DocumentModal({
                 </TouchableOpacity>
             );
         },
-        [colors.surface.card, colors.text.primary, downloadProgress, userAccessToken]
+        [
+            colors.surface.default,
+            colors.text.primary,
+            downloadProgress,
+            userAccessToken,
+        ]
     );
 
     const onClose = () => {

@@ -60,7 +60,7 @@ export default function GoBackHeader({ onPress, fallbackRoute } = {}) {
                         height: 38,
                         borderRadius: 19,
                         backgroundColor: withAlpha(
-                            colors.surface.simpleOpacity,
+                            colors.text.primary,
                             0.25
                         ),
                         alignItems: "center",

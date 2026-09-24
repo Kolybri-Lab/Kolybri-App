@@ -44,7 +44,7 @@ function SettingsSection({ options }) {
                             label: opt.label,
                         })
                     }
-                    backgroundColor={withAlpha(colors.surface.simpleOpacity, 0.1)}
+                    backgroundColor={withAlpha(colors.text.primary, 0.1)}
                     index={index}
                     totalLength={options.length}
                     radiusExt={RADIUS_EXT}
@@ -123,7 +123,7 @@ export default function SettingsScreen({}) {
         return (
             <ScreenStack
                 horizontalSpacing={30}
-                style={{ backgroundColor: colors.background.screen }}
+                style={{ backgroundColor: colors.background.app }}
             >
                 <View
                     style={{
@@ -141,7 +141,7 @@ export default function SettingsScreen({}) {
     return (
         <ScreenStack
             horizontalSpacing={30}
-            style={{ backgroundColor: colors.background.screen }}
+            style={{ backgroundColor: colors.background.app }}
         >
             <ScrollView
                 showsVerticalScrollIndicator={false}
@@ -168,7 +168,7 @@ export default function SettingsScreen({}) {
                 </SafeAreaView>
                 <View
                     style={{
-                        backgroundColor: colors.surface.card,
+                        backgroundColor: colors.surface.default,
                         padding: 14,
                         borderRadius: 26,
                         marginBottom: 6,
@@ -233,10 +233,7 @@ export default function SettingsScreen({}) {
                                 paddingVertical: 10,
                                 borderBottomWidth: 1,
                                 overflow: "hidden",
-                                borderBottomColor: withAlpha(
-                                    colors.surface.simpleOpacity,
-                                    0.25
-                                ),
+                                borderBottomColor: colors.border.subtle,
                             }}
                         >
                             <View
@@ -266,10 +263,7 @@ export default function SettingsScreen({}) {
                                 justifyContent: "space-between",
                                 paddingVertical: 10,
                                 borderBottomWidth: 1,
-                                borderBottomColor: withAlpha(
-                                    colors.surface.simpleOpacity,
-                                    0.25
-                                ),
+                                borderBottomColor: colors.border.subtle,
                             }}
                         >
                             <View
@@ -366,7 +360,7 @@ export default function SettingsScreen({}) {
                 <SafeAreaView edges={["bottom"]} style={{ marginBottom: 20 }}>
                     <View
                         style={{
-                            backgroundColor: withAlpha(colors.overlay.black, 0.25),
+                            backgroundColor: "hsla(0, 0%, 0%, 0.25)",
                             paddingVertical: 12,
                             paddingHorizontal: 14,
                             alignItems: "center",

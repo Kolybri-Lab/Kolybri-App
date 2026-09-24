@@ -252,7 +252,7 @@ export default function FeedbackScreen({ route }) {
                                             : "transparent",
                                         borderWidth: 1.5,
                                         backgroundColor: isActive
-                                            ? withAlpha(colors.brand.primary, 0.16)
+                                            ? colors.brand.soft
                                             : withAlpha(colors.text.primary, 0.12),
                                     }}
                                 >
@@ -260,7 +260,7 @@ export default function FeedbackScreen({ route }) {
                                         preset="body1"
                                         color={
                                             isActive
-                                                ? colors.brand.primary
+                                                ? colors.text.brand
                                                 : withAlpha(colors.text.primary, 0.6)
                                         }
                                     >
@@ -294,13 +294,10 @@ export default function FeedbackScreen({ route }) {
                             autoCapitalize="sentences"
                             style={{
                                 backgroundColor: withAlpha(
-                                    colors.surface.simpleOpacity,
+                                    colors.text.primary,
                                     0.12
                                 ),
-                                borderColor: withAlpha(
-                                    colors.surface.simpleOpacity,
-                                    0.16
-                                ),
+                                borderColor: colors.border.subtle,
                                 borderWidth: 1.5,
                                 borderRadius: 12,
                                 paddingVertical: 13,
@@ -341,13 +338,10 @@ export default function FeedbackScreen({ route }) {
                             onChangeText={(text) => updateField("message", text)}
                             style={{
                                 backgroundColor: withAlpha(
-                                    colors.surface.simpleOpacity,
+                                    colors.text.primary,
                                     0.12
                                 ),
-                                borderColor: withAlpha(
-                                    colors.surface.simpleOpacity,
-                                    0.16
-                                ),
+                                borderColor: colors.border.subtle,
                                 borderWidth: 1.5,
                                 borderRadius: 12,
                                 paddingVertical: 13,
@@ -392,15 +386,12 @@ export default function FeedbackScreen({ route }) {
                     <View
                         style={{
                             backgroundColor: withAlpha(
-                                colors.surface.simpleOpacity,
+                                colors.text.primary,
                                 0.09
                             ),
                             padding: 16,
                             borderRadius: 20,
-                            borderColor: withAlpha(
-                                colors.surface.simpleOpacity,
-                                0.13
-                            ),
+                            borderColor: colors.border.subtle,
                             borderWidth: 1,
                         }}
                     >
@@ -431,7 +422,7 @@ export default function FeedbackScreen({ route }) {
                         onPress={sendFeedback}
                         disabled={isSending}
                         style={{
-                            backgroundColor: colors.surface.card,
+                            backgroundColor: colors.surface.default,
                             paddingVertical: 14,
                             borderRadius: 14,
                             alignItems: "center",
@@ -463,10 +454,7 @@ function Option({
                 <View
                     style={{
                         height: 1,
-                        backgroundColor: withAlpha(
-                            colors.surface.simpleOpacity,
-                            0.1
-                        ),
+                        backgroundColor: colors.border.subtle,
                         marginVertical: 12,
                     }}
                 />
@@ -492,7 +480,7 @@ function Option({
                             flexDirection: "row",
                             alignItems: "center",
                             backgroundColor: withAlpha(
-                                colors.surface.simpleOpacity,
+                                colors.text.primary,
                                 0.1
                             ),
                             paddingHorizontal: 10,

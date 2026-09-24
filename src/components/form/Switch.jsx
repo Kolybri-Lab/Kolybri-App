@@ -20,8 +20,8 @@ export default function Switch({ value, onValueChange }) {
         });
     }, [value]);
 
-    const trackColorInactive = withAlpha(colors.surface.simpleOpacity, 0.1);
-    const trackColorActive = withAlpha(colors.surface.simpleOpacity, 0.4);
+    const trackColorInactive = withAlpha(colors.text.primary, 0.1);
+    const trackColorActive = withAlpha(colors.text.primary, 0.4);
 
     const trackStyle = useAnimatedStyle(() => ({
         backgroundColor: interpolateColor(

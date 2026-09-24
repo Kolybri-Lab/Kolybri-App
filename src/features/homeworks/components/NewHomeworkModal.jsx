@@ -161,7 +161,7 @@ export default function NewHomeworkModal({ visible, defaultDate }) {
                     style={{
                         width: 50,
                         height: 5,
-                        backgroundColor: colors.surface.card,
+                        backgroundColor: colors.surface.default,
                         borderRadius: 3,
                         alignSelf: "center",
                         marginBottom: 24,
@@ -204,7 +204,7 @@ export default function NewHomeworkModal({ visible, defaultDate }) {
                     <View style={{ flexDirection: "row", gap: 20 }}>
                         <TouchableOpacity
                             style={{
-                                backgroundColor: colors.surface.card,
+                                backgroundColor: colors.surface.default,
                                 borderRadius: 13,
                                 paddingHorizontal: 16,
                                 paddingVertical: 12,
@@ -244,7 +244,7 @@ export default function NewHomeworkModal({ visible, defaultDate }) {
                             style={{
                                 backgroundColor: homeworkDatas.isEvaluation
                                     ? "hsl(0, 54%, 57%)"
-                                    : colors.surface.card,
+                                    : colors.surface.default,
                                 alignSelf: "center",
                                 paddingHorizontal: 14,
                                 paddingVertical: 9,
@@ -275,7 +275,7 @@ export default function NewHomeworkModal({ visible, defaultDate }) {
                         <View
                             style={{
                                 flex: 1,
-                                backgroundColor: colors.surface.card,
+                                backgroundColor: colors.surface.default,
                                 borderRadius: 13,
                                 paddingHorizontal: 16,
                                 borderWidth: 1,
@@ -308,7 +308,7 @@ export default function NewHomeworkModal({ visible, defaultDate }) {
                         </Text>
                         <View
                             style={{
-                                backgroundColor: colors.surface.card,
+                                backgroundColor: colors.surface.default,
                                 borderRadius: 13,
                                 paddingHorizontal: 16,
                                 paddingVertical: 7,
@@ -342,7 +342,7 @@ export default function NewHomeworkModal({ visible, defaultDate }) {
                         onPress={handleClose}
                         style={{
                             flex: 1,
-                            backgroundColor: colors.surface.card,
+                            backgroundColor: colors.surface.default,
                             paddingVertical: 16,
                             borderRadius: 13,
                             alignItems: "center",
@@ -360,7 +360,9 @@ export default function NewHomeworkModal({ visible, defaultDate }) {
                         }}
                         onPress={handleCreate}
                     >
-                        <Text preset="label1">Ajouter</Text>
+                        <Text preset="label1" color={colors.text.onBrand}>
+                            Ajouter
+                        </Text>
                     </TouchableOpacity>
                 </View>
             </Animated.View>

@@ -85,7 +85,7 @@ export default function HomeworksPreview({ homeworksDatas, customHomeworks }) {
 }
 
 const DateHeader = ({ date, meta, progress }) => {
-    const { colors } = useTheme();
+    const { colors, components } = useTheme();
     return (
         <View
             style={{
@@ -99,7 +99,7 @@ const DateHeader = ({ date, meta, progress }) => {
             <Text style={{ fontSize: 18, fontFamily: "SemiBold" }}>
                 {(meta?.long ?? `POUR ${formatFrenchDate(date)}`).toUpperCase()}
             </Text>
-            {/* <Text style={{ fontSize: 18, fontFamily: "Bold", color: colors.brand.primary }}>
+            {/* <Text style={{ fontSize: 18, fontFamily: "Bold", color: colors.text.brand }}>
                 {countForDate} restant{countForDate > 1 ? "s" : null}
             </Text> */}
             {/* {console.log(progress)} */}
@@ -109,10 +109,10 @@ const DateHeader = ({ date, meta, progress }) => {
                 color={
                     progress === 1
                         ? "hsl(149, 64%, 52%)"
-                        : colors.progressBar.secondary.progress
+                        : components.progressBar.progress
                 }
                 style={{
-                    backgroundColor: colors.progressBar.secondary.back,
+                    backgroundColor: components.progressBar.track,
                     width: 70,
                     height: 8,
                 }}
@@ -133,8 +133,8 @@ const Homework = ({ homework, index, countForDate }) => {
                 {
                     flex: 1,
                     backgroundColor: homework.isCustom
-                        ? withAlpha(colors.surface.simpleOpacity, 0.08)
-                        : colors.surface.card,
+                        ? withAlpha(colors.text.primary, 0.08)
+                        : colors.surface.default,
                     marginVertical: 1.5,
                     alignItems: "center",
                     flexDirection: "row",
@@ -186,7 +186,7 @@ const Homework = ({ homework, index, countForDate }) => {
                             {homework.homeworksContent.content}
                         </Text>
                     ) : (
-                        <Text oneLine color={colors.text.muted}>
+                        <Text oneLine color={colors.text.secondary}>
                             {homework.plainText}
                         </Text>
                     )}
@@ -198,7 +198,7 @@ const Homework = ({ homework, index, countForDate }) => {
                     style={{
                         flexShrink: 1,
                         backgroundColor: addOpacityToCssRgb(
-                            colors.surface.button,
+                            colors.brand.primary,
                             0.9
                         ),
                         borderRadius: 10,
@@ -210,7 +210,7 @@ const Homework = ({ homework, index, countForDate }) => {
                 >
                     <Text
                         style={{
-                            color: colors.text.onPrimary,
+                            color: colors.text.onBrand,
                             fontFamily: "SemiBold",
                             fontSize: 13,
                         }}

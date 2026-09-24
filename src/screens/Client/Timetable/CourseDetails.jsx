@@ -134,7 +134,7 @@ export default function CourseDetails({ route }) {
         timing = "Erreur lors de la lecture du temps";
     }
     return (
-        <View style={{ flex: 1, backgroundColor: colors.background.screen }}>
+        <View style={{ flex: 1, backgroundColor: colors.background.app }}>
             <View style={{ paddingHorizontal: 15 }}>
                 <GoBackHeader fallbackRoute={routesNames.client.timetable.content} />
             </View>

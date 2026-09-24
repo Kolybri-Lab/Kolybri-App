@@ -12,7 +12,7 @@ export default function SettingSectionLayout({
     return (
         <ScreenStack
             horizontalSpacing={18}
-            style={{ backgroundColor: colors.background.screen }}
+            style={{ backgroundColor: colors.background.app }}
         >
             <GoBackHeader />
             <View style={{ marginBottom: 38, marginTop: 8, gap: 6 }}>

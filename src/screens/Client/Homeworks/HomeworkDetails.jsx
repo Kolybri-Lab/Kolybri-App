@@ -141,7 +141,7 @@ export default function HomeworkDetails({ route }) {
 
                     <View
                         style={{
-                            backgroundColor: colors.surface.card,
+                            backgroundColor: colors.surface.default,
                             flex: 1,
                             padding: 25,
                             borderRadius: 21,
@@ -195,7 +195,7 @@ export default function HomeworkDetails({ route }) {
                                     <TouchableOpacity
                                         style={{
                                             flex: 1,
-                                            backgroundColor: colors.surface.card,
+                                            backgroundColor: colors.surface.default,
                                             borderRadius: 12,
                                             justifyContent: "center",
                                         }}
@@ -206,7 +206,7 @@ export default function HomeworkDetails({ route }) {
                                         <Text
                                             align="center"
                                             preset="label2"
-                                            color={colors.brand.accent}
+                                            color={colors.text.brand}
                                         >
                                             Documents (
                                             {
@@ -220,7 +220,7 @@ export default function HomeworkDetails({ route }) {
                                 <TouchableOpacity
                                     style={{
                                         flex: 1,
-                                        backgroundColor: colors.surface.card,
+                                        backgroundColor: colors.surface.default,
                                         borderRadius: 12,
                                         justifyContent: "center",
                                     }}
@@ -231,7 +231,7 @@ export default function HomeworkDetails({ route }) {
                                     <Text
                                         align="center"
                                         preset="label2"
-                                        color={colors.brand.accent}
+                                        color={colors.text.brand}
                                     >
                                         Contenu séance
                                     </Text>

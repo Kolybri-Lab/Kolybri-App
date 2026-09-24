@@ -22,6 +22,7 @@ import Animated, {
 
 import { Text } from "@/components/core";
 import { routesNames } from "@/router/config/routesNames";
+import { getShadow } from "@/themes/tokens";
 import { addOpacityToCssRgb } from "@/utils/colorGenerator";
 
 import { useTimetable } from "@/features/timetable";
@@ -190,7 +191,7 @@ export default function TimetableContent() {
                 >
                     <TouchableOpacity
                         style={{
-                            backgroundColor: theme.colors.surface.button,
+                            backgroundColor: theme.colors.brand.primary,
                             width: "80%",
                             position: "absolute",
                             height: "65%",
@@ -212,7 +213,7 @@ export default function TimetableContent() {
                         <Text
                             preset="title1"
                             oneLine
-                            color={theme.colors.text.onPrimary}
+                            color={theme.colors.text.onBrand}
                         >
                             {activeDate}
                         </Text>
@@ -258,7 +259,7 @@ const CourseBox = memo(({ course, navigation, theme, timetableViewDims }) => {
     const startCourseLayoutRef = useRef(false);
 
     const { colors } = useTheme();
-    const caseColor = addOpacityToCssRgb(colors.text.onPrimary, 0.2);
+    const caseColor = addOpacityToCssRgb(colors.text.onBrand, 0.2);
 
     useEffect(() => {
         if (roomLayout && startCourseLayout) {
@@ -316,7 +317,8 @@ const CourseBox = memo(({ course, navigation, theme, timetableViewDims }) => {
         }
     };
 
-    const { shadow } = useTheme();
+    const { isDark } = useTheme();
+    const shadow = getShadow(isDark);
     const shadowColor = addOpacityToCssRgb(shadow.color, shadow.opacity);
 
     return (
@@ -346,7 +348,7 @@ const CourseBox = memo(({ course, navigation, theme, timetableViewDims }) => {
                                   1
                                 : CONFIG.minCourseSize,
                         overflow: "hidden",
-                        backgroundColor: colors.surface.card,
+                        backgroundColor: colors.surface.default,
                         borderRadius: 16,
                         borderColor: color,
                         borderWidth: 1.5,
@@ -400,7 +402,7 @@ const CourseBox = memo(({ course, navigation, theme, timetableViewDims }) => {
                                 elevation: 14,
                                 transform: [{ rotate: "-6deg" }],
                             }}
-                            color={colors.text.onPrimary}
+                            color={colors.text.onBrand}
                             preset="title1"
                         >
                             {isCancelled ? "Annulé" : "Dispensé"}

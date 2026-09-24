@@ -1,6 +1,6 @@
 import type { Theme as NavigationTheme } from "@react-navigation/native";
 
-import type { Theme } from "./themes";
+import { Theme } from "@/types";
 import { fontFamily } from "./tokens";
 
 // Convertit NOTRE thème en thème React Navigation (v7).
@@ -10,8 +10,8 @@ export function toNavigationTheme(theme: Theme): NavigationTheme {
         dark: theme.isDark,
         colors: {
             primary: colors.brand.primary,
-            background: colors.background.screen,
-            card: colors.tabBar.background,
+            background: colors.background.app,
+            card: colors.surface.default,
             text: colors.text.primary,
             border: colors.border.subtle,
             notification: colors.state.danger,
@@ -24,3 +24,4 @@ export function toNavigationTheme(theme: Theme): NavigationTheme {
         },
     };
 }
+

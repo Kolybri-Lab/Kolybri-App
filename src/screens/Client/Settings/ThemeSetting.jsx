@@ -38,6 +38,7 @@ export default function ThemeScreen({ route }) {
                     icon={<Sun fill={colors.text.primary} size={18} opacity={0.6} />}
                     index={0}
                     totalLength={3}
+                    disabled
                 >
                     <View
                         style={{
@@ -105,6 +106,7 @@ export default function ThemeScreen({ route }) {
                     }
                     index={1}
                     totalLength={3}
+                    disabled
                 >
                     <Switch
                         value={tempState}
@@ -122,6 +124,7 @@ export default function ThemeScreen({ route }) {
                     }
                     index={2}
                     totalLength={3}
+                    disabled
                 >
                     <Switch
                         value={hapticsEnabled}
@@ -141,3 +144,4 @@ export default function ThemeScreen({ route }) {
         </SettingSectionLayout>
     );
 }
+

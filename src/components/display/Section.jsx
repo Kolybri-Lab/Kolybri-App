@@ -25,7 +25,7 @@ export default function Section({
             disabled={disabled}
             style={({ pressed }) => ({
                 backgroundColor:
-                    backgroundColor ?? withAlpha(colors.surface.simpleOpacity, 0.1),
+                    backgroundColor ?? withAlpha(colors.text.primary, 0.1),
                 height,
                 paddingHorizontal: 14,
                 flexDirection: "row",

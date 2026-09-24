@@ -9,7 +9,6 @@ import {
 } from "@/components/svg";
 import { formatGradeText } from "@/features/grades/utils/helpers";
 import { useTheme } from "@/hooks/useThemeStore";
-import { addOpacityToCssRgb } from "@/utils/colorGenerator";
 import { TouchableOpacity, View } from "react-native";
 import Grade from "../models/Grade";
 const Text = CoreText as any;
@@ -30,12 +29,12 @@ const UI_BADGES: Record<string, any> = {
 
 export default function GradeItem({ grade, dispatch }: GradeItemProps) {
     const { colors } = useTheme() as any;
-    const mainColor = colors?.brand?.primary ?? "hsl(240, 50%, 50%)";
+    const softColor = colors?.brand?.soft ?? "hsl(240, 95%, 85%)";
 
-    let backgroundColor = addOpacityToCssRgb(mainColor, 0.15);
+    let backgroundColor = softColor;
     switch (grade.actionOnStreak) {
         case "nothing":
-            backgroundColor = addOpacityToCssRgb(mainColor, 0.15);
+            backgroundColor = softColor;
             break;
         case "up":
             backgroundColor = "hsla(36, 100%, 34%, .35)";
@@ -45,7 +44,7 @@ export default function GradeItem({ grade, dispatch }: GradeItemProps) {
             break;
     }
 
-    const borderColor = addOpacityToCssRgb(mainColor, 0.25);
+    const borderColor = colors?.border?.subtle ?? "hsla(240, 62%, 58%, 0.2)";
 
     return (
         <TouchableOpacity

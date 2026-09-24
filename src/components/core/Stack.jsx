@@ -1,4 +1,5 @@
 import { useTheme } from "@/hooks/useThemeStore";
+import { getShadow } from "@/themes/tokens";
 import { addOpacity } from "@/utils/colorGenerator";
 import React from "react";
 import { StyleSheet, View } from "react-native";
@@ -162,7 +163,7 @@ function Stack({
             Object.assign(dynamicStyle, {
                 borderRadius: radius || 20,
                 borderCurve: "continuous",
-                backgroundColor: backgroundColor || colors.surface.card,
+                backgroundColor: backgroundColor || colors.surface.default,
                 overflow: "visible",
             });
 
@@ -177,7 +178,7 @@ function Stack({
             } else {
                 // Style card avec ombrage
                 Object.assign(dynamicStyle, {
-                    shadowColor: theme.shadow.color,
+                    shadowColor: getShadow(theme.isDark).color,
                     shadowOffset: { width: 0, height: 0 },
                     shadowOpacity: 0.16,
                     shadowRadius: 1.5,
@@ -195,7 +196,7 @@ function Stack({
                 borderCurve: "continuous",
                 borderColor: colors.border.subtle,
                 borderWidth: 1,
-                backgroundColor: backgroundColor || colors.surface.card,
+                backgroundColor: backgroundColor || colors.surface.default,
             });
         }
 
@@ -209,7 +210,7 @@ function Stack({
         cleanupCache();
 
         return finalStyle;
-    }, [cacheKey, colors, theme.shadow.color]);
+    }, [cacheKey, colors]);
 
     return (
         <View {...rest} style={[computedStyle, style]}>

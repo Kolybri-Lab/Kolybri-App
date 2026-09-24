@@ -186,7 +186,7 @@ export default function MessagingDetails({ route }) {
                 headerTitle={"Retour aux messages"}
                 backArrow={{ color: colors.text.primary, size: 24 }}
                 height={33}
-                backgroundColor={colors.background.base}
+                backgroundColor={colors.background.app}
                 fallbackRoute={routesNames.client.messaging.content}
             />
             <ScrollView showsVerticalScrollIndicator={false}>
@@ -196,7 +196,7 @@ export default function MessagingDetails({ route }) {
 
                 <View
                     style={{
-                        backgroundColor: colors.surface.card,
+                        backgroundColor: colors.surface.default,
                         padding: 14,
                         borderRadius: 16,
                     }}

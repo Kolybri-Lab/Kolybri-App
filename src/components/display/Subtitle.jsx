@@ -8,7 +8,7 @@ export default function Subtitle({ children, ...props }) {
     return (
         <Text
             style={UiStyles.subtitle}
-            color={theme.colors.brand.primary}
+            color={theme.colors.text.brand}
             preset="title2"
             oneLine
             {...props}
