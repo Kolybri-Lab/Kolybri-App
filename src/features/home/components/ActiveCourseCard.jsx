@@ -117,12 +117,11 @@ export default function ActiveCourseCard({
 }
 
 const Course = ({ data }) => {
-    const { colors } = useTheme();
+    const { colors, components } = useTheme();
     const { courseData, color, message, progression, isLast } = data;
     const textColor = addOpacityToCssRgb(colors.text.primary, 0.9);
 
     return (
-        // Une seule carte : fond + arrondis sur le conteneur
         <View
             style={{
                 width: "100%",
@@ -132,12 +131,10 @@ const Course = ({ data }) => {
                 backgroundColor: colors.surface.raised,
                 borderTopLeftRadius: 16,
                 borderTopRightRadius: 16,
-                // collée à la carte suivante, sauf s'il n'y en a pas
-                borderBottomLeftRadius: isLast ? 4 : 16,
-                borderBottomRightRadius: isLast ? 4 : 16,
+                borderBottomLeftRadius: isLast ? 16 : 4,
+                borderBottomRightRadius: isLast ? 16 : 4,
             }}
         >
-            {/* Horaires : centrés verticalement, séparateur court */}
             <View
                 style={{
                     width: 64,
@@ -167,7 +164,6 @@ const Course = ({ data }) => {
                 </Text>
             </View>
 
-            {/* Contenu : titre + heure de fin, puis la barre */}
             <View
                 style={{
                     flex: 1,
@@ -198,7 +194,6 @@ const Course = ({ data }) => {
                         {courseData?.libelle}
                     </Text>
 
-                    {/* flexShrink 0 : c'est le titre qui se tronque, pas l'heure */}
                     <View
                         style={{
                             flexShrink: 0,
@@ -240,10 +235,9 @@ const Course = ({ data }) => {
 const NextCourse = ({ data }) => {
     const { courseData, extras, inClass } = data;
     const { colors, components } = useTheme();
-    const resizeBars = !Boolean(extras.find((e) => e?.resizeBars)?.resizeBars);
+    const resizeBars = !extras.find((e) => e?.resizeBars)?.resizeBars;
 
     return (
-        // Une seule carte : fond + arrondis sur le conteneur
         <View
             style={{
                 width: "100%",
@@ -257,7 +251,6 @@ const NextCourse = ({ data }) => {
                 borderBottomRightRadius: 16,
             }}
         >
-            {/* Horaires : centrés verticalement, séparateur court */}
             <View
                 style={{
                     width: 64,
@@ -287,7 +280,6 @@ const NextCourse = ({ data }) => {
                 </Text>
             </View>
 
-            {/* Contenu : titre en haut, prof / salle en bas */}
             <View
                 style={{
                     flex: 1,
@@ -393,4 +385,3 @@ const AnyCourse = () => {
         </View>
     );
 };
-
