@@ -39,7 +39,7 @@ export default function DropDownMenu({
 }) {
     const [isDeployed, setIsDeployed] = useState(false);
     const [internalSelected, setInternalSelected] = useState(value);
-    const { colors } = useTheme();
+    const { colors, isDark } = useTheme();
     const transitionProgress = useSharedValue(0);
     const opacityProgress = useSharedValue(0);
     const pressScale = useSharedValue(1);
@@ -119,7 +119,7 @@ export default function DropDownMenu({
     const alignment = POSITIONS[selectorPosition] || "flex-start";
 
     return (
-        <View style={{ width: "100%", alignItems: alignment }}>
+        <View style={{ width: "100%", alignItems: alignment, position: "relative" }}>
             <Animated.View style={[buttonSyle, { alignSelf: alignment }]}>
                 <Pressable
                     onPress={toggleDeployed}
@@ -161,6 +161,20 @@ export default function DropDownMenu({
                 </Pressable>
             </Animated.View>
 
+            {options.length > 0 && isDeployed && (
+                <Pressable
+                    onPress={closeDropdown}
+                    style={{
+                        position: "absolute",
+                        top: -10000,
+                        left: -10000,
+                        right: -10000,
+                        bottom: -10000,
+                        zIndex: 1,
+                    }}
+                />
+            )}
+
             {options.length > 0 && (
                 <Animated.View
                     pointerEvents={isDeployed ? "auto" : "none"}
@@ -184,6 +198,15 @@ export default function DropDownMenu({
                                 backgroundColor: colors.surface.raised,
                                 borderRadius: 15,
                                 overflow: "hidden",
+                                boxShadow: [
+                                    {
+                                        offsetX: 0,
+                                        offsetY: 0,
+                                        blurRadius: 14,
+                                        spreadDistance: 3,
+                                        color: `hsla(0, 0%, 0%, ${isDark ? 0.3 : 0.14})`,
+                                    },
+                                ],
                             },
                             customDropDownStyle,
                         ]}

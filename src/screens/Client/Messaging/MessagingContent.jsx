@@ -329,7 +329,7 @@ const MessageItem = memo(({ item, index, navigation, messages, token }) => {
                     width: 37,
                     height: 37,
                     borderRadius: 18,
-                    backgroundColor: "hsla(217, 91%, 60%, 1)",
+                    backgroundColor: colors.brand.primary,
                     alignItems: "center",
                     justifyContent: "center",
                     flexShrink: 0,

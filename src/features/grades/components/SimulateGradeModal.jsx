@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { ScrollView, TextInput, TouchableOpacity, View } from "react-native";
 
 import { Text } from "@/components/core";
+import { useTheme } from "@/hooks/useThemeStore";
+import { withAlpha } from "@/themes/color";
 import { getTodayDateString } from "@/utils/date";
 import Animated, {
     useAnimatedStyle,
@@ -14,10 +16,11 @@ import Grade from "../models/Grade";
 import { parseNumber } from "../utils/averages";
 
 const PLACEHOLDERS = { coef: 1, grade: 15, outOf: 20 };
+const COEF_PRESETS = [1, 2, 3, 4, 5];
 
 export default function AddGradeModal({ visible, disciplineCodes }) {
     const { state, dispatch } = useGrade();
-
+    const { colors } = useTheme();
     const [simulatedGrade, setSimulatedGrade] = useState(PLACEHOLDERS);
     const [simulationCount, setSimulationCount] = useState(1);
     const [isRendered, setIsRendered] = useState(false);
@@ -28,20 +31,12 @@ export default function AddGradeModal({ visible, disciplineCodes }) {
     useEffect(() => {
         if (visible) {
             setIsRendered(true);
-            translateY.value = withTiming(0, {
-                duration: 450,
-            });
+            translateY.value = withTiming(0, { duration: 450 });
             opacity.value = withTiming(1, { duration: 250 });
         } else {
-            translateY.value = withTiming(
-                500,
-                {
-                    duration: 350,
-                },
-                () => {
-                    scheduleOnRN(setIsRendered, false);
-                }
-            );
+            translateY.value = withTiming(500, { duration: 350 }, () => {
+                scheduleOnRN(setIsRendered, false);
+            });
             opacity.value = withTiming(0, { duration: 250 });
         }
     }, [visible]);
@@ -54,8 +49,44 @@ export default function AddGradeModal({ visible, disciplineCodes }) {
         opacity: opacity.value,
     }));
 
+    const isGradeAboveScale = simulatedGrade.grade > simulatedGrade.outOf;
+    const canSubmit = !isGradeAboveScale;
+
+    const updateField = (field) => (text) =>
+        setSimulatedGrade((prev) => ({ ...prev, [field]: parseNumber(text) }));
+
+    const selectCoefPreset = (coef) =>
+        setSimulatedGrade((prev) => ({ ...prev, coef }));
+
     const handleClose = () => {
         dispatch({ type: "CLOSE_SIMULATION_MODAL" });
+    };
+
+    const handleSubmit = () => {
+        if (!canSubmit) return;
+
+        setSimulationCount((prev) => prev + 1);
+
+        const generateGradeSimulation = new Grade({
+            data: simulatedGrade,
+            codes: {
+                discipline: disciplineCodes.discipline,
+                period: disciplineCodes.period,
+            },
+            date: getTodayDateString(),
+            disciplineName: disciplineCodes.libelle,
+            libelle: `Simulation #${simulationCount}`,
+            notSignificant: false,
+            onlySkills: false,
+            isSimulation: true,
+        });
+
+        dispatch({
+            type: "CREATE_SIMULATED_GRADE",
+            payload: generateGradeSimulation.getGrade(),
+        });
+        setSimulatedGrade(PLACEHOLDERS);
+        handleClose();
     };
 
     if (!isRendered) return null;
@@ -71,10 +102,7 @@ export default function AddGradeModal({ visible, disciplineCodes }) {
         >
             <Animated.View
                 style={[
-                    {
-                        flex: 1,
-                        backgroundColor: "rgba(0,0,0,0.7)",
-                    },
+                    { flex: 1, backgroundColor: "rgba(0,0,0,0.7)" },
                     backdropStyle,
                 ]}
             >
@@ -91,12 +119,11 @@ export default function AddGradeModal({ visible, disciplineCodes }) {
                         position: "absolute",
                         bottom: 0,
                         width: "100%",
-                        backgroundColor: "hsl(240, 35%, 11%)",
+                        backgroundColor: colors.surface.raised,
                         borderTopLeftRadius: 42,
                         borderTopRightRadius: 42,
                         paddingHorizontal: 24,
                         paddingTop: 16,
-                        paddingBottom: 40,
                         minHeight: 400,
                         maxHeight: "85%",
                     },
@@ -116,12 +143,7 @@ export default function AddGradeModal({ visible, disciplineCodes }) {
 
                 <View style={{ marginBottom: 24 }}>
                     <Text preset="h2">Ajouter une note</Text>
-                    <Text
-                        style={{
-                            marginTop: 4,
-                        }}
-                        preset="body2"
-                    >
+                    <Text style={{ marginTop: 4 }} preset="body2">
                         Simulez une note pour voir son impact
                     </Text>
                 </View>
@@ -135,32 +157,30 @@ export default function AddGradeModal({ visible, disciplineCodes }) {
                             <View
                                 style={{
                                     flex: 1,
-                                    backgroundColor: "hsla(240, 30%, 20%, 0.8)",
                                     borderRadius: 13,
                                     paddingHorizontal: 16,
                                     paddingVertical: 14,
                                     borderWidth: 1,
-                                    borderColor: "hsla(240, 20%, 40%, 0.3)",
+                                    backgroundColor: colors.surface.default,
+                                    borderColor: colors.border.subtle,
                                 }}
                             >
                                 <TextInput
                                     placeholder={String(PLACEHOLDERS.grade)}
-                                    placeholderTextColor={"hsla(0, 100%, 100%, .25)"} // EDIT
-                                    onChangeText={(text) =>
-                                        setSimulatedGrade((prev) => ({
-                                            ...prev,
-                                            grade: parseNumber(text),
-                                        }))
-                                    }
+                                    placeholderTextColor={withAlpha(
+                                        colors.text.primary,
+                                        0.4
+                                    )}
+                                    onChangeText={updateField("grade")}
                                     keyboardType="numeric"
-                                    style={{ fontSize: 16 }}
+                                    style={{
+                                        fontSize: 16,
+                                        color: colors.text.primary,
+                                    }}
                                 />
                             </View>
                             <Text
-                                style={{
-                                    alignSelf: "center",
-                                    opacity: 0.5,
-                                }}
+                                style={{ alignSelf: "center", opacity: 0.5 }}
                                 preset="h4"
                             >
                                 /
@@ -168,25 +188,26 @@ export default function AddGradeModal({ visible, disciplineCodes }) {
                             <View
                                 style={{
                                     flex: 1,
-                                    backgroundColor: "hsla(240, 30%, 20%, 0.8)",
                                     borderRadius: 13,
                                     paddingHorizontal: 16,
                                     paddingVertical: 14,
                                     borderWidth: 1,
-                                    borderColor: "hsla(240, 20%, 40%, 0.3)",
+                                    backgroundColor: colors.surface.default,
+                                    borderColor: colors.border.subtle,
                                 }}
                             >
                                 <TextInput
                                     placeholder={String(PLACEHOLDERS.outOf)}
-                                    placeholderTextColor={"hsla(0, 100%, 100%, .25)"} // EDIT
-                                    onChangeText={(text) =>
-                                        setSimulatedGrade((prev) => ({
-                                            ...prev,
-                                            outOf: parseNumber(text),
-                                        }))
-                                    }
+                                    placeholderTextColor={withAlpha(
+                                        colors.text.primary,
+                                        0.4
+                                    )}
+                                    onChangeText={updateField("outOf")}
                                     keyboardType="numeric"
-                                    style={{ fontSize: 16 }}
+                                    style={{
+                                        fontSize: 16,
+                                        color: colors.text.primary,
+                                    }}
                                 />
                             </View>
                         </View>
@@ -198,31 +219,69 @@ export default function AddGradeModal({ visible, disciplineCodes }) {
                         </Text>
                         <View
                             style={{
-                                backgroundColor: "hsla(240, 30%, 20%, 0.8)",
                                 borderRadius: 13,
                                 paddingHorizontal: 16,
                                 paddingVertical: 14,
                                 borderWidth: 1,
-                                borderColor: "hsla(240, 20%, 40%, 0.3)",
+                                backgroundColor: colors.surface.default,
+                                borderColor: colors.border.subtle,
                             }}
                         >
                             <TextInput
                                 placeholder={String(PLACEHOLDERS.coef)}
-                                placeholderTextColor={"hsla(0, 100%, 100%, .25)"} // EDIT
-                                onChangeText={(text) =>
-                                    setSimulatedGrade((prev) => ({
-                                        ...prev,
-                                        coef: parseNumber(text),
-                                    }))
+                                placeholderTextColor={withAlpha(
+                                    colors.text.primary,
+                                    0.4
+                                )}
+                                value={
+                                    COEF_PRESETS.includes(simulatedGrade.coef)
+                                        ? String(simulatedGrade.coef)
+                                        : undefined
                                 }
+                                onChangeText={updateField("coef")}
                                 keyboardType="numeric"
-                                style={{ fontSize: 16 }}
+                                style={{ fontSize: 16, color: colors.text.primary }}
                             />
+                        </View>
+
+                        <View
+                            style={{ flexDirection: "row", gap: 8, marginTop: 10 }}
+                        >
+                            {COEF_PRESETS.map((preset) => {
+                                const isActive = simulatedGrade.coef === preset;
+                                return (
+                                    <TouchableOpacity
+                                        key={preset}
+                                        onPress={() => selectCoefPreset(preset)}
+                                        style={{
+                                            width: 38,
+                                            aspectRatio: 1,
+                                            borderRadius: 10,
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            backgroundColor: isActive
+                                                ? colors.brand.vivid
+                                                : colors.surface.default,
+                                        }}
+                                    >
+                                        <Text
+                                            preset="label2"
+                                            color={
+                                                isActive
+                                                    ? colors.text.onBrand
+                                                    : colors.text.primary
+                                            }
+                                        >
+                                            ×{preset}
+                                        </Text>
+                                    </TouchableOpacity>
+                                );
+                            })}
                         </View>
                     </View>
                 </ScrollView>
 
-                {simulatedGrade.grade > simulatedGrade.outOf && (
+                {isGradeAboveScale && (
                     <View
                         style={{
                             backgroundColor: "hsla(0, 70%, 50%, 0.2)",
@@ -245,7 +304,7 @@ export default function AddGradeModal({ visible, disciplineCodes }) {
                         onPress={handleClose}
                         style={{
                             flex: 1,
-                            backgroundColor: "hsla(240, 30%, 25%, 0.8)",
+                            backgroundColor: colors.surface.default,
                             paddingVertical: 16,
                             borderRadius: 13,
                             alignItems: "center",
@@ -254,41 +313,24 @@ export default function AddGradeModal({ visible, disciplineCodes }) {
                         <Text preset="label1">Annuler</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
+                        disabled={!canSubmit}
                         style={{
                             flex: 1,
-                            backgroundColor: "hsl(240, 50%, 55%)",
+                            backgroundColor: colors.brand.primary,
                             paddingVertical: 16,
                             borderRadius: 13,
                             alignItems: "center",
+                            opacity: canSubmit ? 1 : 0.4,
                         }}
-                        onPress={() => {
-                            setSimulationCount((prev) => prev + 1);
-                            const generateGradeSimulation = new Grade({
-                                data: simulatedGrade,
-                                codes: {
-                                    discipline: disciplineCodes.discipline,
-                                    period: disciplineCodes.period,
-                                },
-                                date: getTodayDateString(),
-                                disciplineName: disciplineCodes.libelle,
-                                libelle: `Simulation #${simulationCount}`,
-                                notSignificant: false,
-                                onlySkills: false,
-                                isSimulation: true,
-                            });
-
-                            dispatch({
-                                type: "CREATE_SIMULATED_GRADE",
-                                payload: generateGradeSimulation.getGrade(),
-                            });
-                            setSimulatedGrade(PLACEHOLDERS);
-                            handleClose();
-                        }}
+                        onPress={handleSubmit}
                     >
-                        <Text preset="label1">Simuler</Text>
+                        <Text preset="label1" color={colors.text.onBrand}>
+                            Simuler
+                        </Text>
                     </TouchableOpacity>
                 </View>
             </Animated.View>
         </View>
     );
 }
+

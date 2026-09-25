@@ -55,7 +55,7 @@ export default function HomeworkProgress({
                 }}
             />
 
-            <Text preset="custom1" align="center" color="hsl(240, 34%, 77%)">
+            <Text preset="custom1" align="center" color={colors.text.secondary}>
                 {textSentence}
             </Text>
         </SafeAreaView>

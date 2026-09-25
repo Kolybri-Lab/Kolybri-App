@@ -4,6 +4,7 @@ import { useMessageContent } from "@/features/messaging/hooks/useMessaging";
 import { downloadDocument, openDocument } from "@/helpers/documents/documentsHelper";
 import { useTheme } from "@/hooks/useThemeStore";
 import { routesNames } from "@/router/config/routesNames";
+import { withAlpha } from "@/themes/color";
 import { formatDate } from "@/utils/date";
 import { memo, useCallback, useMemo, useState } from "react";
 import {
@@ -23,6 +24,7 @@ const RECOVERY_MODE_BY_TYPE = {
 };
 
 const File = memo(({ item, progress, colors, onOpen, onDownload }) => {
+    const { colors: themeColors } = useTheme();
     const { id, libelle, type, taille: size } = item;
     const ext = libelle.slice(libelle.lastIndexOf(".") + 1).toLowerCase();
 
@@ -55,7 +57,7 @@ const File = memo(({ item, progress, colors, onOpen, onDownload }) => {
                     backgroundColor:
                         progress !== null && progress !== undefined
                             ? "transparent"
-                            : "hsla(235, 28%, 20%, 1)",
+                            : themeColors.surface.raised,
                     padding: 10,
                     gap: 12,
                     borderRadius: 9,
@@ -66,7 +68,7 @@ const File = memo(({ item, progress, colors, onOpen, onDownload }) => {
                 <View
                     style={{
                         padding: 7,
-                        backgroundColor: "hsla(0, 0%, 100%, 0.2)",
+                        backgroundColor: withAlpha(themeColors.surface.default, 0.5),
                         alignItems: "center",
                         justifyContent: "center",
                         borderRadius: 10,
@@ -225,7 +227,7 @@ export default function MessagingDetails({ route }) {
                                     width: 42,
                                     height: 42,
                                     borderRadius: 21,
-                                    backgroundColor: "hsla(217, 91%, 60%, 1)",
+                                    backgroundColor: colors.brand.primary,
                                     alignItems: "center",
                                     justifyContent: "center",
                                     flexShrink: 0,
