@@ -1,7 +1,7 @@
-import { useNavigation } from "@react-navigation/native";
-import { useEffect } from "react";
 import { routesNames } from "@/router/config/routesNames";
 import { objectsEqual } from "@/utils/json";
+import { useNavigation } from "@react-navigation/native";
+import { useEffect } from "react";
 import Discipline from "../models/Discipline";
 import Grade from "../models/Grade";
 import Period from "../models/Period";
@@ -53,30 +53,34 @@ export const useSimulation = ({
 
             const updatedGroups = displayPeriode.groups.map((group) => {
                 if (group.isDisciplineGroup && Array.isArray(group.disciplines)) {
-                    const updatedDisciplines = group.disciplines.map((discipline) => {
-                        if (discipline.code === gradeToDelete.codes.discipline) {
-                            const newGrades = (discipline.grades || []).filter(
-                                (g) => !objectsEqual(new Grade(g).getGrade(), gradeObj)
-                            );
-                            const tempDiscipline = new Discipline({
-                                ...discipline,
-                                grades: newGrades,
-                            });
-                            const calculatedAvg = tempDiscipline.getWeightedAverage();
-                            return {
-                                ...discipline,
-                                grades: newGrades,
-                                averageDatas: {
-                                    ...discipline.averageDatas,
-                                    userAverage:
-                                        calculatedAvg !== null && calculatedAvg !== undefined
-                                            ? calculatedAvg
-                                            : discipline.averageDatas?.userAverage,
-                                },
-                            };
+                    const updatedDisciplines = group.disciplines.map(
+                        (discipline) => {
+                            if (discipline.code === gradeToDelete.codes.discipline) {
+                                const newGrades = (discipline.grades || []).filter(
+                                    (g) =>
+                                        !objectsEqual(
+                                            new Grade(g).getGrade(),
+                                            gradeObj
+                                        )
+                                );
+                                const tempDiscipline = new Discipline({
+                                    ...discipline,
+                                    grades: newGrades,
+                                });
+                                const calculatedAvg =
+                                    tempDiscipline.getWeightedAverage();
+                                return {
+                                    ...discipline,
+                                    grades: newGrades,
+                                    averageDatas: {
+                                        ...discipline.averageDatas,
+                                        userAverage: calculatedAvg,
+                                    },
+                                };
+                            }
+                            return discipline;
                         }
-                        return discipline;
-                    });
+                    );
 
                     const tempGroup = new Discipline({
                         ...group,
@@ -89,10 +93,7 @@ export const useSimulation = ({
                         disciplines: updatedDisciplines,
                         averageDatas: {
                             ...group.averageDatas,
-                            userAverage:
-                                calculatedGroupAvg !== null && calculatedGroupAvg !== undefined
-                                    ? calculatedGroupAvg
-                                    : group.averageDatas?.userAverage,
+                            userAverage: calculatedGroupAvg,
                         },
                     };
                 } else if (group.code === gradeToDelete.codes.discipline) {
@@ -109,10 +110,7 @@ export const useSimulation = ({
                         grades: newGrades,
                         averageDatas: {
                             ...group.averageDatas,
-                            userAverage:
-                                calculatedAvg !== null && calculatedAvg !== undefined
-                                    ? calculatedAvg
-                                    : group.averageDatas?.userAverage,
+                            userAverage: calculatedAvg,
                         },
                     };
                 }
@@ -145,7 +143,6 @@ export const useSimulation = ({
         setGeneralAverage,
         dispatch,
     ]);
-
     useEffect(() => {
         if (state.simulatedGrade && displayPeriode?.groups) {
             const simulatedGrade = new Grade(state.simulatedGrade);
@@ -153,28 +150,38 @@ export const useSimulation = ({
 
             const updatedGroups = displayPeriode.groups.map((group) => {
                 if (group.isDisciplineGroup && Array.isArray(group.disciplines)) {
-                    const updatedDisciplines = group.disciplines.map((discipline) => {
-                        if (discipline.code === simulatedGrade.codes.discipline) {
-                            const newGrades = [...(discipline.grades || []), gradeObj];
-                            const tempDiscipline = new Discipline({
-                                ...discipline,
-                                grades: newGrades,
-                            });
-                            const calculatedAvg = tempDiscipline.getWeightedAverage();
-                            return {
-                                ...discipline,
-                                grades: newGrades,
-                                averageDatas: {
-                                    ...discipline.averageDatas,
-                                    userAverage:
-                                        calculatedAvg !== null && calculatedAvg !== undefined
-                                            ? calculatedAvg
-                                            : discipline.averageDatas?.userAverage,
-                                },
-                            };
+                    const updatedDisciplines = group.disciplines.map(
+                        (discipline) => {
+                            if (
+                                discipline.code === simulatedGrade.codes.discipline
+                            ) {
+                                const newGrades = [
+                                    ...(discipline.grades || []),
+                                    gradeObj,
+                                ];
+                                const tempDiscipline = new Discipline({
+                                    ...discipline,
+                                    grades: newGrades,
+                                });
+                                const calculatedAvg =
+                                    tempDiscipline.getWeightedAverage();
+                                return {
+                                    ...discipline,
+                                    grades: newGrades,
+                                    averageDatas: {
+                                        ...discipline.averageDatas,
+                                        userAverage:
+                                            calculatedAvg !== null &&
+                                            calculatedAvg !== undefined
+                                                ? calculatedAvg
+                                                : discipline.averageDatas
+                                                      ?.userAverage,
+                                    },
+                                };
+                            }
+                            return discipline;
                         }
-                        return discipline;
-                    });
+                    );
 
                     const tempGroup = new Discipline({
                         ...group,
@@ -188,7 +195,8 @@ export const useSimulation = ({
                         averageDatas: {
                             ...group.averageDatas,
                             userAverage:
-                                calculatedGroupAvg !== null && calculatedGroupAvg !== undefined
+                                calculatedGroupAvg !== null &&
+                                calculatedGroupAvg !== undefined
                                     ? calculatedGroupAvg
                                     : group.averageDatas?.userAverage,
                         },

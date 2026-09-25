@@ -2,7 +2,7 @@ export const motivationSentences = {
     0: [
         "Il faut un début à tout",
         "Bonne chance !",
-        "Aller, ça va pas se faire tout seul",
+        "Allez, ça va pas se faire tout seul",
     ],
     0.25: [
         "C'est un bon début !",
@@ -39,3 +39,4 @@ export const motivationSentences = {
         "Bravo !",
     ],
 };
+
