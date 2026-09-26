@@ -69,10 +69,10 @@ export default {
         url: "https://u.expo.dev/597e7932-e1c1-4c19-a8b9-5b77ea8659f2",
     },
     runtimeVersion: {
-        policy: "fingerprint",
+        policy: "appVersion",
     },
 
-    version: "1.1.0",
+    version: "1.0.0",
     orientation: "portrait",
     icon: "./assets/icons/icon.png",
     userInterfaceStyle: "automatic",
@@ -104,3 +104,4 @@ export default {
     owner: "kolybrilab",
     githubUrl: "https://github.com/Kolybri-Lab/Kolybri-App",
 };
+
