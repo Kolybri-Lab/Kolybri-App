@@ -86,7 +86,6 @@ export default {
     ios: {
         supportsTablet: true,
         bundleIdentifier: identifiers.ios,
-        appStoreUrl: "https://apps.apple.com/app/idXXXXXXXXX",
         infoPlist: {
             ITSAppUsesNonExemptEncryption: false,
         },

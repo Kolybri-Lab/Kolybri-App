@@ -2,7 +2,7 @@
 import { useTheme } from "@/hooks/useThemeStore";
 import appConfig from "app.config";
 import LottieView from "lottie-react-native";
-import { Modal, Platform, Pressable, Share, View } from "react-native";
+import { Modal, Pressable, Share, View } from "react-native";
 import WinnerBadge from "../../../assets/lottie/Winner Badge.json";
 import { Text } from "../core";
 
@@ -11,10 +11,8 @@ export default function SharePopup({ visible, onClose, onShared }) {
 
     const handleShare = async () => {
         try {
-            const url =
-                Platform.OS === "android"
-                    ? appConfig.android.playStoreUrl
-                    : appConfig.ios.appStoreUrl;
+            const url = appConfig.android.playStoreUrl;
+
             const result = await Share.share({
                 message: `J'utilise cette app pour suivre mes cours, notes et devoirs. Tu peux la télécharger ici : ${url}`,
                 url, // used on ios
