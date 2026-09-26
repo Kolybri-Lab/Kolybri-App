@@ -1,11 +1,13 @@
 import { Section, Text } from "@/components";
 import { Link } from "@/components/svg";
+import { useTheme } from "@/hooks/useThemeStore";
+import { withAlpha } from "@/themes/color";
+import { logger } from "@/utils/logger";
 import { openUrl } from "@/utils/url";
 import { fetch } from "expo/fetch";
 import { memo, useEffect, useState } from "react";
 import { ActivityIndicator, Image, View } from "react-native";
 import SettingSectionLayout from "../components/SettingSectionLayout";
-import { logger } from "@/utils/logger";
 
 export default function ContributorsScreen({ route }) {
     const { label } = route.params;
@@ -47,7 +49,7 @@ export default function ContributorsScreen({ route }) {
 
 const Contributor = memo(({ item, index, totalLength }) => {
     const { login, avatar_url, contributions, html_url } = item;
-
+    const { colors } = useTheme();
     return (
         <Section
             height={72}
@@ -63,7 +65,7 @@ const Contributor = memo(({ item, index, totalLength }) => {
             index={index}
             onPress={() => openUrl(html_url)}
         >
-            <Link size={24} fill="hsla(0, 0%, 100%, 0.3)" />
+            <Link size={24} fill={withAlpha(colors.text.primary, 0.3)} />
         </Section>
     );
 });

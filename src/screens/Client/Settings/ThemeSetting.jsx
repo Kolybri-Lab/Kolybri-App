@@ -1,8 +1,9 @@
 import { Section, Switch, Text } from "@/components";
 import { Lightning, Moon, Sun } from "@/components/svg";
 import { useTheme, useThemeStore } from "@/hooks/useThemeStore";
+import { withAlpha } from "@/themes/color";
 import { Vibrate } from "lucide-react-native";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Pressable, View } from "react-native";
 import SettingSectionLayout from "./components/SettingSectionLayout";
 
@@ -30,22 +31,19 @@ export default function ThemeScreen({ route }) {
         }
     };
 
-    return (
-        <SettingSectionLayout label={label}>
-            <View style={{ gap: 2 }}>
-                <Section
-                    label={"Thème"}
-                    icon={<Sun fill={colors.text.primary} size={18} opacity={0.6} />}
-                    index={0}
-                    totalLength={3}
-                    disabled
-                >
+    const themeSettings = useMemo(
+        () => [
+            {
+                label: "Thème",
+                icon: <Sun fill={colors.text.primary} size={18} opacity={0.6} />,
+                children: (
                     <View
                         style={{
                             alignItems: "center",
                             flexDirection: "row",
                             gap: 16,
-                            borderColor: "hsla(0, 0%, 100%, .3)",
+                            borderColor: withAlpha(colors.text.primary, 0.3),
+
                             borderWidth: 1,
                             paddingVertical: 2,
                             paddingHorizontal: 4,
@@ -59,11 +57,11 @@ export default function ThemeScreen({ route }) {
                                 borderRadius: 50,
                                 backgroundColor:
                                     value === "dark"
-                                        ? "hsla(0, 0%, 100%, .4)"
+                                        ? withAlpha(colors.text.primary, 0.4)
                                         : "transparent",
                             }}
                         >
-                            <Moon size={18} />
+                            <Moon size={18} fill={colors.text.primary} />
                         </Pressable>
 
                         <Pressable
@@ -72,7 +70,7 @@ export default function ThemeScreen({ route }) {
                                 borderRadius: 50,
                                 backgroundColor:
                                     value === "system"
-                                        ? "hsla(0, 0%, 100%, .4)"
+                                        ? withAlpha(colors.text.primary, 0.4)
                                         : "transparent",
                             }}
                             onPress={() => handleChange("system")}
@@ -87,61 +85,67 @@ export default function ThemeScreen({ route }) {
                                 borderRadius: 50,
                                 backgroundColor:
                                     value === "light"
-                                        ? "hsla(0, 0%, 100%, .4)"
+                                        ? withAlpha(colors.text.primary, 0.4)
                                         : "transparent",
                             }}
                         >
-                            <Sun size={21} opacity={1} />
+                            <Sun
+                                size={21}
+
+                                fill={colors.text.primary}
+                            />
                         </Pressable>
                     </View>
-                </Section>
-                <Section
-                    label={"Jouer les animations"}
-                    icon={
-                        <Lightning
-                            stroke={colors.text.primary}
-                            size={18}
-                            opacity={0.6}
-                        />
-                    }
-                    index={1}
-                    totalLength={3}
-                    disabled
-                >
+                ),
+            },
+            {
+                label: "Jouer les animations",
+                icon: (
+                    <Lightning
+                        stroke={colors.text.primary}
+                        size={18}
+                        opacity={0.6}
+                    />
+                ),
+                children: (
                     <Switch
                         value={tempState}
                         onValueChange={(toSet) => setTempStateValue(toSet)}
                     />
-                </Section>
-                <Section
-                    label={"Retours haptiques"}
-                    icon={
-                        <Vibrate
-                            stroke={colors.text.primary}
-                            size={18}
-                            opacity={0.6}
-                        />
-                    }
-                    index={2}
-                    totalLength={3}
-                    disabled
-                >
+                ),
+            },
+            {
+                label: "Retours haptiques",
+                icon: (
+                    <Vibrate stroke={colors.text.primary} size={18} opacity={0.6} />
+                ),
+                children: (
                     <Switch
                         value={hapticsEnabled}
                         onValueChange={(toSet) => setHapticsEnabled(toSet)}
                     />
-                </Section>
-            </View>
+                ),
+            },
+        ],
+        [hapticsEnabled, tempState, colors, value]
+    );
 
-            <Text
-                style={{ marginTop: 20 }}
-                color="hsla(0, 0%, 100%, .85)"
-                preset="label1"
-                align="center"
-            >
-                Ça arrive bientôt !
-            </Text>
+    return (
+        <SettingSectionLayout label={label}>
+            <View style={{ gap: 2 }}>
+                {themeSettings.map(({ children, icon, label }, index) => (
+                    <Section
+                        key={index}
+                        label={label}
+                        icon={icon}
+                        disabled
+                        index={index}
+                        totalLength={themeSettings.length}
+                    >
+                        {children}
+                    </Section>
+                ))}
+            </View>
         </SettingSectionLayout>
     );
 }
-

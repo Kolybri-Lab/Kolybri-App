@@ -1,15 +1,16 @@
-import { StyleSheet, Text, View, useWindowDimensions } from "react-native";
+import { useTheme } from "@/hooks/useThemeStore";
 import LottieView from "lottie-react-native";
+import { StyleSheet, Text, View, useWindowDimensions } from "react-native";
 
 const ASPECT_RATIO = 1.34;
 
 const FLAME_SOURCES: Record<string, any> = {
     orange: require("assets/lottie/flamme.json"),
-    violet: require("assets/lottie/flamme2.json"),
+    purple: require("assets/lottie/flamme2.json"),
 };
 
 interface GradeFlameProps {
-    color?: "orange" | "violet" | string;
+    color?: "orange" | "purple" | string;
     value?: string | number;
     label?: string;
     width: number | string;
@@ -24,6 +25,7 @@ export default function GradeFlame({
     style,
 }: GradeFlameProps) {
     const { width: windowWidth } = useWindowDimensions();
+    const { colors } = useTheme();
     const flameSource = FLAME_SOURCES[color] || FLAME_SOURCES.orange;
 
     let finalWidth: number;
@@ -73,6 +75,7 @@ export default function GradeFlame({
                         {
                             fontSize: Math.round(24 * scale),
                             marginTop: Math.round(28 * scale),
+                            color: colors.text.primary,
                         },
                     ]}
                 >
@@ -97,7 +100,5 @@ const styles = StyleSheet.create({
     },
     flammeSubText: {
         fontFamily: "SemiBold",
-        color: "#FFFFFF",
     },
 });
-

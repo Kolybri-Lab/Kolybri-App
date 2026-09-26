@@ -1,4 +1,5 @@
 import { Section, Text } from "@/components";
+import { useTheme } from "@/hooks/useThemeStore";
 import * as Application from "expo-application";
 import Constants from "expo-constants";
 import { useRef, useState } from "react";
@@ -10,6 +11,7 @@ const TAP_TIMEOUT = 250;
 
 export default function PlusScreen({ route }) {
     const { label } = route.params;
+    const { colors } = useTheme();
 
     const { major, minor, patch } = Platform.constants.reactNativeVersion;
     const rnVersion = `${major}.${minor}.${patch}`; // ex: "0.74.5"
@@ -70,7 +72,7 @@ export default function PlusScreen({ route }) {
                 <Text
                     style={{ marginBottom: 12 }}
                     preset="label2"
-                    color="hsla(0, 0%, 100%, .6)"
+                    color={colors.text.secondary}
                 >
                     Informations
                 </Text>
@@ -93,7 +95,7 @@ export default function PlusScreen({ route }) {
             <View style={{ gap: 3, marginTop: 20 }}>
                 <Text
                     style={{ marginBottom: 12 }}
-                    color="hsla(0, 0%, 100%, .6)"
+                    color={colors.text.secondary}
                     preset="label2"
                 >
                     Debug
@@ -117,7 +119,7 @@ export default function PlusScreen({ route }) {
                         position: "absolute",
                         bottom: 40,
                         alignSelf: "center",
-                        backgroundColor: "hsla(0, 0%, 10%, .95)",
+                        backgroundColor: colors.surface.raised,
                         paddingVertical: 10,
                         paddingHorizontal: 20,
                         borderRadius: 20,

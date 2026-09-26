@@ -1,3 +1,4 @@
+import { useTheme } from "@/hooks/useThemeStore";
 import { useEffect, useState } from "react";
 import { TouchableOpacity, View } from "react-native";
 import Animated, {
@@ -11,6 +12,8 @@ export default function Modal({ children, visible, handleClose }) {
     const [isRendered, setIsRendered] = useState(false);
     const translateY = useSharedValue(500);
     const opacity = useSharedValue(0);
+
+    const { colors } = useTheme();
 
     useEffect(() => {
         if (visible) {
@@ -69,7 +72,7 @@ export default function Modal({ children, visible, handleClose }) {
                         position: "absolute",
                         bottom: 0,
                         width: "100%",
-                        backgroundColor: "hsl(240, 35%, 11%)",
+                        backgroundColor: colors.surface.raised,
                         borderTopLeftRadius: 42,
                         borderTopRightRadius: 42,
                         paddingHorizontal: 24,
@@ -86,7 +89,7 @@ export default function Modal({ children, visible, handleClose }) {
                     style={{
                         width: 50,
                         height: 5,
-                        backgroundColor: "hsla(240, 20%, 60%, 0.4)",
+                        backgroundColor: colors.surface.default,
                         borderRadius: 3,
                         alignSelf: "center",
                         marginBottom: 24,

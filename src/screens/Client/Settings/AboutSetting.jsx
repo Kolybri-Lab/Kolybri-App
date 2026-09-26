@@ -30,7 +30,7 @@ export default function AboutScreen({ route }) {
                     <AnimatedFrenchFlag baseRotation={350} />
                     <View
                         style={{
-                            backgroundColor: "hsla(230, 30%, 38%, .7)",
+                            backgroundColor: colors.surface.raised,
                             padding: 18,
                             borderRadius: 18,
                             alignItems: "center",
@@ -46,8 +46,9 @@ export default function AboutScreen({ route }) {
                     style={{
                         justifyContent: "center",
                         alignItems: "center",
-                        backgroundColor: "hsla(0, 0%, 100%, .07)",
-                        padding: 18,
+                        backgroundColor: withAlpha(colors.surface.raised, 0.7),
+                        marginHorizontal: 10,
+                        padding: 16,
                         borderRadius: 28,
                         gap: 20,
                         marginBottom: 20,
@@ -168,4 +169,3 @@ export default function AboutScreen({ route }) {
         </SettingSectionLayout>
     );
 }
-

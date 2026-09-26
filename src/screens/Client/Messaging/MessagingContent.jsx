@@ -178,6 +178,14 @@ export default function MessagingContent() {
                                     mass: 1.1,
                                 });
                             }}
+                            onLongPress={() => {
+                                haptics();
+                                pressScale.value = withSpring(1, {
+                                    damping: 12,
+                                    stiffness: 170,
+                                    mass: 1.1,
+                                });
+                            }}
                         >
                             <Search size={18} fill={colors.text.primary} />
                             <Text
@@ -209,9 +217,10 @@ export default function MessagingContent() {
                                     height: "100%",
                                     paddingLeft: 16,
                                     flex: 1,
-                                    color: "white",
+                                    color: colors.text.primary,
                                 }}
                                 placeholder="Nom de prof. ou sujet..."
+                                placeholderTextColor={colors.text.secondary}
                                 onBlur={() => inputRef.current?.blur()}
                                 onChangeText={setSearchQuery}
                                 value={searchQuery}
@@ -384,4 +393,3 @@ const MessageItem = memo(({ item, index, navigation, messages, token }) => {
         </TouchableOpacity>
     );
 });
-

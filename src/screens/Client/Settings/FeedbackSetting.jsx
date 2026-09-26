@@ -385,10 +385,7 @@ export default function FeedbackScreen({ route }) {
                 >
                     <View
                         style={{
-                            backgroundColor: withAlpha(
-                                colors.text.primary,
-                                0.09
-                            ),
+                            backgroundColor: withAlpha(colors.text.primary, 0.09),
                             padding: 16,
                             borderRadius: 20,
                             borderColor: colors.border.subtle,
@@ -422,14 +419,14 @@ export default function FeedbackScreen({ route }) {
                         onPress={sendFeedback}
                         disabled={isSending}
                         style={{
-                            backgroundColor: colors.surface.default,
+                            backgroundColor: colors.brand.highlight,
                             paddingVertical: 14,
                             borderRadius: 14,
                             alignItems: "center",
                             opacity: isSending ? 0.6 : 1,
                         }}
                     >
-                        <Text preset="label1">
+                        <Text preset="label1" color={colors.text.onBrand}>
                             {isSending ? "En cours d'envoi..." : "Envoyer"}
                         </Text>
                     </Pressable>
@@ -479,10 +476,7 @@ function Option({
                         style={{
                             flexDirection: "row",
                             alignItems: "center",
-                            backgroundColor: withAlpha(
-                                colors.text.primary,
-                                0.1
-                            ),
+                            backgroundColor: withAlpha(colors.text.primary, 0.1),
                             paddingHorizontal: 10,
                             paddingVertical: 5,
                             borderRadius: 8,
@@ -499,4 +493,3 @@ function Option({
         </View>
     );
 }
-

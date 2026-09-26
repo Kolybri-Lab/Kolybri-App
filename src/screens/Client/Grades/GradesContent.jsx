@@ -146,7 +146,7 @@ export default function GradesContent() {
                         width="30%"
                     />
                     <GradeFlame
-                        color="violet"
+                        color="purple"
                         value={formatGradeText(generalAverage)}
                         label="Moyenne"
                         width="30%"
@@ -217,4 +217,3 @@ const createStyles = (colors) =>
             zIndex: -1,
         },
     });
-
