@@ -72,7 +72,7 @@ export default {
         policy: "appVersion",
     },
 
-    version: "1.0.0",
+    version: "1.1.0",
     orientation: "portrait",
     icon: "./assets/icons/icon.png",
     userInterfaceStyle: "automatic",
@@ -103,5 +103,5 @@ export default {
         },
     },
     owner: "kolybrilab",
-    githubUrl: "https://github.com/Kolybri-Lab/EcoleDirectePlus-Mobile",
+    githubUrl: "https://github.com/Kolybri-Lab/Kolybri-App",
 };
