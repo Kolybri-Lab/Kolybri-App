@@ -17,7 +17,6 @@ import { UpdateNotifier } from "./updates/components/UpdateNotifer";
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-    console.log(fonts);
     const [fontLoaded] = useFonts(fonts);
     const setSystemTheme = useThemeStore((s) => s.setSystemTheme);
 
@@ -55,4 +54,3 @@ export default function App() {
         </RootProviders>
     );
 }
-
