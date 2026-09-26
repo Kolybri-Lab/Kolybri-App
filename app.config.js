@@ -86,12 +86,15 @@ export default {
     ios: {
         supportsTablet: true,
         bundleIdentifier: identifiers.ios,
+        appStoreUrl: "https://apps.apple.com/app/idXXXXXXXXX",
         infoPlist: {
             ITSAppUsesNonExemptEncryption: false,
         },
     },
     android: {
         package: identifiers.android,
+        playStoreUrl:
+            "https://play.google.com/store/apps/details?id=org.kolybri.app",
         adaptiveIcon: {
             foregroundImage: "./assets/icons/colored-icon.png",
             monochromeImage: "./assets/icons/monochromatic-icon.png",
@@ -102,4 +105,3 @@ export default {
     owner: "kolybrilab",
     githubUrl: "https://github.com/Kolybri-Lab/EcoleDirectePlus-Mobile",
 };
-

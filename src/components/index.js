@@ -21,6 +21,7 @@ export { default as SwipeBackWrapper } from "./navigation/SwipeBackWrapper";
 // modal
 export { default as A2fSelectableModal } from "./modal/A2fSelectableModal";
 export { default as Modal } from "./modal/Modal";
+export { default as SharePopup } from "./modal/SharePopup";
 
 // form
 export { default as CheckBox } from "./form/CheckBox";
@@ -34,4 +35,3 @@ export { default as Separation } from "./display/Separation";
 export { default as StyleMask } from "./display/StyleMask";
 export { default as Subtitle } from "./display/Subtitle";
 export { default as Title } from "./display/Title";
-

@@ -1,4 +1,4 @@
-import { ScreenStack, Text } from "@/components";
+import { ScreenStack, SharePopup, Text } from "@/components";
 import { useGrades } from "@/features/grades";
 import ActiveCourseCard from "@/features/home/components/ActiveCourseCard";
 import GeneralAveragePreview from "@/features/home/components/GeneralAveragePreview";
@@ -25,7 +25,7 @@ import {
     isInInterval,
 } from "@/utils/time";
 import { useNavigation } from "@react-navigation/native";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Image, Pressable, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -36,6 +36,14 @@ export default function HomeScreen() {
     const { colors } = useTheme();
     const token = useUserStore((state) => state.token);
     const profile = useUserStore((state) => state.profile);
+
+    const [greetingMessage] = useState(getGreetingMessage);
+
+    const hasHydrated = useUserStore((s) => s.hasHydrated);
+    const isFirstLaunch = useUserStore((s) => s.isFirstLaunch);
+    const markLaunched = useUserStore((s) => s.markLaunched);
+    const [showPopup, setShowPopup] = useState(false);
+
     const name = profile?.name ?? "";
     const { data: timetableData } = useTimetable(token);
     const { data: gradesData } = useGrades(token);
@@ -45,7 +53,18 @@ export default function HomeScreen() {
 
     const customDataStore = useCustomDataStore();
     const currentTime = useCurrentTime();
-    const [greetingMessage] = useState(getGreetingMessage);
+
+    useEffect(() => {
+        if (hasHydrated && isFirstLaunch) {
+            const timer = setTimeout(() => setShowPopup(true), 2000);
+            return () => clearTimeout(timer);
+        }
+    }, [hasHydrated, isFirstLaunch]);
+
+    const handleClosePopup = () => {
+        setShowPopup(false);
+        markLaunched();
+    };
 
     const getProfileImageSource = useCallback(
         () =>
@@ -198,6 +217,7 @@ export default function HomeScreen() {
     }, [activeCourse, nextCourse]);
     return (
         <ScreenStack>
+            <SharePopup visible={showPopup} onClose={handleClosePopup} />
             <View style={{ paddingHorizontal: 20 }}>
                 <ScrollView
                     showsVerticalScrollIndicator={false}
@@ -308,4 +328,3 @@ export default function HomeScreen() {
         </ScreenStack>
     );
 }
-
