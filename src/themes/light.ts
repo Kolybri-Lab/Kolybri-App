@@ -35,11 +35,11 @@ const colors = {
 
     brand: {
         /** Main interactive color: filled buttons, switch/checkbox/radio/slider active state, outline button text. */
-        primary: "hsl(240, 70%, 55%)",
+        primary: "hsl(213, 98%, 61%)",
         /** Tinted soft background: chips, badges, selected list item, secondary button background. */
-        soft: "hsl(240, 95%, 85%)",
+        soft: "hsl(213, 95%, 85%)",
         /** Large brand surfaces and illustrations: home header, avatar, hero. Not for buttons with small text. */
-        vivid: "hsl(240, 89%, 72%)",
+        vivid: "hsl(213, 89%, 72%)",
         /** Decorative blue, never as text color: active tab, accent icons, progress bar. */
         highlight: "hsl(213, 98%, 61%)",
     },
@@ -48,7 +48,7 @@ const colors = {
         /** Separators and light outlines: list dividers, card border, header and tab bar border. */
         subtle: "hsla(240, 62%, 58%, 0.2)",
         /** Outline of interactive elements: input border, outline button. Use brand.primary on focus, state.danger on error. */
-        strong: "hsl(240, 62%, 58%)",
+        strong: "hsl(213, 62%, 58%)",
     },
 
     state: {
