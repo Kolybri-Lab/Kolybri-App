@@ -66,6 +66,7 @@ export function QueryProvider({ children }: { children: React.ReactNode }) {
             client={queryClient}
             persistOptions={{
                 persister: mmkvPersister,
+                maxAge: 1000 * 60 * 60 * 24 * 7,
                 dehydrateOptions: {
                     shouldDehydrateQuery: (query) => {
                         if (query.queryKey[0] === "timetable") {

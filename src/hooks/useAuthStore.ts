@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { useUserStore } from "./useUserStore";
 
 interface AuthState {
     isAuthenticated: boolean;
@@ -26,9 +27,11 @@ interface AuthState {
     reset: () => void;
 }
 
+const hasExistingAccount = Boolean(useUserStore.getState().profile);
+
 export const useAuthStore = create<AuthState>((set) => ({
-    isAuthenticated: false,
-    isBooting: true,
+    isAuthenticated: hasExistingAccount,
+    isBooting: false,
     error: null,
     mcqDatas: null,
     selectedChoice: null,

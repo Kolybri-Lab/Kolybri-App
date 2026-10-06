@@ -22,11 +22,21 @@ export default function storeDatas({ data, token }) {
                   code: data.profile?.classe?.code || "",
               },
           };
-    if (!useUserStore.getState().profile)
-        useUserStore.getState().setProfile(formattedProfile);
-    useUserStore.getState().setToken(token);
+    const currentProfile = useUserStore.getState().profile;
+    const mergedProfile = currentProfile
+        ? {
+              ...formattedProfile,
+              localPhotoUri:
+                  currentProfile.localPhotoUri || formattedProfile.localPhotoUri,
+          }
+        : formattedProfile;
+    useUserStore.getState().setProfile(mergedProfile);
 
-    if (formattedProfile.photoUrl && !formattedProfile.localPhotoUri) {
+    if (token) {
+        useUserStore.getState().setToken(token);
+    }
+
+    if (formattedProfile.photoUrl && !mergedProfile.localPhotoUri && token) {
         cacheProfilePhoto(
             formattedProfile.id,
             formattedProfile.photoUrl,
@@ -34,7 +44,7 @@ export default function storeDatas({ data, token }) {
         ).then((localPath) => {
             if (localPath) {
                 useUserStore.getState().setProfile({
-                    ...formattedProfile,
+                    ...mergedProfile,
                     localPhotoUri: localPath,
                 });
             }

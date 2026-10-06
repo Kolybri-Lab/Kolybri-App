@@ -2,6 +2,7 @@ import { GUEST_CREDENTIALS } from "@/constants/config";
 import { payloadHelper } from "@/helpers/cryptoHelper";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import { useUserStore } from "@/hooks/useUserStore";
+import { queryClient } from "@/provider/QueryProvider";
 import dayjs from "dayjs";
 import authService from "../authService";
 import storeDatas from "./storeLoginDatas";
@@ -9,7 +10,7 @@ import storeDatas from "./storeLoginDatas";
 /**
  * Get token and user data from storage
  * @param {Object} credentialsCipherText
- * @returns {Promise<string|null>}
+ * @returns {Promise<boolean>}
  */
 
 export async function tryLoginWithStoredCreds({ cipherText }) {
@@ -18,17 +19,14 @@ export async function tryLoginWithStoredCreds({ cipherText }) {
         const now = dayjs();
         const expiration = dayjs(payload.expirationDate, "YYYY-MM-DD_HH:mm");
 
+        let getDataFromStorage = useUserStore.getState().profile;
+
+        if (!getDataFromStorage && payload.superSecretUserToken === "guest_token") {
+            const { mockLogin } = require("@/mock/guest/json");
+            getDataFromStorage = mockLogin?.data?.accounts?.[0];
+        }
+
         if (now.isBefore(expiration)) {
-            let getDataFromStorage = useUserStore.getState().profile;
-
-            if (
-                !getDataFromStorage &&
-                payload.superSecretUserToken === "guest_token"
-            ) {
-                const { mockLogin } = require("@/mock/guest/json");
-                getDataFromStorage = mockLogin?.data?.accounts?.[0];
-            }
-
             if (payload.superSecretUserToken === "guest_token") {
                 console.log("Restauration du compte développeur");
             }
@@ -41,6 +39,13 @@ export async function tryLoginWithStoredCreds({ cipherText }) {
             useAuthStore.getState().setAuthenticated(true);
             useAuthStore.getState().setBooting(false);
             return true;
+        }
+
+        if (getDataFromStorage) {
+            storeDatas({
+                data: getDataFromStorage,
+                token: payload.superSecretUserToken,
+            });
         }
         return false;
     } catch (error) {
@@ -84,6 +89,10 @@ export async function tryRestoreToken({ credentialsPassword }) {
                 "Stored credentials are no longer valid (505/522). Clearing credentials."
             );
             await authService.deleteCredentials();
+            useAuthStore
+                .getState()
+                .setError("Votre session a expiré. Veuillez vous reconnecter.");
+            useAuthStore.getState().setAuthenticated(false);
             return false;
         }
 
@@ -103,9 +112,15 @@ export async function tryRestoreToken({ credentialsPassword }) {
         await authService.saveCredentials(token, accountData.id, authData);
         useAuthStore.getState().setAuthenticated(true);
         useAuthStore.getState().setBooting(false);
+
+        queryClient.invalidateQueries();
+
         return true;
     } catch (error) {
-        console.error("Error in tryRestoreToken:", error);
+        console.warn(
+            "Erreur lors du rafraîchissement du token en arrière-plan (session hors-ligne conservée) :",
+            error
+        );
         return false;
     }
 }

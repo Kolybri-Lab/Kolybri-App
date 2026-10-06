@@ -28,7 +28,7 @@ const colors = {
         /** Blue text for large or bold text only (contrast ~3:1 on white). Not for small body text or links. */
         accent: "hsl(213, 98%, 61%)",
         /** Brand-colored text on light surfaces: titles, links, checkbox labels, active chips (~7:1 on white). */
-        brand: "hsl(240, 70%, 55%)",
+        brand: "hsl(213, 98%, 61%)",
         /** Text and icons placed on brand.primary (filled buttons, active switch label). */
         onBrand: "hsl(0, 0%, 100%)",
     },

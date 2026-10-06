@@ -8,6 +8,7 @@ import ErrorToast from "@/components/error/ErrorToast";
 import NetworkBanner from "@/components/error/NetworkBanner";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import { useActiveThemeMode, useTheme } from "@/hooks/useThemeStore";
+import { useUserStore } from "@/hooks/useUserStore";
 import SplashScreen from "@/screens/Splash/SplashScreen";
 import authService from "@/services/login/authService";
 import {
@@ -29,6 +30,7 @@ export default function AuthNavigator() {
                 const credentials = await authService.restoreCredentials();
                 const hasCipher = Boolean(credentials?.cipherText);
                 const hasLoginCreds = Boolean(credentials?.password);
+                const cachedProfile = useUserStore.getState().profile;
 
                 if (hasCipher) {
                     const success = await tryLoginWithStoredCreds({
@@ -37,16 +39,31 @@ export default function AuthNavigator() {
                     if (success) return;
                 }
 
-                if (hasLoginCreds) {
-                    const restored = await tryRestoreToken({
-                        credentialsPassword: credentials.password,
-                    });
-                    if (restored) return;
+                if (hasLoginCreds || cachedProfile) {
+                    if (cachedProfile && !useUserStore.getState().profile) {
+                        useUserStore.getState().setProfile(cachedProfile);
+                    }
+                    useAuthStore.getState().setAuthenticated(true);
+                    useAuthStore.getState().setBooting(false);
+
+                    if (hasLoginCreds) {
+                        tryRestoreToken({
+                            credentialsPassword: credentials.password,
+                        }).catch((err) => {
+                            console.warn(
+                                "Échec du rafraîchissement du token en arrière-plan :",
+                                err
+                            );
+                        });
+                    }
+                    return;
                 }
 
+                useAuthStore.getState().setAuthenticated(false);
                 useAuthStore.getState().setBooting(false);
             } catch (error) {
                 console.error("ERROR IN BOOTSTRAPASYNC", error);
+                useAuthStore.getState().setAuthenticated(false);
                 useAuthStore.getState().setBooting(false);
             }
         };
