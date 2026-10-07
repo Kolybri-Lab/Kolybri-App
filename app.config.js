@@ -81,7 +81,7 @@ export default {
     splash: {
         image: "./assets/icons/splash-icon.png",
         resizeMode: "contain",
-        backgroundColor: "#181829",
+        backgroundColor: "#E4EFFB",
     },
     ios: {
         supportsTablet: true,
@@ -97,7 +97,7 @@ export default {
         adaptiveIcon: {
             foregroundImage: "./assets/icons/colored-icon.png",
             monochromeImage: "./assets/icons/monochromatic-icon.png",
-            backgroundColor: "#181829",
+            backgroundColor: "#E4EFFB",
             predictiveBackGestureEnabled: true,
         },
     },
