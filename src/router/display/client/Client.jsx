@@ -6,6 +6,9 @@ import { SharePopup } from "@/components";
 import { shouldShowSharePrompt, useUserStore } from "@/hooks/useUserStore";
 import appNavigatorOrganisation from "./indexClient";
 
+import WhatsNewModal from "@/components/modal/WhatsNewModal";
+import { useWhatsNew } from "@/hooks/useWhatsNew";
+
 const Stack = createNativeStackNavigator();
 
 export default function Client() {
@@ -20,9 +23,13 @@ export default function Client() {
     const markSharePromptShown = useUserStore((s) => s.markSharePromptShown);
     const markShared = useUserStore((s) => s.markShared);
 
+    const { item: whatsNewItem, dismiss: dismissWhatsNew, settled } = useWhatsNew();
+
     const [showSharePopup, setShowSharePopup] = useState(false);
     const hasIncremented = useRef(false);
 
+    // La SharePopup n'a le droit de passer que si WhatsNew a fini et n'a rien à montrer
+    const canShowShare = settled && !whatsNewItem;
     useEffect(() => {
         if (hasHydrated && !hasIncremented.current) {
             hasIncremented.current = true;
@@ -31,7 +38,7 @@ export default function Client() {
     }, [hasHydrated]);
 
     useEffect(() => {
-        if (hasHydrated && shouldShowSharePrompt(sharePrompt)) {
+        if (hasHydrated && canShowShare && shouldShowSharePrompt(sharePrompt)) {
             const timer = setTimeout(() => {
                 setShowSharePopup(true);
                 markSharePromptShown();
@@ -39,7 +46,7 @@ export default function Client() {
             return () => clearTimeout(timer);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [hasHydrated]);
+    }, [hasHydrated, canShowShare]);
 
     return (
         <>
@@ -48,6 +55,8 @@ export default function Client() {
             >
                 {screens}
             </Stack.Navigator>
+
+            <WhatsNewModal item={whatsNewItem} dismiss={dismissWhatsNew} />
 
             <SharePopup
                 visible={showSharePopup}
@@ -60,3 +69,4 @@ export default function Client() {
         </>
     );
 }
+
