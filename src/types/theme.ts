@@ -13,6 +13,7 @@ export type Theme = {
         background: {
             app: string;
             auth: string;
+            modal: string;
         };
         surface: {
             default: string;

@@ -8,6 +8,8 @@ const colors = {
         app: "hsl(211, 74%, 6%)",
         /** Background of auth screens (login, sign up, forgot password). */
         auth: "hsl(240, 35%, 10%)",
+        /** Backdrop of modals, to elevate modal */
+        modal: "hsla(211, 74%, 4%, .55)",
     },
 
     surface: {
