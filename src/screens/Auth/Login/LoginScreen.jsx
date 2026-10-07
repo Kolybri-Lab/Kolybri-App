@@ -16,7 +16,7 @@ import {
     LinkButton,
     OverLoader,
 } from "@/components/index";
-import { Account, Discord, EDP, Github } from "@/components/svg";
+import { Account, Discord, Github, Kolybri } from "@/components/svg";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Text } from "@/components/core";
@@ -117,15 +117,12 @@ export default function LoginScreen() {
 
             <View style={styles.form}>
                 <View style={styles.logo.box}>
-                    <View style={{ opacity: 0 }}>
-                        <EDP size={88} />
+                    <View style={{ marginTop: 40 }}>
+                        <Kolybri size={98} />
                     </View>
                     <MaskedView maskElement={<Text preset="h1">Kolybri</Text>}>
                         <LinearGradient
-                            colors={[
-                                theme.logo.textFrom,
-                                theme.logo.textTo,
-                            ]}
+                            colors={[theme.logo.textFrom, theme.logo.textTo]}
                             start={{ x: 1, y: 0 }}
                             end={{ x: 0, y: 0 }}
                         >
@@ -159,8 +156,7 @@ export default function LoginScreen() {
                                     styles.input.case,
                                     {
                                         borderColor: theme.colors.border.strong,
-                                        backgroundColor:
-                                            theme.colors.surface.muted,
+                                        backgroundColor: theme.colors.surface.muted,
                                     },
                                 ]}
                             />
@@ -190,8 +186,7 @@ export default function LoginScreen() {
                                     styles.input.case,
                                     {
                                         borderColor: theme.colors.border.strong,
-                                        backgroundColor:
-                                            theme.colors.surface.muted,
+                                        backgroundColor: theme.colors.surface.muted,
                                     },
                                 ]}
                             />

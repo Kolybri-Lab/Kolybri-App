@@ -89,13 +89,13 @@ export const lightTheme: Theme = {
     },
     logo: {
         /** Logo icon gradient, start. */
-        from: "hsl(223, 96%, 69%)",
+        from: "hsl(223, 90%, 65%)",
         /** Logo icon gradient, end. */
-        to: "hsl(248, 100%, 72%)",
+        to: "hsl(213, 81%, 90%)",
         /** Logo wordmark gradient, start. */
-        textFrom: "hsl(234, 42%, 73%)",
+        textFrom: "hsl(213, 81%, 90%)",
         /** Logo wordmark gradient, end. */
-        textTo: "hsl(233, 62%, 58%)",
+        textTo: "hsl(223, 90%, 65%)",
     },
     ...shared,
 };

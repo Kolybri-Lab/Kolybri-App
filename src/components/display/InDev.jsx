@@ -30,7 +30,7 @@ export default function InDev({}) {
                 <Text align="center" preset="body1" color={mainColor}>
                     Rejoignez le{" "}
                     <LinkText href={CONFIG.discordInviteLink} color={mainColor}>
-                        serveur Discord d'EDP
+                        serveur Discord d'Kolybri
                     </LinkText>{" "}
                     pour en suivre l'avancée !
                 </Text>

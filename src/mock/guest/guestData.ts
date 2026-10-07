@@ -313,7 +313,7 @@ const getGenericMessageDetail = (messageId: string | number) => {
             to: [],
             files: [],
             from: foundMsg?.from || {
-                nom: "EDP",
+                nom: "Kolybri",
                 prenom: "Support",
                 civilite: "",
                 role: "A",
@@ -466,3 +466,4 @@ export const loginAsGuest = async (keepConnected: boolean = true) => {
     useAuthStore.getState().setAuthenticated(true);
     useAuthStore.getState().setBooting(false);
 };
+

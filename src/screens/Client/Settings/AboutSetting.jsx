@@ -1,8 +1,8 @@
 import { Section, Text } from "@/components";
 import { Chevron, Info, Link, Person } from "@/components/svg";
 import DiscordLogo from "@/components/svg/logos/Discord";
-import EDPLogo from "@/components/svg/logos/EDP";
 import GithubLogo from "@/components/svg/logos/Github";
+import KolybriLogo from "@/components/svg/logos/Kolybri";
 import { useTheme } from "@/hooks/useThemeStore";
 import { routesNames } from "@/router/config/routesNames";
 import { withAlpha } from "@/themes/color";
@@ -37,7 +37,7 @@ export default function AboutScreen({ route }) {
                             justifyContent: "center",
                         }}
                     >
-                        <EDPLogo size={100} />
+                        <KolybriLogo size={100} />
                     </View>
                     <AnimatedFrenchFlag baseRotation={10} />
                 </View>
@@ -169,3 +169,4 @@ export default function AboutScreen({ route }) {
         </SettingSectionLayout>
     );
 }
+

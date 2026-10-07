@@ -90,11 +90,11 @@ export const darkTheme: Theme = {
         /** Logo icon gradient, start. */
         from: "hsl(223, 90%, 65%)",
         /** Logo icon gradient, end. */
-        to: "hsl(248, 90%, 68%)",
+        to: "hsl(213, 81%, 90%)",
         /** Logo wordmark gradient, start. */
-        textFrom: "hsl(234, 55%, 70%)",
+        textFrom: "hsl(213, 81%, 90%)",
         /** Logo wordmark gradient, end. */
-        textTo: "hsl(233, 70%, 62%)",
+        textTo: "hsl(223, 90%, 65%)",
     },
     ...shared,
 };
