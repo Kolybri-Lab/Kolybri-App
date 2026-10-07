@@ -137,7 +137,7 @@ export default function GradeDetails({ route }) {
                     }}
                 >
                     <View style={{ flexDirection: "column", maxWidth: "70%" }}>
-                        <Text preset="label1">{grade.disciplineName}</Text>
+                        <Text preset="label1">{grade.libelle}</Text>
                         <Teachers teachers={discipline.teachers} />
                     </View>
                     <View
@@ -236,12 +236,7 @@ const Teachers = ({ teachers = [] }) => {
     const { colors } = useTheme();
     if (safeTeachers.length > 1) {
         return safeTeachers.map((teacher, i) => (
-            <Text
-                key={i}
-                oneLine
-                preset="label2"
-                color={colors.text.secondary}
-            >
+            <Text key={i} oneLine preset="label2" color={colors.text.secondary}>
                 - {teacher}
             </Text>
         ));
