@@ -17,3 +17,5 @@ export const GUEST_CREDENTIALS = {
     password: "guestauth",
 };
 export const WEBHOOK_URL = process.env.EXPO_PUBLIC_WEBHOOK_URL ?? "";
+export const CHANGELOG_URL = process.env.EXPO_PUBLIC_CHANGELOG_URL ?? "";
+
