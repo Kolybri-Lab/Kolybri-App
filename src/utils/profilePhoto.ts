@@ -29,13 +29,12 @@ export async function cacheProfilePhoto(
             {
                 headers: {
                     "X-Token": token,
-                    "Referer": "https://www.ecoledirecte.com/",
-                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+                    Referer: "https://www.ecoledirecte.com/",
+                    "User-Agent":
+                        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
                 },
             }
         );
-
-        console.log("Download Result:", downloadResult);
 
         if (downloadResult.status !== 200) {
             await FileSystem.deleteAsync(localUri, { idempotent: true });
@@ -48,3 +47,4 @@ export async function cacheProfilePhoto(
         return null;
     }
 }
+

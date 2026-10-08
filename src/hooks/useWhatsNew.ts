@@ -112,7 +112,6 @@ export function useWhatsNew() {
             );
             if (!res.ok) throw new Error("changelog fetch failed");
             const json = await res.json();
-            console.log("fetched !", json);
             return json as GithubChangelog;
         },
         staleTime: 0,
@@ -165,7 +164,6 @@ export function useWhatsNew() {
             setLastSeenVersion(Application.nativeApplicationVersion ?? "1.0.0");
         else markAnnouncementSeen(item.announcement.id);
     };
-    console.log(item, settled, data); // item est nul
     return { item, dismiss, settled };
 }
 

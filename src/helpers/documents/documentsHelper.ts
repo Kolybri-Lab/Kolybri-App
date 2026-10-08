@@ -1,9 +1,9 @@
 import { API } from "@/constants/api/api";
+import { logger } from "@/utils/logger";
 import * as FileSystem from "expo-file-system/legacy";
 import * as IntentLauncher from "expo-intent-launcher";
 import { fetch } from "expo/fetch";
 import { Alert } from "react-native";
-import { logger } from "@/utils/logger";
 import {
     DocumentActionResult,
     DocumentFile,
@@ -39,18 +39,15 @@ const fetchAndConvertToBase64 = async (
 ): Promise<string> => {
     const url = `https://api.ecoledirecte.com/v3/telechargement.awp?verbe=get&fichierId=${fileId}&leTypeDeFichier=${fileType}&v=${API.API_VERSION}`;
     logger.log(`[FETCH] POST ${url}`);
-    const response = await fetch(
-        url,
-        {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-                "User-Agent": API.USER_AGENT,
-                "X-Token": userAccesToken,
-            },
-            body: `data=${JSON.stringify({ forceDownload: 0 })}`,
-        }
-    );
+    const response = await fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "User-Agent": API.USER_AGENT,
+            "X-Token": userAccesToken,
+        },
+        body: `data=${JSON.stringify({ forceDownload: 0 })}`,
+    });
 
     if (!response.ok) throw new Error(`Erreur HTTP : ${response.status}`);
 
@@ -208,7 +205,6 @@ export const downloadDocument = async (
 };
 
 export const assignUnit = (size: number): string => {
-    console.log(size);
     const absNumber = Math.abs(size);
     if (absNumber >= 1000000) {
         return (size / 1000000).toFixed(2).replace(/\.?0+$/, "") + " Mo";
@@ -218,3 +214,4 @@ export const assignUnit = (size: number): string => {
         return size.toString();
     }
 };
+
