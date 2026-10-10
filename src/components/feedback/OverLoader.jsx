@@ -1,6 +1,7 @@
 import { useTheme } from "@/hooks/useThemeStore";
 import { useEffect } from "react";
 import Animated, {
+    interpolateColor,
     useAnimatedStyle,
     useSharedValue,
     withTiming,
@@ -16,7 +17,11 @@ export default function OverLoader({
     loaderStyles, // stylesheet -> object
     svgSize = 70,
 }) {
-    if (bgOpacityValue > 1 || typeof bgOpacityValue !== "number") {
+    if (
+        bgOpacityValue > 1 ||
+        bgOpacityValue < 0 ||
+        typeof bgOpacityValue !== "number"
+    ) {
         console.error("OverLoader: 'bgOpacityValue' doit être entre 0 et 1");
     }
 
@@ -24,14 +29,18 @@ export default function OverLoader({
     const [triggerView, setTriggerView] = triggerViewArr;
 
     const loadingOpacity = useSharedValue(0);
-    const backgroundLoadingOpacity = useSharedValue(0);
+    const backgroundProgress = useSharedValue(0); // 0 -> 1
 
     const loadingOpacityDynamicStyle = useAnimatedStyle(() => ({
         opacity: loadingOpacity.value,
     }));
 
     const backgroundLoadingOpacityDynamicStyle = useAnimatedStyle(() => ({
-        backgroundColor: `rgba(10, 10, 10, ${backgroundLoadingOpacity.value})`,
+        backgroundColor: interpolateColor(
+            backgroundProgress.value,
+            [0, 1],
+            ["rgba(10, 10, 10, 0)", `rgba(10, 10, 10, ${bgOpacityValue})`]
+        ),
     }));
 
     useEffect(() => {
@@ -42,14 +51,14 @@ export default function OverLoader({
                 loadingOpacity.value = withTiming(1, {
                     duration: annimationStartTiming,
                 });
-                backgroundLoadingOpacity.value = withTiming(bgOpacityValue, {
+                backgroundProgress.value = withTiming(1, {
                     duration: annimationStartTiming,
                 });
             } else {
                 loadingOpacity.value = withTiming(0, {
                     duration: annimationStartTiming,
                 });
-                backgroundLoadingOpacity.value = withTiming(
+                backgroundProgress.value = withTiming(
                     0,
                     { duration: annimationStartTiming },
                     (finished) => {
@@ -63,7 +72,6 @@ export default function OverLoader({
 
         return () => setTriggerState(null);
     }, [triggerState]);
-
     const { colors } = useTheme();
 
     return (
@@ -89,4 +97,3 @@ export default function OverLoader({
         )
     );
 }
-
