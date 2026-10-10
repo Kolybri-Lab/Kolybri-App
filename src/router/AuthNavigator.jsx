@@ -16,6 +16,7 @@ import {
     tryRestoreToken,
 } from "@/services/login/tools/bootstrapAsync";
 import { toNavigationTheme } from "@/themes/navigation";
+import { StatusBar } from "react-native";
 import Auth from "./display/auth/Auth";
 import Client from "./display/client/Client";
 
@@ -73,10 +74,15 @@ export default function AuthNavigator() {
 
     const theme = useTheme();
     const navTheme = useMemo(() => toNavigationTheme(theme), [theme]);
-
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <ErrorBoundary>
+                <StatusBar
+                    barStyle={theme.isDark ? "light-content" : "dark-content"}
+                    backgroundColor="transparent"
+                    animated
+                    translucent
+                />
                 <NavigationContainer theme={navTheme}>
                     {isBooting ? (
                         <SplashScreen />
@@ -98,4 +104,3 @@ export default function AuthNavigator() {
         </GestureHandlerRootView>
     );
 }
-

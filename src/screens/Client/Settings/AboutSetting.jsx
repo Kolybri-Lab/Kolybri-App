@@ -9,7 +9,7 @@ import { withAlpha } from "@/themes/color";
 import { openUrl } from "@/utils/url";
 import { useNavigation } from "@react-navigation/native";
 import { Heart } from "lucide-react-native";
-import { View } from "react-native";
+import { Image, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AnimatedFrenchFlag from "./components/AnimatedFrenchFlag";
 import SettingSectionLayout from "./components/SettingSectionLayout";
@@ -30,7 +30,7 @@ export default function AboutScreen({ route }) {
                     <AnimatedFrenchFlag baseRotation={350} />
                     <View
                         style={{
-                            backgroundColor: colors.surface.raised,
+                            backgroundColor: colors.surface.default,
                             padding: 18,
                             borderRadius: 18,
                             alignItems: "center",
@@ -64,6 +64,54 @@ export default function AboutScreen({ route }) {
             </View>
 
             <View style={{ gap: 9, flex: 1, justifyContent: "center" }}>
+                <Text
+                    preset="label2"
+                    style={{ marginTop: 26 }}
+                    color={colors.text.primary}
+                >
+                    Développeurs principaux
+                </Text>
+                <Section
+                    index={0}
+                    totalLength={2}
+                    label={"As de Pique"}
+                    icon={
+                        <Image
+                            source={{
+                                uri: "https://avatars.githubusercontent.com/u/187793762?v=4",
+                            }}
+                            style={{ width: 32, height: 32, borderRadius: 16 }}
+                        />
+                    }
+                    height={48}
+                    onPress={() => openUrl("https://github.com/as2pick")}
+                >
+                    <Link size={24} fill={withAlpha(colors.text.primary, 0.3)} />
+                </Section>
+                <Section
+                    index={1}
+                    totalLength={2}
+                    label={"Lucilus"}
+                    icon={
+                        <Image
+                            source={{
+                                uri: "https://avatars.githubusercontent.com/u/208399537?v=4",
+                            }}
+                            style={{ width: 32, height: 32, borderRadius: 16 }}
+                        />
+                    }
+                    height={48}
+                    onPress={() => openUrl("https://github.com/Lucilus78")}
+                >
+                    <Link size={24} fill={withAlpha(colors.text.primary, 0.3)} />
+                </Section>
+                <Text
+                    preset="label2"
+                    style={{ marginTop: 26 }}
+                    color={colors.text.primary}
+                >
+                    Le projet et les contributeurs
+                </Text>
                 <View
                     style={{
                         flexDirection: "row",
@@ -113,7 +161,7 @@ export default function AboutScreen({ route }) {
                         </Section>
                     </View>
                 </View>
-                <View style={{ gap: 5 }}>
+                <View style={{ gap: 9 }}>
                     <Section
                         index={0}
                         totalLength={2}
@@ -142,6 +190,7 @@ export default function AboutScreen({ route }) {
                             fill={withAlpha(colors.text.primary, 0.3)}
                         />
                     </Section>
+                    {/* <View style={{pheight: 20 }} /> */}
                 </View>
             </View>
 
@@ -169,4 +218,3 @@ export default function AboutScreen({ route }) {
         </SettingSectionLayout>
     );
 }
-

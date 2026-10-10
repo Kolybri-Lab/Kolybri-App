@@ -7,6 +7,9 @@ import { blendWithWhite } from "@/utils/colorGenerator";
 import { useNavigation } from "@react-navigation/native";
 import { useMemo } from "react";
 import { FlatList, TouchableOpacity, View } from "react-native";
+
+const RADIUS_IN = 4;
+const RADIUS_OUT = 16;
 export default function LastGrades({ lastGradesObject }) {
     const navigation = useNavigation();
     const haptic = useHaptic("light");
@@ -61,21 +64,25 @@ const GradeCard = ({ disciplineColor, disciplineName, data, index, count }) => {
     if (!disciplineName || !data) return null;
 
     let borderBottomRadius = {};
-
     if (index === 0 && count > 1) {
         borderBottomRadius = {
-            borderBottomLeftRadius: 16,
-            borderBottomRightRadius: 4,
+            borderBottomLeftRadius: RADIUS_OUT,
+            borderBottomRightRadius: RADIUS_IN,
         };
     } else if (count === 1) {
         borderBottomRadius = {
-            borderBottomLeftRadius: 16,
-            borderBottomRightRadius: 16,
+            borderBottomLeftRadius: RADIUS_OUT,
+            borderBottomRightRadius: RADIUS_OUT,
         };
     } else if (index === count - 1 && count > 1) {
         borderBottomRadius = {
-            borderBottomLeftRadius: 4,
-            borderBottomRightRadius: 16,
+            borderBottomLeftRadius: RADIUS_IN,
+            borderBottomRightRadius: RADIUS_OUT,
+        };
+    } else if (count > 1) {
+        borderBottomRadius = {
+            borderBottomLeftRadius: RADIUS_IN,
+            borderBottomRightRadius: RADIUS_IN,
         };
     }
     return (
@@ -84,8 +91,8 @@ const GradeCard = ({ disciplineColor, disciplineName, data, index, count }) => {
                 {
                     backgroundColor: colors.surface.default,
                     // borderRadius: 4,
-                    borderTopRightRadius: 4,
-                    borderTopLeftRadius: 4,
+                    borderTopRightRadius: RADIUS_IN,
+                    borderTopLeftRadius: RADIUS_IN,
                     width: 120,
                     height: 70,
                     paddingHorizontal: 14,

@@ -39,8 +39,8 @@ export default function GeneralAveragePreview({ gradesData }) {
                     ? {
                           borderTopLeftRadius: 16,
                           borderTopRightRadius: 16,
-                          borderBottomLeftRadius: 8,
-                          borderBottomRightRadius: 8,
+                          borderBottomLeftRadius: 4,
+                          borderBottomRightRadius: 4,
                       }
                     : { borderRadius: 16 }),
                 flexDirection: "row",
@@ -95,4 +95,3 @@ export default function GeneralAveragePreview({ gradesData }) {
         </TouchableOpacity>
     );
 }
-
