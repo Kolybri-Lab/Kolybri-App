@@ -1,8 +1,8 @@
 import { CONFIG } from "@/constants/config";
+import { sortTimetable } from "@/features/timetable/utils/sort";
 import fetchApi from "@/services/fetchApi";
 import { FetchApiResponse } from "@/types";
 import { addDaysToDateString, getPreviousMonday } from "@/utils/date";
-import { sortTimetable } from "coverage/resp";
 import { ApiTimetableEntry, TimetableResolverParams, Week } from "../types";
 import { fillHolidays } from "../utils/holidays";
 
@@ -29,13 +29,12 @@ export default async function timetableResolver({
             method: "POST",
         }
     );
-
     if (timetableResponse?.isDataEmpty) {
         return [];
     }
 
     return !timetableResponse
         ? (fillHolidays(requestedMonday, requestedSunday) as any)
-        : await sortTimetable(timetableResponse.data);
+        : sortTimetable(timetableResponse.data);
 }
 
