@@ -221,6 +221,5 @@ const applyWeekViewPlacing = (week: Week) => {
     }
 };
 
-console.dir(sortTimetable(TimetableResponse), { depth: null });
-// sortTimetable(TimetableResponse);
-
+export const flattenDays = (weeks: Week[]): Day[] =>
+    weeks.flatMap((week) => week.days);

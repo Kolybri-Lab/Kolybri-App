@@ -4,14 +4,55 @@
 // import { GLOBALS_DATAS } from "@/constants/device/globals";
 // import { timetableConfig } from "@/constants/features/timetableConfig";
 
-import { Text } from "@/components/core";
 import { useTimetable } from "@/features/timetable";
+import { flattenDays } from "@/features/timetable/utils/sort";
+import { useCurrentTime } from "@/hooks/useCurrentTime";
 import { useUserStore } from "@/hooks/useUserStore";
+import dayjs from "dayjs";
+import { useMemo, useState } from "react";
+import { View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import DateSelector from "./components/DateSelector";
+import DaySummary from "./components/DaySummary";
+import ViewSelector from "./components/ViewSelector";
 
 export default function TimetableContent() {
     const token = useUserStore((state) => state.token);
-    const { data: timetableData, isLoading, isError } = useTimetable(token);
-    console.log(timetableData);
-    return <Text>Hello World !</Text>;
+    const { data: weeks } = useTimetable(token);
+    const { date: isoDate, frenchDate } = useCurrentTime();
+
+    const days = useMemo(() => flattenDays(weeks), [weeks]);
+    const [view, setView] = useState("day"); // "day" | "week"
+    const [selectedDate, setSelectedDate] = useState(dayjs().format("YYYY-MM-DD"));
+    const day = useMemo(() => {
+        if (days.length === 0) return undefined;
+        return (
+            days.find((d) => d.date === selectedDate) ??
+            days.find((d) => d.date > selectedDate) ??
+            days[days.length - 1]
+        );
+    }, [days, selectedDate]);
+    return (
+        <SafeAreaView
+            edges={["top"]}
+            style={{ flex: 1, marginHorizontal: 22, alignItems: "flex-start" }}
+        >
+            {/* <Text>Hello World !</Text> */}
+            <ViewSelector onChange={setView} value={view} />
+            <View style={{ marginTop: 24 }}>
+                {day && (
+                    <DateSelector
+                        date={day}
+                        onSelect={setSelectedDate}
+                        minimumDate={dayjs(days[0].date).toDate()}
+                        maximumDate={dayjs(days[days.length - 1].date).toDate()}
+                    />
+                )}
+            </View>
+            <View style={{ marginVertical: 14 }}>
+                {day && <DaySummary day={day} />}
+            </View>
+        </SafeAreaView>
+    );
 }
 
