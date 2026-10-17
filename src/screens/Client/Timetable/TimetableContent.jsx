@@ -10,8 +10,8 @@ import { useUserStore } from "@/hooks/useUserStore";
 
 export default function TimetableContent() {
     const token = useUserStore((state) => state.token);
-    const { data: gradesData, isLoading, isError } = useTimetable(token);
-    console.log(gradesData);
+    const { data: timetableData, isLoading, isError } = useTimetable(token);
+    console.log(timetableData);
     return <Text>Hello World !</Text>;
 }
 
