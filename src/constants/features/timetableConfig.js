@@ -1,6 +1,7 @@
 export const timetableConfig = {
-    cancelledColor: "rgb(130, 14, 14)",
-    editedColor: "rgb(254, 198, 6)",
-    dispensedColor: "rgb(3, 77, 108)",
+    minHeight: 60,
+    pxPerHour: 40,
+    breakMinMinutes: 45,
+    breakHeight: 80,
 };
 
