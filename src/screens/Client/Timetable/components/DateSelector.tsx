@@ -1,8 +1,10 @@
 import { Text } from "@/components";
+import { MorphingText } from "@/components/core";
 import { useCurrentTime } from "@/hooks/useCurrentTime";
 import { useTheme } from "@/hooks/useThemeStore";
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import dayjs from "dayjs";
+import { memo } from "react";
 import { Pressable, View } from "react-native";
 
 const getRelativeLabel = (date, today) => {
@@ -12,8 +14,7 @@ const getRelativeLabel = (date, today) => {
     if (diff === 1) return "Demain";
     return null;
 };
-
-export default function DateSelector({ date, onSelect, minimumDate, maximumDate }) {
+function DateSelector({ date, onSelect, minimumDate, maximumDate }) {
     const { colors } = useTheme();
     const { date: isoDate } = useCurrentTime();
 
@@ -67,11 +68,15 @@ export default function DateSelector({ date, onSelect, minimumDate, maximumDate 
                     borderRadius: 50,
                 }}
             >
-                <Text size={20} style={{ fontFamily: "SemiBold" }}>
-                    {date.fullDate}
-                </Text>
+                <MorphingText
+                    style={{ fontFamily: "SemiBold", fontSize: 20 }}
+                    duration={600}
+                    translateDistance={4}
+                    value={date.fullDate}
+                />
             </Pressable>
         </View>
     );
 }
 
+export default memo(DateSelector);

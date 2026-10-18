@@ -1,9 +1,10 @@
-import { Text } from "@/components";
 import { useTheme } from "@/hooks/useThemeStore";
 import { useEffect } from "react";
 import { Pressable, View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
+    interpolate,
+    interpolateColor,
     useAnimatedStyle,
     useSharedValue,
     withSpring,
@@ -18,9 +19,9 @@ const OPTIONS = [
 const PADDING = 4;
 
 const SPRING = {
-    damping: 24,
-    stiffness: 240,
-    mass: 0.9,
+    damping: 26,
+    stiffness: 260,
+    mass: 0.8,
     overshootClamping: true,
 };
 
@@ -96,7 +97,7 @@ export default function ViewSelector({ value, onChange }) {
                 style={{
                     flexDirection: "row",
                     backgroundColor: colors.surface.raised,
-                    borderRadius: 16,
+                    borderRadius: 18,
                     padding: PADDING,
                 }}
             >
@@ -110,17 +111,21 @@ export default function ViewSelector({ value, onChange }) {
                             left: PADDING,
                             width: `${100 / OPTIONS.length}%`,
                             marginRight: PADDING * 2,
-                            borderRadius: 12,
+                            borderRadius: 14,
                             backgroundColor: colors.surface.default,
                         },
                         pillStyle,
                     ]}
                 />
 
-                {OPTIONS.map((option) => (
+                {OPTIONS.map((option, index) => (
                     <Tab
                         key={option.value}
                         label={option.label}
+                        index={index}
+                        progress={progress}
+                        activeColor={colors.text.brand}
+                        inactiveColor={colors.text.secondary}
                         selected={value === option.value}
                         onPress={() => handleSelect(option.value)}
                     />
@@ -130,12 +135,41 @@ export default function ViewSelector({ value, onChange }) {
     );
 }
 
-function Tab({ label, selected, onPress }) {
+function Tab({
+    label,
+    index,
+    progress,
+    activeColor,
+    inactiveColor,
+    selected,
+    onPress,
+}) {
     const pressed = useSharedValue(0);
 
-    const style = useAnimatedStyle(() => ({
-        transform: [{ scale: 1 - pressed.value * 0.05 }],
-    }));
+    const containerStyle = useAnimatedStyle(() => {
+        const focus = interpolate(
+            progress.value,
+            [index - 1, index, index + 1],
+            [0, 1, 0],
+            "clamp"
+        );
+        return {
+            transform: [{ scale: (1 + focus * 0.04) * (1 - pressed.value * 0.05) }],
+        };
+    });
+
+    const textStyle = useAnimatedStyle(() => {
+        const focus = interpolate(
+            progress.value,
+            [index - 1, index, index + 1],
+            [0, 1, 0],
+            "clamp"
+        );
+        return {
+            color: interpolateColor(focus, [0, 1], [inactiveColor, activeColor]),
+            opacity: 0.75 + focus * 0.25,
+        };
+    });
 
     return (
         <Pressable
@@ -146,8 +180,17 @@ function Tab({ label, selected, onPress }) {
             accessibilityState={{ selected }}
             style={{ flex: 1 }}
         >
-            <Animated.View style={[{ alignItems: "center", padding: 10 }, style]}>
-                <Text style={{ fontWeight: "600" }}>{label}</Text>
+            <Animated.View
+                style={[
+                    { alignItems: "center", paddingVertical: 4 },
+                    containerStyle,
+                ]}
+            >
+                <Animated.Text
+                    style={[{ fontFamily: "SemiBold", fontSize: 16 }, textStyle]}
+                >
+                    {label}
+                </Animated.Text>
             </Animated.View>
         </Pressable>
     );

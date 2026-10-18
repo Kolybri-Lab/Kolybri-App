@@ -100,21 +100,11 @@ export type FlatDay = Omit<Day, "courses" | "breaks"> & {
     items: TimelineItem[];
 };
 
-// export function parseDateTime(value: DateTimeString): Date {
-//     return new Date(value.replace(" ", "T"));
-// }
+// ui
 
-// export const isLesson = (entry: TimetableEntry): boolean =>
-//     entry.typeCours === "COURS" && !entry.isAnnule;
-
-// export const isFreePeriod = (entry: TimetableEntry): boolean =>
-//     entry.typeCours === "PERMANENCE";
-
-// /** Chronological sort (the enriched JSON is already sorted, the raw one is not). */
-// export function sortByStartDate(entries: TimetableEntry[]): TimetableEntry[] {
-//     return [...entries].sort(
-//         (a, b) =>
-//             parseDateTime(a.start_date).getTime() -
-//             parseDateTime(b.start_date).getTime()
-//     );
-// }
+export type DayViewProps = {
+    days: FlatDay[];
+    dayIndex: number;
+    setSelectedDate: (date: string) => void;
+    day: FlatDay;
+};
