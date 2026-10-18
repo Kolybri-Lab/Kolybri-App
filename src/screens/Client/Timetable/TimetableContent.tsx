@@ -9,13 +9,12 @@ import { flattenDays } from "@/features/timetable/utils/sort";
 import { useCurrentTime } from "@/hooks/useCurrentTime";
 import { useUserStore } from "@/hooks/useUserStore";
 import dayjs from "dayjs";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { View } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import DateSelector from "./components/DateSelector";
+import DayPager from "./components/DayPager";
 import DaySummary from "./components/DaySummary";
-import { DayViewBreak, DayViewCourse } from "./components/DayViewCards";
 import ViewSelector from "./components/ViewSelector";
 
 export default function TimetableContent() {
@@ -24,17 +23,26 @@ export default function TimetableContent() {
     const { date: isoDate, frenchDate } = useCurrentTime();
 
     const days = useMemo(() => flattenDays(weeks), [weeks]);
-    console.log(days);
     const [view, setView] = useState("day"); // "day" | "week"
     const [selectedDate, setSelectedDate] = useState(dayjs().format("YYYY-MM-DD"));
-    const day = useMemo(() => {
-        if (days.length === 0) return undefined;
-        return (
-            days.find((d) => d.date === selectedDate) ??
-            days.find((d) => d.date > selectedDate) ??
-            days[days.length - 1]
-        );
+
+    const dayIndex = useMemo(() => {
+        if (days.length === 0) return -1;
+        const exact = days.findIndex((d) => d.date === selectedDate);
+        if (exact !== -1) return exact;
+        const next = days.findIndex((d) => d.date > selectedDate);
+        return next !== -1 ? next : days.length - 1;
     }, [days, selectedDate]);
+
+    const day = days[dayIndex];
+
+    const goTo = useCallback(
+        (delta) => {
+            const target = days[dayIndex + delta];
+            if (target) setSelectedDate(target.date);
+        },
+        [days, dayIndex]
+    );
     return (
         <SafeAreaView
             edges={["top"]}
@@ -56,28 +64,13 @@ export default function TimetableContent() {
                 {day && <DaySummary day={day} />}
             </View>
             <View style={{ marginVertical: 14, width: "100%", flex: 1 }}>
-                <ScrollView
-                    style={{ width: "100%" }}
-                    contentContainerStyle={{
-                        gap: 12,
-                        paddingBottom: 24,
-                    }}
-                    showsVerticalScrollIndicator={false}
-                >
-                    {day?.items?.map((item) =>
-                        item.kind === "course" ? (
-                            <DayViewCourse
-                                key={`c-${item.data.id}`}
-                                course={item.data}
-                            />
-                        ) : (
-                            <DayViewBreak
-                                key={`b-${item.data.type}-${item.data.schedules.start.time}`}
-                                breakItem={item.data}
-                            />
-                        )
-                    )}
-                </ScrollView>
+                {dayIndex >= 0 && (
+                    <DayPager
+                        days={days}
+                        index={dayIndex}
+                        onIndexChange={(i) => setSelectedDate(days[i].date)}
+                    />
+                )}
             </View>
         </SafeAreaView>
     );

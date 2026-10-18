@@ -16,13 +16,11 @@ interface DayViewBreakProps {
 
 export function DayViewCourse({ course: course }: DayViewCourseProps) {
     const { colors } = useTheme();
-    // console.log(course);
     return (
         <View
             style={{
                 flexDirection: "row",
                 alignItems: "stretch",
-                // backgroundColor: "red",
             }}
         >
             <View
