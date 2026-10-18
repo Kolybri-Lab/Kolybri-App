@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { FlatList, ScrollView, View } from "react-native";
 import { DayViewBreak, DayViewCourse } from "./DayViewCards";
 
@@ -27,7 +27,7 @@ function DayPage({ day, width }) {
     );
 }
 
-export default function DayPager({ days, index, onIndexChange }) {
+function DayPager({ days, index, onIndexChange }) {
     const [width, setWidth] = useState(0);
     const listRef = useRef(null);
     const currentIndex = useRef(index);
@@ -39,13 +39,16 @@ export default function DayPager({ days, index, onIndexChange }) {
         listRef.current?.scrollToIndex({ index, animated });
     }, [index, width]);
 
-    const handleEnd = (e) => {
-        if (width === 0) return;
-        const next = Math.round(e.nativeEvent.contentOffset.x / width);
-        if (next === currentIndex.current) return;
-        currentIndex.current = next;
-        onIndexChange(next);
-    };
+    const handleEnd = useCallback(
+        (e) => {
+            if (width === 0) return;
+            const next = Math.round(e.nativeEvent.contentOffset.x / width);
+            if (next === currentIndex.current) return;
+            currentIndex.current = next;
+            onIndexChange(next);
+        },
+        [width, onIndexChange]
+    );
 
     const renderItem = useCallback(
         ({ item }) => <DayPage day={item} width={width} />,
@@ -64,7 +67,7 @@ export default function DayPager({ days, index, onIndexChange }) {
                     keyExtractor={(d) => d.date}
                     horizontal
                     pagingEnabled
-                    decelerationRate="normal"
+                    decelerationRate="fast"
                     showsHorizontalScrollIndicator={false}
                     initialScrollIndex={index}
                     getItemLayout={(_, i) => ({
@@ -72,7 +75,7 @@ export default function DayPager({ days, index, onIndexChange }) {
                         offset: width * i,
                         index: i,
                     })}
-                    windowSize={5}
+                    windowSize={3}
                     initialNumToRender={5}
                     onMomentumScrollEnd={handleEnd}
                     renderItem={renderItem}
@@ -81,3 +84,4 @@ export default function DayPager({ days, index, onIndexChange }) {
         </View>
     );
 }
+export default memo(DayPager);
