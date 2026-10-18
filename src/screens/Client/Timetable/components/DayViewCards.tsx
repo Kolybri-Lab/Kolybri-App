@@ -4,7 +4,7 @@ import { Break, Course } from "@/features/timetable";
 import { isLunchBreak } from "@/features/timetable/utils/sort";
 import { useTheme } from "@/hooks/useThemeStore";
 import { Coffee, ForkKnife, MapPin } from "lucide-react-native";
-import { useMemo } from "react";
+import { memo } from "react";
 import { View } from "react-native";
 
 interface DayViewCourseProps {
@@ -13,8 +13,7 @@ interface DayViewCourseProps {
 interface DayViewBreakProps {
     breakItem: Break;
 }
-
-export function DayViewCourse({ course: course }: DayViewCourseProps) {
+function DayViewCourseComponent({ course: course }: DayViewCourseProps) {
     const { colors } = useTheme();
     return (
         <View
@@ -134,9 +133,9 @@ export function DayViewCourse({ course: course }: DayViewCourseProps) {
         </View>
     );
 }
-export function DayViewBreak({ breakItem: breakItem }: DayViewBreakProps) {
+function DayViewBreakComponent({ breakItem: breakItem }: DayViewBreakProps) {
     const { colors } = useTheme();
-    const lunchBreak = useMemo(() => isLunchBreak(breakItem), [breakItem]);
+    const lunchBreak = isLunchBreak(breakItem);
     return (
         <View
             style={{
@@ -203,3 +202,6 @@ export function DayViewBreak({ breakItem: breakItem }: DayViewBreakProps) {
         </View>
     );
 }
+
+export const DayViewCourse = memo(DayViewCourseComponent);
+export const DayViewBreak = memo(DayViewBreakComponent);
