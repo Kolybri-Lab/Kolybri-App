@@ -43,6 +43,7 @@ interface Schedules {
 export interface Course {
     id: number;
     libelle: string;
+    teacher: string;
     room: string;
     schedules: Schedules;
     color: string;
@@ -91,6 +92,14 @@ export interface TimetableResolverParams {
     token: string;
     offset: number;
 }
+
+export type TimelineItem =
+    { kind: "course"; data: Course } | { kind: "break"; data: Break };
+
+export type FlatDay = Omit<Day, "courses" | "breaks"> & {
+    items: TimelineItem[];
+};
+
 // export function parseDateTime(value: DateTimeString): Date {
 //     return new Date(value.replace(" ", "T"));
 // }
@@ -109,4 +118,3 @@ export interface TimetableResolverParams {
 //             parseDateTime(b.start_date).getTime()
 //     );
 // }
-

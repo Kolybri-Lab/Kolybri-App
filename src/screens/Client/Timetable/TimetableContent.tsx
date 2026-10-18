@@ -11,9 +11,11 @@ import { useUserStore } from "@/hooks/useUserStore";
 import dayjs from "dayjs";
 import { useMemo, useState } from "react";
 import { View } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import DateSelector from "./components/DateSelector";
 import DaySummary from "./components/DaySummary";
+import { DayViewBreak, DayViewCourse } from "./components/DayViewCards";
 import ViewSelector from "./components/ViewSelector";
 
 export default function TimetableContent() {
@@ -22,6 +24,7 @@ export default function TimetableContent() {
     const { date: isoDate, frenchDate } = useCurrentTime();
 
     const days = useMemo(() => flattenDays(weeks), [weeks]);
+    console.log(days);
     const [view, setView] = useState("day"); // "day" | "week"
     const [selectedDate, setSelectedDate] = useState(dayjs().format("YYYY-MM-DD"));
     const day = useMemo(() => {
@@ -52,7 +55,30 @@ export default function TimetableContent() {
             <View style={{ marginVertical: 14 }}>
                 {day && <DaySummary day={day} />}
             </View>
+            <View style={{ marginVertical: 14, width: "100%", flex: 1 }}>
+                <ScrollView
+                    style={{ width: "100%" }}
+                    contentContainerStyle={{
+                        gap: 12,
+                        paddingBottom: 24,
+                    }}
+                    showsVerticalScrollIndicator={false}
+                >
+                    {day?.items?.map((item) =>
+                        item.kind === "course" ? (
+                            <DayViewCourse
+                                key={`c-${item.data.id}`}
+                                course={item.data}
+                            />
+                        ) : (
+                            <DayViewBreak
+                                key={`b-${item.data.type}-${item.data.schedules.start.time}`}
+                                breakItem={item.data}
+                            />
+                        )
+                    )}
+                </ScrollView>
+            </View>
         </SafeAreaView>
     );
 }
-
