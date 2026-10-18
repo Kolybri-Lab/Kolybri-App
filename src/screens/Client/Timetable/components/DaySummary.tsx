@@ -1,11 +1,21 @@
 import { Text } from "@/components";
+import { FlatDay } from "@/features/timetable";
 import { useTheme } from "@/hooks/useThemeStore";
+import { useMemo } from "react";
 import { View } from "react-native";
 
-export default function DaySummary({ day }) {
+interface DaySummaryProps {
+    day: FlatDay;
+}
+
+export default function DaySummary({ day }: DaySummaryProps) {
     const { infos } = day;
     const { colors } = useTheme();
-    console.log(day);
+
+    const totalCourses = useMemo(() => {
+        return day.items.filter((item) => item.kind === "course").length ?? 0;
+    }, [day]);
+
     if (!infos)
         return (
             <Text
@@ -16,13 +26,14 @@ export default function DaySummary({ day }) {
                 Aucune information sur la journée
             </Text>
         );
+
     return (
         <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
             <Text
                 color={colors.text.secondary}
                 style={{ fontFamily: "SemiBold" }}
                 size={15}
-            >{`${day.courses.length} cours · ${infos.firstHour} - ${infos.lastHour}`}</Text>
+            >{`${totalCourses} cours · ${infos.firstHour} - ${infos.lastHour}`}</Text>
             <Text
                 color={colors.text.onBrand}
                 size={15}
@@ -48,4 +59,3 @@ export default function DaySummary({ day }) {
         </View>
     );
 }
-

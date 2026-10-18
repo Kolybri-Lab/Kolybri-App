@@ -9,12 +9,11 @@ import type {
     Course,
     Day,
     DayInfos,
+    FlatDay,
     FormattedEntryType,
+    TimelineItem,
     Week,
 } from "..";
-import resp from "../../../../coverage/resp.json";
-
-const TimetableResponse = resp.data as ApiTimetableEntry[];
 
 dayjs.extend(isoWeek);
 
@@ -76,6 +75,7 @@ const formatCourse = (entry: ApiTimetableEntry, id: number): Course => {
         id, // index
         color: entry.color,
         libelle: entry.matiere?.trim() || entry.text?.trim() || "Cours sans titre",
+        teacher: entry?.prof?.trim() || "Pas de prof",
         room: entry.salle?.trim() || "Aucune salle",
         schedules: {
             start: {
@@ -107,6 +107,15 @@ const formatCourse = (entry: ApiTimetableEntry, id: number): Course => {
 };
 const isBreak = (c: Course): c is Course & { type: "BREAK" | "LEAVE" } =>
     c.type === "BREAK" || c.type === "LEAVE";
+
+const NOON_START = 11 * 60;
+const NOON_END = 14 * 60;
+
+export const isLunchBreak = (breakItem: Break): boolean => {
+    const start = toMinutes(breakItem.schedules.start.time);
+    const end = toMinutes(breakItem.schedules.end.time);
+    return start >= NOON_START && end <= NOON_END;
+};
 
 const formatBreak = (entry: Course): Break => ({
     schedules: entry.schedules,
@@ -221,5 +230,16 @@ const applyWeekViewPlacing = (week: Week) => {
     }
 };
 
-export const flattenDays = (weeks: Week[]): Day[] =>
-    weeks.flatMap((week) => week.days);
+const byStart = (a: TimelineItem, b: TimelineItem) =>
+    a.data.schedules.start.time.localeCompare(b.data.schedules.start.time);
+
+export const flattenDays = (weeks: Week[]): FlatDay[] =>
+    weeks.flatMap((week) =>
+        week.days.map(({ courses, breaks, ...day }) => ({
+            ...day,
+            items: [
+                ...courses.map((data): TimelineItem => ({ kind: "course", data })),
+                ...breaks.map((data): TimelineItem => ({ kind: "break", data })),
+            ].sort(byStart),
+        }))
+    );
