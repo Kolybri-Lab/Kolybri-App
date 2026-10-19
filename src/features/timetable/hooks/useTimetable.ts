@@ -15,14 +15,6 @@ export function useTimetable(token: string) {
         setRange(DEFAULT_RANGE);
     }, []);
 
-    const extendForward = useCallback(() => {
-        setRange((r) => ({ ...r, max: r.max + 1 }));
-    }, []);
-
-    const extendBackward = useCallback(() => {
-        setRange((r) => ({ ...r, min: r.min - 1 }));
-    }, []);
-
     const offsets = useMemo(() => {
         const arr: number[] = [];
         for (let i = range.min; i <= range.max; i++) arr.push(i);
@@ -36,6 +28,24 @@ export function useTimetable(token: string) {
             enabled: Boolean(token),
         })),
     });
+
+    const firstQueryLoading = Boolean(
+        queries[0]?.isLoading || queries[0]?.isFetching
+    );
+    const lastQueryLoading = Boolean(
+        queries[queries.length - 1]?.isLoading ||
+            queries[queries.length - 1]?.isFetching
+    );
+
+    const extendForward = useCallback(() => {
+        if (lastQueryLoading) return;
+        setRange((r) => ({ ...r, max: r.max + 1 }));
+    }, [lastQueryLoading]);
+
+    const extendBackward = useCallback(() => {
+        if (firstQueryLoading) return;
+        setRange((r) => ({ ...r, min: r.min - 1 }));
+    }, [firstQueryLoading]);
 
     const dataUpdatedAtKey = queries.map((q) => q.dataUpdatedAt).join(",");
 

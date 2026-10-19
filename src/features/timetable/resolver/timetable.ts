@@ -29,12 +29,16 @@ export default async function timetableResolver({
             method: "POST",
         }
     );
-    if (timetableResponse?.isDataEmpty) {
-        return [];
+    if (timetableResponse?.isDataEmpty || !timetableResponse) {
+        return [
+            {
+                from: { date: requestedMonday, time: "00:00" },
+                to: { date: requestedSunday, time: "23:59" },
+                days: fillHolidays(requestedMonday, requestedSunday),
+            },
+        ];
     }
 
-    return !timetableResponse
-        ? (fillHolidays(requestedMonday, requestedSunday) as any)
-        : sortTimetable(timetableResponse.data);
+    return sortTimetable(timetableResponse.data);
 }
 

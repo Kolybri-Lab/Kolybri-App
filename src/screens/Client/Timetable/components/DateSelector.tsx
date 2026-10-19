@@ -34,8 +34,8 @@ function DateSelector({ date, onSelect, minimumDate, maximumDate }) {
     };
 
     return (
-        <View style={{ gap: 4 }}>
-            {relativeLabel && (
+        <View style={{ gap: 4, flexShrink: 1, minWidth: 0 }}>
+            {/*{relativeLabel && (
                 <View
                     style={{ flexDirection: "row", gap: 10, alignItems: "center" }}
                 >
@@ -55,17 +55,17 @@ function DateSelector({ date, onSelect, minimumDate, maximumDate }) {
                         {relativeLabel}
                     </Text>
                 </View>
-            )}
+            )}*/}
 
             <Pressable
                 onPress={open}
-                accessibilityRole="button"
-                accessibilityLabel="Choisir une date"
                 style={{
                     backgroundColor: colors.surface.default,
                     paddingHorizontal: 20,
                     paddingVertical: 4,
                     borderRadius: 50,
+                    flexShrink: 1,
+                    minWidth: 0,
                 }}
             >
                 <MorphingText
@@ -80,3 +80,4 @@ function DateSelector({ date, onSelect, minimumDate, maximumDate }) {
 }
 
 export default memo(DateSelector);
+

@@ -59,7 +59,7 @@ const colors = {
         /** Success confirmations, completed steps, positive values. */
         success: "hsl(159, 80%, 30%)",
         /** Warnings and non-blocking alerts. */
-        warning: "hsl(25, 88%, 40%)",
+        warning: "hsl(7, 81%, 46%)",
     },
 };
 
