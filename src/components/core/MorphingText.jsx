@@ -41,10 +41,11 @@ const MorphingText = ({
 
     return (
         <View style={styles.container} pointerEvents="none">
-            <Animated.View style={incomingStyle}>
+            <Animated.View style={[incomingStyle, { maxWidth: "100%" }]}>
                 <Text
                     style={[{ textAlign: "center" }, style]}
                     numberOfLines={1}
+                    ellipsizeMode="tail"
                     {...textProps}
                 >
                     {displayedValue}
@@ -56,9 +57,11 @@ const MorphingText = ({
 
 const styles = StyleSheet.create({
     container: {
-        overflow: "visible",
+        overflow: "hidden",
         alignItems: "center",
-        flexShrink: 0,
+        flexShrink: 1,
+        minWidth: 0,
+        maxWidth: "100%",
     },
 });
 

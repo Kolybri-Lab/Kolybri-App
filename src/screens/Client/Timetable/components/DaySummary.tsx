@@ -13,7 +13,14 @@ export default function DaySummary({ day }: DaySummaryProps) {
     const { colors } = useTheme();
 
     const totalCourses = useMemo(() => {
-        return day.items.filter((item) => item.kind === "course").length ?? 0;
+        return (
+            day.items.reduce((acc, item) => {
+                if (item.kind === "course") {
+                    return acc + (Array.isArray(item.data) ? item.data.length : 1);
+                }
+                return acc;
+            }, 0) ?? 0
+        );
     }, [day]);
 
     if (!infos)
@@ -38,7 +45,10 @@ export default function DaySummary({ day }: DaySummaryProps) {
                 color={colors.text.onBrand}
                 size={15}
                 style={{
-                    backgroundColor: "hsl(215, 28%, 17%)",
+                    backgroundColor:
+                        infos.totalCancelled > 0
+                            ? colors.state.warning
+                            : "hsl(215, 28%, 17%)",
                     paddingVertical: 2,
                     paddingHorizontal: 14,
                     borderRadius: 50,
@@ -49,7 +59,10 @@ export default function DaySummary({ day }: DaySummaryProps) {
                 color={colors.text.onBrand}
                 size={15}
                 style={{
-                    backgroundColor: "hsl(193, 82%, 31%)",
+                    backgroundColor:
+                        infos.totalEdited > 0
+                            ? colors.brand.primary
+                            : "hsl(215, 28%, 17%)",
                     paddingVertical: 2,
                     paddingHorizontal: 14,
                     borderRadius: 50,
@@ -59,3 +72,4 @@ export default function DaySummary({ day }: DaySummaryProps) {
         </View>
     );
 }
+

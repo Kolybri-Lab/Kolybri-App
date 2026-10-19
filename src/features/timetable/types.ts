@@ -94,7 +94,8 @@ export interface TimetableResolverParams {
 }
 
 export type TimelineItem =
-    { kind: "course"; data: Course } | { kind: "break"; data: Break };
+    | { kind: "course"; data: Course | Course[] }
+    | { kind: "break"; data: Break };
 
 export type FlatDay = Omit<Day, "courses" | "breaks"> & {
     items: TimelineItem[];
@@ -107,4 +108,7 @@ export type DayViewProps = {
     dayIndex: number;
     setSelectedDate: (date: string) => void;
     day: FlatDay;
+    extendForward?: () => void;
+    extendBackward?: () => void;
 };
+
