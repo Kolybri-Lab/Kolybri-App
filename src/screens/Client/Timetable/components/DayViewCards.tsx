@@ -45,13 +45,14 @@ function CourseCardItem({
                     flex: 1,
                     justifyContent: "space-between",
                     padding: isMulti ? 10 : 14,
-                    backgroundColor: course.states?.cancelled
+                    /*backgroundColor: course.states?.cancelled
                         ? withAlpha(colors.state.danger, 0.3)
                         : course.states?.edited
                           ? withAlpha(colors.brand.primary, 0.3)
                           : course.states?.dispensed
                             ? withAlpha(colors.text.secondary, 0.3)
-                            : "transparent",
+                            : "transparent",*/
+                    backgroundColor: withAlpha(course.color, 0.25),
                 }}
             >
                 <View
@@ -97,7 +98,7 @@ function CourseCardItem({
                     {!isMulti && (
                         <View
                             style={{
-                                backgroundColor: colors.brand.soft,
+                                backgroundColor: colors.surface.default,
                                 paddingHorizontal: 10,
                                 borderRadius: 50,
                                 flexShrink: 0,
@@ -105,7 +106,7 @@ function CourseCardItem({
                         >
                             <Text
                                 size={14}
-                                color={colors.text.primary}
+                                color={colors.text.secondary}
                                 style={{ fontFamily: "SemiBold" }}
                             >
                                 {course.schedules.duration.text.replace(":", "h")}
