@@ -1,0 +1,83 @@
+import { Text } from "@/components";
+import { MorphingText } from "@/components/core";
+import { useCurrentTime } from "@/hooks/useCurrentTime";
+import { useTheme } from "@/hooks/useThemeStore";
+import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
+import dayjs from "dayjs";
+import { memo } from "react";
+import { Pressable, View } from "react-native";
+
+const getRelativeLabel = (date, today) => {
+    const diff = dayjs(date).startOf("day").diff(dayjs(today).startOf("day"), "day");
+    if (diff === 0) return "Aujourd'hui";
+    if (diff === -1) return "Hier";
+    if (diff === 1) return "Demain";
+    return null;
+};
+function DateSelector({ date, onSelect, minimumDate, maximumDate }) {
+    const { colors } = useTheme();
+    const { date: isoDate } = useCurrentTime();
+
+    const relativeLabel = isoDate ? getRelativeLabel(date.date, isoDate) : null;
+
+    const open = () => {
+        DateTimePickerAndroid.open({
+            value: dayjs(date.date).toDate(),
+            mode: "date",
+            minimumDate,
+            maximumDate,
+            onValueChange: (_, selected) => {
+                const iso = dayjs(selected).format("YYYY-MM-DD");
+                if (iso !== date.date) onSelect(iso);
+            },
+        });
+    };
+
+    return (
+        <View style={{ gap: 4, flexShrink: 1, minWidth: 0 }}>
+            {/*{relativeLabel && (
+                <View
+                    style={{ flexDirection: "row", gap: 10, alignItems: "center" }}
+                >
+                    <View
+                        style={{
+                            width: 8,
+                            aspectRatio: 1,
+                            backgroundColor: colors.text.accent,
+                            borderRadius: 20,
+                        }}
+                    />
+                    <Text
+                        color={colors.text.accent}
+                        size={16}
+                        style={{ fontFamily: "Medium" }}
+                    >
+                        {relativeLabel}
+                    </Text>
+                </View>
+            )}*/}
+
+            <Pressable
+                onPress={open}
+                style={{
+                    backgroundColor: colors.surface.default,
+                    paddingHorizontal: 20,
+                    paddingVertical: 4,
+                    borderRadius: 50,
+                    flexShrink: 1,
+                    minWidth: 0,
+                }}
+            >
+                <MorphingText
+                    style={{ fontFamily: "SemiBold", fontSize: 20 }}
+                    duration={600}
+                    translateDistance={4}
+                    value={date.fullDate}
+                />
+            </Pressable>
+        </View>
+    );
+}
+
+export default memo(DateSelector);
+

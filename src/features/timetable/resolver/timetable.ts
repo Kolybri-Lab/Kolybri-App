@@ -1,27 +1,27 @@
 import { CONFIG } from "@/constants/config";
+import { sortTimetable } from "@/features/timetable/utils/sort";
 import fetchApi from "@/services/fetchApi";
-import { addDaysToDateString, getPreviousMonday } from "@/utils/date";
-import { sortedTimetable } from "../utils/layout";
-import { fillHolidays } from "../utils/holidays";
 import { FetchApiResponse } from "@/types";
-import { TimetableDay, ApiTimetableCourse, TimetableResolverParams } from "../types";
+import { addDaysToDateString, getPreviousMonday } from "@/utils/date";
+import { ApiTimetableEntry, TimetableResolverParams, Week } from "../types";
+import { fillHolidays } from "../utils/holidays";
 
 export default async function timetableResolver({
     token,
     offset = 0,
-}: TimetableResolverParams): Promise<TimetableDay[]> {
+}: TimetableResolverParams): Promise<Week[]> {
     const baseMonday = getPreviousMonday(CONFIG.dateNow);
     const requestedMonday = addDaysToDateString(baseMonday, offset * 7);
 
     const requestedSunday = addDaysToDateString(requestedMonday, 6);
 
-    const timetableResponse = await fetchApi<FetchApiResponse<ApiTimetableCourse[]>>(
+    const timetableResponse = await fetchApi<FetchApiResponse<ApiTimetableEntry[]>>(
         `https://api.ecoledirecte.com/v3/E/{USER_ID}/emploidutemps.awp?verbe=get&{API_VERSION}`,
         {
             body: {
                 dateDebut: requestedMonday,
                 dateFin: requestedSunday,
-                avecTrous: false,
+                avecTrous: true,
             },
             headers: {
                 "X-Token": token,
@@ -29,12 +29,16 @@ export default async function timetableResolver({
             method: "POST",
         }
     );
-
-    if (timetableResponse?.isDataEmpty) {
-        return [];
+    if (timetableResponse?.isDataEmpty || !timetableResponse) {
+        return [
+            {
+                from: { date: requestedMonday, time: "00:00" },
+                to: { date: requestedSunday, time: "23:59" },
+                days: fillHolidays(requestedMonday, requestedSunday),
+            },
+        ];
     }
 
-    return !timetableResponse
-        ? (fillHolidays(requestedMonday, requestedSunday) as any)
-        : await sortedTimetable(timetableResponse.data);
+    return sortTimetable(timetableResponse.data);
 }
+
