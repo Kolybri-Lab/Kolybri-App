@@ -155,28 +155,6 @@ function DayPager({
         checkThresholds(index);
     }, [index, pageWidth, snapInterval, checkThresholds]);
 
-    const handleScroll = useCallback(
-        (e: any) => {
-            if (snapInterval === 0) return;
-
-            const nextIndex = Math.round(
-                e.nativeEvent.contentOffset.x / snapInterval
-            );
-
-            if (
-                nextIndex === currentIndex.current ||
-                nextIndex < 0 ||
-                nextIndex >= days.length
-            )
-                return;
-
-            currentIndex.current = nextIndex;
-            onIndexChange(nextIndex);
-            checkThresholds(nextIndex);
-        },
-        [snapInterval, days.length, onIndexChange, checkThresholds]
-    );
-
     const handleEnd = useCallback(
         (e: any) => {
             if (snapInterval === 0) return;
@@ -240,13 +218,11 @@ function DayPager({
                     disableIntervalMomentum
                     snapToInterval={snapInterval}
                     snapToAlignment="start"
-                    decelerationRate={0.9}
+                    decelerationRate={0.92}
                     showsHorizontalScrollIndicator={false}
                     initialNumToRender={2}
                     maxToRenderPerBatch={2}
                     windowSize={3}
-                    onScroll={handleScroll}
-                    scrollEventThrottle={16}
                     onMomentumScrollEnd={handleEnd}
                 />
             )}
