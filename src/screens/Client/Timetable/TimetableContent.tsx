@@ -106,24 +106,22 @@ export default function TimetableContent() {
                 </Animated.View>
 
                 <Pressable
-                    onPress={() =>
-                        setView((prev) => (prev === "day" ? "week" : "day"))
-                    }
-                    style={({ pressed }) => ({
+                    disabled
+                    style={{
                         padding: 8,
                         backgroundColor: colors.surface.default,
                         borderRadius: 24,
                         alignItems: "center",
                         justifyContent: "center",
-                        opacity: pressed ? 0.7 : 1,
+                        opacity: 0.4,
                         marginLeft: 8,
                         flexShrink: 0,
-                    })}
+                    }}
                 >
                     {view === "day" ? (
-                        <Calendar1 size={24} color={colors.text.primary} />
+                        <Calendar1 size={24} color={colors.text.secondary} />
                     ) : (
-                        <CalendarRange size={24} color={colors.text.primary} />
+                        <CalendarRange size={24} color={colors.text.secondary} />
                     )}
                 </Pressable>
             </View>
