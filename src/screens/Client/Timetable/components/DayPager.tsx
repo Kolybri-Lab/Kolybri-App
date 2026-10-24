@@ -1,18 +1,33 @@
 import { FlatDay } from "@/features/timetable";
-import { memo, useCallback, useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { FlatList, View } from "react-native";
 import { DayViewBreak, DayViewCourse } from "./DayViewCards";
+import { DayViewLeave } from "./DayViewLeave";
 
 const HORIZONTAL_PADDING = 22;
 const PAGE_GAP = 16;
 
+export const isLeaveDay = (day: FlatDay): boolean => {
+    const hasCourses = day.items.some((item) => item.kind === "course");
+    return (
+        !hasCourses &&
+        day.items.some((item) => item.kind === "break" && item.data.type === "LEAVE")
+    );
+};
+
 const DayPage = memo(function DayPage({
     day,
     width,
+    isActive,
+    shouldAnimate,
 }: {
     day: FlatDay;
     width: number;
+    isActive: boolean;
+    shouldAnimate: boolean;
 }) {
+    const leaveDay = useMemo(() => isLeaveDay(day), [day]);
+
     const renderItem = useCallback(({ item }) => {
         return item.kind === "course" ? (
             <DayViewCourse course={item.data} />
@@ -30,6 +45,14 @@ const DayPage = memo(function DayPage({
                 : `b-${item.data.type}-${item.data.schedules.start.time}`,
         []
     );
+
+    if (leaveDay) {
+        return (
+            <View style={{ width, flex: 1, paddingHorizontal: HORIZONTAL_PADDING }}>
+                <DayViewLeave isActive={isActive} shouldAnimate={shouldAnimate} />
+            </View>
+        );
+    }
 
     return (
         <View style={{ width, paddingHorizontal: HORIZONTAL_PADDING }}>
@@ -71,8 +94,18 @@ function DayPager({
 
     const pageWidth = containerWidth;
     const snapInterval = pageWidth + PAGE_GAP;
-
     const prevFirstDateRef = useRef<string | null>(null);
+    const prevIndexRef = useRef<number | null>(null);
+
+    const wasPrevLeave = useMemo(() => {
+        if (prevIndexRef.current === null) return false;
+        const prevDay = days[prevIndexRef.current];
+        return prevDay ? isLeaveDay(prevDay) : false;
+    }, [days, index]);
+
+    useEffect(() => {
+        prevIndexRef.current = index;
+    }, [index]);
 
     const checkThresholds = useCallback(
         (targetIndex: number) => {
@@ -122,6 +155,28 @@ function DayPager({
         checkThresholds(index);
     }, [index, pageWidth, snapInterval, checkThresholds]);
 
+    const handleScroll = useCallback(
+        (e: any) => {
+            if (snapInterval === 0) return;
+
+            const nextIndex = Math.round(
+                e.nativeEvent.contentOffset.x / snapInterval
+            );
+
+            if (
+                nextIndex === currentIndex.current ||
+                nextIndex < 0 ||
+                nextIndex >= days.length
+            )
+                return;
+
+            currentIndex.current = nextIndex;
+            onIndexChange(nextIndex);
+            checkThresholds(nextIndex);
+        },
+        [snapInterval, days.length, onIndexChange, checkThresholds]
+    );
+
     const handleEnd = useCallback(
         (e: any) => {
             if (snapInterval === 0) return;
@@ -147,10 +202,15 @@ function DayPager({
                     marginRight: itemIndex < days.length - 1 ? PAGE_GAP : 0,
                 }}
             >
-                <DayPage day={item} width={pageWidth} />
+                <DayPage
+                    day={item}
+                    width={pageWidth}
+                    isActive={itemIndex === index}
+                    shouldAnimate={!wasPrevLeave}
+                />
             </View>
         ),
-        [pageWidth, days.length]
+        [pageWidth, days.length, index, wasPrevLeave]
     );
 
     const getItemLayout = useCallback(
@@ -171,6 +231,7 @@ function DayPager({
                 <FlatList
                     ref={listRef}
                     data={days}
+                    extraData={index}
                     keyExtractor={(day) => day.date}
                     renderItem={renderItem}
                     getItemLayout={getItemLayout}
@@ -179,11 +240,13 @@ function DayPager({
                     disableIntervalMomentum
                     snapToInterval={snapInterval}
                     snapToAlignment="start"
-                    decelerationRate={0.92}
+                    decelerationRate={0.9}
                     showsHorizontalScrollIndicator={false}
                     initialNumToRender={2}
                     maxToRenderPerBatch={2}
                     windowSize={3}
+                    onScroll={handleScroll}
+                    scrollEventThrottle={16}
                     onMomentumScrollEnd={handleEnd}
                 />
             )}

@@ -23,6 +23,16 @@ export default function DaySummary({ day }: DaySummaryProps) {
         );
     }, [day]);
 
+    const isLeaveDay = useMemo(() => {
+        const hasCourses = day.items.some((item) => item.kind === "course");
+        return (
+            !hasCourses &&
+            day.items.some(
+                (item) => item.kind === "break" && item.data.type === "LEAVE"
+            )
+        );
+    }, [day]);
+
     if (!infos)
         return (
             <Text
@@ -30,7 +40,9 @@ export default function DaySummary({ day }: DaySummaryProps) {
                 style={{ fontFamily: "SemiBold" }}
                 size={15}
             >
-                Aucune information sur la journée
+                {isLeaveDay
+                    ? "Aucun cours trouvé. Tu es libre !"
+                    : "Aucune information sur la journée"}
             </Text>
         );
 
