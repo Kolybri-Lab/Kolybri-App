@@ -1,4 +1,4 @@
-import { DropDownMenu, ScreenStack, Text } from "@/components";
+import { ScreenStack, Selector, Text } from "@/components";
 import { Search } from "@/components/svg";
 import { useMessaging } from "@/features/messaging";
 import { useHaptic } from "@/hooks/useHaptics";
@@ -259,18 +259,18 @@ export default function MessagingContent() {
                         flexShrink: 1,
                     }}
                 >
-                    <DropDownMenu
+                    <Selector
+                        type="dropdown"
                         options={[
                             { id: "received", name: "Reçus" },
                             { id: "sent", name: "Envoyés" },
                             { id: "draft", name: "Brouillons" },
                             { id: "archived", name: "Archivés" },
                         ]}
-
                         value={displayGroup}
                         onSelect={(item) => setDisplayGroup(item)}
-                        minWidth="180"
-                        selectorPosition={"right"}
+                        minWidth={180}
+                        selectorPosition="right"
                     />
                 </View>
             </View>

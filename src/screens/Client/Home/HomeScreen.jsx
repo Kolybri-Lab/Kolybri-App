@@ -1,4 +1,4 @@
-import { ScreenStack, SharePopup, Text } from "@/components";
+import { ScreenStack, Selector, SharePopup, Text } from "@/components";
 import { useGrades } from "@/features/grades";
 import GeneralAveragePreview from "@/features/home/components/GeneralAveragePreview";
 import HomeworksPreview from "@/features/home/components/HomeworksPreview";
@@ -20,6 +20,15 @@ import { Image, Pressable, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+const TEST_OPTIONS = [
+    { label: "Trimestre 1", value: "T1" },
+    { label: "Trimestre 2", value: "T2" },
+    { label: "Trimestre 3", value: "T3" },
+    { label: "Semestre 1", value: "S1" },
+    { label: "Semestre 2", value: "S2" },
+    { label: "Année entière", value: "FULL" },
+];
+
 export default function HomeScreen() {
     const { signOut } = useSignIn();
     const navigation = useNavigation();
@@ -28,6 +37,7 @@ export default function HomeScreen() {
     const profile = useUserStore((state) => state.profile);
 
     const [greetingMessage] = useState(getGreetingMessage);
+    const [selectedTestOption, setSelectedTestOption] = useState(TEST_OPTIONS[0]);
 
     const hasHydrated = useUserStore((s) => s.hasHydrated);
     const isFirstLaunch = useUserStore((s) => s.isFirstLaunch);
@@ -309,6 +319,35 @@ export default function HomeScreen() {
                         <HomeworksPreview
                             customHomeworks={customDataStore?.customHomeworks ?? {}}
                             homeworksDatas={homeworksData}
+                        />
+                    </View>
+
+                    <View
+                        style={{
+                            marginTop: 20,
+                            alignItems: "flex-start",
+                            gap: 8,
+                            zIndex: 10,
+                        }}
+                    >
+                        <Text
+                            size={14}
+                            color={colors.text.secondary}
+                            style={{ fontFamily: "SemiBold" }}
+                        >
+                            🧪 Test Selector (mode dropdown)
+                        </Text>
+                        <Selector
+                            type="dropdown"
+                            text={selectedTestOption.label}
+                            options={TEST_OPTIONS}
+                            selectedValue={selectedTestOption.value}
+                            onSelect={(val) => {
+                                const opt = TEST_OPTIONS.find(
+                                    (o) => o.value === val
+                                );
+                                if (opt) setSelectedTestOption(opt);
+                            }}
                         />
                     </View>
                     {token === "guest_token" && <GuestTestButtons />}
