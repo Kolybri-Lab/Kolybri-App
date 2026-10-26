@@ -25,6 +25,7 @@ export { default as SharePopup } from "./modal/SharePopup";
 
 // form
 export { default as CheckBox } from "./form/CheckBox";
+export { default as Selector } from "./form/Selector";
 export { default as Switch } from "./form/Switch";
 
 // display
