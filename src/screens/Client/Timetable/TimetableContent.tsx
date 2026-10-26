@@ -4,7 +4,7 @@
 // import { GLOBALS_DATAS } from "@/constants/device/globals";
 // import { timetableConfig } from "@/constants/features/timetableConfig";
 
-import { Text } from "@/components";
+import { Selector, Text } from "@/components";
 import { DayViewProps, useTimetable } from "@/features/timetable";
 import { flattenDays } from "@/features/timetable/utils/sort";
 import { useCurrentTime } from "@/hooks/useCurrentTime";
@@ -16,7 +16,6 @@ import { memo, ReactNode, useCallback, useMemo, useState } from "react";
 import { Pressable, View } from "react-native";
 import Animated, { LinearTransition } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
-import DateSelector from "./components/DateSelector";
 import DayPager from "./components/DayPager";
 import DaySummary from "./components/DaySummary";
 import ViewSelector from "./components/ViewSelector";
@@ -69,11 +68,11 @@ export default function TimetableContent() {
                     }}
                 >
                     {day && (
-                        <DateSelector
-                            date={day}
+                        <Selector
+                            type="dateselector"
+                            text={day.fullDate}
+                            date={day.date}
                             onSelect={setSelectedDate}
-                            minimumDate={dayjs(days[0].date).toDate()}
-                            maximumDate={dayjs(days[days.length - 1].date).toDate()}
                         />
                     )}
 

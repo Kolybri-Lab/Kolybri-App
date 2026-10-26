@@ -3,7 +3,7 @@ import { useTheme } from "@/hooks/useThemeStore";
 import { useCallback, useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 
-import { DropDownMenu } from "@/components";
+import { Selector } from "@/components";
 import { API } from "@/constants/api/api";
 import { useGrades } from "@/features/grades";
 import DisciplineGroupItem from "@/features/grades/components/DisciplineGroupItem";
@@ -117,9 +117,11 @@ export default function GradesContent() {
                             zIndex: 10,
                             marginTop: 20,
                             marginLeft: 20,
+                            alignItems: "flex-start",
                         }}
                     >
-                        <DropDownMenu
+                        <Selector
+                            type="dropdown"
                             value={
                                 periodes.find(
                                     (p) =>
@@ -134,7 +136,7 @@ export default function GradesContent() {
                                 setDisplayPeriodeName(value);
                             }}
                             options={periodes}
-                            minWidth="200"
+                            minWidth={200}
                         />
                     </SafeAreaView>
                 )}
