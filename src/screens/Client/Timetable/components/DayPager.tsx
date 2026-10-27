@@ -1,6 +1,6 @@
 import { FlatDay } from "@/features/timetable";
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { FlatList, View } from "react-native";
+import { FlatList, ScrollView, View } from "react-native";
 import { DayViewBreak, DayViewCourse } from "./DayViewCards";
 import { DayViewLeave } from "./DayViewLeave";
 
@@ -28,16 +28,8 @@ const DayPage = memo(function DayPage({
 }) {
     const leaveDay = useMemo(() => isLeaveDay(day), [day]);
 
-    const renderItem = useCallback(({ item }) => {
-        return item.kind === "course" ? (
-            <DayViewCourse course={item.data} />
-        ) : (
-            <DayViewBreak breakItem={item.data} />
-        );
-    }, []);
-
     const keyExtractor = useCallback(
-        (item) =>
+        (item: FlatDay["items"][number]) =>
             item.kind === "course"
                 ? Array.isArray(item.data)
                     ? `c-${item.data.map((c) => c.id).join("-")}`
@@ -55,23 +47,31 @@ const DayPage = memo(function DayPage({
     }
 
     return (
-        <View style={{ width, paddingHorizontal: HORIZONTAL_PADDING }}>
-            <FlatList
-                data={day.items}
-                keyExtractor={keyExtractor}
-                renderItem={renderItem}
-                ItemSeparatorComponent={DaySeparator}
-                contentContainerStyle={{ paddingTop: 14, paddingBottom: 24 }}
+        <View style={{ width, flex: 1, paddingHorizontal: HORIZONTAL_PADDING }}>
+            <ScrollView
+                style={{ flex: 1 }}
+                contentContainerStyle={{
+                    paddingTop: 14,
+                    paddingBottom: 24,
+                    gap: 12,
+                }}
                 showsVerticalScrollIndicator={false}
-                initialNumToRender={6}
-                maxToRenderPerBatch={6}
-                windowSize={5}
-            />
+                nestedScrollEnabled
+            >
+                {day.items.map((item) =>
+                    item.kind === "course" ? (
+                        <DayViewCourse key={keyExtractor(item)} course={item.data} />
+                    ) : (
+                        <DayViewBreak
+                            key={keyExtractor(item)}
+                            breakItem={item.data}
+                        />
+                    )
+                )}
+            </ScrollView>
         </View>
     );
 });
-
-const DaySeparator = () => <View style={{ height: 12 }} />;
 
 interface DayPagerProps {
     days: FlatDay[];
@@ -236,11 +236,11 @@ function DayPager({
                     disableIntervalMomentum
                     snapToInterval={snapInterval}
                     snapToAlignment="start"
-                    decelerationRate={0.92}
+                    decelerationRate="normal"
                     showsHorizontalScrollIndicator={false}
-                    initialNumToRender={2}
-                    maxToRenderPerBatch={2}
-                    windowSize={3}
+                    initialNumToRender={4}
+                    maxToRenderPerBatch={4}
+                    windowSize={5}
                     onViewableItemsChanged={onViewableItemsChanged}
                     viewabilityConfig={viewabilityConfig}
                     onMomentumScrollEnd={handleEnd}
