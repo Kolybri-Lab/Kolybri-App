@@ -1,30 +1,155 @@
 import { Text } from "@/components";
 import { ProgressBar } from "@/components/progression/ProgressBar";
 import { BackArrow } from "@/components/svg";
+import { useTimetable } from "@/features/timetable";
+import { useCurrentTime } from "@/hooks/useCurrentTime";
 import { useHaptic } from "@/hooks/useHaptics";
 import { useTheme } from "@/hooks/useThemeStore";
+import { useUserStore } from "@/hooks/useUserStore";
 import { routesNames } from "@/router/config/routesNames";
 import { withAlpha } from "@/themes/color";
 import { addOpacityToCssRgb } from "@/utils/colorGenerator";
+import {
+    convertTimeHoursMinToMinutes,
+    isAfter,
+    isBefore,
+    isInInterval,
+} from "@/utils/time";
 import { useNavigation } from "@react-navigation/native";
+import { useMemo } from "react";
 import { TouchableOpacity, View } from "react-native";
 
-export default function ActiveCourseCard({
-    progression,
-    activeCourse,
-    nextCourse,
-    activeStatus,
-    isLast,
-}) {
+export default function ActiveCourseCard() {
     const { colors } = useTheme();
     const navigation = useNavigation();
     const haptic = useHaptic("medium");
 
-    const { inClass, nextCourseKnown } = activeStatus || {};
+    const token = useUserStore((state) => state.token);
+    const { data: allWeeks, isLoading } = useTimetable(token);
+    const currentTime = useCurrentTime();
+
+    const allDays = useMemo(() => {
+        if (!Array.isArray(allWeeks)) return [];
+        return allWeeks.flatMap((w) => w.days || []);
+    }, [allWeeks]);
+
+    const activeDay = useMemo(() => {
+        return allDays.find((d) => d.date === currentTime.date) ?? null;
+    }, [allDays, currentTime.date]);
+
+    const todayCourses = useMemo(() => {
+        if (!activeDay?.courses) return [];
+        return activeDay.courses.filter((c) => !c.states?.cancelled);
+    }, [activeDay]);
+
+    const activeCourse = useMemo(() => {
+        if (todayCourses.length === 0) return null;
+        return (
+            todayCourses.find((course) =>
+                isInInterval(
+                    currentTime.time,
+                    course.schedules.start.time,
+                    course.schedules.end.time
+                )
+            ) ?? null
+        );
+    }, [todayCourses, currentTime.time]);
+
+    const progression = useMemo(() => {
+        if (!activeCourse) return 0;
+        const [activeMinutes, startMinutes, endMinutes] =
+            convertTimeHoursMinToMinutes(
+                currentTime.time,
+                activeCourse.schedules.start.time,
+                activeCourse.schedules.end.time
+            );
+        if (endMinutes <= startMinutes) return 0;
+        const progress = (activeMinutes - startMinutes) / (endMinutes - startMinutes);
+        return Math.min(Math.max(parseFloat(progress.toFixed(4)), 0), 1);
+    }, [activeCourse, currentTime.time]);
+
+    const { nextCourse, isLastCourseOfTheDay } = useMemo(() => {
+        if (todayCourses.length === 0) {
+            const followingDay = allDays.find(
+                (d) =>
+                    d.date > currentTime.date &&
+                    d.courses.some((c) => !c.states?.cancelled)
+            );
+            const nextC =
+                followingDay?.courses.find((c) => !c.states?.cancelled) ?? null;
+            return { nextCourse: nextC, isLastCourseOfTheDay: false };
+        }
+
+        const firstCourse = todayCourses[0];
+        const lastCourse = todayCourses[todayCourses.length - 1];
+
+        const activeCourseIndex = activeCourse
+            ? todayCourses.findIndex((c) => c.id === activeCourse.id)
+            : -1;
+
+        const isLast =
+            activeCourseIndex !== -1 &&
+            activeCourseIndex === todayCourses.length - 1;
+
+        // 1. Avant le début des cours de la journée
+        if (isBefore(currentTime.time, firstCourse.schedules.start.time)) {
+            return {
+                nextCourse: firstCourse,
+                isLastCourseOfTheDay: todayCourses.length === 1,
+            };
+        }
+
+        // 2. Pendant une pause / récréation
+        if (
+            !activeCourse &&
+            isInInterval(
+                currentTime.time,
+                firstCourse.schedules.start.time,
+                lastCourse.schedules.end.time
+            )
+        ) {
+            const nextC =
+                todayCourses.find((c) =>
+                    isAfter(c.schedules.start.time, currentTime.time)
+                ) ?? null;
+            return {
+                nextCourse: nextC,
+                isLastCourseOfTheDay: nextC?.id === lastCourse.id,
+            };
+        }
+
+        // 3. En plein cours et ce n'est pas le dernier
+        if (activeCourse && !isLast) {
+            return {
+                nextCourse: todayCourses[activeCourseIndex + 1],
+                isLastCourseOfTheDay: false,
+            };
+        }
+
+        // 4. Dernier cours en cours ou fin de journée de cours
+        const followingDay = allDays.find(
+            (d) =>
+                d.date > currentTime.date &&
+                d.courses.some((c) => !c.states?.cancelled)
+        );
+        const nextC =
+            followingDay?.courses.find((c) => !c.states?.cancelled) ?? null;
+
+        return {
+            nextCourse: nextC,
+            isLastCourseOfTheDay: isLast,
+        };
+    }, [todayCourses, allDays, activeCourse, currentTime]);
+
+    const inClass = Boolean(activeCourse);
+    const nextCourseKnown = Boolean(nextCourse);
+
+    if (isLoading && (!allWeeks || allWeeks.length === 0)) {
+        return null;
+    }
 
     const message = nextCourseKnown ? "EN COURS" : "DERNIER COURS CONNU";
     const color = nextCourseKnown ? colors.brand.primary : "hsla(295, 64%, 71%, 1)";
-    const extras = inClass ? [] : [{ resizeBars: true }];
 
     return (
         <View style={{ width: "100%", gap: 8 }}>
@@ -50,26 +175,27 @@ export default function ActiveCourseCard({
                             color={colors.text.accent}
                             style={{ fontFamily: "SemiBold", fontSize: 16 }}
                         >
-                            {isLast ? "DERNIER COURS DE LA JOURNÉE !" : message}
+                            {isLastCourseOfTheDay
+                                ? "DERNIER COURS DE LA JOURNÉE !"
+                                : message}
                         </Text>
                     </View>
                     <TouchableOpacity
                         onPress={() => {
                             haptic();
-                            navigation.navigate(routesNames.client.timetable.group, {
-                                screen: routesNames.client.timetable.content,
-                            });
+                            navigation.navigate(
+                                routesNames.client.timetable.group,
+                                {
+                                    screen: routesNames.client.timetable.content,
+                                }
+                            );
                         }}
                         style={{ width: "100%" }}
                     >
                         <Course
-                            data={{
-                                courseData: activeCourse,
-                                color,
-                                message,
-                                progression,
-                                isLast,
-                            }}
+                            course={activeCourse}
+                            progression={progression}
+                            isLast={isLastCourseOfTheDay}
                         />
                     </TouchableOpacity>
                 </View>
@@ -95,19 +221,16 @@ export default function ActiveCourseCard({
                     <TouchableOpacity
                         onPress={() => {
                             haptic();
-                            navigation.navigate(routesNames.client.timetable.group, {
-                                screen: routesNames.client.timetable.content,
-                            });
+                            navigation.navigate(
+                                routesNames.client.timetable.group,
+                                {
+                                    screen: routesNames.client.timetable.content,
+                                }
+                            );
                         }}
                         style={{ width: "100%" }}
                     >
-                        <NextCourse
-                            data={{
-                                courseData: nextCourse,
-                                extras,
-                                inClass,
-                            }}
-                        />
+                        <NextCourse course={nextCourse} inClass={inClass} />
                     </TouchableOpacity>
                 </View>
             )}
@@ -116,9 +239,8 @@ export default function ActiveCourseCard({
     );
 }
 
-const Course = ({ data }) => {
+const Course = ({ course, progression, isLast }) => {
     const { colors, components } = useTheme();
-    const { courseData, color, message, progression, isLast } = data;
     const textColor = addOpacityToCssRgb(colors.text.primary, 0.9);
 
     return (
@@ -146,7 +268,7 @@ const Course = ({ data }) => {
                     color={colors.text.secondary}
                     style={{ fontFamily: "Medium", fontSize: 14, lineHeight: 18 }}
                 >
-                    {courseData.startCourse.time}
+                    {course.schedules.start.time}
                 </Text>
                 <View
                     style={{
@@ -160,7 +282,7 @@ const Course = ({ data }) => {
                     color={colors.text.secondary}
                     style={{ fontFamily: "Medium", fontSize: 14, lineHeight: 18 }}
                 >
-                    {courseData.endCourse.time}
+                    {course.schedules.end.time}
                 </Text>
             </View>
 
@@ -191,7 +313,7 @@ const Course = ({ data }) => {
                             lineHeight: 24,
                         }}
                     >
-                        {courseData?.libelle}
+                        {course.libelle}
                     </Text>
 
                     <View
@@ -215,7 +337,7 @@ const Course = ({ data }) => {
                                 lineHeight: 20,
                             }}
                         >
-                            {courseData?.endCourse?.time}
+                            {course.schedules.end.time}
                         </Text>
                     </View>
                 </View>
@@ -232,10 +354,9 @@ const Course = ({ data }) => {
         </View>
     );
 };
-const NextCourse = ({ data }) => {
-    const { courseData, extras, inClass } = data;
-    const { colors, components } = useTheme();
-    const resizeBars = !extras.find((e) => e?.resizeBars)?.resizeBars;
+
+const NextCourse = ({ course, inClass }) => {
+    const { colors } = useTheme();
 
     return (
         <View
@@ -262,7 +383,7 @@ const NextCourse = ({ data }) => {
                     color={withAlpha(colors.text.secondary, 0.7)}
                     style={{ fontFamily: "Medium", fontSize: 14, lineHeight: 18 }}
                 >
-                    {courseData.course.startCourse.time}
+                    {course.schedules.start.time}
                 </Text>
                 <View
                     style={{
@@ -276,7 +397,7 @@ const NextCourse = ({ data }) => {
                     color={withAlpha(colors.text.secondary, 0.7)}
                     style={{ fontFamily: "Medium", fontSize: 14, lineHeight: 18 }}
                 >
-                    {courseData.course.endCourse.time}
+                    {course.schedules.end.time}
                 </Text>
             </View>
 
@@ -294,7 +415,7 @@ const NextCourse = ({ data }) => {
                     color={colors.text.primary}
                     style={{ fontSize: 18, fontFamily: "Bold" }}
                 >
-                    {courseData.course.libelle}
+                    {course.libelle}
                 </Text>
 
                 <View
@@ -315,7 +436,7 @@ const NextCourse = ({ data }) => {
                             lineHeight: 15,
                         }}
                     >
-                        {courseData.course.teacher ?? "Pas de prof."}
+                        {course.teacher ?? "Pas de prof."}
                     </Text>
                     <Text
                         oneLine
@@ -327,7 +448,7 @@ const NextCourse = ({ data }) => {
                             lineHeight: 15,
                         }}
                     >
-                        {courseData.course.room ?? "Aucune salle"}
+                        {course.room ?? "Aucune salle"}
                     </Text>
                 </View>
             </View>

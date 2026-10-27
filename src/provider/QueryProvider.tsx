@@ -70,7 +70,8 @@ export function QueryProvider({ children }: { children: React.ReactNode }) {
                 dehydrateOptions: {
                     shouldDehydrateQuery: (query) => {
                         if (query.queryKey[0] === "timetable") {
-                            const offset = query.queryKey[1];
+                            // queryKey: ["timetable", token, offset]
+                            const offset = query.queryKey[2];
                             const isPersistableOffset =
                                 offset === -1 || offset === 0 || offset === 1;
                             return (

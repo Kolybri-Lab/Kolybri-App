@@ -1,5 +1,4 @@
-import { Text } from "@/components";
-import { MorphingText } from "@/components/core";
+import { MorphingText, Text } from "@/components/core";
 import { useTheme } from "@/hooks/useThemeStore";
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import dayjs from "dayjs";
