@@ -321,35 +321,6 @@ export default function HomeScreen() {
                             homeworksDatas={homeworksData}
                         />
                     </View>
-
-                    <View
-                        style={{
-                            marginTop: 20,
-                            alignItems: "flex-start",
-                            gap: 8,
-                            zIndex: 10,
-                        }}
-                    >
-                        <Text
-                            size={14}
-                            color={colors.text.secondary}
-                            style={{ fontFamily: "SemiBold" }}
-                        >
-                            🧪 Test Selector (mode dropdown)
-                        </Text>
-                        <Selector
-                            type="dropdown"
-                            text={selectedTestOption.label}
-                            options={TEST_OPTIONS}
-                            selectedValue={selectedTestOption.value}
-                            onSelect={(val) => {
-                                const opt = TEST_OPTIONS.find(
-                                    (o) => o.value === val
-                                );
-                                if (opt) setSelectedTestOption(opt);
-                            }}
-                        />
-                    </View>
                     {token === "guest_token" && <GuestTestButtons />}
                     <View style={{ height: 25 }} />
                 </ScrollView>
