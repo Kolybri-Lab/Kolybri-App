@@ -95,17 +95,24 @@ function DayPager({
     const pageWidth = containerWidth;
     const snapInterval = pageWidth + PAGE_GAP;
     const prevFirstDateRef = useRef<string | null>(null);
-    const prevIndexRef = useRef<number | null>(null);
+    const [originIndex, setOriginIndex] = useState(index);
+    const originDay = days[originIndex];
+    const isOriginLeave = originDay ? isLeaveDay(originDay) : false;
 
-    const wasPrevLeave = useMemo(() => {
-        if (prevIndexRef.current === null) return false;
-        const prevDay = days[prevIndexRef.current];
-        return prevDay ? isLeaveDay(prevDay) : false;
-    }, [days, index]);
+    const isProgrammaticScrollRef = useRef(false);
+    const [animatingIndex, setAnimatingIndex] = useState(index);
 
-    useEffect(() => {
-        prevIndexRef.current = index;
-    }, [index]);
+    const viewabilityConfig = useRef({
+        itemVisiblePercentThreshold: 60,
+    }).current;
+
+    const onViewableItemsChanged = useRef(({ viewableItems }: any) => {
+        if (isProgrammaticScrollRef.current) return;
+        const dominant = viewableItems?.[0];
+        if (dominant && typeof dominant.index === "number") {
+            setAnimatingIndex(dominant.index);
+        }
+    }).current;
 
     const checkThresholds = useCallback(
         (targetIndex: number) => {
@@ -145,8 +152,11 @@ function DayPager({
     }, [days, snapInterval]);
 
     useEffect(() => {
+        setAnimatingIndex(index);
+        setOriginIndex(index);
         if (pageWidth === 0 || index === currentIndex.current) return;
 
+        isProgrammaticScrollRef.current = true;
         currentIndex.current = index;
         listRef.current?.scrollToOffset({
             offset: index * snapInterval,
@@ -157,12 +167,15 @@ function DayPager({
 
     const handleEnd = useCallback(
         (e: any) => {
+            isProgrammaticScrollRef.current = false;
             if (snapInterval === 0) return;
 
             const nextIndex = Math.round(
                 e.nativeEvent.contentOffset.x / snapInterval
             );
 
+            setAnimatingIndex(nextIndex);
+            setOriginIndex(nextIndex);
             if (nextIndex === currentIndex.current) return;
 
             currentIndex.current = nextIndex;
@@ -173,22 +186,27 @@ function DayPager({
     );
 
     const renderItem = useCallback(
-        ({ item, index: itemIndex }) => (
-            <View
-                style={{
-                    width: pageWidth,
-                    marginRight: itemIndex < days.length - 1 ? PAGE_GAP : 0,
-                }}
-            >
-                <DayPage
-                    day={item}
-                    width={pageWidth}
-                    isActive={itemIndex === index}
-                    shouldAnimate={!wasPrevLeave}
-                />
-            </View>
-        ),
-        [pageWidth, days.length, index, wasPrevLeave]
+        ({ item, index: itemIndex }) => {
+            const isItemActive = itemIndex === animatingIndex;
+            const shouldAnimate = !isOriginLeave;
+
+            return (
+                <View
+                    style={{
+                        width: pageWidth,
+                        marginRight: itemIndex < days.length - 1 ? PAGE_GAP : 0,
+                    }}
+                >
+                    <DayPage
+                        day={item}
+                        width={pageWidth}
+                        isActive={isItemActive}
+                        shouldAnimate={shouldAnimate}
+                    />
+                </View>
+            );
+        },
+        [pageWidth, days.length, animatingIndex, isOriginLeave]
     );
 
     const getItemLayout = useCallback(
@@ -209,7 +227,7 @@ function DayPager({
                 <FlatList
                     ref={listRef}
                     data={days}
-                    extraData={index}
+                    extraData={`${index}-${animatingIndex}-${isOriginLeave}`}
                     keyExtractor={(day) => day.date}
                     renderItem={renderItem}
                     getItemLayout={getItemLayout}
@@ -223,6 +241,8 @@ function DayPager({
                     initialNumToRender={2}
                     maxToRenderPerBatch={2}
                     windowSize={3}
+                    onViewableItemsChanged={onViewableItemsChanged}
+                    viewabilityConfig={viewabilityConfig}
                     onMomentumScrollEnd={handleEnd}
                 />
             )}

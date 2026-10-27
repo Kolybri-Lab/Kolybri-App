@@ -13,11 +13,18 @@ function DayViewLeaveComponent({
     shouldAnimate = true,
 }: DayViewLeaveProps) {
     const animRef = useRef<LottieView>(null);
+    const hasStartedRef = useRef(false);
 
     useEffect(() => {
-        if (isActive && shouldAnimate) {
+        if (!isActive) {
+            hasStartedRef.current = false;
+            return;
+        }
+
+        if (isActive && shouldAnimate && !hasStartedRef.current) {
+            hasStartedRef.current = true;
             animRef.current?.reset();
-            animRef.current?.play();
+            animRef.current?.play(6, 60);
         }
     }, [isActive, shouldAnimate]);
 
@@ -47,8 +54,7 @@ function DayViewLeaveComponent({
                     ref={animRef}
                     source={FreeAnimation}
                     loop={false}
-                    autoPlay={isActive && shouldAnimate}
-                    progress={!shouldAnimate ? 1 : undefined}
+                    progress={!shouldAnimate && !hasStartedRef.current ? 1 : undefined}
                     speed={1.35}
                     style={{
                         width: 280,
