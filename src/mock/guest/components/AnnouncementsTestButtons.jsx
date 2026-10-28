@@ -61,7 +61,7 @@ export default function AnnouncementsTestButtons() {
                             message:
                                 "Tu souhaites échanger avec nous ou signaler un retour ? Clique sur le bouton ci-dessous pour nous rejoindre !",
                             link: {
-                                label: "Rejoindre le Discord",
+                                label: "Rejoindre le Discord nom très très long",
                                 url: "https://discord.gg/AKAqXfTgvE",
                             },
                             type: "community",
