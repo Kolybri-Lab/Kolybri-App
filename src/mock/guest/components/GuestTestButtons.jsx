@@ -3,6 +3,7 @@ import { useErrorStore } from "@/hooks/useErrorStore";
 import { useUserStore } from "@/hooks/useUserStore";
 import React from "react";
 import { DevSettings, TouchableOpacity, View } from "react-native";
+import AnnouncementsTestButtons from "./AnnouncementsTestButtons";
 import ErrorsTestButtons from "./ErrorsTestButtons";
 import GradesTestButtons from "./GradesTestButtons";
 import HomeworksTestButtons from "./HomeworksTestButtons";
@@ -36,6 +37,7 @@ export default function GuestTestButtons() {
             <GradesTestButtons />
             <HomeworksTestButtons />
             <ErrorsTestButtons />
+            <AnnouncementsTestButtons />
 
             {/* --- REDÉMARRAGE DE L'APPLICATION --- */}
             <TouchableOpacity
