@@ -1,3 +1,5 @@
+const packageJson = require("./package.json");
+
 const APP_ENV = process.env.APP_ENV || process.env.EAS_BUILD_PROFILE || "production";
 
 const IS_DEV = APP_ENV === "development" || APP_ENV === "dev" || APP_ENV === "build";
@@ -73,7 +75,7 @@ export default {
         policy: "appVersion",
     },
 
-    version: "1.2.0",
+    version: process.env.APP_VERSION || packageJson.version,
     orientation: "portrait",
     icon: "./assets/icons/icon.png",
     userInterfaceStyle: "automatic",
