@@ -4,3 +4,4 @@ export { default as TimetableTestButtons } from "./TimetableTestButtons";
 export { default as GradesTestButtons } from "./GradesTestButtons";
 export { default as HomeworksTestButtons } from "./HomeworksTestButtons";
 export { default as ErrorsTestButtons } from "./ErrorsTestButtons";
+export { default as AnnouncementsTestButtons } from "./AnnouncementsTestButtons";
