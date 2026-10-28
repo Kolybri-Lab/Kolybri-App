@@ -67,7 +67,9 @@ export const useWhatsNewStore = create<WhatsNewStoreState>()(
             setLastSeenVersion: (v: string) => set({ lastSeenVersion: v }),
             markAnnouncementSeen: (id: string) =>
                 set((s) => ({
-                    seenAnnouncementIds: [...s.seenAnnouncementIds, id],
+                    seenAnnouncementIds: s.seenAnnouncementIds.includes(id)
+                        ? s.seenAnnouncementIds
+                        : [...s.seenAnnouncementIds, id],
                 })),
             initialize: (version, announcementIds) =>
                 set({
@@ -120,7 +122,6 @@ export function useWhatsNew() {
     const seenAnnouncementIds = useWhatsNewStore((s) => s.seenAnnouncementIds);
     const setLastSeenVersion = useWhatsNewStore((s) => s.setLastSeenVersion);
     const markAnnouncementSeen = useWhatsNewStore((s) => s.markAnnouncementSeen);
-    const initialize = useWhatsNewStore((s) => s.initialize);
     const hasHydrated = useWhatsNewStore((s) => s.hasHydrated);
 
     const currentVersion = Application.nativeApplicationVersion ?? "1.0.0";
