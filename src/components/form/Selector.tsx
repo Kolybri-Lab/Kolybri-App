@@ -56,11 +56,12 @@ function Selector({
     fontSize = 20,
     style,
 }: SelectorProps) {
-    const { colors } = useTheme();
+    const { colors, isDark } = useTheme();
     const [isDeployed, setIsDeployed] = useState(false);
 
     const transitionProgress = useSharedValue(0);
     const opacityProgress = useSharedValue(0);
+    const pressScale = useSharedValue(1);
 
     const activeValue = value !== undefined ? value : selectedValue;
     const isRight = selectorPosition === "right" || position === "right";
@@ -97,8 +98,8 @@ function Selector({
     const closeDropdown = useCallback(() => {
         setIsDeployed(false);
         transitionProgress.value = withSpring(0, {
-            damping: 25,
-            stiffness: 300,
+            damping: 47,
+            stiffness: 600,
         });
         opacityProgress.value = withTiming(0, { duration: 150 });
     }, [transitionProgress, opacityProgress]);
@@ -107,8 +108,8 @@ function Selector({
         const next = !isDeployed;
         setIsDeployed(next);
         transitionProgress.value = withSpring(next ? 1 : 0, {
-            damping: 25,
-            stiffness: 300,
+            damping: 47,
+            stiffness: 600,
         });
         opacityProgress.value = withTiming(next ? 1 : 0, { duration: 180 });
     }, [isDeployed, transitionProgress, opacityProgress]);
@@ -157,49 +158,62 @@ function Selector({
         ] as [{ translateY: number }, { scale: number }],
     }));
 
+    const buttonStyle = useAnimatedStyle(() => ({
+        transform: [{ scale: pressScale.value }],
+    }));
+
     return (
         <View
             style={[
-                {
-                    gap: 4,
-                    flexShrink: 1,
-                    minWidth: 0,
-                    position: "relative",
-                    zIndex: isDeployed ? 10 : 1,
-                },
+                { gap: 4, flexShrink: 1, minWidth: 0, zIndex: isDeployed ? 10 : 1 },
                 style,
             ]}
         >
-            <Pressable
-                onPress={handlePress}
-                disabled={disabled}
-                style={({ pressed }) => ({
-                    backgroundColor: colors.surface.default,
-                    paddingHorizontal: 20,
-                    paddingVertical: 4,
-                    borderRadius: 50,
-                    flexShrink: 1,
-                    minWidth: 0,
-                    flexDirection: "row",
-                    alignItems: "center",
-                    gap: 8,
-                    opacity: pressed ? 0.7 : 1,
-                })}
-            >
-                <MorphingText
-                    style={{ fontFamily: "SemiBold", fontSize }}
-                    duration={250}
-                    translateDistance={4}
-                    value={displayedText}
-                />
+            <Animated.View style={[buttonStyle, { flexShrink: 1, minWidth: 0 }]}>
+                <Pressable
+                    onPress={handlePress}
+                    disabled={disabled}
+                    onPressIn={() => {
+                        pressScale.value = withSpring(0.94, {
+                            damping: 10,
+                            stiffness: 140,
+                            mass: 0.7,
+                        });
+                    }}
+                    onPressOut={() => {
+                        pressScale.value = withSpring(1, {
+                            damping: 12,
+                            stiffness: 170,
+                            mass: 1.1,
+                        });
+                    }}
+                    style={({ pressed }) => ({
+                        backgroundColor: colors.surface.default,
+                        paddingHorizontal: 20,
+                        paddingVertical: 4,
+                        borderRadius: type === "dropdown" ? 14 : 50,
+                        flexShrink: 1,
+                        minWidth: 0,
+                        flexDirection: "row",
+                        alignItems: "center",
+                        gap: 8,
+                        opacity: pressed ? 0.7 : 1,
+                    })}
+                >
+                    <MorphingText
+                        style={{ fontFamily: "SemiBold", fontSize }}
+                        duration={250}
+                        translateDistance={4}
+                        value={displayedText}
+                    />
 
-                {type === "dropdown" && (
-                    <Animated.View style={chevronStyle}>
-                        <ChevronDown size={18} color={colors.text.primary} />
-                    </Animated.View>
-                )}
-            </Pressable>
-
+                    {type === "dropdown" && (
+                        <Animated.View style={chevronStyle}>
+                            <ChevronDown size={18} color={colors.text.primary} />
+                        </Animated.View>
+                    )}
+                </Pressable>
+            </Animated.View>
             {type === "dropdown" && options.length > 0 && isDeployed && (
                 <Pressable
                     onPress={closeDropdown}
@@ -234,13 +248,15 @@ function Selector({
                             backgroundColor: colors.surface.default,
                             borderRadius: 16,
                             overflow: "hidden",
-                            //borderWidth: 1,
-                            //borderColor: colors.border.subtle,
-                            //elevation: 4,
-                            //shadowColor: "#000",
-                            //shadowOffset: { width: 0, height: 4 },
-                            //shadowOpacity: 0.12,
-                            //shadowRadius: 8,
+                            boxShadow: [
+                                {
+                                    offsetX: 0,
+                                    offsetY: 0,
+                                    blurRadius: 14,
+                                    spreadDistance: 3,
+                                    color: `hsla(0, 0%, 0%, ${isDark ? 0.3 : 0.14})`,
+                                },
+                            ],
                         }}
                     >
                         {options.map((option, index) => {
@@ -278,6 +294,15 @@ function Selector({
                                     >
                                         {optName}
                                     </Text>
+                                    <View
+                                        style={{
+                                            width: 6,
+                                            aspectRatio: 1,
+                                            backgroundColor: colors.text.accent,
+                                            opacity: isSelected ? 0.7 : 0,
+                                            borderRadius: 50,
+                                        }}
+                                    />
                                 </Pressable>
                             );
                         })}

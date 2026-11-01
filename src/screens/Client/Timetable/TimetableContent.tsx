@@ -1,9 +1,3 @@
-// import VerticalScrollView from "@/components/layout/VerticalScrollView";
-// import { RoadFinish } from "@/components/svg";
-// import { CONFIG } from "@/constants/config";
-// import { GLOBALS_DATAS } from "@/constants/device/globals";
-// import { timetableConfig } from "@/constants/features/timetableConfig";
-
 import { Selector, Text } from "@/components";
 import { DayViewProps, useTimetable } from "@/features/timetable";
 import { flattenDays } from "@/features/timetable/utils/sort";
@@ -12,13 +6,18 @@ import { useTheme } from "@/hooks/useThemeStore";
 import { useUserStore } from "@/hooks/useUserStore";
 import dayjs from "dayjs";
 import { Calendar1, CalendarCheck, CalendarRange } from "lucide-react-native";
-import { memo, ReactNode, useCallback, useMemo, useState } from "react";
+import { memo, ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import { Pressable, View } from "react-native";
-import Animated, { LinearTransition } from "react-native-reanimated";
+import Animated, {
+    Easing,
+    interpolate,
+    useAnimatedStyle,
+    useSharedValue,
+    withTiming,
+} from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 import DayPager from "./components/DayPager";
 import DaySummary from "./components/DaySummary";
-import ViewSelector from "./components/ViewSelector";
 
 export default function TimetableContent() {
     const { colors } = useTheme();
@@ -29,7 +28,7 @@ export default function TimetableContent() {
         extendForward,
         extendBackward,
     } = useTimetable(token, selectedDate);
-    const { date: isoDate, frenchDate } = useCurrentTime();
+    const { date: isoDate } = useCurrentTime();
 
     const days = useMemo(() => flattenDays(weeks), [weeks]);
     const [view, setView] = useState("day"); // "day" | "week"
@@ -46,9 +45,13 @@ export default function TimetableContent() {
 
     const day = useMemo(() => days[dayIndex], [days, dayIndex]);
 
+    const goToToday = useCallback(() => {
+        setSelectedDate(isoDate || dayjs().format("YYYY-MM-DD"));
+    }, [isoDate]);
+
     return (
         <SafeAreaView edges={["top"]} style={{ flex: 1, marginHorizontal: 22 }}>
-            {/*<ViewSelector onChange={setView} value={view} />*/}
+            {/* <ViewSelector onChange={setView} value={view} /> */}
             <View
                 style={{
                     marginTop: 24,
@@ -57,8 +60,7 @@ export default function TimetableContent() {
                     width: "100%",
                 }}
             >
-                <Animated.View
-                    layout={LinearTransition.springify().duration(250)}
+                <View
                     style={{
                         flex: 1,
                         flexDirection: "row",
@@ -76,33 +78,8 @@ export default function TimetableContent() {
                         />
                     )}
 
-                    <Animated.View
-                        layout={LinearTransition.springify().duration(250)}
-                        style={{
-                            marginLeft: isToday ? -48 : 0,
-                            zIndex: -1,
-                            flexShrink: 0,
-                        }}
-                    >
-                        <Pressable
-                            onPress={() =>
-                                setSelectedDate(
-                                    isoDate || dayjs().format("YYYY-MM-DD")
-                                )
-                            }
-                            style={({ pressed }) => ({
-                                padding: 8,
-                                backgroundColor: colors.surface.default,
-                                borderRadius: 24,
-                                alignItems: "center",
-                                justifyContent: "center",
-                                opacity: pressed ? 0.7 : 1,
-                            })}
-                        >
-                            <CalendarCheck size={24} color={colors.text.primary} />
-                        </Pressable>
-                    </Animated.View>
-                </Animated.View>
+                    <TodayButton isToday={isToday} onPress={goToToday} />
+                </View>
 
                 <Pressable
                     disabled
@@ -144,6 +121,60 @@ export default function TimetableContent() {
         </SafeAreaView>
     );
 }
+
+const BUTTON_SIZE = 40; // 24 (size) + 2 × 8 (padding)
+const BUTTON_GAP = 8;
+const ROLL_DISTANCE = BUTTON_SIZE + BUTTON_GAP; // 48 px
+const ROLL_ROTATION = (ROLL_DISTANCE / (BUTTON_SIZE / 2)) * (180 / Math.PI); // ≈ 137.5°
+
+const TodayButton = memo(
+    ({ isToday, onPress }: { isToday: boolean; onPress: () => void }) => {
+        const { colors } = useTheme();
+        const progress = useSharedValue(isToday ? 1 : 0);
+
+        useEffect(() => {
+            progress.value = withTiming(isToday ? 1 : 0, {
+                duration: 250,
+                easing: Easing.linear,
+            });
+        }, [isToday, progress]);
+
+        const animatedStyle = useAnimatedStyle(() => ({
+            marginLeft: interpolate(progress.value, [0, 1], [0, -ROLL_DISTANCE]),
+            opacity: interpolate(progress.value, [0, 1], [1, 0]),
+            transform: [
+                {
+                    rotate: `${interpolate(
+                        progress.value,
+                        [0, 1],
+                        [0, -ROLL_ROTATION]
+                    )}deg`,
+                },
+            ],
+        }));
+
+        return (
+            <Animated.View
+                pointerEvents={isToday ? "none" : "auto"}
+                style={[{ zIndex: -1, flexShrink: 0 }, animatedStyle]}
+            >
+                <Pressable
+                    onPress={onPress}
+                    style={({ pressed }) => ({
+                        padding: 8,
+                        backgroundColor: colors.surface.default,
+                        borderRadius: 24,
+                        alignItems: "center",
+                        justifyContent: "center",
+                        opacity: pressed ? 0.7 : 1,
+                    })}
+                >
+                    <CalendarCheck size={24} color={colors.text.primary} />
+                </Pressable>
+            </Animated.View>
+        );
+    }
+);
 
 const Panel = memo(
     ({ visible, children }: { visible: boolean; children: ReactNode }) => (
@@ -196,6 +227,7 @@ const DayView = memo(
         );
     }
 );
+
 const WeekView = memo(({}) => {
     return (
         <View style={{ marginVertical: 14, width: "100%", flex: 1 }}>
