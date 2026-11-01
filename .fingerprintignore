@@ -1,9 +1,11 @@
-/android/**/*
-/ios/**/*
-/.expo/**/*
-/dist/**/*
-/build/**/*
+android/**/*
+ios/**/*
+.expo/**/*
+dist/**/*
+build/**/*
 *.apk
 *.aab
 *.ipa
 .env*
+eas.json
+.easignore
