@@ -6,7 +6,11 @@
     "start": "expo start",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "clean:build": "rm -rf android ios .expo dist",
+    "clean:native": "rm -rf android ios .expo",
+    "prebuild:clean": "npm run clean:build && npx expo prebuild --clean",
+    "build:local:android": "npm run clean:native && eas build --platform android --local"
   },
   "dependencies": {
     "@expo/fingerprint": "~0.20.13",
