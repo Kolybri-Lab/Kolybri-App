@@ -3,6 +3,7 @@ import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { FlatList, ScrollView, View } from "react-native";
 import { DayViewBreak, DayViewCourse } from "./DayViewCards";
 import { DayViewLeave } from "./DayViewLeave";
+import { useTimetablePagerStore } from "./timetablePagerStore";
 
 const HORIZONTAL_PADDING = 22;
 const PAGE_GAP = 16;
@@ -18,13 +19,11 @@ export const isLeaveDay = (day: FlatDay): boolean => {
 const DayPage = memo(function DayPage({
     day,
     width,
-    isActive,
-    shouldAnimate,
+    pageIndex,
 }: {
     day: FlatDay;
     width: number;
-    isActive: boolean;
-    shouldAnimate: boolean;
+    pageIndex: number;
 }) {
     const leaveDay = useMemo(() => isLeaveDay(day), [day]);
 
@@ -41,7 +40,7 @@ const DayPage = memo(function DayPage({
     if (leaveDay) {
         return (
             <View style={{ width, flex: 1, paddingHorizontal: HORIZONTAL_PADDING }}>
-                <DayViewLeave isActive={isActive} shouldAnimate={shouldAnimate} />
+                <DayViewLeave pageIndex={pageIndex} />
             </View>
         );
     }
@@ -95,12 +94,8 @@ function DayPager({
     const pageWidth = containerWidth;
     const snapInterval = pageWidth + PAGE_GAP;
     const prevFirstDateRef = useRef<string | null>(null);
-    const [originIndex, setOriginIndex] = useState(index);
-    const originDay = days[originIndex];
-    const isOriginLeave = originDay ? isLeaveDay(originDay) : false;
 
     const isProgrammaticScrollRef = useRef(false);
-    const [animatingIndex, setAnimatingIndex] = useState(index);
 
     const viewabilityConfig = useRef({
         itemVisiblePercentThreshold: 60,
@@ -110,7 +105,7 @@ function DayPager({
         if (isProgrammaticScrollRef.current) return;
         const dominant = viewableItems?.[0];
         if (dominant && typeof dominant.index === "number") {
-            setAnimatingIndex(dominant.index);
+            useTimetablePagerStore.getState().setAnimatingIndex(dominant.index);
         }
     }).current;
 
@@ -152,8 +147,10 @@ function DayPager({
     }, [days, snapInterval]);
 
     useEffect(() => {
-        setAnimatingIndex(index);
-        setOriginIndex(index);
+        const originDay = days[index];
+        const isLeave = originDay ? isLeaveDay(originDay) : false;
+        useTimetablePagerStore.getState().setBoth(index, isLeave);
+
         if (pageWidth === 0 || index === currentIndex.current) return;
 
         isProgrammaticScrollRef.current = true;
@@ -163,7 +160,7 @@ function DayPager({
             animated: true,
         });
         checkThresholds(index);
-    }, [index, pageWidth, snapInterval, checkThresholds]);
+    }, [index, pageWidth, snapInterval, checkThresholds, days]);
 
     const handleEnd = useCallback(
         (e: any) => {
@@ -174,22 +171,21 @@ function DayPager({
                 e.nativeEvent.contentOffset.x / snapInterval
             );
 
-            setAnimatingIndex(nextIndex);
-            setOriginIndex(nextIndex);
+            const nextDay = days[nextIndex];
+            const isLeave = nextDay ? isLeaveDay(nextDay) : false;
+            useTimetablePagerStore.getState().setBoth(nextIndex, isLeave);
+
             if (nextIndex === currentIndex.current) return;
 
             currentIndex.current = nextIndex;
             onIndexChange(nextIndex);
             checkThresholds(nextIndex);
         },
-        [snapInterval, onIndexChange, checkThresholds]
+        [snapInterval, onIndexChange, checkThresholds, days]
     );
 
     const renderItem = useCallback(
-        ({ item, index: itemIndex }) => {
-            const isItemActive = itemIndex === animatingIndex;
-            const shouldAnimate = !isOriginLeave;
-
+        ({ item, index: itemIndex }: { item: FlatDay; index: number }) => {
             return (
                 <View
                     style={{
@@ -200,17 +196,16 @@ function DayPager({
                     <DayPage
                         day={item}
                         width={pageWidth}
-                        isActive={isItemActive}
-                        shouldAnimate={shouldAnimate}
+                        pageIndex={itemIndex}
                     />
                 </View>
             );
         },
-        [pageWidth, days.length, animatingIndex, isOriginLeave]
+        [pageWidth, days.length]
     );
 
     const getItemLayout = useCallback(
-        (_, i) => ({
+        (_: any, i: number) => ({
             length: snapInterval,
             offset: snapInterval * i,
             index: i,
@@ -227,7 +222,6 @@ function DayPager({
                 <FlatList
                     ref={listRef}
                     data={days}
-                    extraData={`${index}-${animatingIndex}-${isOriginLeave}`}
                     keyExtractor={(day) => day.date}
                     renderItem={renderItem}
                     getItemLayout={getItemLayout}

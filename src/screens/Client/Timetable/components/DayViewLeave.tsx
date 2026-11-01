@@ -2,16 +2,29 @@ import LottieView from "lottie-react-native";
 import { memo, useEffect, useRef } from "react";
 import { Pressable, View } from "react-native";
 import FreeAnimation from "assets/lottie/00_anim_free_tier3_1.json";
+import { useTimetablePagerStore } from "./timetablePagerStore";
 
 interface DayViewLeaveProps {
-    isActive: boolean;
+    pageIndex?: number;
+    isActive?: boolean;
     shouldAnimate?: boolean;
 }
 
 function DayViewLeaveComponent({
-    isActive,
-    shouldAnimate = true,
+    pageIndex,
+    isActive: propIsActive,
+    shouldAnimate: propShouldAnimate,
 }: DayViewLeaveProps) {
+    const isStoreActive = useTimetablePagerStore(
+        (s) => pageIndex !== undefined && s.animatingIndex === pageIndex
+    );
+    const isOriginLeave = useTimetablePagerStore((s) => s.isOriginLeave);
+
+    const isActive =
+        pageIndex !== undefined ? isStoreActive : (propIsActive ?? false);
+    const shouldAnimate =
+        pageIndex !== undefined ? !isOriginLeave : (propShouldAnimate ?? true);
+
     const animRef = useRef<LottieView>(null);
     const hasStartedRef = useRef(false);
 
