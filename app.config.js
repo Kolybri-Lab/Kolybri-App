@@ -72,7 +72,7 @@ export default {
         url: "https://u.expo.dev/597e7932-e1c1-4c19-a8b9-5b77ea8659f2",
     },
     runtimeVersion: {
-        policy: "appVersion",
+        policy: "fingerprint",
     },
 
     version: process.env.APP_VERSION || packageJson.version,
