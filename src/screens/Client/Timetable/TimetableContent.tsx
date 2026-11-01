@@ -23,16 +23,16 @@ import ViewSelector from "./components/ViewSelector";
 export default function TimetableContent() {
     const { colors } = useTheme();
     const token = useUserStore((state) => state.token);
+    const [selectedDate, setSelectedDate] = useState(dayjs().format("YYYY-MM-DD"));
     const {
         data: weeks,
         extendForward,
         extendBackward,
-    } = useTimetable(token);
+    } = useTimetable(token, selectedDate);
     const { date: isoDate, frenchDate } = useCurrentTime();
 
     const days = useMemo(() => flattenDays(weeks), [weeks]);
     const [view, setView] = useState("day"); // "day" | "week"
-    const [selectedDate, setSelectedDate] = useState(dayjs().format("YYYY-MM-DD"));
 
     const isToday = selectedDate === (isoDate || dayjs().format("YYYY-MM-DD"));
 

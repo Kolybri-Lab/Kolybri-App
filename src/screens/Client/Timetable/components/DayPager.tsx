@@ -123,7 +123,6 @@ function DayPager({
         [days.length, onExtendBackward, onExtendForward]
     );
 
-    // Maintien de l'offset sans animation lors de l'insertion de jours passés (backward)
     useEffect(() => {
         if (days.length === 0) return;
         const currentFirstDate = days[0].date;
@@ -135,16 +134,12 @@ function DayPager({
             const addedCount = days.findIndex(
                 (d) => d.date === prevFirstDateRef.current
             );
-            if (addedCount > 0 && snapInterval > 0) {
+            if (addedCount > 0) {
                 currentIndex.current += addedCount;
-                listRef.current?.scrollToOffset({
-                    offset: currentIndex.current * snapInterval,
-                    animated: false,
-                });
             }
         }
         prevFirstDateRef.current = currentFirstDate;
-    }, [days, snapInterval]);
+    }, [days]);
 
     useEffect(() => {
         const originDay = days[index];
@@ -232,9 +227,10 @@ function DayPager({
                     snapToAlignment="start"
                     decelerationRate="normal"
                     showsHorizontalScrollIndicator={false}
-                    initialNumToRender={4}
-                    maxToRenderPerBatch={4}
-                    windowSize={5}
+                    initialNumToRender={2}
+                    maxToRenderPerBatch={2}
+                    windowSize={3}
+                    maintainVisibleContentPosition={{ minIndexForVisible: 0 }}
                     onViewableItemsChanged={onViewableItemsChanged}
                     viewabilityConfig={viewabilityConfig}
                     onMomentumScrollEnd={handleEnd}

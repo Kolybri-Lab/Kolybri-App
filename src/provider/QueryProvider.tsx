@@ -7,6 +7,7 @@ import {
     QueryClient,
 } from "@tanstack/react-query";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
+import dayjs from "dayjs";
 import { createMMKV } from "react-native-mmkv";
 
 export const queryClient = new QueryClient({
@@ -70,12 +71,16 @@ export function QueryProvider({ children }: { children: React.ReactNode }) {
                 dehydrateOptions: {
                     shouldDehydrateQuery: (query) => {
                         if (query.queryKey[0] === "timetable") {
-                            // queryKey: ["timetable", token, offset]
-                            const offset = query.queryKey[2];
-                            const isPersistableOffset =
-                                offset === -1 || offset === 0 || offset === 1;
+                            // queryKey: ["timetable", userId, mondayDate]
+                            const mondayDate = query.queryKey[2];
+                            if (typeof mondayDate !== "string") return false;
+
+                            // Ne persister que les semaines autour d'aujourd'hui (+/- 14 jours)
+                            const now = dayjs();
+                            const monday = dayjs(mondayDate);
+                            const diffDays = Math.abs(monday.diff(now, "day"));
                             return (
-                                isPersistableOffset &&
+                                diffDays <= 14 &&
                                 query.state.status === "success"
                             );
                         }

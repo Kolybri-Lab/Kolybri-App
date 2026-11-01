@@ -46,9 +46,18 @@ const formatDuration = (
     startDate: string,
     endDate: string
 ): { text: string; int: number } => {
-    const start = dayjs(startDate);
-    const end = dayjs(endDate);
-    const minutes = end.diff(start, "minute");
+    const [startDatePart, startTimePart] = startDate.split(" ");
+    const [endDatePart, endTimePart] = endDate.split(" ");
+
+    let minutes: number;
+    if (startDatePart === endDatePart && startTimePart && endTimePart) {
+        minutes = toMinutes(endTimePart) - toMinutes(startTimePart);
+    } else {
+        const start = dayjs(startDate);
+        const end = dayjs(endDate);
+        minutes = end.diff(start, "minute");
+    }
+
     const h = Math.floor(minutes / 60);
     const m = minutes % 60;
     const text = `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
@@ -72,6 +81,9 @@ const formatCourse = (entry: ApiTimetableEntry, id: number): Course => {
             type = "BREAK";
             break;
     }
+
+    const duration = formatDuration(entry.start_date, entry.end_date);
+
     return {
         id, // index
         color: useColorStore.getState().getOrAssignColor(entry.codeMatiere),
@@ -87,7 +99,7 @@ const formatCourse = (entry: ApiTimetableEntry, id: number): Course => {
                 date: entry.end_date.split(" ")[0],
                 time: entry.end_date.split(" ")[1],
             },
-            duration: formatDuration(entry.start_date, entry.end_date),
+            duration,
         },
         states: {
             cancelled: entry.isAnnule,
@@ -98,8 +110,7 @@ const formatCourse = (entry: ApiTimetableEntry, id: number): Course => {
         dayView: {
             height: Math.max(
                 timetableConfig.minHeight,
-                (Math.round(formatDuration(entry.start_date, entry.end_date).int) -
-                    1) *
+                (Math.round(duration.int) - 1) *
                     timetableConfig.pxPerHour +
                     timetableConfig.minHeight
             ),
@@ -193,7 +204,11 @@ const weekKey = (date: string) => {
     return `${d.isoWeekYear()}-W${String(d.isoWeek()).padStart(2, "0")}`;
 };
 
-export const sortTimetable = (data: ApiTimetableEntry[]): Week[] => {
+export const sortTimetable = (
+    data: ApiTimetableEntry[],
+    targetMonday?: string,
+    targetSunday?: string
+): Week[] => {
     const courses = data
         .map(formatCourse)
         .sort((a, b) =>
@@ -203,6 +218,23 @@ export const sortTimetable = (data: ApiTimetableEntry[]): Week[] => {
         );
 
     const weeks = new Map<string, Week>();
+
+    if (targetMonday) {
+        const monday = dayjs(targetMonday).startOf("isoWeek");
+        const key = weekKey(targetMonday);
+        weeks.set(key, {
+            from: {
+                date: monday.format("YYYY-MM-DD"),
+                time: "",
+            },
+            to: {
+                date: targetSunday || monday.add(6, "day").format("YYYY-MM-DD"),
+                time: "",
+            },
+            days: [],
+        });
+    }
+
     for (const course of courses) {
         const date = course.schedules.start.date;
         const key = weekKey(date);
@@ -304,6 +336,14 @@ export const sortTimetable = (data: ApiTimetableEntry[]): Week[] => {
             week.from.time = minHour;
             week.to.time = maxHour;
             applyWeekViewPlacing(week);
+        }
+    }
+
+    if (targetMonday) {
+        const key = weekKey(targetMonday);
+        const targetWeek = weeks.get(key);
+        if (targetWeek) {
+            return [targetWeek];
         }
     }
 

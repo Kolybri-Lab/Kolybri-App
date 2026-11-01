@@ -80,7 +80,7 @@ export default function DaySummary({ day }: DaySummaryProps) {
                     borderRadius: 50,
                     fontFamily: "Medium",
                 }}
-            >{`${infos.totalEdited} modifié${infos.totalCancelled > 1 ? "s" : ""}`}</Text>
+            >{`${infos.totalEdited} modifié${infos.totalEdited > 1 ? "s" : ""}`}</Text>
         </View>
     );
 }

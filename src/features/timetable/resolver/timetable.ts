@@ -1,19 +1,19 @@
-import { CONFIG } from "@/constants/config";
 import { sortTimetable } from "@/features/timetable/utils/sort";
 import fetchApi from "@/services/fetchApi";
 import { FetchApiResponse } from "@/types";
-import { addDaysToDateString, getPreviousMonday } from "@/utils/date";
+import dayjs from "dayjs";
+import isoWeek from "dayjs/plugin/isoWeek";
 import { ApiTimetableEntry, TimetableResolverParams, Week } from "../types";
 import { fillHolidays } from "../utils/holidays";
 
-export default async function timetableResolver({
-    token,
-    offset = 0,
-}: TimetableResolverParams): Promise<Week[]> {
-    const baseMonday = getPreviousMonday(CONFIG.dateNow);
-    const requestedMonday = addDaysToDateString(baseMonday, offset * 7);
+dayjs.extend(isoWeek);
 
-    const requestedSunday = addDaysToDateString(requestedMonday, 6);
+export default async function timetableResolver({
+    mondayDate,
+    token,
+}: TimetableResolverParams): Promise<Week[]> {
+    const requestedMonday = dayjs(mondayDate).startOf("isoWeek").format("YYYY-MM-DD");
+    const requestedSunday = dayjs(requestedMonday).add(6, "day").format("YYYY-MM-DD");
 
     const timetableResponse = await fetchApi<FetchApiResponse<ApiTimetableEntry[]>>(
         `https://api.ecoledirecte.com/v3/E/{USER_ID}/emploidutemps.awp?verbe=get&{API_VERSION}`,
@@ -23,13 +23,12 @@ export default async function timetableResolver({
                 dateFin: requestedSunday,
                 avecTrous: true,
             },
-            headers: {
-                "X-Token": token,
-            },
+            headers: token ? { "X-Token": token } : undefined,
             method: "POST",
         }
     );
-    if (timetableResponse?.isDataEmpty || !timetableResponse) {
+
+    if (timetableResponse?.isDataEmpty || !timetableResponse?.data) {
         return [
             {
                 from: { date: requestedMonday, time: "00:00" },
@@ -39,6 +38,5 @@ export default async function timetableResolver({
         ];
     }
 
-    return sortTimetable(timetableResponse.data);
+    return sortTimetable(timetableResponse.data, requestedMonday, requestedSunday);
 }
-

@@ -89,8 +89,8 @@ export interface Week {
 }
 
 export interface TimetableResolverParams {
-    token: string;
-    offset: number;
+    mondayDate: string; // YYYY-MM-DD
+    token?: string;
 }
 
 export type TimelineItem =
