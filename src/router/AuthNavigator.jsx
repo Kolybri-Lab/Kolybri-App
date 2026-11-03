@@ -5,7 +5,6 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import StyleMask from "@/components/display/StyleMask";
 import ErrorBoundary from "@/components/error/ErrorBoundary";
 import ErrorToast from "@/components/error/ErrorToast";
-import NetworkBanner from "@/components/error/NetworkBanner";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import { useActiveThemeMode, useTheme } from "@/hooks/useThemeStore";
 import { useUserStore } from "@/hooks/useUserStore";
@@ -94,13 +93,9 @@ export default function AuthNavigator() {
                         <Auth />
                     )}
                 </NavigationContainer>
-                {isAuthenticated && !isBooting && (
-                    <>
-                        <NetworkBanner />
-                        <ErrorToast />
-                    </>
-                )}
+                {isAuthenticated && !isBooting && <ErrorToast />}
             </ErrorBoundary>
         </GestureHandlerRootView>
     );
 }
+

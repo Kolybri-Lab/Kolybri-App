@@ -16,7 +16,7 @@ Le système repose sur un flux uni-directionnel absolu :
 
 1. **Couche Réseau (`fetchApi.ts` & `errorNormalizer.ts`)** : Intercepte toutes les erreurs HTTP et codes retour EcoleDirecte pour les convertir sous forme de types discriminés TypeScript.
 2. **Store Volatil (`useErrorStore.ts`)** : Centralise les erreurs actives en mémoire avec un mécanisme automatique de dédoublonnage (10 secondes) et de mise à jour des horodatages.
-3. **Sentinelles UI (`NetworkBanner.tsx`, `ErrorToast.tsx`)** : Affichent de manière réactive les erreurs selon leur sévérité.
+3. **Sentinelle UI (`ErrorToast.tsx`)** : Affiche de manière réactive les erreurs selon leur sévérité.
 4. **React ErrorBoundary & Crash View (`ErrorBoundary.tsx`, `CrashScreen.tsx`)** : Interceptent les crashs fatals du composant React et les exceptions JS globales non gérées pour proposer un redémarrage propre de l'application.
 
 ---
@@ -105,12 +105,7 @@ Store Zustand non-persistant (`create<ErrorState>()`) qui gère l'état global d
 
 ## 5. Composants UI & Sentinelles
 
-### A. `NetworkBanner.tsx`
-
-- S'affiche en haut de l'écran lorsque le réseau est coupé ou qu'une `NetworkAppError` est présente dans le store.
-- Masquage automatique au rétablissement du réseau avec animation Reanimated fluide.
-
-### B. `ErrorToast.tsx`
+### A. `ErrorToast.tsx`
 
 - Notification flottante en bas d'écran avec animations Reanimated à 120 FPS.
 - Centrage vertical dynamique selon la taille du contenu.
@@ -119,10 +114,9 @@ Store Zustand non-persistant (`create<ErrorState>()`) qui gère l'état global d
     - Le code numérique et sa signification (`ErrorDetails` + `getApiMessage`).
     - Des boutons d'action universels : **"Réessayer"** (relance la requête TanStack Query / rafraîchit) et **"Ignorer"** (ferme le toast).
 
-### C. `ErrorBoundary.tsx` & `CrashScreen.tsx`
+### B. `ErrorBoundary.tsx` & `CrashScreen.tsx`
 
 - **`ErrorBoundary.tsx`** : Composant de classe React enveloppant la navigation dans `AuthNavigator.jsx`.
     - Intercepte les crashs de rendu JSX ainsi que 100% des exceptions JS globales via `ErrorUtils.setGlobalHandler`.
     - Effectue un `useErrorStore.getState().clearAll()` et relance l'application à chaud via `DevSettings.reload()` lors du clic sur le bouton de redémarrage.
 - **`CrashScreen.tsx`** (`src/screens/Crash/CrashScreen.tsx`) : Écran complet de crash affichant l'icône d'alerte, un message explicatif et un `<ScrollView>` adaptatif (`flexGrow: 0`, `maxHeight: "60%"`, `contentContainerStyle={{ padding: 12 }}`) permettant de consulter les stack traces très longues sans tronquage.
-

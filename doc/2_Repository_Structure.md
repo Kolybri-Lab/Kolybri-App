@@ -36,7 +36,7 @@ Contient uniquement les composants graphiques génériques et réutilisables dan
 
 - `core/` : Composants de base et abstractions de structure (Layouts bruts comme `Text` et `Stack` unifié).
 - `display/` : Éléments visuels simples (Gradients, séparateurs, titres).
-- `error/` : Composants de sentinelles et notifications d'erreur (`NetworkBanner.tsx`, `ErrorToast.tsx`, `ErrorBoundary.tsx`).
+- `error/` : Composants de sentinelles et notifications d'erreur (`ErrorToast.tsx`, `ErrorBoundary.tsx`).
 - `feedback/` : Indicateurs de chargement, spinners, Overlays.
 - `form/` : Éléments d'interaction et de formulaire (CheckBox, Inputs).
 - `layout/` : Structures de conteneurs complexes (ScrollViews, BottomSheet, Onboarding).
@@ -105,4 +105,3 @@ Dans le cadre de la transition vers du code entierement type et securise, les re
 
 - `PascalCase` : Applique aux composants graphiques et aux ecrans (ex: `HomeScreen.tsx`, `LoadingSpinner.tsx`).
 - `camelCase` : Applique aux fichiers de logique, hooks, services et utilitaires (ex: `useHomeworks.ts`, `date.ts`).
-
