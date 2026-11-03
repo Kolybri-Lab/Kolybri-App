@@ -1,5 +1,5 @@
+import { AnimatedLottie } from "@/components";
 import { useTheme } from "@/hooks/useThemeStore";
-import LottieView from "lottie-react-native";
 import { StyleSheet, Text, View, useWindowDimensions } from "react-native";
 
 const ASPECT_RATIO = 1.34;
@@ -48,7 +48,7 @@ export default function GradeFlame({
                 style,
             ]}
         >
-            <LottieView
+            <AnimatedLottie
                 source={flameSource}
                 autoPlay
                 loop

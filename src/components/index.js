@@ -29,6 +29,7 @@ export { default as Selector } from "./form/Selector";
 export { default as Switch } from "./form/Switch";
 
 // display
+export { default as AnimatedLottie } from "./display/AnimatedLottie";
 export { default as LinkButton } from "./display/LinkButton";
 export { default as LinkText } from "./display/LinkText";
 export { default as Section } from "./display/Section";
@@ -36,3 +37,4 @@ export { default as Separation } from "./display/Separation";
 export { default as StyleMask } from "./display/StyleMask";
 export { default as Subtitle } from "./display/Subtitle";
 export { default as Title } from "./display/Title";
+

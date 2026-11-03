@@ -1,10 +1,10 @@
 // components/share/SharePopup.jsx
 import { useTheme } from "@/hooks/useThemeStore";
 import appConfig from "app.config";
-import LottieView from "lottie-react-native";
 import { Modal, Pressable, Share, View } from "react-native";
 import WinnerBadge from "../../../assets/lottie/Winner Badge.json";
 import { Text } from "../core";
+import AnimatedLottie from "../display/AnimatedLottie";
 
 export default function SharePopup({ visible, onClose, onShared }) {
     const { colors } = useTheme();
@@ -62,7 +62,7 @@ export default function SharePopup({ visible, onClose, onShared }) {
                             marginBottom: 16,
                         }}
                     >
-                        <LottieView
+                        <AnimatedLottie
                             loop={false}
                             autoPlay
                             source={WinnerBadge}

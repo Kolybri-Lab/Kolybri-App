@@ -1,4 +1,4 @@
-import { Switch, Text } from "@/components";
+import { AnimatedLottie, Switch, Text } from "@/components";
 import { useTheme } from "@/hooks/useThemeStore";
 import { useUserStore } from "@/hooks/useUserStore";
 import { routesNames } from "@/router/config/routesNames";
@@ -7,7 +7,6 @@ import { withAlpha } from "@/themes/color";
 import { useNavigation } from "@react-navigation/native";
 import * as Application from "expo-application";
 import * as Device from "expo-device";
-import LottieView from "lottie-react-native";
 import { useEffect, useMemo, useState } from "react";
 import {
     Dimensions,
@@ -179,9 +178,7 @@ export default function FeedbackScreen({ route }) {
                             marginBottom: 8,
                         }}
                     >
-                        {/* <Text style={{ fontSize: 40 }}>✅</Text> */}
-                        <LottieView
-                            // autoPlay
+                        <AnimatedLottie
                             loop={false}
                             autoPlay
                             source={SendingCheckAnimation}

@@ -1,7 +1,8 @@
+import { AnimatedLottie } from "@/components";
+import FreeAnimation from "assets/lottie/00_anim_free_tier3_1.json";
 import LottieView from "lottie-react-native";
 import { memo, useEffect, useRef } from "react";
 import { Pressable, View } from "react-native";
-import FreeAnimation from "assets/lottie/00_anim_free_tier3_1.json";
 import { useTimetablePagerStore } from "./timetablePagerStore";
 
 interface DayViewLeaveProps {
@@ -63,11 +64,13 @@ function DayViewLeaveComponent({
                     width: "100%",
                 }}
             >
-                <LottieView
+                <AnimatedLottie
                     ref={animRef}
                     source={FreeAnimation}
                     loop={false}
-                    progress={!shouldAnimate && !hasStartedRef.current ? 1 : undefined}
+                    progress={
+                        !shouldAnimate && !hasStartedRef.current ? 1 : undefined
+                    }
                     speed={1.35}
                     style={{
                         width: 280,

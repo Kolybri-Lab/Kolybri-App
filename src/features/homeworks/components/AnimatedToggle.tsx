@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
-import { TouchableOpacity, StyleProp, ViewStyle } from "react-native";
-import LottieView from "lottie-react-native";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { StyleProp, TouchableOpacity, ViewStyle } from "react-native";
 
+import { AnimatedLottie } from "@/components";
+import FailAnimation from "../../../../assets/lottie/Fail.json";
 import Loading1Animation from "../../../../assets/lottie/Loading1.json";
 import Loading2Animation from "../../../../assets/lottie/Loading2.json";
 import SuccessAnimation from "../../../../assets/lottie/Success.json";
-import FailAnimation from "../../../../assets/lottie/Fail.json";
 
 export interface AnimatedToggleProps {
     isDone?: "done" | "todo" | boolean;
@@ -238,7 +238,10 @@ export default function AnimatedToggle({
                 };
             case "unwind_icon":
                 return {
-                    source: previousIconRef.current === "success" ? SuccessAnimation : FailAnimation,
+                    source:
+                        previousIconRef.current === "success"
+                            ? SuccessAnimation
+                            : FailAnimation,
                     speed: -speed,
                 };
             case "loading2_reverse":
@@ -253,9 +256,11 @@ export default function AnimatedToggle({
                 };
             case "target_icon":
                 return {
-                    source: (loadingStateRef.current === "error" || !isCompletedRef.current)
-                        ? FailAnimation
-                        : SuccessAnimation,
+                    source:
+                        loadingStateRef.current === "error" ||
+                        !isCompletedRef.current
+                            ? FailAnimation
+                            : SuccessAnimation,
                     speed: speed,
                 };
         }
@@ -264,7 +269,8 @@ export default function AnimatedToggle({
     const getProgress = () => {
         if (isPlaying) return undefined;
         if (currentStep === "static_loading1") return 0;
-        if (currentStep === "static_success" || currentStep === "static_fail") return 1;
+        if (currentStep === "static_success" || currentStep === "static_fail")
+            return 1;
         return undefined;
     };
 
@@ -287,7 +293,7 @@ export default function AnimatedToggle({
             disabled={disabled || isPlaying || loadingState === "loading"}
             activeOpacity={0.7}
         >
-            <LottieView
+            <AnimatedLottie
                 key={`${currentStep}_${cycle}`}
                 source={animConfig.source}
                 speed={animConfig.speed}

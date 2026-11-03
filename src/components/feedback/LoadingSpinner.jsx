@@ -1,10 +1,10 @@
 import { useTheme } from "@/hooks/useThemeStore";
-import LottieView from "lottie-react-native";
+import AnimatedLottie from "../display/AnimatedLottie";
 
 const LoadingSpinner = ({ size }) => {
     const { colors } = useTheme();
     return (
-        <LottieView
+        <AnimatedLottie
             autoPlay
             source={require("assets/lottie/loader.json")}
             loop
@@ -18,4 +18,3 @@ const LoadingSpinner = ({ size }) => {
 };
 
 export default LoadingSpinner;
-

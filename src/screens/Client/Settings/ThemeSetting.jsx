@@ -17,7 +17,10 @@ export default function ThemeScreen({ route }) {
     const setFollowSystem = useThemeStore((state) => state.setFollowSystem);
     const hapticsEnabled = useThemeStore((state) => state.hapticsEnabled);
     const setHapticsEnabled = useThemeStore((state) => state.setHapticsEnabled);
-
+    const animationsEnabled = useThemeStore((state) => state.animationsEnabled);
+    const setAnimationsEnabled = useThemeStore(
+        (state) => state.setAnimationsEnabled
+    );
     const { colors } = useTheme();
 
     const value = followSystem ? "system" : themeMode;
@@ -109,15 +112,15 @@ export default function ThemeScreen({ route }) {
                 ),
                 children: (
                     <Switch
-                        value={tempState}
-                        onValueChange={(toSet) => setTempStateValue(toSet)}
+                        value={animationsEnabled}
+                        onValueChange={(toSet) => setAnimationsEnabled(toSet)}
                     />
                 ),
             },
             {
                 label: "Retours haptiques",
                 icon: (
-                    <Vibrate stroke={colors.text.primary} size={18} opacity={0.6} />
+                    <Vibrate stroke={colors.text.primary} size={18} opacity={0.8} />
                 ),
                 children: (
                     <Switch
@@ -127,7 +130,7 @@ export default function ThemeScreen({ route }) {
                 ),
             },
         ],
-        [hapticsEnabled, tempState, colors, value]
+        [hapticsEnabled, tempState, colors, value, animationsEnabled]
     );
 
     return (
