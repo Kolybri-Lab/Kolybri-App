@@ -20,8 +20,8 @@ export default function Switch({ value, onValueChange }) {
         });
     }, [value]);
 
-    const trackColorInactive = withAlpha(colors.text.primary, 0.1);
-    const trackColorActive = withAlpha(colors.text.primary, 0.4);
+    const trackColorInactive = withAlpha(colors.text.primary, 0.2);
+    const trackColorActive = withAlpha(colors.brand.primary, 0.5);
 
     const trackStyle = useAnimatedStyle(() => ({
         backgroundColor: interpolateColor(
@@ -64,4 +64,3 @@ export default function Switch({ value, onValueChange }) {
         </Pressable>
     );
 }
-

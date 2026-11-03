@@ -3,18 +3,13 @@ import { Lightning, Moon, Sun } from "@/components/svg";
 import { useTheme, useThemeStore } from "@/hooks/useThemeStore";
 import { withAlpha } from "@/themes/color";
 import { Vibrate } from "lucide-react-native";
-import { useMemo, useState } from "react";
+import { memo, useCallback } from "react";
 import { Pressable, View } from "react-native";
 import SettingSectionLayout from "./components/SettingSectionLayout";
 
 export default function ThemeScreen({ route }) {
     const { label } = route.params;
-    const [tempState, setTempStateValue] = useState(true);
 
-    const themeMode = useThemeStore((state) => state.themeMode);
-    const setThemeMode = useThemeStore((state) => state.setThemeMode);
-    const followSystem = useThemeStore((state) => state.followSystem);
-    const setFollowSystem = useThemeStore((state) => state.setFollowSystem);
     const hapticsEnabled = useThemeStore((state) => state.hapticsEnabled);
     const setHapticsEnabled = useThemeStore((state) => state.setHapticsEnabled);
     const animationsEnabled = useThemeStore((state) => state.animationsEnabled);
@@ -23,122 +18,37 @@ export default function ThemeScreen({ route }) {
     );
     const { colors } = useTheme();
 
-    const value = followSystem ? "system" : themeMode;
-
-    const handleChange = (id) => {
-        if (id === "system") {
-            setFollowSystem(true);
-        } else {
-            setFollowSystem(false);
-            setThemeMode(id);
-        }
-    };
-
-    const themeSettings = useMemo(
-        () => [
-            {
-                label: "Thème",
-                icon: <Sun fill={colors.text.primary} size={18} opacity={0.6} />,
-                children: (
-                    <View
-                        style={{
-                            alignItems: "center",
-                            flexDirection: "row",
-                            gap: 16,
-                            borderColor: withAlpha(colors.text.primary, 0.3),
-
-                            borderWidth: 1,
-                            paddingVertical: 2,
-                            paddingHorizontal: 4,
-                            borderRadius: 50,
-                        }}
-                    >
-                        <Pressable
-                            onPress={() => handleChange("dark")}
-                            style={{
-                                padding: 6,
-                                borderRadius: 50,
-                                backgroundColor:
-                                    value === "dark"
-                                        ? withAlpha(colors.text.primary, 0.4)
-                                        : "transparent",
-                            }}
-                        >
-                            <Moon size={18} fill={colors.text.primary} />
-                        </Pressable>
-
-                        <Pressable
-                            style={{
-                                padding: 6,
-                                borderRadius: 50,
-                                backgroundColor:
-                                    value === "system"
-                                        ? withAlpha(colors.text.primary, 0.4)
-                                        : "transparent",
-                            }}
-                            onPress={() => handleChange("system")}
-                        >
-                            <Text preset="label2">Auto</Text>
-                        </Pressable>
-
-                        <Pressable
-                            onPress={() => handleChange("light")}
-                            style={{
-                                padding: 6,
-                                borderRadius: 50,
-                                backgroundColor:
-                                    value === "light"
-                                        ? withAlpha(colors.text.primary, 0.4)
-                                        : "transparent",
-                            }}
-                        >
-                            <Sun
-                                size={21}
-
-                                fill={colors.text.primary}
-                            />
-                        </Pressable>
-                    </View>
-                ),
-            },
-            {
-                label: "Jouer les animations",
-                icon: (
-                    <Lightning
-                        stroke={colors.text.primary}
-                        size={18}
-                        opacity={0.6}
-                    />
-                ),
-                children: (
-                    <Switch
-                        value={animationsEnabled}
-                        onValueChange={(toSet) => setAnimationsEnabled(toSet)}
-                    />
-                ),
-            },
-            {
-                label: "Retours haptiques",
-                icon: (
-                    <Vibrate stroke={colors.text.primary} size={18} opacity={0.8} />
-                ),
-                children: (
-                    <Switch
-                        value={hapticsEnabled}
-                        onValueChange={(toSet) => setHapticsEnabled(toSet)}
-                    />
-                ),
-            },
-        ],
-        [hapticsEnabled, tempState, colors, value, animationsEnabled]
-    );
+    const themeSettings = [
+        {
+            label: "Thème",
+            icon: <Sun fill={colors.text.primary} size={18} opacity={0.6} />,
+            children: <ThemeSelector />,
+        },
+        {
+            label: "Jouer les animations",
+            icon: <Lightning stroke={colors.text.primary} size={18} opacity={0.6} />,
+            children: (
+                <Switch
+                    value={animationsEnabled}
+                    onValueChange={setAnimationsEnabled}
+                />
+            ),
+        },
+        {
+            label: "Retours haptiques",
+            icon: <Vibrate stroke={colors.text.primary} size={18} opacity={0.8} />,
+            children: (
+                <Switch value={hapticsEnabled} onValueChange={setHapticsEnabled} />
+            ),
+        },
+    ];
 
     return (
         <SettingSectionLayout label={label}>
             <View style={{ gap: 2 }}>
                 {themeSettings.map(({ children, icon, label }, index) => (
                     <Section
-                        key={index}
+                        key={label}
                         label={label}
                         icon={icon}
                         disabled
@@ -152,3 +62,93 @@ export default function ThemeScreen({ route }) {
         </SettingSectionLayout>
     );
 }
+
+const THEME_OPTIONS = [
+    { id: "dark", Icon: Moon, size: 18 },
+    { id: "system", label: "Auto" },
+    { id: "light", Icon: Sun, size: 21 },
+];
+
+const ThemeSelector = memo(function ThemeSelector() {
+    const { colors } = useTheme();
+
+    const value = useThemeStore((state) =>
+        state.followSystem ? "system" : state.themeMode
+    );
+    const setThemeMode = useThemeStore((state) => state.setThemeMode);
+    const setFollowSystem = useThemeStore((state) => state.setFollowSystem);
+
+    const handleSelect = useCallback(
+        (id) => {
+            if (id === "system") {
+                setFollowSystem(true);
+            } else {
+                setFollowSystem(false);
+                setThemeMode(id);
+            }
+        },
+        [setFollowSystem, setThemeMode]
+    );
+
+    const activeBackground = withAlpha(colors.brand.primary, 0.5);
+
+    return (
+        <View
+            style={{
+                borderColor: withAlpha(colors.text.primary, 0.3),
+                alignItems: "center",
+                flexDirection: "row",
+                gap: 16,
+                borderWidth: 1,
+                paddingVertical: 2,
+                paddingHorizontal: 4,
+                borderRadius: 50,
+            }}
+        >
+            {THEME_OPTIONS.map((option) => (
+                <ThemeOption
+                    key={option.id}
+                    {...option}
+                    selected={value === option.id}
+                    onSelect={handleSelect}
+                    activeBackground={activeBackground}
+                    activeColor={colors.text.onBrand}
+                    idleColor={colors.text.primary}
+                />
+            ))}
+        </View>
+    );
+});
+
+const ThemeOption = memo(function ThemeOption({
+    id,
+    label,
+    Icon,
+    size,
+    selected,
+    onSelect,
+    activeBackground,
+    activeColor,
+    idleColor,
+}) {
+    const handlePress = useCallback(() => onSelect(id), [onSelect, id]);
+
+    return (
+        <Pressable
+            onPress={handlePress}
+            style={[
+                {
+                    padding: 6,
+                    borderRadius: 50,
+                },
+                selected && { backgroundColor: activeBackground },
+            ]}
+        >
+            {Icon ? (
+                <Icon size={size} fill={selected ? activeColor : idleColor} />
+            ) : (
+                <Text preset="label2">{label}</Text>
+            )}
+        </Pressable>
+    );
+});

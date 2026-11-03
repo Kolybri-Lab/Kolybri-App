@@ -5,7 +5,7 @@ import { useCurrentTime } from "@/hooks/useCurrentTime";
 import { useTheme } from "@/hooks/useThemeStore";
 import { useUserStore } from "@/hooks/useUserStore";
 import dayjs from "dayjs";
-import { Calendar1, CalendarCheck, CalendarRange } from "lucide-react-native";
+import { Calendar1, CalendarRange, Undo2 } from "lucide-react-native";
 import { memo, ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import { Pressable, View } from "react-native";
 import Animated, {
@@ -169,7 +169,7 @@ const TodayButton = memo(
                         opacity: pressed ? 0.7 : 1,
                     })}
                 >
-                    <CalendarCheck size={24} color={colors.text.primary} />
+                    <Undo2 size={24} color={colors.text.primary} />
                 </Pressable>
             </Animated.View>
         );
