@@ -25,14 +25,15 @@ jobs:
             - name: Build APK on EAS
               run: |
                   eas build --platform android --profile github-apk \
-                    --non-interactive --wait --json > build.json
-                  echo "APK_URL=$(jq -r '.[0].artifacts.buildUrl' build.json)" >> $GITHUB_ENV
+                    --non-interactive --wait --json > "$RUNNER_TEMP/build.json"
+                  echo "APK_URL=$(jq -r '.[0].artifacts.buildUrl' "$RUNNER_TEMP/build.json")" >> $GITHUB_ENV
 
-            - name: Download builded APK
-              run: curl -L "$APK_URL" -o "app-${{ github.ref_name }}.apk"
+            - name: Download built APK
+              run: curl -fL "$APK_URL" -o "$RUNNER_TEMP/app-${{ github.ref_name }}.apk"
+
             - name: Generate release notes
               run: |
-                  curl -fsSL "https://kolybri-lab.github.io/kolybri-announcements/changelog.json?t=$(date +%s)" -o changelog.json
+                  curl -fsSL "https://kolybri-lab.github.io/kolybri-announcements/changelog.json?t=$(date +%s)" -o "$RUNNER_TEMP/changelog.json"
                   VERSION="${GITHUB_REF_NAME#v}"
                   jq -r --arg v "$VERSION" '
                     .[] | select(.version == $v) |
@@ -42,8 +43,14 @@ jobs:
                        elif .type == "improved" then "⚡ Amélioration"
                        else "🐛 Correction" end) + " : " + .text
                     ] | map("- " + .) | join("\n"))
-                  ' changelog.json > release-notes.md
-                  test -s release-notes.md || { echo "Aucune entrée pour $VERSION dans le changelog"; exit 1; }
+                  ' "$RUNNER_TEMP/changelog.json" > "$RUNNER_TEMP/release-notes.md"
+                  test -s "$RUNNER_TEMP/release-notes.md" || { echo "Aucune entrée pour $VERSION dans le changelog"; exit 1; }
+
+            - name: Create GitHub release
+              uses: softprops/action-gh-release@v2
+              with:
+                  files: ${{ runner.temp }}/app-${{ github.ref_name }}.apk
+                  body_path: ${{ runner.temp }}/release-notes.md
 
     aab-play-store:
         runs-on: ubuntu-latest
@@ -51,16 +58,16 @@ jobs:
             - uses: actions/checkout@v4
             - uses: actions/setup-node@v4
               with:
-                  node-version: 20
+                  node-version: 22
                   cache: npm
             - uses: expo/expo-github-action@v8
               with:
                   eas-version: latest
                   token: ${{ secrets.EXPO_TOKEN }}
+                  packager: npm
             - run: npm ci
 
             - name: Build AAB + submit to Play Store
               run: |
                   eas build --platform android --profile production \
                     --non-interactive --wait --auto-submit
-
