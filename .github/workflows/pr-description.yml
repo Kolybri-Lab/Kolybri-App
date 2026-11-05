@@ -16,7 +16,7 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
-            - name: Générer la description depuis le changelog
+            - name: Generate description from changelog
               env:
                   GH_TOKEN: ${{ github.token }}
               run: |
