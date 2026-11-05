@@ -1,26 +1,19 @@
-import { useTheme } from "@react-navigation/native";
+import { useTheme } from "@/hooks/useThemeStore";
 import { StyleSheet, View } from "react-native";
 
+// Le thème n'a plus de dégradé : fond uni `background.app`.
+// (le nom du composant est conservé pour ne pas toucher à StyleMask.)
 export default function GradientBackground({ children }) {
     const { colors } = useTheme();
+
     return (
         <View
             style={[
-                styles.gradient,
-                { backgroundColor: colors.background.gradient },
+                StyleSheet.absoluteFill,
+                { backgroundColor: colors.background.app },
             ]}
         >
             {children}
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    gradient: {
-        flex: 1,
-        position: "absolute",
-        width: "100%",
-        height: "100%",
-    },
-});
-

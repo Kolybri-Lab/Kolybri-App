@@ -3,7 +3,7 @@ import { useTheme } from "@/hooks/useThemeStore";
 
 export default function AccountIcon({ size = 30, fill, props = {} }) {
     const theme = useTheme();
-    fill = fill || theme.colors.main
+    fill = fill || theme.colors.brand.primary
     return (
         <Svg width={size} height={size} viewBox="0 0 100 100" fill={fill}>
             <Path

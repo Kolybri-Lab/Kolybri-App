@@ -1,27 +1,50 @@
 {
-  "cli": {
-    "version": ">= 18.9.1",
-    "appVersionSource": "remote"
-  },
-  "build": {
-    "development": {
-      "node": "22.11.0",
-      "developmentClient": true,
-      "distribution": "internal"
+    "cli": {
+        "version": ">= 18.9.1",
+        "appVersionSource": "remote",
+        "requireCommit": true
     },
-    "preview": {
-      "node": "22.11.0",
-      "distribution": "internal",
-      "android": {
-        "buildType": "apk"
-      }
+    "build": {
+        "development": {
+            "node": "24.16.0",
+            "developmentClient": true,
+            "distribution": "internal",
+            "channel": "development",
+            "env": {
+                "APP_ENV": "development"
+            }
+        },
+        "preview": {
+            "node": "24.16.0",
+            "distribution": "internal",
+            "channel": "preview",
+            "android": {
+                "buildType": "apk"
+            },
+            "env": {
+                "APP_ENV": "preview"
+            }
+        },
+        "production": {
+            "node": "24.16.0",
+            "autoIncrement": true,
+            "channel": "production",
+            "env": {
+                "APP_ENV": "production"
+            },
+            "android": { "buildType": "app-bundle" }
+        },
+        "github-apk": {
+            "android": { "buildType": "apk" },
+            "autoIncrement": true
+        }
     },
-    "production": {
-      "node": "22.11.0",
-      "autoIncrement": true
+    "submit": {
+        "production": {
+            "android": {
+                "track": "internal", // change to production after checking if the workflow work correctly
+                "releaseStatus": "completed"
+            }
+        }
     }
-  },
-  "submit": {
-    "production": {}
-  }
 }

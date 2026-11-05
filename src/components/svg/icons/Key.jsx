@@ -3,7 +3,7 @@ import { useTheme } from "@/hooks/useThemeStore";
 
 export default function KeyIcon({ size = 30, fill, props = {} }) {
     const theme = useTheme();
-    fill = fill || theme.colors.main
+    fill = fill || theme.colors.brand.primary
     return (
         <Svg viewBox="0 0 35 35" fill="none" width={size} height={size}>
             <Path

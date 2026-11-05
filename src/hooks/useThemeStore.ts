@@ -1,8 +1,8 @@
+import { THEMES_ASSOCIATIONS } from "@/themes/themes";
 import { Appearance } from "react-native";
 import { createMMKV } from "react-native-mmkv";
 import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
-import { THEMES_ASSOCIATIONS } from "@/themes/themes";
+import { createJSONStorage, persist } from "zustand/middleware";
 import type { AppTheme, AppThemeConfig } from "../types";
 
 const storage = createMMKV({ id: "theme-store" });
@@ -17,24 +17,31 @@ interface ThemeState {
     themeMode: AppTheme;
     followSystem: boolean;
     systemTheme: AppTheme;
+    hapticsEnabled: boolean;
+    animationsEnabled: boolean;
 
     setThemeMode: (mode: AppTheme) => void;
     setFollowSystem: (follow: boolean) => void;
     setSystemTheme: (theme: AppTheme) => void;
+    setHapticsEnabled: (state: boolean) => void;
+    setAnimationsEnabled: (state: boolean) => void;
     getTheme: () => AppThemeConfig;
 }
 
 export const useThemeStore = create<ThemeState>()(
     persist(
         (set, get) => ({
-            themeMode: 'dark',
+            themeMode: "dark",
             followSystem: true,
-            systemTheme: Appearance.getColorScheme() || 'dark',
+            systemTheme: Appearance.getColorScheme() || "dark",
+            hapticsEnabled: true,
+            animationsEnabled: true,
 
             setThemeMode: (themeMode) => set({ themeMode, followSystem: false }),
             setFollowSystem: (followSystem) => set({ followSystem }),
             setSystemTheme: (systemTheme) => set({ systemTheme }),
-
+            setHapticsEnabled: (hapticsEnabled) => set({ hapticsEnabled }),
+            setAnimationsEnabled: (animationsEnabled) => set({ animationsEnabled }),
             getTheme: () => {
                 const { followSystem, systemTheme, themeMode } = get();
                 const activeMode = followSystem ? systemTheme : themeMode;
@@ -47,6 +54,8 @@ export const useThemeStore = create<ThemeState>()(
             partialize: (state) => ({
                 themeMode: state.themeMode,
                 followSystem: state.followSystem,
+                hapticsEnabled: state.hapticsEnabled,
+                animationsEnabled: state.animationsEnabled,
             }),
         }
     )
@@ -60,6 +69,7 @@ export const useTheme = () => {
 };
 
 export const useActiveThemeMode = () => {
-    return useThemeStore((state) => state.followSystem ? state.systemTheme : state.themeMode);
+    return useThemeStore((state) =>
+        state.followSystem ? state.systemTheme : state.themeMode
+    );
 };
-

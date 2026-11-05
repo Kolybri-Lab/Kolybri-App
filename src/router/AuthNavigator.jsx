@@ -1,16 +1,21 @@
 import { NavigationContainer } from "@react-navigation/native";
-import * as Network from "expo-network";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
-import { MainLayout } from "../components";
+import StyleMask from "@/components/display/StyleMask";
+import ErrorBoundary from "@/components/error/ErrorBoundary";
+import ErrorToast from "@/components/error/ErrorToast";
 import { useAuthStore } from "@/hooks/useAuthStore";
-import { useActiveThemeMode } from "@/hooks/useThemeStore";
-import { useNetworkStore } from "@/hooks/useNetworkStore";
-import authService from "@/services/login/authService";
-import { tryLoginWithStoredCreds, tryRestoreToken } from "@/services/login/tools/bootstrapAsync";
+import { useActiveThemeMode, useTheme } from "@/hooks/useThemeStore";
+import { useUserStore } from "@/hooks/useUserStore";
 import SplashScreen from "@/screens/Splash/SplashScreen";
-import { THEMES_ASSOCIATIONS } from "@/themes/themes";
+import authService from "@/services/login/authService";
+import {
+    tryLoginWithStoredCreds,
+    tryRestoreToken,
+} from "@/services/login/tools/bootstrapAsync";
+import { toNavigationTheme } from "@/themes/navigation";
+import { StatusBar } from "react-native";
 import Auth from "./display/auth/Auth";
 import Client from "./display/client/Client";
 
@@ -18,7 +23,6 @@ export default function AuthNavigator() {
     const activeMode = useActiveThemeMode();
     const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
     const isBooting = useAuthStore((state) => state.isBooting);
-    const setActiveNetworkStatus = useNetworkStore((state) => state.setActiveNetworkStatus);
 
     useEffect(() => {
         const bootstrapAsync = async () => {
@@ -26,6 +30,7 @@ export default function AuthNavigator() {
                 const credentials = await authService.restoreCredentials();
                 const hasCipher = Boolean(credentials?.cipherText);
                 const hasLoginCreds = Boolean(credentials?.password);
+                const cachedProfile = useUserStore.getState().profile;
 
                 if (hasCipher) {
                     const success = await tryLoginWithStoredCreds({
@@ -34,16 +39,31 @@ export default function AuthNavigator() {
                     if (success) return;
                 }
 
-                if (hasLoginCreds) {
-                    const restored = await tryRestoreToken({
-                        credentialsPassword: credentials.password,
-                    });
-                    if (restored) return;
+                if (hasLoginCreds || cachedProfile) {
+                    if (cachedProfile && !useUserStore.getState().profile) {
+                        useUserStore.getState().setProfile(cachedProfile);
+                    }
+                    useAuthStore.getState().setAuthenticated(true);
+                    useAuthStore.getState().setBooting(false);
+
+                    if (hasLoginCreds) {
+                        tryRestoreToken({
+                            credentialsPassword: credentials.password,
+                        }).catch((err) => {
+                            console.warn(
+                                "Échec du rafraîchissement du token en arrière-plan :",
+                                err
+                            );
+                        });
+                    }
+                    return;
                 }
 
+                useAuthStore.getState().setAuthenticated(false);
                 useAuthStore.getState().setBooting(false);
             } catch (error) {
                 console.error("ERROR IN BOOTSTRAPASYNC", error);
+                useAuthStore.getState().setAuthenticated(false);
                 useAuthStore.getState().setBooting(false);
             }
         };
@@ -51,60 +71,30 @@ export default function AuthNavigator() {
         bootstrapAsync();
     }, []);
 
-    useEffect(() => {
-        const initializeNetwork = async () => {
-            try {
-                const connectionStatus = await Network.getNetworkStateAsync();
-                const airplaneStatus = await Network.isAirplaneModeEnabledAsync();
-
-                if (
-                    connectionStatus.isConnected &&
-                    connectionStatus.isInternetReachable
-                ) {
-                    console.log("### ONLINE");
-                } else {
-                    console.log("### OFFLINE");
-                }
-
-                setActiveNetworkStatus({
-                    ...connectionStatus,
-                    inAirplaneMode: airplaneStatus,
-                });
-            } catch (error) {
-                console.error("Error when init network:", error);
-            }
-        };
-
-        const subscription = Network.addNetworkStateListener((networkData) => {
-            console.log("Connection change:", networkData);
-            setActiveNetworkStatus((prevState) => ({
-                ...prevState,
-                ...networkData,
-            }));
-        });
-
-        initializeNetwork();
-
-        return () => {
-            if (subscription && subscription.remove) {
-                subscription.remove();
-            }
-        };
-    }, [setActiveNetworkStatus]);
-
+    const theme = useTheme();
+    const navTheme = useMemo(() => toNavigationTheme(theme), [theme]);
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
-            <NavigationContainer theme={THEMES_ASSOCIATIONS[activeMode]}>
-                {isBooting ? (
-                    <SplashScreen />
-                ) : isAuthenticated ? (
-                    <MainLayout>
-                        <Client />
-                    </MainLayout>
-                ) : (
-                    <Auth />
-                )}
-            </NavigationContainer>
+            <ErrorBoundary>
+                <StatusBar
+                    barStyle={theme.isDark ? "light-content" : "dark-content"}
+                    backgroundColor="transparent"
+                    animated
+                    translucent
+                />
+                <NavigationContainer theme={navTheme}>
+                    {isBooting ? (
+                        <SplashScreen />
+                    ) : isAuthenticated ? (
+                        <StyleMask>
+                            <Client />
+                        </StyleMask>
+                    ) : (
+                        <Auth />
+                    )}
+                </NavigationContainer>
+                {isAuthenticated && !isBooting && <ErrorToast />}
+            </ErrorBoundary>
         </GestureHandlerRootView>
     );
 }

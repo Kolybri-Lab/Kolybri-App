@@ -1,0 +1,26 @@
+{
+    "code": 200,
+    "token": "guest_token",
+    "host": "HTTP200",
+    "message": "",
+    "data": {
+        "accounts": [
+            {
+                "id": 5734,
+                "typeCompte": "E",
+                "prenom": "Léonard",
+                "nom": "DE VINCI",
+                "email": "l.devinci@oldmail.it",
+                "nomEtablissement": "Lycée Saint Julien",
+                "profile": {
+                    "sexe": "M",
+                    "telPortable": "0607080910",
+                    "classe": {
+                        "libelle": "Terminale Générale 1",
+                        "code": "TG1"
+                    }
+                }
+            }
+        ]
+    }
+}

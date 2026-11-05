@@ -1,5 +1,5 @@
-export { default as Dashboard } from "./Dashboard";
-export { default as Grades } from "./Grades";
-export { default as Homeworks } from "./Homeworks";
-export { default as Messaging } from "./Messaging";
-export { default as Timetable } from "./Timetable";
+export { default as GradesIcon } from "./GradesIcon";
+export { default as HomeIcon } from "./HomeIcon";
+export { default as HomeworksIcon } from "./HomeworksIcon";
+export { default as MessagingIcon } from "./MessagingIcon";
+export { default as TimetableIcon } from "./TimetableIcon";

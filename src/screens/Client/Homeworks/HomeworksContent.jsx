@@ -1,32 +1,33 @@
-import { memo, useCallback, useEffect, useMemo, useState } from "react";
-import { TouchableOpacity, View } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
-import Animated, {
-    interpolate,
-    useAnimatedStyle,
-    useSharedValue,
-    withDelay,
-    withSpring,
-} from "react-native-reanimated";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { ScrollView, TouchableOpacity, View } from "react-native";
 
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Plus } from "@/components/svg";
-import HomeworkCard from "@/features/homeworks/components/HomeworkCard";
 import { Text } from "@/components/core";
+import { Plus } from "lucide-react-native";
 import { motivationSentences } from "@/constants/features/homeworksConfig";
+import HomeworkCard from "@/features/homeworks/components/HomeworkCard";
+import HomeworkDatesRow from "@/features/homeworks/components/HomeworkDatesRow";
+import HomeworkProgress from "@/features/homeworks/components/HomeworkProgress";
 
-import { adjustLightness } from "@/utils/colorGenerator";
-import { formatFrenchDate } from "@/utils/date";
+import DocumentModal from "@/features/homeworks/components/DocumentModal";
 import NewHomeworkModal from "@/features/homeworks/components/NewHomeworkModal";
 import { useHomework } from "@/features/homeworks/context/HomeworkContext";
 import { useHomeworksHandler } from "@/features/homeworks/hooks/useHomeworksHandler";
+import { formatFrenchDate } from "@/utils/date";
 
+import { ScreenStack } from "@/components";
+import { useHomeworks } from "@/features/homeworks";
 import { useCustomDataStore } from "@/hooks/useCustomDataStore";
-import { useHomeworks } from "@/hooks/useHomeworks";
 import { useUserStore } from "@/hooks/useUserStore";
 import { objectsEqual } from "@/utils/json";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useTheme } from "@/hooks/useThemeStore";
+import { addOpacityToCssRgb } from "@/utils/colorGenerator";
+import Animated, { LinearTransition } from "react-native-reanimated";
+
+const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 
 export default function HomeworksContent() {
+    const { colors } = useTheme();
     const token = useUserStore((state) => state.token);
     const {
         data: homeworksData,
@@ -66,185 +67,108 @@ export default function HomeworksContent() {
         return merged;
     }, [homeworksData, customHomeworksData]);
 
-    const [homeworksDates, setHomeworksDates] = useState();
-    const [formatedDates, setFormatedDates] = useState();
     const [activeDate, setActiveDate] = useState("");
-    const [progression, setProgression] = useState(0);
-    const [displayTasks, setDisplayTasks] = useState([]);
-    const [encouragementSentence, setEncouragemementSentence] = useState("");
-    const [completedTasks, setCompletedTasks] = useState([]);
-
     const [modalOpen, setModalOpen] = useState(false);
+    const [documentModal, setDocumentModal] = useState({
+        open: false,
+        documents: [],
+    });
+    const [expandedHomeworkId, setExpandedHomeworkId] = useState(null);
+
+    const handleItemPress = useCallback((id) => {
+        setExpandedHomeworkId((prev) => (prev === id ? null : id));
+    }, []);
+
+    useEffect(() => {
+        setExpandedHomeworkId(null);
+    }, [activeDate]);
 
     useHomeworksHandler({
         setModalOpen,
         toggleHomework,
+        setDocumentModal,
     });
 
-    const animatedWidth = useSharedValue(0);
+    const homeworksDates = mergedHomeworks?.formatedDates;
 
-    const pickSentence = useCallback(
-        (progression) => {
-            let key;
-
-            if (progression === 0) {
-                setEncouragemementSentence("");
-                return;
-            } else if (progression < 0.25) key = "0.25";
-            else if (progression < 0.5) key = "0.5";
-            else if (progression < 1) key = "0.75";
-            else key = "1";
-
-            const sentences = motivationSentences[key];
-            setEncouragemementSentence(
-                sentences[Math.floor(Math.random() * sentences.length)]
-            );
-        },
-        [progression]
-    );
     useEffect(() => {
-        if (!mergedHomeworks || Object.keys(mergedHomeworks).length === 0) return;
-
-        setHomeworksDates(mergedHomeworks.formatedDates);
-        setFormatedDates(mergedHomeworks.formatedDates);
+        if (
+            !mergedHomeworks?.formatedDates ||
+            Object.keys(mergedHomeworks.formatedDates).length === 0
+        )
+            return;
 
         if (!activeDate || !mergedHomeworks.formatedDates[activeDate]) {
             setActiveDate(Object.keys(mergedHomeworks.formatedDates)[0]);
         }
-    }, [mergedHomeworks]);
+    }, [mergedHomeworks, activeDate]);
 
-    useEffect(() => {
-        if (!activeDate || !mergedHomeworks) return;
-
-        const datas = mergedHomeworks[activeDate] || [];
-        setDisplayTasks(datas);
-        const completed = datas.filter(({ isDone }) => isDone === "done");
-        setCompletedTasks(completed);
-        const progression =
-            datas.length > 0
-                ? Math.round((completed.length / datas.length) * 100) / 100
-                : 0;
-        setProgression(progression);
-        pickSentence(progression);
+    const displayTasks = useMemo(() => {
+        if (!activeDate || !mergedHomeworks) return [];
+        return mergedHomeworks[activeDate] || [];
     }, [activeDate, mergedHomeworks]);
 
-    useEffect(() => {
-        if (!homeworksDates || !activeDate || !homeworksDates[activeDate]) return;
-        setHomeworksDates((prev) => {
-            if (!prev[activeDate]) return prev;
-            prev[activeDate].allTasksCompleted = progression === 1;
-            return { ...prev };
-        });
-    }, [progression, activeDate]);
+    const completedTasks = useMemo(() => {
+        return displayTasks.filter(({ isDone }) => isDone === "done");
+    }, [displayTasks]);
 
-    const renderDateItem = useCallback(
-        ({ item }) => {
-            const [date, { contracted, isEvaluation }] = item;
+    const progression = useMemo(() => {
+        return displayTasks.length > 0
+            ? Math.round((completedTasks.length / displayTasks.length) * 100) / 100
+            : 0;
+    }, [displayTasks, completedTasks]);
 
-            const tasks = mergedHomeworks[date] ?? [];
-            const allTasksCompleted =
-                tasks.length > 0 && tasks.every(({ isDone }) => isDone === "done");
+    const encouragementSentence = useMemo(() => {
+        let key;
+        if (progression === 0) key = "0";
+        else if (progression < 0.25) key = "0.25";
+        else if (progression < 0.5) key = "0.5";
+        else if (progression < 1) key = "0.75";
+        else key = "1";
 
-            return (
-                <DateItem
-                    date={date}
-                    contracted={contracted}
-                    isEvaluation={isEvaluation}
-                    isActive={date === activeDate}
-                    allTasksCompleted={allTasksCompleted}
-                    onPress={() => setActiveDate(date)}
-                />
-            );
-        },
-        [activeDate, mergedHomeworks]
-    );
-    const renderHomework = useCallback(
-        ({ item }) => <HomeworkCard dispatch={dispatch} homework={item} />,
-        [dispatch]
-    );
+        const sentences = motivationSentences[key];
+        return sentences
+            ? sentences[Math.floor(Math.random() * sentences.length)]
+            : "";
+    }, [progression]);
 
-    if (isError) {
-        return null;
-    }
     return (
         <>
-            <NewHomeworkModal visible={modalOpen} />
-            <View style={{ flex: 1 }}>
-                <View
-                    style={{
-                        position: "absolute",
-                        top: "5%",
-                        right: "5%",
-                        gap: 2,
-                        zIndex: 1,
+            <NewHomeworkModal visible={modalOpen} defaultDate={activeDate} />
+            <DocumentModal
+                visible={documentModal.open}
+                setVisible={(open) =>
+                    setDocumentModal((prev) => ({ ...prev, open }))
+                }
+                documents={documentModal.documents}
+            />
+            <ScreenStack>
+                <ScrollView
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={{
+                        paddingBottom: 40,
                     }}
                 >
-                    <TouchableOpacity
-                        style={{
-                            paddingHorizontal: 6,
-                            backgroundColor: "hsl(240, 56%, 60%)",
-                            borderRadius: 12,
-                        }}
-                        onPress={() => dispatch({ type: "OPEN_NEW_HOMEWORK_MODAL" })}
-                    >
-                        <Plus size={36} />
-                    </TouchableOpacity>
-                </View>
-
-                <SafeAreaView
-                    style={{
-                        height: "25%",
-                        justifyContent: "space-between",
-                        paddingTop: 14,
-                    }}
-                >
-                    <View
-                        style={{
-                            backgroundColor: "hsl(240, 19%, 38%)",
-                            alignSelf: "center",
-                            paddingHorizontal: 12,
-                            paddingVertical: 3,
-                            borderRadius: 9,
-                        }}
-                    >
-                        <Text align="center" preset="h3">
-                            {completedTasks.length}/{displayTasks.length}
-                        </Text>
-                    </View>
-                    <TasksProgression
+                    <HomeworkProgress
+                        completedCount={completedTasks.length}
+                        totalCount={displayTasks.length}
                         progression={progression}
-                        animatedWidth={animatedWidth}
+                        encouragementSentence={encouragementSentence}
                     />
 
-                    <Text preset="custom1" align="center" color="hsl(240, 34%, 77%)">
-                        {encouragementSentence}
-                    </Text>
-                </SafeAreaView>
-                <View style={{ flex: 1 }}>
-                    {homeworksDates && (
-                        <View style={{ flexDirection: "row", paddingHorizontal: 9 }}>
-                            <FlatList
-                                data={Object.entries(homeworksDates)}
-                                horizontal
-                                renderItem={renderDateItem}
-                                contentContainerStyle={{
-                                    gap: 12,
-                                    paddingVertical: 10,
-                                    paddingHorizontal: 6,
-                                }}
-                                keyExtractor={([date]) => date}
-                                showsHorizontalScrollIndicator={false}
-                            />
-                        </View>
-                    )}
+                    <HomeworkDatesRow
+                        homeworksDates={homeworksDates}
+                        activeDate={activeDate}
+                        setActiveDate={setActiveDate}
+                        mergedHomeworks={mergedHomeworks}
+                    />
+
                     <View
                         style={{
-                            flex: 1,
-                            backgroundColor: "hsl(240, 29%, 11%)",
-                            borderTopLeftRadius: 30,
-                            borderTopRightRadius: 30,
-                            padding: 24,
+                            paddingHorizontal: 24,
+                            gap: 10,
                         }}
+                        key={activeDate}
                     >
                         {objectsEqual({}, homeworksData) && (
                             <Text>
@@ -256,128 +180,43 @@ export default function HomeworksContent() {
                                 </Text>
                             </Text>
                         )}
-                        <View
+                        {displayTasks.map((homework) => (
+                            <HomeworkCard
+                                key={homework.id}
+                                dispatch={dispatch}
+                                homework={homework}
+                                isExpanded={expandedHomeworkId === homework.id}
+                                onToggleExpand={() => handleItemPress(homework.id)}
+                                onOpenDocuments={(documents) =>
+                                    setDocumentModal({ open: true, documents })
+                                }
+                            />
+                        ))}
+                        <AnimatedTouchableOpacity
+                            layout={LinearTransition.springify()}
                             style={{
-                                flexDirection: "row",
+                                paddingHorizontal: 6,
+                                paddingVertical: 3,
+                                backgroundColor: colors.brand.primary,
+                                borderRadius: 12,
+                                width: 55,
+                                alignItems: "center",
                                 alignSelf: "center",
-                                marginBottom: 24,
                             }}
+                            onPress={() =>
+                                dispatch({ type: "OPEN_NEW_HOMEWORK_MODAL" })
+                            }
                         >
-                            <Text preset="custom2">
-                                {activeDate &&
-                                    formatedDates &&
-                                    formatedDates[activeDate].long}
-                            </Text>
-                        </View>
-                        <FlatList
-                            data={displayTasks}
-                            renderItem={renderHomework}
-                            keyExtractor={({ id }) => id}
-                            showsVerticalScrollIndicator={false}
-                            contentContainerStyle={{
-                                gap: 10,
-                            }}
-                        />
+                            <Plus
+                                size={24}
+                                color={colors.text.onBrand}
+                                strokeWidth={3}
+                            />
+                        </AnimatedTouchableOpacity>
                     </View>
-                </View>
-            </View>
+                </ScrollView>
+            </ScreenStack>
         </>
     );
 }
 
-const TasksProgression = ({ progression, animatedWidth }) => {
-    useEffect(() => {
-        animatedWidth.value = withDelay(
-            100,
-            withSpring(progression * 100, {
-                damping: 40,
-                stiffness: 100,
-            })
-        );
-    }, [progression]);
-
-    const animatedStyle = useAnimatedStyle(() => {
-        const hue = interpolate(animatedWidth.value, [0, 100], [0, 120]);
-
-        return {
-            width: `${animatedWidth.value}%`,
-            backgroundColor: `hsl(${hue}, 100%, 50%)`,
-        };
-    });
-
-    return (
-        <View
-            style={{
-                marginHorizontal: 50,
-                backgroundColor: "hsl(240, 15%, 33%)",
-                borderRadius: 20,
-            }}
-        >
-            <Animated.View
-                style={[
-                    {
-                        height: 20,
-                        borderRadius: 20,
-                        alignItems: "flex-end",
-                        justifyContent: "center",
-                        paddingRight: 8,
-                    },
-                    animatedStyle,
-                ]}
-            />
-        </View>
-    );
-};
-
-const DateItem = memo(
-    ({ contracted, isEvaluation, isActive, allTasksCompleted, onPress }) => {
-        let dateBackgroundColor;
-        if (isEvaluation && allTasksCompleted) {
-            dateBackgroundColor = "hsl(28, 48%, 33%)"; //temp color
-        } else if (isEvaluation) {
-            dateBackgroundColor = "hsl(2, 63%, 43%)"; // temp color
-        } else if (allTasksCompleted) {
-            dateBackgroundColor = "hsl(115, 33%, 38%)"; // maybe good ?
-        } else {
-            dateBackgroundColor = "hsl(240, 19%, 36%)"; // keep this
-        }
-        return (
-            <TouchableOpacity
-                style={{
-                    width: 58,
-                    height: 58,
-                    alignItems: "center",
-                    justifyContent: "center",
-                    padding: 4,
-                }}
-                onPress={onPress}
-                activeOpacity={0.7}
-            >
-                <View
-                    style={{
-                        width: 50,
-                        height: 50,
-                        alignItems: "center",
-                        justifyContent: "center",
-                        backgroundColor: dateBackgroundColor,
-                        borderRadius: 10,
-                        ...(isActive && {
-                            boxShadow: [
-                                {
-                                    offsetX: 0,
-                                    offsetY: 0,
-                                    blurRadius: 6,
-                                    spreadDistance: 3,
-                                    color: adjustLightness(dateBackgroundColor, 30),
-                                },
-                            ],
-                        }),
-                    }}
-                >
-                    <Text preset="label1">{contracted[1]}</Text>
-                    <Text preset="label2">{contracted[0]}</Text>
-                </View>
-            </TouchableOpacity>
-        );
-    }
-);

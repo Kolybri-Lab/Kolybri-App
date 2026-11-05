@@ -1,0 +1,39 @@
+name: PR release description
+
+on:
+    pull_request:
+        branches: [main]
+        types: [opened, reopened, synchronize]
+
+permissions:
+    pull-requests: write
+    contents: read
+
+jobs:
+    describe:
+        if: github.head_ref == 'develop'
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Generate description from changelog
+              env:
+                  GH_TOKEN: ${{ github.token }}
+              run: |
+                  curl -fsSL "https://kolybri-lab.github.io/kolybri-announcements/changelog.json?t=$(date +%s)" -o changelog.json
+                  VERSION=$(jq -r '.[0].version' changelog.json)
+                  {
+                      echo "## Release v$VERSION"
+                      echo
+                      jq -r --arg v "$VERSION" '
+                      .[] | select(.version == $v) |
+                      ([.changes[] |
+                          (if .type == "new" then "✨ Nouveauté"
+                          elif .type == "improved" then "⚡ Amélioration"
+                          else "🐛 Correction" end) + " : " + .text
+                      ] | map("- " + .) | join("\n"))
+                      ' changelog.json
+                  } > body.md
+                  grep -q '^- ' body.md || { echo "Aucune entrée pour $VERSION dans le changelog"; exit 1; }
+                  gh pr edit ${{ github.event.pull_request.number }} \
+                      --title "Release v$VERSION" --body-file body.md

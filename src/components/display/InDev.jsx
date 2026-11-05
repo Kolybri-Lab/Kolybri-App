@@ -1,16 +1,17 @@
-import { useTheme } from "@react-navigation/native";
-import { StyleSheet, View } from "react-native";
 import { CONFIG } from "@/constants/config";
+import { useTheme } from "@/hooks/useThemeStore";
+import { getShadow } from "@/themes/tokens";
 import { addOpacityToCssRgb } from "@/utils/colorGenerator";
-import LinkText from "./LinkText";
+import { StyleSheet, View } from "react-native";
 import { Text } from "../core";
+import LinkText from "./LinkText";
 
 export default function InDev({}) {
-    const { colors } = useTheme();
-    const { shadow } = useTheme();
-    const mainColor = addOpacityToCssRgb(colors.main, 0.7);
-    const shadowColor = addOpacityToCssRgb("rgb(0, 0, 0)", shadow.oppacity);
-    const caseColor = addOpacityToCssRgb(colors.case, 0.8);
+    const { colors, isDark } = useTheme();
+    const shadow = getShadow(isDark);
+    const mainColor = addOpacityToCssRgb(colors.text.brand, 0.7);
+    const shadowColor = addOpacityToCssRgb(shadow.color, shadow.opacity);
+    const caseColor = addOpacityToCssRgb(colors.surface.raised, 0.8);
     return (
         <View style={[styles.parent]}>
             <View
@@ -29,7 +30,7 @@ export default function InDev({}) {
                 <Text align="center" preset="body1" color={mainColor}>
                     Rejoignez le{" "}
                     <LinkText href={CONFIG.discordInviteLink} color={mainColor}>
-                        serveur Discord d'EDP
+                        serveur Discord d'Kolybri
                     </LinkText>{" "}
                     pour en suivre l'avancée !
                 </Text>

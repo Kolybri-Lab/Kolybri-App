@@ -1,31 +1,68 @@
-export interface AppColors {
-    background: {
-        gradient: string | string[];
-        login: string;
-    };
-    txt: Record<string, string>;
-    error: string;
-    secondary: string;
-    main: string;
-    contrast: string;
-    edplogo: {
-        c1: string;
-        c2: string;
-    };
-    edptext: string[];
-}
+import { radius, spacing, typography } from "@/themes/tokens";
 
-export interface AppThemeConfig {
+export type AppThemeConfig = Theme;
+export type AppTheme = "light" | "dark";
+
+type ProgressBar = { progress: string; back: string };
+type ProgressBarKeys = "primary" | "secondary" | "success";
+
+export type Theme = {
+    name: AppTheme;
     isDark: boolean;
-    colors: AppColors;
-    fonts: {
-        bold: { fontFamily: string; fontWeight: string };
-        heavy: { fontFamily: string; fontWeight: string };
-        medium: { fontFamily: string; fontWeight: string };
-        regular: { fontFamily: string; fontWeight: string };
+    colors: {
+        background: {
+            app: string;
+            auth: string;
+            modal: string;
+        };
+        surface: {
+            default: string;
+            raised: string;
+            muted: string;
+        };
+        text: {
+            primary: string;
+            secondary: string;
+            accent: string;
+            brand: string;
+            onBrand: string;
+        };
+        brand: {
+            primary: string;
+            soft: string;
+            vivid: string;
+            highlight: string;
+        };
+        border: {
+            subtle: string;
+            strong: string;
+        };
+        state: {
+            danger: string;
+            success: string;
+            warning: string;
+        };
     };
-    shadow: {
-        oppacity: number;
-        color?: string;
+    components: {
+        tabBar: {
+            background: string;
+            border: string;
+            active: string;
+            inactive: string;
+        };
+        progressBar: {
+            progress: string;
+            track: string;
+        };
     };
-}
+    logo: {
+        from: string;
+        to: string;
+        textFrom: string;
+        textTo: string;
+    };
+    spacing: typeof spacing;
+    radius: typeof radius;
+    typography: typeof typography;
+};
+

@@ -1,0 +1,29 @@
+{
+    "code": 200,
+    "token": "guest_token",
+    "host": "HTTP200",
+    "message": "",
+    "data": {
+        "id": 103040,
+        "mtype": "received",
+        "read": true,
+        "idDossier": -1,
+        "idClasseur": 0,
+        "transferred": false,
+        "answered": false,
+        "to_cc_cci": "to",
+        "brouillon": false,
+        "subject": "option Maths expertes",
+        "content": "Qm9uam91ciwKClZvaWNpIGxlcyBpbmZvcm1hdGlvbnMgY29uY2VybmFudCBsJ29wdGlvbiBNYXRocyBleHBlcnRlcyBwb3VyIGwnYW5uZSBwcm9jaGFpbmUuCgpDb3JkaWFsZW1lbnQsCk0uIEdhdXRoaWVyIFAu",
+        "date": "2026-06-22 10:57:32",
+        "to": [],
+        "files": [],
+        "from": {
+            "nom": "GAUTHIER",
+            "prenom": "P.",
+            "civilite": "M",
+            "role": "A",
+            "id": 332
+        }
+    }
+}

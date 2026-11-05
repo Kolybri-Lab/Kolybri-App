@@ -1,6 +1,7 @@
+import { routesNames } from "@/router/config/routesNames";
+import { objectsEqual } from "@/utils/json";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect } from "react";
-import { routesNames } from "@/router/config/routesNames";
 import Discipline from "../models/Discipline";
 import Grade from "../models/Grade";
 import Period from "../models/Period";
@@ -13,14 +14,15 @@ export const useSimulation = ({
     setRenderDisciplineArray,
     renderDisciplinesArray,
     displayPeriode,
+    setDisplayPeriode,
     setGeneralAverage,
 }) => {
     const navigation = useNavigation();
 
     useEffect(() => {
         if (state.gradeData) {
-            const discipline = renderDisciplinesArray.find(
-                ({ code }) => code === state.gradeData.codes.discipline
+            const discipline = renderDisciplinesArray?.find(
+                ({ code }) => code === state.gradeData.codes?.discipline
             );
 
             navigation.navigate(routesNames.client.grades.details, {
@@ -29,7 +31,7 @@ export const useSimulation = ({
             });
             dispatch({ type: "RESET_GRADE_DETAILS" });
         }
-    }, [state.gradeData, navigation, dispatch]);
+    }, [state.gradeData, navigation, dispatch, renderDisciplinesArray]);
 
     useEffect(() => {
         if (state.simulation.disciplineCode) {
@@ -38,99 +40,214 @@ export const useSimulation = ({
                 period: displayPeriodeName,
             });
         }
-    }, [state.simulation.disciplineCode, setSimulatedDisciplineCodes]);
+    }, [
+        state.simulation.disciplineCode,
+        displayPeriodeName,
+        setSimulatedDisciplineCodes,
+    ]);
 
     useEffect(() => {
-        if (state.gradeToRemove) {
-            // get Grade methods
+        if (state.gradeToRemove && displayPeriode?.groups) {
             const gradeToDelete = new Grade(state.gradeToRemove);
+            const gradeObj = gradeToDelete.getGrade();
 
-            // find the wanted discipline to calculate new discipline average
-            const disciplineToUpdate = renderDisciplinesArray.find(
-                (discipline) => discipline.code === gradeToDelete.codes.discipline
-            );
+            const updatedGroups = displayPeriode.groups.map((group) => {
+                if (group.isDisciplineGroup && Array.isArray(group.disciplines)) {
+                    const updatedDisciplines = group.disciplines.map(
+                        (discipline) => {
+                            if (discipline.code === gradeToDelete.codes.discipline) {
+                                const newGrades = (discipline.grades || []).filter(
+                                    (g) =>
+                                        !objectsEqual(
+                                            new Grade(g).getGrade(),
+                                            gradeObj
+                                        )
+                                );
+                                const tempDiscipline = new Discipline({
+                                    ...discipline,
+                                    grades: newGrades,
+                                });
+                                const calculatedAvg =
+                                    tempDiscipline.getWeightedAverage();
+                                return {
+                                    ...discipline,
+                                    grades: newGrades,
+                                    averageDatas: {
+                                        ...discipline.averageDatas,
+                                        userAverage: calculatedAvg,
+                                    },
+                                };
+                            }
+                            return discipline;
+                        }
+                    );
 
-            // get Discipline methods
-            const duplicatedDiscipline = new Discipline(disciplineToUpdate);
-            duplicatedDiscipline.removeGrade(gradeToDelete.getGrade());
-            // IMPORTANT getGrade because without is makes confusion with object so use is :)
+                    const tempGroup = new Discipline({
+                        ...group,
+                        disciplines: updatedDisciplines,
+                    });
+                    const calculatedGroupAvg = tempGroup.getDisciplineGroupAverage();
 
-            // get Period methods
-            const periodToUpdate = new Period(displayPeriode);
-            periodToUpdate.removeGrade(gradeToDelete.getGrade());
-            // IMPORTANT getGrade because without is makes confusion with object so use is :)
-
-            const updatedRenderDisciplines = renderDisciplinesArray.map(
-                (discipline) => {
-                    if (discipline.code === gradeToDelete.codes.discipline) {
-                        return {
-                            ...duplicatedDiscipline.getDiscipline(),
-
-                            averageDatas: {
-                                ...discipline.averageDatas,
-                                userAverage:
-                                    // update new discipline average
-                                    duplicatedDiscipline.getWeightedAverage(), // same :)
-                            },
-                        };
-                    } else {
-                        return discipline;
-                    }
+                    return {
+                        ...group,
+                        disciplines: updatedDisciplines,
+                        averageDatas: {
+                            ...group.averageDatas,
+                            userAverage: calculatedGroupAvg,
+                        },
+                    };
+                } else if (group.code === gradeToDelete.codes.discipline) {
+                    const newGrades = (group.grades || []).filter(
+                        (g) => !objectsEqual(new Grade(g).getGrade(), gradeObj)
+                    );
+                    const tempDiscipline = new Discipline({
+                        ...group,
+                        grades: newGrades,
+                    });
+                    const calculatedAvg = tempDiscipline.getWeightedAverage();
+                    return {
+                        ...group,
+                        grades: newGrades,
+                        averageDatas: {
+                            ...group.averageDatas,
+                            userAverage: calculatedAvg,
+                        },
+                    };
                 }
-            );
+                return group;
+            });
 
-            setRenderDisciplineArray(
-                updatedRenderDisciplines /* update in render the discipline average */
-            );
-            setGeneralAverage(
-                periodToUpdate.makeGeneralAverage() /* set new general average */
-            );
+            const updatedDisplayPeriode = {
+                ...displayPeriode,
+                groups: updatedGroups,
+            };
+
+            const newGeneralAvg = new Period(
+                updatedDisplayPeriode,
+                displayPeriodeName
+            ).makeGeneralAverage();
+
+            if (setDisplayPeriode) {
+                setDisplayPeriode(updatedDisplayPeriode);
+            }
+            if (setGeneralAverage) {
+                setGeneralAverage(newGeneralAvg);
+            }
             dispatch({ type: "CLEAR_SIMULATED_GRADE" });
         }
-    }, [state.gradeToRemove]);
-
+    }, [
+        state.gradeToRemove,
+        displayPeriode,
+        displayPeriodeName,
+        setDisplayPeriode,
+        setGeneralAverage,
+        dispatch,
+    ]);
     useEffect(() => {
-        if (state.simulatedGrade) {
-            // get Grade methods
+        if (state.simulatedGrade && displayPeriode?.groups) {
             const simulatedGrade = new Grade(state.simulatedGrade);
-            // find the wanted discipline to calculate new discipline average
-            const disciplineToUpdate = renderDisciplinesArray.find(
-                (discipline) => discipline.code === simulatedGrade.codes.discipline
-            );
-            // get Discipline methods
-            const duplicatedDiscipline = new Discipline(disciplineToUpdate);
-            duplicatedDiscipline.injectGrade(simulatedGrade.getGrade());
-            // IMPORTANT getGrade because without is makes confusion with object so use is :)
+            const gradeObj = simulatedGrade.getGrade();
 
-            // get Period methods
-            const updatedPeriod = new Period(displayPeriode);
-            updatedPeriod.injectGrade(simulatedGrade.getGrade());
-            // IMPORTANT getGrade because without is makes confusion with object so use is :)
+            const updatedGroups = displayPeriode.groups.map((group) => {
+                if (group.isDisciplineGroup && Array.isArray(group.disciplines)) {
+                    const updatedDisciplines = group.disciplines.map(
+                        (discipline) => {
+                            if (
+                                discipline.code === simulatedGrade.codes.discipline
+                            ) {
+                                const newGrades = [
+                                    ...(discipline.grades || []),
+                                    gradeObj,
+                                ];
+                                const tempDiscipline = new Discipline({
+                                    ...discipline,
+                                    grades: newGrades,
+                                });
+                                const calculatedAvg =
+                                    tempDiscipline.getWeightedAverage();
+                                return {
+                                    ...discipline,
+                                    grades: newGrades,
+                                    averageDatas: {
+                                        ...discipline.averageDatas,
+                                        userAverage:
+                                            calculatedAvg !== null &&
+                                            calculatedAvg !== undefined
+                                                ? calculatedAvg
+                                                : discipline.averageDatas
+                                                      ?.userAverage,
+                                    },
+                                };
+                            }
+                            return discipline;
+                        }
+                    );
 
-            const updatedRenderDisciplines = renderDisciplinesArray.map(
-                (discipline) => {
-                    if (discipline.code === simulatedGrade.codes.discipline) {
-                        return {
-                            ...duplicatedDiscipline.getDiscipline(), // same :)
-                            averageDatas: {
-                                ...discipline.averageDatas,
-                                userAverage:
-                                    // update new discipline average
-                                    duplicatedDiscipline.getWeightedAverage(),
-                            },
-                        };
-                    } else {
-                        return discipline;
-                    }
+                    const tempGroup = new Discipline({
+                        ...group,
+                        disciplines: updatedDisciplines,
+                    });
+                    const calculatedGroupAvg = tempGroup.getDisciplineGroupAverage();
+
+                    return {
+                        ...group,
+                        disciplines: updatedDisciplines,
+                        averageDatas: {
+                            ...group.averageDatas,
+                            userAverage:
+                                calculatedGroupAvg !== null &&
+                                calculatedGroupAvg !== undefined
+                                    ? calculatedGroupAvg
+                                    : group.averageDatas?.userAverage,
+                        },
+                    };
+                } else if (group.code === simulatedGrade.codes.discipline) {
+                    const newGrades = [...(group.grades || []), gradeObj];
+                    const tempDiscipline = new Discipline({
+                        ...group,
+                        grades: newGrades,
+                    });
+                    const calculatedAvg = tempDiscipline.getWeightedAverage();
+                    return {
+                        ...group,
+                        grades: newGrades,
+                        averageDatas: {
+                            ...group.averageDatas,
+                            userAverage:
+                                calculatedAvg !== null && calculatedAvg !== undefined
+                                    ? calculatedAvg
+                                    : group.averageDatas?.userAverage,
+                        },
+                    };
                 }
-            );
-            setRenderDisciplineArray(
-                updatedRenderDisciplines /* update in render the discipline average */
-            );
-            setGeneralAverage(
-                updatedPeriod.makeGeneralAverage() /* set new general average */
-            );
+                return group;
+            });
+
+            const updatedDisplayPeriode = {
+                ...displayPeriode,
+                groups: updatedGroups,
+            };
+
+            const newGeneralAvg = new Period(
+                updatedDisplayPeriode,
+                displayPeriodeName
+            ).makeGeneralAverage();
+
+            if (setDisplayPeriode) {
+                setDisplayPeriode(updatedDisplayPeriode);
+            }
+            if (setGeneralAverage) {
+                setGeneralAverage(newGeneralAvg);
+            }
+            dispatch({ type: "CLEAR_SIMULATED_GRADE" });
         }
-    }, [state.simulatedGrade]);
+    }, [
+        state.simulatedGrade,
+        displayPeriode,
+        displayPeriodeName,
+        setDisplayPeriode,
+        setGeneralAverage,
+        dispatch,
+    ]);
 };
 

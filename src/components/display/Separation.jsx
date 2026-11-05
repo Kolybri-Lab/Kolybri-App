@@ -1,4 +1,4 @@
-import { useTheme } from "@react-navigation/native";
+import { useTheme } from "@/hooks/useThemeStore";
 import { View } from "react-native";
 import { UiStyles } from "./UiStyles";
 
@@ -9,7 +9,7 @@ export default function Separation({ color }) {
             <View
                 style={[
                     UiStyles.separationChildren,
-                    { backgroundColor: color ? color : colors.contrast },
+                    { backgroundColor: color ? color : colors.text.primary },
                 ]}
             />
         </View>

@@ -1,4 +1,6 @@
-import { useTheme } from "@react-navigation/native";
+import { useTheme } from "@/hooks/useThemeStore";
+import { getShadow } from "@/themes/tokens";
+import { addOpacity } from "@/utils/colorGenerator";
 import React from "react";
 import { StyleSheet, View } from "react-native";
 
@@ -85,7 +87,7 @@ function Stack({
             card,
             flat,
             bordered,
-            theme.dark, // Important d'inclure le thème
+            theme.name, // Important : le cache est global, il doit distinguer les thèmes
         ].join("-");
     }, [
         direction,
@@ -103,7 +105,7 @@ function Stack({
         card,
         flat,
         bordered,
-        theme.dark,
+        theme.name,
     ]);
 
     // Calcul des styles avec mise en cache
@@ -161,7 +163,7 @@ function Stack({
             Object.assign(dynamicStyle, {
                 borderRadius: radius || 20,
                 borderCurve: "continuous",
-                backgroundColor: backgroundColor || colors.card,
+                backgroundColor: backgroundColor || colors.surface.default,
                 overflow: "visible",
             });
 
@@ -171,18 +173,18 @@ function Stack({
                     shadowColor: "transparent",
                     shadowOpacity: 0,
                     borderWidth: 1,
-                    borderColor: colors.text + "25",
+                    borderColor: addOpacity(colors.text.primary, 0.15),
                 });
             } else {
                 // Style card avec ombrage
                 Object.assign(dynamicStyle, {
-                    shadowColor: "#000000",
+                    shadowColor: getShadow(theme.isDark).color,
                     shadowOffset: { width: 0, height: 0 },
                     shadowOpacity: 0.16,
                     shadowRadius: 1.5,
                     elevation: 1,
                     borderWidth: 0.5,
-                    borderColor: colors.text + "25",
+                    borderColor: addOpacity(colors.text.primary, 0.15),
                 });
             }
         }
@@ -192,9 +194,9 @@ function Stack({
             Object.assign(dynamicStyle, {
                 borderRadius: radius || 20,
                 borderCurve: "continuous",
-                borderColor: colors.border + "33",
+                borderColor: colors.border.subtle,
                 borderWidth: 1,
-                backgroundColor: backgroundColor || colors.card,
+                backgroundColor: backgroundColor || colors.surface.default,
             });
         }
 
@@ -208,7 +210,7 @@ function Stack({
         cleanupCache();
 
         return finalStyle;
-    }, [cacheKey, colors.card, colors.text, colors.border]);
+    }, [cacheKey, colors]);
 
     return (
         <View {...rest} style={[computedStyle, style]}>

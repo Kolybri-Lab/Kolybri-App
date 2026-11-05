@@ -2,6 +2,7 @@ import React, { forwardRef, useImperativeHandle, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
+    cancelAnimation,
     useAnimatedStyle,
     useDerivedValue,
     useSharedValue,
@@ -14,9 +15,16 @@ const {
     screen: { height },
 } = GLOBALS_DATAS;
 
+const SPRING_CONFIG = {
+    stiffness: 180,
+    damping: 22,
+    mass: 0.8,
+};
+
 const VerticalScrollView = forwardRef(({ children, arrayLength, getIndex }, ref) => {
     const translateY = useSharedValue(0);
     const pageIndex = useSharedValue(0);
+    const startY = useSharedValue(0);
     const [activePageIndex, setActivePageIndex] = useState(0);
 
     useDerivedValue(() => {
@@ -28,11 +36,7 @@ const VerticalScrollView = forwardRef(({ children, arrayLength, getIndex }, ref)
 
         pageIndex.value = index;
         if (withAnimation) {
-            translateY.value = withSpring(-index * height, {
-                stiffness: 100,
-                damping: 15,
-                duration: 750,
-            });
+            translateY.value = withSpring(-index * height, SPRING_CONFIG);
         } else {
             translateY.value = -index * height;
         }
@@ -40,61 +44,49 @@ const VerticalScrollView = forwardRef(({ children, arrayLength, getIndex }, ref)
         setActivePageIndex(index);
     };
 
+    const adjustForPrepend = (addedCount) => {
+        if (addedCount <= 0) return;
+        pageIndex.value = pageIndex.value + addedCount;
+        translateY.value = translateY.value - addedCount * height;
+        setActivePageIndex((prev) => prev + addedCount);
+    };
+
     useImperativeHandle(ref, () => ({
         scrollToIndex,
+        adjustForPrepend,
     }));
 
     const gesture = Gesture.Pan()
+        .onStart(() => {
+            cancelAnimation(translateY);
+            startY.value = translateY.value;
+        })
         .onUpdate((event) => {
-            if (
-                event.translationY > 0 && // up swipe (< 0 -> down ; > 0 -> up)
-                activePageIndex + 1 !== arrayLength - 1 && // check page index (if not at end or start)
-                activePageIndex === 0 // check if we are at first index  (last element)
-            ) {
-                if (event.translationY > 800) {
-                    translateY.value = translateY.value;
-                }
-                translateY.value = withSpring(event.translationY * 0.2, {
-                    stiffness: 200,
-                    damping: 20,
-                    duration: 750,
-                });
-            } else if (
-                event.translationY < 0 && // down swipe (< 0 -> down ; > 0 -> up)
-                activePageIndex + 1 !== arrayLength - 1 && // check page index (if not at end or start)
-                activePageIndex === arrayLength - 1 // check if we are at least index (last element)
-            ) {
-                if (event.translationY < -800) {
-                    translateY.value = translateY.value;
-                }
-                translateY.value = withSpring(
-                    -pageIndex.value * height + event.translationY * 0.2,
-                    {
-                        stiffness: 200,
-                        damping: 20,
-                        duration: 750,
-                    }
-                );
+            const minTranslate = -(arrayLength - 1) * height;
+            const maxTranslate = 0;
+            const rawTranslate = startY.value + event.translationY;
+
+            if (rawTranslate > maxTranslate) {
+                translateY.value = maxTranslate + (rawTranslate - maxTranslate) * 0.2;
+            } else if (rawTranslate < minTranslate) {
+                translateY.value = minTranslate + (rawTranslate - minTranslate) * 0.2;
             } else {
-                translateY.value = withSpring(
-                    -pageIndex.value * height + event.translationY,
-                    {
-                        stiffness: 225,
-                        damping: 50,
-                        duration: 750,
-                    }
-                );
+                translateY.value = rawTranslate;
             }
         })
         .onEnd((event) => {
-            let newIndex = pageIndex.value;
-            if (event.translationY < -35 && newIndex < arrayLength - 1) {
-                newIndex += 1;
-            } else if (event.translationY > 35 && newIndex > 0) {
-                newIndex -= 1;
+            const currentTranslate = translateY.value;
+            let targetIndex = pageIndex.value;
+
+            if (event.velocityY < -500 || event.translationY < -height * 0.25) {
+                targetIndex = Math.min(arrayLength - 1, Math.floor(-currentTranslate / height) + 1);
+            } else if (event.velocityY > 500 || event.translationY > height * 0.25) {
+                targetIndex = Math.max(0, Math.ceil(-currentTranslate / height) - 1);
+            } else {
+                targetIndex = Math.max(0, Math.min(arrayLength - 1, Math.round(-currentTranslate / height)));
             }
 
-            scheduleOnRN(scrollToIndex, newIndex);
+            scheduleOnRN(scrollToIndex, targetIndex);
         });
 
     const animatedStyle = useAnimatedStyle(() => ({
@@ -120,4 +112,3 @@ const styles = StyleSheet.create({
 });
 
 export default VerticalScrollView;
-

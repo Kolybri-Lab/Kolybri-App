@@ -1,5 +1,9 @@
 export const motivationSentences = {
-    0: [""],
+    0: [
+        "Il faut un début à tout",
+        "Bonne chance !",
+        "Allez, ça va pas se faire tout seul",
+    ],
     0.25: [
         "C'est un bon début !",
         "On ne lâche rien !",
@@ -22,7 +26,7 @@ export const motivationSentences = {
         "Ça avance super bien !",
         "C'est presque un jeu d'enfant !",
         "Bientôt l'arrêt au stand !",
-        "Alors c'est bien Ecole Directe Plus sur mobile ?",
+        "Alors c'est bien Kolybri sur mobile ?",
     ],
     1: [
         "Top 1 !",

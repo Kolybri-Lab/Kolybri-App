@@ -23,8 +23,9 @@ export default function SwipeBackWrapper({
     }, [navigation]);
 
     const gesture = Gesture.Pan()
-        .activeOffsetX(direction === "right" ? [10, 9999] : [-9999, -10])
-        .failOffsetY([-30, 30])
+        .cancelsTouchesInView(false)
+        .activeOffsetX(direction === "right" ? [20, 9999] : [-9999, -20])
+        .failOffsetY([-25, 25])
         .onUpdate((event) => {
             if (
                 (direction === "right" && event.translationX > 0) ||

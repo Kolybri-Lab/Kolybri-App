@@ -1,3 +1,7 @@
+import { Text } from "@/components/core";
+import { useTheme } from "@/hooks/useThemeStore";
+import { withAlpha } from "@/themes/color";
+import { formatDate } from "@/utils/date";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { MD5 } from "crypto-js";
 import { useEffect, useState } from "react";
@@ -14,12 +18,11 @@ import Animated, {
     withTiming,
 } from "react-native-reanimated";
 import { scheduleOnRN } from "react-native-worklets";
-import { Text } from "@/components/core";
-import { formatDate } from "@/utils/date";
 import { useHomework } from "../context/HomeworkContext";
 
-export default function NewHomeworkModal({ visible }) {
+export default function NewHomeworkModal({ visible, defaultDate }) {
     const { dispatch } = useHomework();
+    const { colors } = useTheme();
     const [isRendered, setIsRendered] = useState(false);
     const [error, setError] = useState(null);
     const translateY = useSharedValue(500);
@@ -48,6 +51,15 @@ export default function NewHomeworkModal({ visible }) {
 
     useEffect(() => {
         if (visible) {
+            const initialDate = defaultDate
+                ? new Date(`${defaultDate}T12:00:00`)
+                : new Date();
+            setDate(initialDate);
+            setHomeworkDatas((prev) => ({
+                ...prev,
+                date: formatDate(initialDate, "ed"),
+            }));
+
             setIsRendered(true);
             translateY.value = withTiming(0, {
                 duration: 450,
@@ -65,7 +77,7 @@ export default function NewHomeworkModal({ visible }) {
             );
             opacity.value = withTiming(0, { duration: 250 });
         }
-    }, [visible]);
+    }, [visible, defaultDate]);
 
     const modalStyle = useAnimatedStyle(() => ({
         transform: [{ translateY: translateY.value }],
@@ -134,12 +146,11 @@ export default function NewHomeworkModal({ visible }) {
                         position: "absolute",
                         bottom: 0,
                         width: "100%",
-                        backgroundColor: "hsl(240, 35%, 11%)",
+                        backgroundColor: colors.surface.raised,
                         borderTopLeftRadius: 42,
                         borderTopRightRadius: 42,
                         paddingHorizontal: 24,
                         paddingTop: 16,
-                        paddingBottom: 40,
                         minHeight: 400,
                         maxHeight: "85%",
                     },
@@ -150,7 +161,7 @@ export default function NewHomeworkModal({ visible }) {
                     style={{
                         width: 50,
                         height: 5,
-                        backgroundColor: "hsla(240, 20%, 60%, 0.4)",
+                        backgroundColor: colors.surface.default,
                         borderRadius: 3,
                         alignSelf: "center",
                         marginBottom: 24,
@@ -193,12 +204,12 @@ export default function NewHomeworkModal({ visible }) {
                     <View style={{ flexDirection: "row", gap: 20 }}>
                         <TouchableOpacity
                             style={{
-                                backgroundColor: "hsla(240, 30%, 20%, 0.8)",
+                                backgroundColor: colors.surface.default,
                                 borderRadius: 13,
                                 paddingHorizontal: 16,
                                 paddingVertical: 12,
                                 borderWidth: 1,
-                                borderColor: "hsla(240, 20%, 40%, 0.3)",
+                                borderColor: colors.border.subtle,
                                 width: "40%",
                                 justifyContent: "center",
                             }}
@@ -212,7 +223,13 @@ export default function NewHomeworkModal({ visible }) {
                                     mode="date"
                                     display="calendar"
                                     onChange={onChange}
-                                    minimumDate={new Date()}
+                                    minimumDate={
+                                        date < new Date()
+                                            ? date
+                                            : new Date(
+                                                  new Date().setHours(0, 0, 0, 0)
+                                              )
+                                    }
                                     maximumDate={
                                         new Date(
                                             new Date().setFullYear(
@@ -227,7 +244,7 @@ export default function NewHomeworkModal({ visible }) {
                             style={{
                                 backgroundColor: homeworkDatas.isEvaluation
                                     ? "hsl(0, 54%, 57%)"
-                                    : "hsla(240, 30%, 20%, 0.8)",
+                                    : colors.surface.default,
                                 alignSelf: "center",
                                 paddingHorizontal: 14,
                                 paddingVertical: 9,
@@ -258,20 +275,23 @@ export default function NewHomeworkModal({ visible }) {
                         <View
                             style={{
                                 flex: 1,
-                                backgroundColor: "hsla(240, 30%, 20%, 0.8)",
+                                backgroundColor: colors.surface.default,
                                 borderRadius: 13,
                                 paddingHorizontal: 16,
                                 borderWidth: 1,
-                                borderColor: "hsla(240, 20%, 40%, 0.3)",
+                                borderColor: colors.border.subtle,
                                 minHeight: 50,
                                 justifyContent: "center",
                             }}
                         >
                             <TextInput
                                 placeholder="Mathématiques"
-                                placeholderTextColor={"hsla(0, 100%, 100%, .25)"}
+                                placeholderTextColor={withAlpha(
+                                    colors.text.primary,
+                                    0.4
+                                )}
                                 keyboardType="default"
-                                style={{ fontSize: 16 }}
+                                style={{ fontSize: 16, color: colors.text.primary }}
                                 onChangeText={(text) =>
                                     setHomeworkDatas((prev) => ({
                                         ...prev,
@@ -288,20 +308,23 @@ export default function NewHomeworkModal({ visible }) {
                         </Text>
                         <View
                             style={{
-                                backgroundColor: "hsla(240, 30%, 20%, 0.8)",
+                                backgroundColor: colors.surface.default,
                                 borderRadius: 13,
                                 paddingHorizontal: 16,
                                 paddingVertical: 7,
                                 borderWidth: 1,
-                                borderColor: "hsla(240, 20%, 40%, 0.3)",
+                                borderColor: colors.border.subtle,
                                 minHeight: 250,
                             }}
                         >
                             <TextInput
                                 placeholder="Décris la tâche à faire..."
-                                placeholderTextColor={"hsla(0, 100%, 100%, .25)"}
+                                placeholderTextColor={withAlpha(
+                                    colors.text.primary,
+                                    0.4
+                                )}
                                 keyboardType="default"
-                                style={{ fontSize: 16 }}
+                                style={{ fontSize: 16, color: colors.text.primary }}
                                 multiline={true}
                                 onChangeText={(text) =>
                                     setHomeworkDatas((prev) => ({
@@ -319,7 +342,7 @@ export default function NewHomeworkModal({ visible }) {
                         onPress={handleClose}
                         style={{
                             flex: 1,
-                            backgroundColor: "hsla(240, 30%, 25%, 0.8)",
+                            backgroundColor: colors.surface.default,
                             paddingVertical: 16,
                             borderRadius: 13,
                             alignItems: "center",
@@ -330,14 +353,16 @@ export default function NewHomeworkModal({ visible }) {
                     <TouchableOpacity
                         style={{
                             flex: 1,
-                            backgroundColor: "hsl(240, 50%, 55%)",
+                            backgroundColor: colors.brand.primary,
                             paddingVertical: 16,
                             borderRadius: 13,
                             alignItems: "center",
                         }}
                         onPress={handleCreate}
                     >
-                        <Text preset="label1">Ajouter</Text>
+                        <Text preset="label1" color={colors.text.onBrand}>
+                            Ajouter
+                        </Text>
                     </TouchableOpacity>
                 </View>
             </Animated.View>

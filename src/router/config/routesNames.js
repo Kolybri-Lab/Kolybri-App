@@ -1,7 +1,7 @@
 export const routesNames = {
     auth: {
         login: "auth_login",
-        privacyPolicy: "auth_privacy_pol",
+        privacyPolicy: "auth_privacy_policy",
         settings: "auth_varaible_settings",
     },
     client: {
@@ -22,16 +22,31 @@ export const routesNames = {
             course_details: "client_timetable_course_details",
         },
 
-        messaging: "client_messaging",
+        messaging: {
+            group: "client_messaging",
+            content: "client_messaging_content",
+            details: "client_messaging_details",
+        },
     },
-    core: {
-        settings: "client_core_settings",
+    settings: {
+        home: "client_settings_home",
+        account_settings: {
+            account: "account_setting",
+            data_and_confidentiality: "data_and_confidentiality_setting",
+        },
+        app_settings: {
+            theme: "theme_setting",
+        },
+        about_settings: {
+            release_notes: "releaes_notes_setting",
+            feedback: "feedback_setting",
+            about: "about_setting",
+            contributors: "contributors",
+            plus: "plus",
+        },
     },
     navigators: {
-        core: "navigators_variable_settings",
-        splash: "navigators_splash",
+        settings: "navigators_variable_settings",
         tabs: "navigators_root",
-        auth: "navigators_authentification",
     },
 };
-

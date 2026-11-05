@@ -1,28 +1,37 @@
-import { useNavigation, useTheme } from "@react-navigation/native";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
+import { useTheme } from "@/hooks/useThemeStore";
+import { useNavigation } from "@react-navigation/native";
 
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Account, Discord, EDP, Github, Key } from "@/components/svg";
+import { useCallback, useEffect, useRef, useState } from "react";
+import {
+    Pressable,
+    StyleSheet,
+    TextInput,
+    TouchableOpacity,
+    View,
+} from "react-native";
+
 import {
     A2fSelectableModal,
     CheckBox,
     LinkButton,
     OverLoader,
 } from "@/components/index";
+import { Account, Discord, Github, Kolybri } from "@/components/svg";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-import MaskedView from "@react-native-masked-view/masked-view";
-import { LinearGradient } from "expo-linear-gradient";
 import { Text } from "@/components/core";
 import { getApiMessage } from "@/constants/api/codes";
 import { useSignIn } from "@/hooks/useSignIn";
 import { routesNames } from "@/router/config/routesNames";
 import { addOpacityToCssRgb } from "@/utils/colorGenerator";
+import MaskedView from "@react-native-masked-view/masked-view";
+import { LinearGradient } from "expo-linear-gradient";
+import { EyeClosedIcon, EyeIcon } from "lucide-react-native";
 
 export default function LoginScreen() {
     const navigation = useNavigation();
     const theme = useTheme();
-    const caseColor = addOpacityToCssRgb(theme.colors.case, 0.3);
+    const caseColor = addOpacityToCssRgb(theme.colors.surface.raised, 0.3);
 
     const styles = createStyles(theme, caseColor); //Temporary
     const { signIn, mcqDatas, setChoice, setMcqDatas, apiError, setApiError } =
@@ -30,6 +39,8 @@ export default function LoginScreen() {
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [passwordVisible, setPasswordVisible] = useState(false);
+
     const [modalVisible, setModalVisible] = useState(false);
     const [keepConnected, setKeepConnected] = useState(true);
     const [loginStates, setLoginStates] = useState({
@@ -87,13 +98,13 @@ export default function LoginScreen() {
         <SafeAreaView style={[styles.container]}>
             <SafeAreaView style={styles.logos}>
                 <LinkButton url={"https://discord.gg/AKAqXfTgvE"}>
-                    <Discord fill={theme.colors.main} size={28} />
+                    <Discord fill={theme.colors.brand.primary} size={28} />
                 </LinkButton>
 
                 <LinkButton
                     url={"https://github.com/as2pick/EcoleDirectePlus-Mobile"}
                 >
-                    <Github fill={theme.colors.main} size={28} />
+                    <Github fill={theme.colors.brand.primary} size={28} />
                 </LinkButton>
             </SafeAreaView>
             <OverLoader
@@ -106,17 +117,17 @@ export default function LoginScreen() {
 
             <View style={styles.form}>
                 <View style={styles.logo.box}>
-                    <EDP size={88} />
-                    <MaskedView
-                        maskElement={<Text preset="h1">Ecole Directe Plus</Text>}
-                    >
+                    <View style={{ marginTop: 40 }}>
+                        <Kolybri size={98} />
+                    </View>
+                    <MaskedView maskElement={<Text preset="h1">Kolybri</Text>}>
                         <LinearGradient
-                            colors={theme.colors.edptext}
+                            colors={[theme.logo.textFrom, theme.logo.textTo]}
                             start={{ x: 1, y: 0 }}
                             end={{ x: 0, y: 0 }}
                         >
                             <Text preset="h1" style={{ opacity: 0 }}>
-                                Ecole Directe Plus
+                                Kolybri
                             </Text>
                         </LinearGradient>
                     </MaskedView>
@@ -127,7 +138,7 @@ export default function LoginScreen() {
                             <TextInput
                                 ref={usernameInputRef}
                                 placeholder="Identifiant"
-                                placeholderTextColor={theme.colors.main}
+                                placeholderTextColor={theme.colors.text.secondary}
                                 onChangeText={(data) => {
                                     setApiError(null);
                                     setUsername(data);
@@ -138,12 +149,14 @@ export default function LoginScreen() {
                                 returnKeyType="next"
                                 value={username}
                                 textAlign="center"
+                                autoComplete="username"
+                                textContentType="username"
                                 spellCheck={false}
                                 style={[
                                     styles.input.case,
                                     {
-                                        borderColor: theme.colors.border,
-                                        backgroundColor: theme.colors.background,
+                                        borderColor: theme.colors.border.strong,
+                                        backgroundColor: theme.colors.surface.muted,
                                     },
                                 ]}
                             />
@@ -155,7 +168,7 @@ export default function LoginScreen() {
                             <TextInput
                                 ref={passwordInputRef}
                                 placeholder="Mot de passe"
-                                placeholderTextColor={theme.colors.main}
+                                placeholderTextColor={theme.colors.text.secondary}
                                 onChangeText={(data) => {
                                     setApiError(null);
                                     setPassword(data);
@@ -166,19 +179,37 @@ export default function LoginScreen() {
                                 spellCheck={false}
                                 textAlign="center"
                                 // keyboardType="visible-password"
-                                // secureTextEntry={true}  // ONLY IN PROD ENV
-                                // autoComplete="password" // ONLY IN PROD ENV
-                                // textContentType="password" // ONLY IN PROD ENV
+                                secureTextEntry={!passwordVisible} // ONLY IN PROD ENV
+                                autoComplete="password" // ONLY IN PROD ENV
+                                textContentType="password" // ONLY IN PROD ENV
                                 style={[
                                     styles.input.case,
                                     {
-                                        borderColor: theme.colors.border,
-                                        backgroundColor: theme.colors.background,
+                                        borderColor: theme.colors.border.strong,
+                                        backgroundColor: theme.colors.surface.muted,
                                     },
                                 ]}
                             />
                             <View style={styles.input.icon}>
-                                <Key />
+                                <Pressable
+                                    onPress={() =>
+                                        setPasswordVisible(!passwordVisible)
+                                    }
+                                >
+                                    {passwordVisible ? (
+                                        <EyeIcon
+                                            size={26}
+
+                                            color="hsl(222, 54%, 75%)"
+                                        />
+                                    ) : (
+                                        <EyeClosedIcon
+                                            size={26}
+                                            color="hsl(222, 54%, 75%)"
+                                        />
+                                    )}
+                                </Pressable>
+                                {/* <Key /> */}
                             </View>
                         </View>
                         <View style={styles.checkBox}>
@@ -198,7 +229,7 @@ export default function LoginScreen() {
                         borderRadius: 12,
                         paddingVertical: 7,
                         paddingHorizontal: 16,
-                        borderColor: theme.colors.border,
+                        borderColor: theme.colors.border.strong,
                         transform: [{ scale: 1.2 }],
                     }}
                 >
@@ -206,11 +237,18 @@ export default function LoginScreen() {
                 </TouchableOpacity>
             </View>
             {apiError && (
-                <Text style={styles.error} color={theme.colors.error}>
+                <Text style={styles.error} color={theme.colors.state.danger}>
                     {apiError}
                 </Text>
             )}
-            <View style={styles.infos}>
+
+            <View
+                style={{
+                    flex: 1,
+                    justifyContent: "flex-end",
+                    marginBottom: 8,
+                }}
+            >
                 <TouchableOpacity
                     onPress={() => {
                         navigation.navigate(routesNames.auth.privacyPolicy);
@@ -219,13 +257,14 @@ export default function LoginScreen() {
                     <Text
                         style={[styles.privacyPolicy]}
                         align="center"
-                        color={theme.colors.main}
+                        color={theme.colors.text.brand}
                         preset="body2"
                     >
                         Politique de confidentialité et Conditions d'utilisation
                     </Text>
                 </TouchableOpacity>
             </View>
+
             <View>
                 <A2fSelectableModal
                     visible={modalVisible}
@@ -245,7 +284,7 @@ const createStyles = (theme, caseColor) =>
         container: {
             flex: 1,
             alignItems: "center",
-            backgroundColor: theme.colors.background.login,
+            backgroundColor: theme.colors.background.primary,
         },
         logos: {
             flexDirection: "row",
@@ -254,7 +293,7 @@ const createStyles = (theme, caseColor) =>
             left: 8,
             marginLeft: 12,
             gap: 16,
-            color: theme.colors.main,
+            color: theme.colors.text.brand,
         },
         checkBox: {
             marginLeft: "5%",
@@ -307,8 +346,8 @@ const createStyles = (theme, caseColor) =>
                 paddingRight: 42, // 30(logo size)+12(right 12)
                 fontSize: 16,
                 overflow: "hidden",
-                borderColor: theme.colors.accent,
-                color: theme.colors.main,
+                borderColor: theme.colors.border.strong,
+                color: theme.colors.text.primary,
                 backgroundColor: caseColor,
             },
             logos: {
@@ -317,18 +356,19 @@ const createStyles = (theme, caseColor) =>
             icon: {
                 right: 12,
                 position: "absolute",
+                gap: 6,
             },
         },
 
         button: {
             //borderWidth: 1,
-            //borderColor: theme.colors.accent,
+            //borderColor: theme.colors.border.strong,
             //transform: [{ scale: 1.2 }],
             borderRadius: 12,
             paddingVertical: 7,
             paddingHorizontal: 16,
-            color: theme.colors.theme,
-            //backgroundColor: theme.colors.accent,
+            color: theme.colors.text.onBrand,
+            //backgroundColor: theme.colors.brand.primary,
         },
         buttonWrapper: {
             borderRadius: 12,
@@ -336,17 +376,13 @@ const createStyles = (theme, caseColor) =>
             transform: [{ scale: 1.2 }],
         },
 
-        infos: {
-            position: "absolute",
-            bottom: 20,
-        },
         privacyPolicy: {
             maxWidth: 210,
         },
         error: {
             padding: 12,
-            backgroundColor: theme.colors.bg.bg2,
-            borderColor: theme.colors.error,
+            backgroundColor: theme.colors.surface.default,
+            borderColor: theme.colors.state.danger,
             borderWidth: 0.9,
             borderRadius: 12,
         },
@@ -357,3 +393,4 @@ const createStyles = (theme, caseColor) =>
             alignItems: "center",
         },
     });
+

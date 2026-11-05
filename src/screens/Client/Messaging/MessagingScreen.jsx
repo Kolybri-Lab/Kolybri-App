@@ -1,11 +1,28 @@
-import { SafeAreaView } from "react-native-safe-area-context";
-import InDev from "@/components/display/InDev";
+import { GradeProvider } from "@/features/grades/context/GradeContext";
+import { routesNames } from "@/router/config/routesNames";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import MessagingContent from "./MessagingContent";
+import MessagingDetails from "./MessagingDetails";
+const NativeStack = createNativeStackNavigator();
+export default function MessagingScreen({}) {
+    const {
+        client: {
+            messaging: { content, details },
+        },
+    } = routesNames;
 
-export default function MessagingScreen() {
     return (
-        <SafeAreaView>
-            <InDev />
-        </SafeAreaView>
+        <GradeProvider>
+            <NativeStack.Navigator
+                initialRouteName={content}
+                screenOptions={{
+                    headerShown: false,
+                    animation: "fade",
+                }}
+            >
+                <NativeStack.Screen name={content} component={MessagingContent} />
+                <NativeStack.Screen name={details} component={MessagingDetails} />
+            </NativeStack.Navigator>
+        </GradeProvider>
     );
 }
-

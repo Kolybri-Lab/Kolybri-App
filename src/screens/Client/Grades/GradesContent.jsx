@@ -1,47 +1,35 @@
-import { LinearGradient } from "expo-linear-gradient";
+import { useTheme } from "@/hooks/useThemeStore";
+
 import { useCallback, useEffect, useState } from "react";
-import { Dimensions, View } from "react-native";
-import { GradeArrow } from "@/components/svg";
-import BottomSheet from "@/components/layout/BottomSheet";
+import { ScrollView, StyleSheet, View } from "react-native";
 
-import { FlatList } from "react-native-gesture-handler";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { DropDown, ScrollableStack } from "@/components";
+import { Selector } from "@/components";
 import { API } from "@/constants/api/api";
-import { cssHslaToHsla } from "@/utils/colorGenerator";
-import { parseNumber } from "@/utils/grades/makeAverage";
-import Discipline from "@/features/grades/models/Discipline";
-import Period from "@/features/grades/models/Period";
+import { useGrades } from "@/features/grades";
+import DisciplineGroupItem from "@/features/grades/components/DisciplineGroupItem";
+import GradeFlame from "@/features/grades/components/GradeFlame";
 import AddGradeModal from "@/features/grades/components/SimulateGradeModal";
-
-import { Text } from "@/components/core";
 import { useGrade } from "@/features/grades/context/GradeContext";
-import { calculateStrengthsWeaknesses, formatGradeText } from "@/features/grades/utils/helpers";
 import { useSimulation } from "@/features/grades/hooks/useSimulation";
-
-import { useGrades } from "@/hooks/useGrades";
+import Period from "@/features/grades/models/Period";
+import { formatGradeText } from "@/features/grades/utils/helpers";
 import { useUserStore } from "@/hooks/useUserStore";
-
-const { width } = Dimensions.get("window");
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function GradesContent() {
-    const { state, dispatch } = useGrade();
+    const { colors } = useTheme();
 
     const token = useUserStore((state) => state.token);
     const { data: gradesData, isLoading, isError } = useGrades(token);
-
+    const { state, dispatch } = useGrade();
     const [periodes, setPeriodes] = useState([]);
     const [displayPeriode, setDisplayPeriode] = useState({});
     const [displayPeriodeName, setDisplayPeriodeName] = useState(
         API.DEFAULT_PERIOD_KEY
-    ); // DEFAULT A001
+    );
     const [generalAverage, setGeneralAverage] = useState(0);
     const [globalStreakScore, setGlobalStreakScore] = useState(0);
 
-    const [strengths, setStrengths] = useState([]);
-    const [weaknesses, setWeaknesses] = useState([]);
-
-    const [bottomSheetOpened, setBottomSheetOpened] = useState(false);
     const [renderDisciplinesArray, setRenderDisciplineArray] = useState([]);
     const [expandedChain, setExpandedChain] = useState(null);
 
@@ -55,25 +43,43 @@ export default function GradesContent() {
         setRenderDisciplineArray,
         renderDisciplinesArray,
         displayPeriode,
+        setDisplayPeriode,
         setGeneralAverage,
     });
 
     const fetchAndProcessGrades = useCallback(() => {
         try {
-            // setLoading(true);
-            setPeriodes(
-                Object.entries(gradesData).map(([value, { periodName }]) => ({
+            const validPeriodEntries = Object.entries(gradesData).filter(
+                ([key, val]) =>
+                    key !== "lastGrades" &&
+                    key !== "activePeriod" &&
+                    val &&
+                    typeof val === "object" &&
+                    val.groups
+            );
+
+            const formattedPeriodes = validPeriodEntries.map(
+                ([value, { periodName }]) => ({
                     label: periodName,
                     value,
-                }))
+                })
             );
-            setDisplayPeriode(gradesData[API.DEFAULT_PERIOD_KEY]);
+
+            setPeriodes(formattedPeriodes);
+
+            const initialPeriodKey =
+                gradesData.activePeriod?.periodCode ||
+                (gradesData[API.DEFAULT_PERIOD_KEY]
+                    ? API.DEFAULT_PERIOD_KEY
+                    : validPeriodEntries[0]?.[0]);
+
+            if (initialPeriodKey && gradesData[initialPeriodKey]) {
+                setDisplayPeriode(gradesData[initialPeriodKey]);
+                setDisplayPeriodeName(initialPeriodKey);
+            }
         } catch (err) {
             console.error("Error while loading grades:", err);
         }
-        // finally {
-        //     setLoading(false);
-        // }
     }, [gradesData]);
 
     useEffect(() => {
@@ -87,9 +93,7 @@ export default function GradesContent() {
         try {
             setRenderDisciplineArray(flattenDisciplines(displayPeriode.groups));
             setGeneralAverage(
-                new Period({
-                    groups: displayPeriode.groups,
-                }).makeGeneralAverage()
+                new Period(displayPeriode, displayPeriodeName).makeGeneralAverage()
             );
 
             setGlobalStreakScore(displayPeriode.globalStreakScore);
@@ -98,215 +102,80 @@ export default function GradesContent() {
         }
     }, [displayPeriode]);
 
-    useEffect(() => {
-        if (Object.keys(displayPeriode).length === 0) return;
-
-        try {
-            const { strengths, weaknesses } = calculateStrengthsWeaknesses(
-                displayPeriode,
-                3
-            );
-
-            const formattedStrengths = strengths.map((item) => ({
-                subject: item.subject.libelle || item.subject.code,
-                average: parseNumber(item.subject.averageDatas?.userAverage),
-            }));
-
-            const formattedWeaknesses = weaknesses.map((item) => ({
-                subject: item.subject.libelle || item.subject.code,
-                average: parseNumber(item.subject.averageDatas?.userAverage),
-            }));
-
-            setStrengths(formattedStrengths);
-            setWeaknesses(formattedWeaknesses);
-        } catch (error) {
-            console.error("Error when calculate strength/weakness:", error);
-            setStrengths([]);
-            setWeaknesses([]);
-        }
-    }, [displayPeriode]);
-
     const handleItemPress = useCallback((chain) => {
         setExpandedChain((prev) => (prev === chain ? null : chain));
     }, []);
 
-    const renderItem = ({ item, index }) => {
-        const DisciplineClass = new Discipline(item);
-
-        if (DisciplineClass.isDisciplineGroup) {
-            return DisciplineClass.RenderDisciplineGroup({
-                dataLength: renderDisciplinesArray.length,
-                index: index,
-            });
-        } else {
-            return DisciplineClass.RenderDiscipline({
-                dataLength: renderDisciplinesArray.length,
-                index,
-                isExpanded:
-                    expandedChain ===
-                    `${DisciplineClass.code}-${DisciplineClass.libelle}`,
-                onPress: () =>
-                    handleItemPress(
-                        `${DisciplineClass.code}-${DisciplineClass.libelle}`
-                    ),
-
-                dispatch: dispatch,
-            });
-        }
-    };
-
-    const keyExtractor = useCallback(
-        (item, index) => item.id?.toString() || `${item.libelle}-${index}`,
-        []
-    );
-
-    if (isError) return null;
+    const styles = createStyles(colors);
 
     return (
         <View style={{ flex: 1 }}>
-            <View
-                style={{
-                    flex: 0.4,
-                    pointerEvents: bottomSheetOpened ? "none" : "auto",
-                }}
-            >
-                <SafeAreaView
-                    style={{
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        alignItems: "center",
-                        justifyContent: "flex-start",
-                        marginTop: 3,
-                        zIndex: 1,
-                    }}
-                >
-                    {periodes.length > 0 && (
-                        <DropDown
-                            onSelect={(value) => {
+            <ScrollView showsVerticalScrollIndicator={false}>
+                {periodes.length > 0 && (
+                    <SafeAreaView
+                        style={{
+                            zIndex: 10,
+                            marginTop: 20,
+                            marginLeft: 20,
+                            alignItems: "flex-start",
+                        }}
+                    >
+                        <Selector
+                            type="dropdown"
+                            value={
+                                periodes.find(
+                                    (p) =>
+                                        p.value === displayPeriodeName ||
+                                        p.id === displayPeriodeName
+                                ) || periodes[0]
+                            }
+                            onSelect={(item) => {
+                                const value = item?.value ?? item?.id ?? item;
                                 const changedPeriod = gradesData[value];
                                 setDisplayPeriode(changedPeriod);
-
                                 setDisplayPeriodeName(value);
                             }}
                             options={periodes}
+                            minWidth={200}
                         />
-                    )}
-                </SafeAreaView>
-                <ScrollableStack
-                    horizontal
-                    paging
-                    contentContainerStyle={{ alignItems: "center" }}
-                    gap={0}
-                >
-                    <HeaderStatsCarousel
-                        item={{
-                            key: "streak",
-                            text: "Ta streak",
-                            value: globalStreakScore,
-                            gradient: {
-                                colors: ["rgb(255, 15, 0)", "rgba(255, 150, 0, .7)"],
-                                locations: [0.24, 0.68],
-                                start: { x: 0, y: 0 },
-                                end: { x: 0, y: 1 },
-                            },
-                        }}
+                    </SafeAreaView>
+                )}
+                <View style={styles.flammesContainer}>
+                    <GradeFlame
+                        color="orange"
+                        value={globalStreakScore}
+                        label="Streak"
+                        width="30%"
                     />
-                    <HeaderStatsCarousel
-                        item={{
-                            key: "average",
-                            text: "Moyenne Générale",
-                            value: formatGradeText(generalAverage),
-                            gradient: {
-                                colors: ["rgb(68, 55, 149)", "rgb(119, 29, 124)"],
-                                locations: [0.21, 0.66],
-                                start: { x: 0, y: 0 },
-                                end: { x: 0, y: 1 },
-                            },
-                        }}
+                    <GradeFlame
+                        color="purple"
+                        value={formatGradeText(generalAverage)}
+                        label="Moyenne"
+                        width="30%"
                     />
-                </ScrollableStack>
-            </View>
-            <View
-                style={{
-                    position: "absolute",
-                    width: "100%",
-                    height: "100%",
-                }}
-            >
-                <BottomSheet
+                </View>
+
+                <View
                     style={{
-                        backgroundColor: "hsl(240, 35%, 11%)",
-                        borderTopLeftRadius: 42,
-                        borderTopRightRadius: 42,
-                        zIndex: 1000,
+                        gap: 16,
+                        paddingHorizontal: 18,
+                        marginTop: 30,
                     }}
-                    displayLine
-                    opened={(state) => setBottomSheetOpened(state)}
                 >
-                    <View
-                        style={{
-                            alignItems: "center",
-                            justifyContent: "center",
-                            marginHorizontal: 14,
-                            backgroundColor: "hsl(240, 28%, 26%)",
-                            borderRadius: 18,
-                            padding: 16,
-                            marginTop: 24,
-                        }}
-                    >
-                        <ScrollableStack
-                            horizontal
-                            paging
-                            contentContainerStyle={{
-                                width: "200%",
-                            }}
-                        >
-                            <View
-                                style={{
-                                    flexDirection: "column",
-                                    flex: 1,
-                                    gap: 8,
-                                    width: "100%",
-                                }}
-                            >
-                                <StrengthsAndWeakness
-                                    firstColor={"hsla(115, 79%, 41%, 0.8)"}
-                                    data={strengths}
-                                />
-                            </View>
-                            <View
-                                style={{
-                                    flexDirection: "column",
-                                    flex: 1,
-                                    gap: 8,
-                                    width: "100%",
-                                }}
-                            >
-                                <StrengthsAndWeakness
-                                    firstColor={"hsla(5, 79%, 41%, 0.8)"}
-                                    data={weaknesses}
-                                />
-                            </View>
-                        </ScrollableStack>
-                    </View>
-                    <View
-                        style={{
-                            flex: 1,
-                            margin: 14,
-                        }}
-                    >
-                        <FlatList
-                            data={renderDisciplinesArray}
-                            renderItem={renderItem}
-                            keyExtractor={keyExtractor}
-                            contentContainerStyle={{ gap: 3 }}
-                            showsVerticalScrollIndicator={false}
+                    {displayPeriode.groups?.map((group, gIndex) => (
+                        <DisciplineGroupItem
+                            key={`group-${group.libelle || group.name || gIndex}-${gIndex}`}
+                            group={group}
+                            groupIndex={gIndex}
+                            expandedChain={expandedChain}
+                            onItemPress={handleItemPress}
+                            dispatch={dispatch}
                         />
-                    </View>
-                </BottomSheet>
-            </View>
+                    ))}
+                </View>
+                <View style={{ height: 25 }} />
+            </ScrollView>
+
             <AddGradeModal
                 visible={state.simulation.modalOpen}
                 disciplineCodes={simulatedDisciplineCodes}
@@ -315,103 +184,10 @@ export default function GradesContent() {
     );
 }
 
-const HeaderStatsCarousel = ({ item }) => (
-    <View style={{ width, height: "100%", flex: 1 }}>
-        <LinearGradient
-            colors={item.gradient.colors}
-            start={item.gradient.start}
-            end={item.gradient.end}
-            locations={item.gradient.locations}
-            style={{ width, height: "100%", flex: 1 }}
-        >
-            <View
-                style={{ justifyContent: "center", alignItems: "center", flex: 1 }}
-            >
-                <Text size={38} weight="bold" align="center">
-                    {item.text}
-                </Text>
-                <View
-                    style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                    }}
-                >
-                    {Array.from({ length: 3 }).map((_, i) => (
-                        <GradeArrow key={`left-${i}`} />
-                    ))}
-                    <Text size={64} weight="bold">
-                        {item.value}
-                    </Text>
-                    {Array.from({ length: 3 }).map((_, i) => (
-                        <GradeArrow key={`right-${i}`} miroired />
-                    ))}
-                </View>
-            </View>
-        </LinearGradient>
-    </View>
-);
-
-const StrengthsAndWeakness = ({ data, firstColor }) => {
-    const [tint, saturation, lightness, opacity] = cssHslaToHsla(firstColor);
-    const colors = [
-        firstColor,
-        `hsla(${tint + 3}, ${saturation - 4}%, ${lightness - 6}%, ${opacity})`,
-        `hsla(${tint + 7}, ${saturation - 3}%, ${lightness - 14}%, ${opacity})`,
-    ];
-
-    return (
-        <>
-            {data.map(({ subject, average }, i) => (
-                <View
-                    style={{
-                        backgroundColor: colors[i],
-                        borderRadius: 50,
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        width: "100%",
-                        padding: 8,
-                        alignItems: "center",
-                    }}
-                    key={i}
-                >
-                    <View
-                        style={{
-                            flex: 1,
-                            flexDirection: "row",
-                            alignItems: "center",
-                            marginLeft: 6,
-                            marginRight: 8,
-                        }}
-                    >
-                        <Text preset="label1">{i + 1} · </Text>
-                        <Text oneLine preset="label2" style={{ flexShrink: 1 }}>
-                            {subject}
-                        </Text>
-                    </View>
-
-                    <View
-                        style={{
-                            paddingHorizontal: 9,
-                            paddingVertical: 4,
-                            backgroundColor: "hsla(240, 26%, 13%, 0.35)",
-                            borderRadius: 50,
-                            justifyContent: "center",
-                            alignItems: "center",
-                            minWidth: "18%",
-                        }}
-                    >
-                        <Text preset="label1">{formatGradeText(average)}</Text>
-                    </View>
-                </View>
-            ))}
-        </>
-    );
-};
-
 function flattenDisciplines(groups) {
     const result = [];
 
-    groups.forEach((group) => {
+    groups?.forEach((group) => {
         result.push(group);
 
         if (Array.isArray(group.disciplines)) {
@@ -423,3 +199,23 @@ function flattenDisciplines(groups) {
 
     return result;
 }
+
+const createStyles = (colors) =>
+    StyleSheet.create({
+        flammesContainer: {
+            zIndex: -1,
+            marginTop: 10,
+            flexDirection: "row",
+            gap: "8%",
+            alignSelf: "center",
+        },
+        canardman: {
+            position: "absolute",
+            top: 12,
+            right: -148,
+            width: 336,
+            height: 336,
+            transform: [{ rotate: "5deg" }, { scaleX: -1 }],
+            zIndex: -1,
+        },
+    });

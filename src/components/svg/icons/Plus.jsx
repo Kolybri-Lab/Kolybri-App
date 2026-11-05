@@ -3,7 +3,7 @@ import { useTheme } from "@/hooks/useThemeStore";
 
 export default function PlusIcon({ size = 30, fill, props = {} }) {
     const theme = useTheme();
-    fill = fill || theme.colors.contrast;
+    fill = fill || theme.colors.text.primary;
 
     return (
         <Svg fill={fill} width={size} height={size} viewBox="0 0 24 24" {...props}>

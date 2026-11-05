@@ -1,6 +1,6 @@
 import { useTheme } from "@/hooks/useThemeStore";
-import { UiStyles } from "./UiStyles";
 import { Text } from "../core";
+import { UiStyles } from "./UiStyles";
 
 export default function Subtitle({ children, ...props }) {
     const theme = useTheme();
@@ -8,7 +8,7 @@ export default function Subtitle({ children, ...props }) {
     return (
         <Text
             style={UiStyles.subtitle}
-            color={theme.colors.main}
+            color={theme.colors.text.brand}
             preset="title2"
             oneLine
             {...props}

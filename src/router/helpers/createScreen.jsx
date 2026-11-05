@@ -1,4 +1,4 @@
-import { useTheme } from "@react-navigation/native";
+import { useTheme } from "@/hooks/useThemeStore";
 
 const createScreen = (screenName, ScreenComponent, options = {}, props = {}) => {
     const ScreenWrapper = (screenProps) => {

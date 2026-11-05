@@ -1,12 +1,12 @@
-import { createMMKV } from "react-native-mmkv";
-import * as SecureStore from "expo-secure-store";
-import { payloadHelper } from "@/helpers/cryptoHelper";
-import { useUserStore } from "@/hooks/useUserStore";
-import { useColorStore } from "@/hooks/useColorStore";
 import { CONFIG } from "@/constants/config";
+import { payloadHelper } from "@/helpers/cryptoHelper";
+import { useColorStore } from "@/hooks/useColorStore";
+import { useUserStore } from "@/hooks/useUserStore";
+import * as SecureStore from "expo-secure-store";
+import { createMMKV } from "react-native-mmkv";
 
 import fetchApi from "../fetchApi";
-import { getCookiesFromResponse } from "../responseUtils";
+import { getCookieFromResponse } from "../responseUtils";
 import { getResponseChoices, sendResponseChoice } from "./doubleAuth";
 
 const storage = createMMKV();
@@ -18,8 +18,7 @@ const authService = {
             "https://api.ecoledirecte.com/v3/login.awp?gtk=1&{API_VERSION}",
             { method: "GET" }
         );
-
-        return getCookiesFromResponse(rawGtkResponse);
+        return getCookieFromResponse(rawGtkResponse);
     },
     login: async ({
         username = "",
@@ -33,14 +32,14 @@ const authService = {
                 body:
                     authConnectionDatas != null
                         ? {
-                            ...authConnectionDatas,
-                        }
+                              ...authConnectionDatas,
+                          }
                         : {
-                            identifiant: username,
-                            motdepasse: password,
-                            isReLogin: false,
-                            uuid: "",
-                        },
+                              identifiant: username,
+                              motdepasse: password,
+                              isReLogin: false,
+                              uuid: "",
+                          },
                 method: "POST",
                 headers: headers,
             }
@@ -60,7 +59,10 @@ const authService = {
             connectionToken: JSON.stringify(loginDatas),
             userId: userId,
         });
-        await SecureStore.setItemAsync(`${localSecretKeyStoreName}Credentials`, credentialsCipher);
+        await SecureStore.setItemAsync(
+            `${localSecretKeyStoreName}Credentials`,
+            credentialsCipher
+        );
 
         const cipherText = await payloadHelper.encrypt({
             connectionToken: token,
@@ -73,7 +75,9 @@ const authService = {
         );
     },
     restoreCredentials: async () => {
-        const credentialsCipher = await SecureStore.getItemAsync(`${localSecretKeyStoreName}Credentials`);
+        const credentialsCipher = await SecureStore.getItemAsync(
+            `${localSecretKeyStoreName}Credentials`
+        );
         const cipherText = await SecureStore.getItemAsync(
             `${localSecretKeyStoreName}Payload`
         );
@@ -101,6 +105,4 @@ const authService = {
     },
 };
 
-
 export default authService;
-

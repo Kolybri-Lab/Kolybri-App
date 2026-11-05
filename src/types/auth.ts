@@ -30,3 +30,11 @@ export interface ApiLoginResponse {
     };
     responseHeaders?: any;
 }
+
+export interface FetchApiResponse<T> {
+    code: number;
+    token: string;
+    message: string;
+    data: T;
+    isDataEmpty: boolean;
+}

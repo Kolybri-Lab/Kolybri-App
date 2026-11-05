@@ -1,45 +1,43 @@
 import {
-    Dashboard,
-    Grades,
-    Homeworks,
-    Messaging,
-    Timetable,
+    GradesIcon,
+    HomeIcon,
+    HomeworksIcon,
+    MessagingIcon,
+    TimetableIcon,
 } from "@/components/svg/navigation";
+import createScreen from "@/router/helpers/createScreen";
 import GradesScreen from "@/screens/Client/Grades/GradesScreen";
 import HomeScreen from "@/screens/Client/Home/HomeScreen";
 import HomeworksScreen from "@/screens/Client/Homeworks/HomeworksScreen";
 import MessagingScreen from "@/screens/Client/Messaging/MessagingScreen";
 import TimetableScreen from "@/screens/Client/Timetable/TimetableScreen";
 import { routesNames } from "../../../config/routesNames";
-import createScreen from "@/router/helpers/createScreen";
 
 const {
     client: { grades, home, homeworks, messaging, timetable },
-    navigators: { settings },
 } = routesNames;
 
 const tabClientScreens = [
     createScreen(grades.group, GradesScreen, {
         inNavbar: true,
-        icon: Grades,
+        icon: GradesIcon,
     }),
     createScreen(homeworks.group, HomeworksScreen, {
         inNavbar: true,
-        icon: Homeworks,
+        icon: HomeworksIcon,
     }),
     createScreen(home, HomeScreen, {
         inNavbar: true,
-        icon: Dashboard,
+        icon: HomeIcon,
     }),
     createScreen(timetable.group, TimetableScreen, {
         inNavbar: true,
-        icon: Timetable,
+        icon: TimetableIcon,
     }),
-    createScreen(messaging, MessagingScreen, {
+    createScreen(messaging.group, MessagingScreen, {
         inNavbar: true,
-        icon: Messaging,
+        icon: MessagingIcon,
     }),
 ];
 
 export default tabClientScreens;
-

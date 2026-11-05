@@ -1,31 +1,30 @@
-import { useNavigation, useTheme } from "@react-navigation/native";
-import { useCallback, useMemo, useState } from "react";
+import { Text } from "@/components/core";
+import { useHomeworks } from "@/features/homeworks";
+import DocumentModal from "@/features/homeworks/components/DocumentModal";
+import HomeworkCard from "@/features/homeworks/components/HomeworkCard";
+import { useHomework } from "@/features/homeworks/context/HomeworkContext";
+import {
+    createHomework,
+    decodeHomeworkContent,
+    serializeHomework,
+} from "@/features/homeworks/utils/homeworks";
+import { useTheme } from "@/hooks/useThemeStore";
+import { useUserStore } from "@/hooks/useUserStore";
+import { routesNames } from "@/router/config/routesNames";
+import { formatFrenchDate } from "@/utils/date";
+import { useNavigation } from "@react-navigation/native";
+import { useMemo, useState } from "react";
 import {
     ScrollView,
     TouchableOpacity,
     useWindowDimensions,
     View,
 } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
 import RenderHTML from "react-native-render-html";
-import { File } from "@/components/svg";
-import { CustomTopHeader, Modal } from "../../../components";
-import HomeworkCard from "@/features/homeworks/components/HomeworkCard";
-import { Text } from "@/components/core";
-import { useUserStore } from "@/hooks/useUserStore";
-import { useHomeworks } from "@/hooks/useHomeworks";
-import { formatFrenchDate } from "@/utils/date";
-import { useHomework } from "@/features/homeworks/context/HomeworkContext";
-import { downloadDocument, openDocument } from "@/features/homeworks/utils/documents";
-import {
-    assignUnit,
-    createHomework,
-    decodeHomeworkContent,
-    serializeHomework,
-} from "@/features/homeworks/utils/homeworks";
+import { GoBackHeader, Modal } from "../../../components";
 
 export default function HomeworkDetails({ route }) {
-    const { homeworksData } = route.params;
+    const { homeworksData = {} } = route?.params || {};
 
     const { width } = useWindowDimensions();
     const navigation = useNavigation();
@@ -52,9 +51,7 @@ export default function HomeworkDetails({ route }) {
 
     const homeworkContent = homework.isCustom
         ? homework.homeworksContent.content
-        : homework.decodedHTMLHomework;
-
-    const [downloadProgress, setDownloadProgress] = useState({});
+        : homework.homeworksContent.renderHtml || homework.decodedHTMLHomework;
 
     const tagsStyles = useMemo(
         () => ({
@@ -67,9 +64,9 @@ export default function HomeworkDetails({ route }) {
 
     const baseStyle = useMemo(
         () => ({
-            color: colors.contrast,
+            color: colors.text.primary,
         }),
-        [colors.contrast]
+        [colors.text.primary]
     );
 
     const HomeworkHTML = useMemo(
@@ -98,80 +95,12 @@ export default function HomeworkDetails({ route }) {
         [homework.decodedHTMLCourseContent, baseStyle, tagsStyles, width]
     );
 
-    const renderDocuments = useCallback(
-        ({ item }) => {
-            const { id, libelle, type, taille: size } = item;
-
-            const prog = downloadProgress[id] ?? null;
-            const ext = libelle.slice(libelle.lastIndexOf(".") + 1).toLowerCase();
-
-            return (
-                <TouchableOpacity
-                    style={{
-                        overflow: "hidden",
-                        borderRadius: 9,
-                        marginBottom: 4,
-                    }}
-                    key={id}
-                    onPress={() =>
-                        openDocument(
-                            { fileName: libelle, fileType: type, fileId: id },
-                            userAccesToken,
-                            setDownloadProgress
-                        )
-                    }
-                    onLongPress={() =>
-                        downloadDocument(
-                            { fileName: libelle, fileType: type, fileId: id },
-                            userAccesToken,
-                            setDownloadProgress
-                        )
-                    }
-                    disabled={prog !== null}
-                >
-                    {prog !== null && (
-                        <View
-                            style={{
-                                position: "absolute",
-                                left: 0,
-                                top: 0,
-                                bottom: 0,
-                                width: `${prog}%`,
-                                backgroundColor: "#4CAF5066",
-                                borderRadius: 9,
-                            }}
-                        />
-                    )}
-                    <View
-                        style={{
-                            backgroundColor:
-                                prog !== null ? "transparent" : colors.bg.bg1,
-                            padding: 10,
-                            borderRadius: 9,
-                            flexDirection: "row",
-                            alignItems: "center",
-                        }}
-                    >
-                        <View style={{ flex: 1 }}>
-                            <Text preset="label2">{libelle}</Text>
-                            <Text preset="label3">{assignUnit(size)}</Text>
-                        </View>
-                        <File fill={colors.contrast} size={25} extention={ext} />
-                    </View>
-                </TouchableOpacity>
-            );
-        },
-        [colors.bg.bg1, colors.contrast, downloadProgress]
-    );
-
     return (
-        <>
+        <View style={{ flex: 1 }}>
             <DocumentModal
                 visible={modalsHander.document[0]}
                 setVisible={modalsHander.document[1]}
-                documents={homework.homeworksContent.joinedDocuments}
-                renderDocuments={renderDocuments}
-                extras={{ colors }}
+                documents={homework.homeworksContent?.joinedDocuments}
             />
 
             <CourseContentModal
@@ -183,20 +112,15 @@ export default function HomeworkDetails({ route }) {
             <View
                 style={{
                     flex: 1,
-                    backgroundColor: colors.background.gradient,
                     marginHorizontal: 20,
                     marginBottom: 110,
                 }}
             >
-                <CustomTopHeader
-                    headerTitle={"Retour aux tâches"}
-                    backArrow={{ color: colors.contrast, size: 24 }}
-                    height={33}
-                    backgroundColor={colors.background.gradient}
-                />
+                <GoBackHeader fallbackRoute={routesNames.client.homeworks.content} />
                 <View style={{ flex: 1, gap: 18 }}>
                     <TouchableOpacity
                         activeOpacity={1}
+                        style={{ width: "100%" }}
                         onLongPress={() => {
                             if (homework.isCustom) {
                                 dispatch({
@@ -211,24 +135,16 @@ export default function HomeworkDetails({ route }) {
                             dispatch={dispatch}
                             enabled={false}
                             homework={homework}
+                            onOpenDocuments={() => modalsHander.document[1](true)}
                         />
                     </TouchableOpacity>
 
                     <View
                         style={{
-                            backgroundColor: colors.bg.bg4,
+                            backgroundColor: colors.surface.default,
                             flex: 1,
                             padding: 25,
                             borderRadius: 21,
-                            boxShadow: [
-                                {
-                                    offsetX: 0,
-                                    offsetY: 0,
-                                    blurRadius: 7.5,
-                                    spreadDistance: 6,
-                                    color: "hsla(0, 0%, 0%, 0.25)",
-                                },
-                            ],
                         }}
                     >
                         <Text
@@ -274,12 +190,12 @@ export default function HomeworkDetails({ route }) {
                             </View>
                         ) : (
                             <>
-                                {homework.homeworksContent.joinedDocuments.length >
+                                {homework.homeworksContent?.joinedDocuments?.length >
                                     0 && (
                                     <TouchableOpacity
                                         style={{
                                             flex: 1,
-                                            backgroundColor: colors.bg.bg3,
+                                            backgroundColor: colors.surface.default,
                                             borderRadius: 12,
                                             justifyContent: "center",
                                         }}
@@ -290,7 +206,7 @@ export default function HomeworkDetails({ route }) {
                                         <Text
                                             align="center"
                                             preset="label2"
-                                            color={colors.bg.bg5}
+                                            color={colors.text.brand}
                                         >
                                             Documents (
                                             {
@@ -304,7 +220,7 @@ export default function HomeworkDetails({ route }) {
                                 <TouchableOpacity
                                     style={{
                                         flex: 1,
-                                        backgroundColor: colors.bg.bg3,
+                                        backgroundColor: colors.surface.default,
                                         borderRadius: 12,
                                         justifyContent: "center",
                                     }}
@@ -315,7 +231,7 @@ export default function HomeworkDetails({ route }) {
                                     <Text
                                         align="center"
                                         preset="label2"
-                                        color={colors.bg.bg5}
+                                        color={colors.text.brand}
                                     >
                                         Contenu séance
                                     </Text>
@@ -325,39 +241,9 @@ export default function HomeworkDetails({ route }) {
                     </View>
                 </View>
             </View>
-        </>
+        </View>
     );
 }
-
-const DocumentModal = ({
-    visible,
-    setVisible,
-    documents,
-    renderDocuments,
-    extras,
-}) => {
-    const { colors } = extras;
-    return (
-        <Modal visible={visible} handleClose={() => setVisible(false)}>
-            <Text preset="title1" style={{ marginBottom: 12 }}>
-                Documents associés
-            </Text>
-            <Text
-                preset="label3"
-                color={colors.txt.txt3}
-                style={{ marginBottom: 6 }}
-            >
-                Note du dev: maintenir pour télécharger
-            </Text>
-            <FlatList
-                data={documents}
-                renderItem={renderDocuments}
-                keyExtractor={(item) => item.id.toString()}
-                contentContainerStyle={{ gap: 7 }}
-            />
-        </Modal>
-    );
-};
 
 const CourseContentModal = ({ visible, setVisible, courseHTML }) => {
     return (

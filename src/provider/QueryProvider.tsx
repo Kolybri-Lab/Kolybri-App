@@ -1,15 +1,48 @@
+import { useErrorStore } from "@/hooks/useErrorStore";
 import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
-import { QueryClient } from "@tanstack/react-query";
+import {
+    defaultShouldDehydrateQuery,
+    MutationCache,
+    QueryCache,
+    QueryClient,
+} from "@tanstack/react-query";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
+import dayjs from "dayjs";
 import { createMMKV } from "react-native-mmkv";
 
 export const queryClient = new QueryClient({
+    queryCache: new QueryCache({
+        onSuccess: () => {
+            useErrorStore.getState().clearNetworkErrors();
+        },
+        onError: (error) => {
+            useErrorStore.getState().pushError(error as any);
+        },
+    }),
+    mutationCache: new MutationCache({
+        onSuccess: () => {
+            useErrorStore.getState().clearNetworkErrors();
+        },
+        onError: (error) => {
+            useErrorStore.getState().pushError(error as any);
+        },
+    }),
     defaultOptions: {
         queries: {
-            staleTime: 1000 * 60 * 5, // 5 min
-            gcTime: 1000 * 60 * 60 * 14, // 14 h
-            refetchOnWindowFocus: false,
-            retry: 2,
+            staleTime: 1000 * 60 * 60, // 1h
+            gcTime: 1000 * 60 * 60 * 24 * 7, // 1 week
+            placeholderData: (previousData) => previousData,
+            retry: (failureCount, error: any) => {
+                if (
+                    error?.type === "auth" ||
+                    error?.type === "api-business" ||
+                    error?.code === 403 ||
+                    error?.code === 401
+                ) {
+                    return false;
+                }
+                return failureCount < 1;
+            },
         },
     },
 });
@@ -32,9 +65,33 @@ export function QueryProvider({ children }: { children: React.ReactNode }) {
     return (
         <PersistQueryClientProvider
             client={queryClient}
-            persistOptions={{ persister: mmkvPersister }}
+            persistOptions={{
+                persister: mmkvPersister,
+                maxAge: 1000 * 60 * 60 * 24 * 7,
+                dehydrateOptions: {
+                    shouldDehydrateQuery: (query) => {
+                        if (query.queryKey[0] === "timetable") {
+                            // queryKey: ["timetable", userId, mondayDate]
+                            const mondayDate = query.queryKey[2];
+                            if (typeof mondayDate !== "string") return false;
+
+                            // Ne persister que les semaines autour d'aujourd'hui (+/- 14 jours)
+                            const now = dayjs();
+                            const monday = dayjs(mondayDate);
+                            const diffDays = Math.abs(monday.diff(now, "day"));
+                            return (
+                                diffDays <= 14 &&
+                                query.state.status === "success"
+                            );
+                        }
+                        return defaultShouldDehydrateQuery(query);
+                    },
+                },
+            }}
+            onSuccess={() => queryClient.resumePausedMutations()}
         >
             {children}
         </PersistQueryClientProvider>
     );
 }
+

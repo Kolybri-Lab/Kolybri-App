@@ -21,10 +21,11 @@ export const UiStyles = StyleSheet.create({
     },
     separationChildren: {
         width: "92%",
-        height: 1.8,
+        height: 1.4,
         borderRadius: 999,
         marginLeft: 30,
         marginRight: 20,
+        opacity: 0.4,
     },
     header: {
         flexDirection: "row",

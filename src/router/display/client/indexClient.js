@@ -1,16 +1,15 @@
-import { routesNames } from "../../config/routesNames";
 import createScreen from "@/router/helpers/createScreen";
-import Core from "./core/Core";
+import { routesNames } from "../../config/routesNames";
+import Settings from "./settings/Settings";
 import Tabs from "./tabs/Tabs";
 
 const {
-    navigators: { auth, core, tabs },
+    navigators: { settings, tabs },
 } = routesNames;
 
 const appNavigatorOrganisation = [
     createScreen(tabs, Tabs), // PAY ATTENTION TO THE ORDER !
-    createScreen(core, Core),
+    createScreen(settings, Settings),
 ];
 
 export default appNavigatorOrganisation;
-

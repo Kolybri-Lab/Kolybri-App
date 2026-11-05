@@ -1,13 +1,37 @@
-import { LinearGradient } from "expo-linear-gradient";
-import { TouchableOpacity, View } from "react-native";
-import { serializeHomework } from "@/features/homeworks/utils/homeworks";
-import { formatShortDate } from "@/utils/date";
 import { Text } from "@/components/core";
+import { serializeHomework } from "@/features/homeworks/utils/homeworks";
+import { useCustomDataStore } from "@/hooks/useCustomDataStore";
+import { useHaptic } from "@/hooks/useHaptics";
+import { useTheme } from "@/hooks/useThemeStore";
+import { addOpacity } from "@/utils/colorGenerator";
+import { formatShortDate } from "@/utils/date";
+import { FolderOpen, Maximize2, Trash2 } from "lucide-react-native";
+import { useCallback } from "react";
+import { TouchableOpacity, View } from "react-native";
+import Animated, { LinearTransition } from "react-native-reanimated";
+import AnimatedToggle from "./AnimatedToggle";
 
-export default function HomeworkCard({ homework, dispatch, enabled = true }) {
-    const gradientColors = homework.isEvaluation
-        ? ["hsl(2, 63%, 43%)", "hsl(2, 54%, 23%)"]
-        : ["hsl(240, 19%, 38%)", "hsl(240, 20%, 23%)"];
+const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
+
+export default function HomeworkCard({
+    homework,
+    dispatch,
+    enabled = true,
+    isExpanded = false,
+    onToggleExpand,
+    onOpenDocuments,
+}) {
+    const haptics = useHaptic("success");
+    const handleOpenDocuments = () => {
+        if (typeof onOpenDocuments === "function") {
+            onOpenDocuments(homework.homeworksContent?.joinedDocuments, homework);
+        } else if (typeof dispatch === "function") {
+            dispatch({
+                type: "OPEN_DOCUMENT_MODAL",
+                payload: homework.homeworksContent?.joinedDocuments,
+            });
+        }
+    };
 
     const handlePress = () => {
         dispatch({
@@ -16,8 +40,10 @@ export default function HomeworkCard({ homework, dispatch, enabled = true }) {
         });
     };
     const handleToggle = () => {
-        if (homework.loadingState === "loading" || homework.loadingState === "error") return;
+        if (homework.loadingState === "loading" || homework.loadingState === "error")
+            return;
         const nextIsDoneBoolean = homework.isDone !== "done";
+        haptics();
         dispatch({
             type: "TOGGLE_HOMEWORK",
             payload: {
@@ -28,93 +54,208 @@ export default function HomeworkCard({ homework, dispatch, enabled = true }) {
         });
     };
 
-    let statusColor = "red";
-    if (homework.loadingState === "loading") {
-        statusColor = "orange";
-    } else if (homework.loadingState === "error") {
-        statusColor = "black";
-    } else {
-        statusColor = homework.isDone === "done" ? "green" : "red";
-    }
+    const removeCustomHomework = useCustomDataStore(
+        (state) => state.removeCustomHomework
+    );
+
+    const { colors } = useTheme();
+
+    const handleToggleExpand = useCallback(
+        (id = homework?.id) => {
+            if (typeof onToggleExpand === "function") {
+                onToggleExpand(id ?? homework?.id);
+            }
+        },
+        [onToggleExpand, homework?.id]
+    );
 
     return (
-        <TouchableOpacity onPress={handlePress} disabled={!enabled}>
-            <LinearGradient
-                colors={gradientColors}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                locations={[0.17, 1]}
+        <AnimatedTouchableOpacity
+            layout={LinearTransition.springify()}
+            onPress={handleToggleExpand}
+            activeOpacity={1}
+            disabled={!enabled}
+            style={{
+                backgroundColor: colors.surface.default,
+                width: "100%",
+                borderRadius: 20,
+                overflow: "hidden",
+                paddingTop: 17,
+                paddingHorizontal: 20,
+                borderColor: homework.discipline?.color || "grey",
+                borderWidth: isExpanded ? 1 : 0,
+            }}
+        >
+            <View
                 style={{
-                    height: 100,
-                    borderRadius: 20,
-                    overflow: "hidden",
-                    padding: 14,
                     flexDirection: "row",
                     justifyContent: "space-between",
                     alignItems: "center",
+                    height: 50,
+                }}
+            >
+                <View style={{ flex: 1, marginRight: 80 }}>
+                    <View
+                        style={{
+                            flexDirection: "row",
+                            gap: 7,
+                            alignItems: "flex-start",
+                            alignSelf: "flex-start",
+                            marginRight: 12,
+                            zIndex: 2000,
+                            marginTop: -5,
+                        }}
+                    >
+                        <Text
+                            oneLine
+                            style={{
+                                fontSize: 18,
+                                fontFamily: "Bold",
+                                color: homework.discipline?.color || "grey",
+                            }}
+                        >
+                            {homework.discipline.name}
+                        </Text>
+                        {homework.isEvaluation && (
+                            <View
+                                style={{
+                                    paddingTop: 1,
+                                    paddingHorizontal: 8,
+                                    borderWidth: 1,
+                                    borderRadius: 7,
+                                    borderColor: addOpacity("#F87171", 0.2),
+                                    backgroundColor: addOpacity("#F87171", 0.12),
+                                    flexShrink: 0,
+                                }}
+                            >
+                                <Text
+                                    style={{
+                                        color: "#F87171",
+                                        fontSize: 14,
+                                        fontFamily: "Medium",
+                                    }}
+                                >
+                                    Contrôle
+                                </Text>
+                            </View>
+                        )}
+                    </View>
+                    <Text
+                        style={{
+                            fontSize: 12,
+                            fontFamily: "Medium",
+                            color: colors.text.primary,
+                        }}
+                    >
+                        {homework.discipline.teacher}
+                    </Text>
+                </View>
 
-                    boxShadow: [
-                        {
-                            offsetX: 0,
-                            offsetY: 0,
-                            blurRadius: 7.5,
-                            spreadDistance: 3,
-                            color: "hsla(0, 0%, 0%, 0.2)",
-                        },
-                    ],
+                <AnimatedToggle
+                    isDone={homework.isDone}
+                    loadingState={homework.loadingState}
+                    onToggle={handleToggle}
+                />
+            </View>
+
+            {/* CONTENT */}
+            <View
+                style={{
+                    alignItems: "center",
+                    overflow: "hidden",
+                    height: isExpanded ? undefined : 0,
                 }}
             >
                 <View
                     style={{
-                        justifyContent: "space-between",
-                        height: "100%",
+                        height: 1.5,
+                        width: "95%",
+                        borderRadius: 2,
+                        backgroundColor: addOpacity(colors.text.primary, 0.4),
+                        marginTop: 12,
+                    }}
+                />
+
+                <Text
+                    style={{
+                        color: colors.text.primary,
+                        padding: 12,
+                        fontSize: 14,
+                        fontFamily: "Lexend-Regular",
                     }}
                 >
-                    <View
+                    {homework.plainText}
+                </Text>
+
+                <View
+                    style={{
+                        height: 1.5,
+                        width: "95%",
+                        borderRadius: 2,
+                        backgroundColor: addOpacity(colors.text.primary, 0.4),
+                        marginBottom: 12,
+                    }}
+                />
+            </View>
+
+            <Animated.View
+                layout={LinearTransition.springify()}
+                style={{
+                    marginTop: isExpanded ? -10 : -32,
+                    paddingTop: 10,
+                    paddingBottom: 17,
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    backgroundColor: colors.surface.default,
+                }}
+            >
+                <Text
+                    style={{
+                        fontSize: 12,
+                        fontFamily: "Medium",
+                        color: colors.text.primary,
+                    }}
+                >
+                    Donnée le {formatShortDate(homework.givenOn)}
+                </Text>
+                {isExpanded && (
+                    <Animated.View
                         style={{
                             flexDirection: "row",
-                            gap: 8,
-                            alignItems: "center",
+                            justifyContent: "flex-end",
+                            gap: 20,
                         }}
                     >
-                        <Text preset="label1" oneLine>
-                            {homework.discipline.name}
-                        </Text>
-                        <View
-                            style={{
-                                backgroundColor: "hsl(240, 30%, 71%)",
-                                width: 24,
-                                height: 24,
-                                justifyContent: "center",
-                                alignItems: "center",
-                                borderRadius: 12,
-                            }}
+                        <TouchableOpacity
+                            onPress={handlePress}
+                            style={{ margin: -2 }}
+                            hitSlop={8}
                         >
-                            <Text preset="label3" align="center">
-                                {homework.homeworksContent?.joinedDocuments
-                                    ?.length || 0}
-                            </Text>
-                        </View>
-                    </View>
-
-                    <Text preset="label3" color="hsl(240, 19%, 68%)">
-                        Mis en ligne le {formatShortDate(homework.givenOn)}
-                    </Text>
-                </View>
-
-                <TouchableOpacity
-                    style={{
-                        aspectRatio: 1,
-                        width: 40,
-                        backgroundColor: statusColor,
-                        marginLeft: 12,
-                        borderRadius: 20,
-                    }}
-                    onPress={handleToggle}
-                    disabled={homework.loadingState === "loading" || homework.loadingState === "error"}
-                />
-            </LinearGradient>
-        </TouchableOpacity>
+                            <Maximize2 size={20} color={colors.text.primary} />
+                        </TouchableOpacity>
+                        {homework.homeworksContent.joinedDocuments?.length > 0 && (
+                            <TouchableOpacity
+                                onPress={handleOpenDocuments}
+                                style={{ margin: -2 }}
+                                hitSlop={8}
+                            >
+                                <FolderOpen size={20} color={colors.text.primary} />
+                            </TouchableOpacity>
+                        )}
+                        {homework.isCustom && (
+                            <TouchableOpacity
+                                onPress={() => removeCustomHomework(homework.id)}
+                                style={{ margin: -2 }}
+                                hitSlop={8}
+                            >
+                                <Trash2 size={20} color="#F87171" />
+                            </TouchableOpacity>
+                        )}
+                    </Animated.View>
+                )}
+            </Animated.View>
+        </AnimatedTouchableOpacity>
     );
 }
 

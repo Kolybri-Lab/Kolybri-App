@@ -1,0 +1,137 @@
+{
+    "code": 200,
+    "data": {
+        "2026-07-25": [
+            {
+                "matiere": "MATIERE AU NOM TRES LONG",
+                "codeMatiere": "MANL",
+                "aFaire": true,
+                "idDevoir": 2266,
+                "documentsAFaire": true,
+                "donneLe": "2026-07-23",
+                "effectue": false,
+                "interrogation": true,
+                "rendreEnLigne": false
+            }
+        ],
+        "2026-07-26": [
+            {
+                "matiere": "BIOLOGIE",
+                "codeMatiere": "BIO",
+                "aFaire": true,
+                "idDevoir": 2941,
+                "documentsAFaire": true,
+                "donneLe": "2026-07-24",
+                "effectue": true,
+                "interrogation": false,
+                "rendreEnLigne": false
+            },
+            {
+                "matiere": "PHILOSOPHIE",
+                "codeMatiere": "PHIL",
+                "aFaire": false,
+                "idDevoir": 9555,
+                "documentsAFaire": true,
+                "donneLe": "2026-07-12",
+                "effectue": true,
+                "interrogation": false,
+                "rendreEnLigne": true
+            },
+            {
+                "matiere": "ANGLAIS",
+                "codeMatiere": "AGL2",
+                "aFaire": false,
+                "idDevoir": 1662,
+                "documentsAFaire": false,
+                "donneLe": "2026-07-23",
+                "effectue": false,
+                "interrogation": false,
+                "rendreEnLigne": true
+            },
+            {
+                "matiere": "Musique",
+                "codeMatiere": "Physique",
+                "aFaire": false,
+                "idDevoir": 6513,
+                "documentsAFaire": true,
+                "donneLe": "2026-07-25",
+                "effectue": true,
+                "interrogation": false,
+                "rendreEnLigne": true
+            }
+        ],
+        "2026-07-27": [
+            {
+                "matiere": "Biologie",
+                "codeMatiere": "Physique",
+                "aFaire": false,
+                "idDevoir": 2427,
+                "documentsAFaire": true,
+                "donneLe": "2026-07-09",
+                "effectue": true,
+                "interrogation": true,
+                "rendreEnLigne": true
+            },
+            {
+                "matiere": "Géographie",
+                "codeMatiere": "Histoire",
+                "aFaire": true,
+                "idDevoir": 3812,
+                "documentsAFaire": false,
+                "donneLe": "2026-07-18",
+                "effectue": true,
+                "interrogation": false,
+                "rendreEnLigne": true
+            },
+            {
+                "matiere": "Musique",
+                "codeMatiere": "Mathématiques",
+                "aFaire": false,
+                "idDevoir": 9578,
+                "documentsAFaire": false,
+                "donneLe": "2026-07-21",
+                "effectue": false,
+                "interrogation": true,
+                "rendreEnLigne": false
+            }
+        ],
+        "2026-07-28": [
+            {
+                "matiere": "Français",
+                "codeMatiere": "Sciences",
+                "aFaire": true,
+                "idDevoir": 8725,
+                "documentsAFaire": false,
+                "donneLe": "2026-07-23",
+                "effectue": true,
+                "interrogation": true,
+                "rendreEnLigne": true
+            },
+            {
+                "matiere": "Philosophie",
+                "codeMatiere": "Physique",
+                "aFaire": false,
+                "idDevoir": 9346,
+                "documentsAFaire": false,
+                "donneLe": "2026-07-22",
+                "effectue": true,
+                "interrogation": false,
+                "rendreEnLigne": true
+            },
+            {
+                "matiere": "Anglais",
+                "codeMatiere": "Éducation physique",
+                "aFaire": true,
+                "idDevoir": 2801,
+                "documentsAFaire": true,
+                "donneLe": "2026-07-18",
+                "effectue": false,
+                "interrogation": true,
+                "rendreEnLigne": true
+            }
+        ]
+    },
+    "host": "HTTP00",
+    "token": "token"
+}
+

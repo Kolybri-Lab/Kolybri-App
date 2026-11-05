@@ -8,16 +8,19 @@ sidebar_label: 01. Welcome
 
 Ce document définit la façon dont vous pouvez contribuer au projet. Il est important de le lire attentivement avant de commencer à contribuer.
 
+PS : Dans un éditeur de code comme VSCode pensez à faire Ctrl+Maj+V pour visionner le rendu de la doc.
+
 ---
 
 ## 🚀 Installation rapide
 
 1. **Dépôt officiel** : Rendez-vous sur le GitHub officiel : [Kolybri-Lab/EcoleDirectePlus-Mobile](https://github.com/Kolybri-Lab/EcoleDirectePlus-Mobile)
 2. **Fork** : Forkez le dépôt sur votre compte GitHub personnel.
-3. **Clonage** : Clonez votre fork localement :
+3. **Clonage** : Clonez votre fork localement et installez les dépendances :
     ```bash
     git clone https://github.com/VOTRE_NOM_DUTILISATEUR/EcoleDirectePlus-Mobile.git
     cd EcoleDirectePlus-Mobile
+    npm install
     ```
 
 ---

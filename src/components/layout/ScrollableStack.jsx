@@ -25,7 +25,10 @@ export default function ScrollableStack({
     return (
         <Animated.ScrollView
             horizontal={horizontal}
-            contentContainerStyle={[{}, contentContainerStyle]}
+            contentContainerStyle={[
+                !horizontal && { paddingBottom: 24 },
+                contentContainerStyle,
+            ]}
             showsVerticalScrollIndicator={showsScrollIndicator}
             showsHorizontalScrollIndicator={showsScrollIndicator}
             pagingEnabled={paging}
@@ -39,4 +42,3 @@ export default function ScrollableStack({
         </Animated.ScrollView>
     );
 }
-

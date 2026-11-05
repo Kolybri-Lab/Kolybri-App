@@ -3,7 +3,7 @@ import { useTheme } from "@/hooks/useThemeStore";
 
 export default function RoadFinish({ size = 30, fill, props = {} }) {
     const theme = useTheme();
-    fill = fill || theme.colors.contrast
+    fill = fill || theme.colors.text.primary
     return (
         <Svg viewBox="0 0 24 24" fill="none" width={size} height={size}>
             <Path

@@ -1,15 +1,14 @@
 import { useTheme } from "@/hooks/useThemeStore";
-import { UiStyles } from "./UiStyles";
 import { Text } from "../core";
+import { UiStyles } from "./UiStyles";
 
 export default function Title({ children, ...props }) {
     const theme = useTheme();
     return (
         <Text
             style={UiStyles.title}
-            color={theme.colors.accent}
+            color={theme.colors.text.brand}
             preset="h3"
-            oneLine
             {...props}
         >
             {children}

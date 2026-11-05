@@ -1,0 +1,167 @@
+{
+    "code": 200,
+    "token": "d8832342-2f9a-4118-a98c-970b2311b00c",
+    "host": "HTTP151",
+    "data": {
+        "classeurs": [
+            {
+                "id": 564,
+                "libelle": "Padlet"
+            }
+        ],
+        "messages": {
+            "received": [
+                {
+                    "id": 62996,
+                    "responseId": 0,
+                    "forwardId": 0,
+                    "mtype": "received",
+                    "read": true,
+                    "idDossier": -1,
+                    "idClasseur": 564,
+                    "transferred": false,
+                    "answered": false,
+                    "to_cc_cci": "cci",
+                    "brouillon": false,
+                    "canAnswer": false,
+                    "subject": "Lien padlet RIMBAUD",
+                    "content": "",
+                    "date": "2026-03-10 14:26:43",
+                    "to": [],
+                    "files": [],
+                    "from": {
+                        "nom": "Dupont",
+                        "prenom": "A.",
+                        "particule": "",
+                        "civilite": "M.",
+                        "role": "P",
+                        "listeRouge": false,
+                        "id": 589,
+                        "read": true,
+                        "fonctionPersonnel": ""
+                    }
+                },
+                {
+                    "id": 34873,
+                    "responseId": 0,
+                    "forwardId": 0,
+                    "mtype": "received",
+                    "read": true,
+                    "idDossier": -1,
+                    "idClasseur": 564,
+                    "transferred": false,
+                    "answered": false,
+                    "to_cc_cci": "cci",
+                    "brouillon": false,
+                    "canAnswer": false,
+                    "subject": "Lien padlet FONTENELLE + travail à faire vacances Noël",
+                    "content": "",
+                    "date": "2025-12-08 10:34:22",
+                    "to": [],
+                    "files": [],
+                    "from": {
+                        "nom": "Dupont",
+                        "prenom": "A.",
+                        "particule": "",
+                        "civilite": "M.",
+                        "role": "P",
+                        "listeRouge": false,
+                        "id": 589,
+                        "read": true,
+                        "fonctionPersonnel": ""
+                    }
+                },
+                {
+                    "id": 13214,
+                    "responseId": 0,
+                    "forwardId": 6184,
+                    "mtype": "received",
+                    "read": true,
+                    "idDossier": -1,
+                    "idClasseur": 564,
+                    "transferred": false,
+                    "answered": false,
+                    "to_cc_cci": "cci",
+                    "brouillon": false,
+                    "canAnswer": false,
+                    "subject": "lien Padlet français Colette",
+                    "content": "",
+                    "date": "2025-09-30 14:17:06",
+                    "to": [],
+                    "files": [],
+                    "from": {
+                        "nom": "Dupont",
+                        "prenom": "A.",
+                        "particule": "",
+                        "civilite": "M.",
+                        "role": "P",
+                        "listeRouge": false,
+                        "id": 589,
+                        "read": true,
+                        "fonctionPersonnel": ""
+                    }
+                },
+                {
+                    "id": 6184,
+                    "responseId": 0,
+                    "forwardId": 0,
+                    "mtype": "received",
+                    "read": true,
+                    "idDossier": -1,
+                    "idClasseur": 564,
+                    "transferred": false,
+                    "answered": false,
+                    "to_cc_cci": "cci",
+                    "brouillon": false,
+                    "canAnswer": false,
+                    "subject": "liens Padlet français",
+                    "content": "",
+                    "date": "2025-09-12 19:10:59",
+                    "to": [],
+                    "files": [],
+                    "from": {
+                        "nom": "Dupont",
+                        "prenom": "A.",
+                        "particule": "",
+                        "civilite": "M.",
+                        "role": "P",
+                        "listeRouge": false,
+                        "id": 589,
+                        "read": true,
+                        "fonctionPersonnel": ""
+                    }
+                }
+            ],
+            "sent": [],
+            "draft": [],
+            "archived": []
+        },
+        "parametrage": {
+            "isActif": true,
+            "canParentsLireMessagesEnfants": false,
+            "destAdmin": true,
+            "destEleve": false,
+            "destFamille": false,
+            "destProf": true,
+            "destEspTravail": false,
+            "destEntreprise": true,
+            "disabledNotification": true,
+            "notificationEmailEtablissement": true,
+            "choixMailNotification": 3,
+            "autreMailNotification": "",
+            "mailPro": "",
+            "mailPerso": "mage.famille@gmail.com",
+            "messagerieApiVersion": "v3",
+            "blackListProfActive": false,
+            "estEnBlackList": false,
+            "afficherToutesLesClasses": false
+        },
+        "pagination": {
+            "messagesRecusCount": 4,
+            "messagesEnvoyesCount": 0,
+            "messagesArchivesCount": 0,
+            "messagesRecusNotReadCount": 0,
+            "messagesDraftCount": 0
+        }
+    }
+}

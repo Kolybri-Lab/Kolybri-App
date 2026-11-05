@@ -6,6 +6,7 @@ const defaultState = {
     gradeData: null,
     simulation: { modalOpen: false, disciplineCode: null },
     gradeToRemove: null,
+    simulatedGrade: null,
 };
 
 const gradeReducer = (state, action) => {
@@ -33,6 +34,7 @@ const gradeReducer = (state, action) => {
             return {
                 ...state,
                 gradeToRemove: null,
+                simulatedGrade: null,
             };
         case "CREATE_SIMULATED_GRADE":
             return {
