@@ -31,13 +31,19 @@
             "channel": "production",
             "env": {
                 "APP_ENV": "production"
-            }
+            },
+            "android": { "buildType": "app-bundle" }
+        },
+        "github-apk": {
+            "android": { "buildType": "apk" },
+            "autoIncrement": true
         }
     },
     "submit": {
         "production": {
             "android": {
-                "track": "alpha"
+                "track": "internal", // change to production after checking if the workflow work correctly
+                "releaseStatus": "completed"
             }
         }
     }
