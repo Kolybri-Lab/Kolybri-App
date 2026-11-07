@@ -16,6 +16,8 @@ import {
 } from "@/services/login/tools/bootstrapAsync";
 import { toNavigationTheme } from "@/themes/navigation";
 import { StatusBar } from "react-native";
+import { linking } from "./config/routesNames";
+import { navigationRef } from "./rootNavigation";
 import Auth from "./display/auth/Auth";
 import Client from "./display/client/Client";
 
@@ -82,7 +84,7 @@ export default function AuthNavigator() {
                     animated
                     translucent
                 />
-                <NavigationContainer theme={navTheme}>
+                <NavigationContainer ref={navigationRef} theme={navTheme} linking={linking}>
                     {isBooting ? (
                         <SplashScreen />
                     ) : isAuthenticated ? (

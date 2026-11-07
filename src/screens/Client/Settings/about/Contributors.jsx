@@ -10,7 +10,7 @@ import { ActivityIndicator, Image, View } from "react-native";
 import SettingSectionLayout from "../components/SettingSectionLayout";
 
 export default function ContributorsScreen({ route }) {
-    const { label } = route.params;
+    const label = route?.params?.label || "Contributeurs";
 
     const [contributors, setContributors] = useState(null);
     const [error, setError] = useState(null);

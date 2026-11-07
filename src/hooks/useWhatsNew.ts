@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import * as Application from "expo-application";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { createMMKV } from "react-native-mmkv";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
@@ -18,10 +18,12 @@ export interface WhatsNewStoreState {
     lastSeenVersion: string | null;
     seenAnnouncementIds: string[];
     hasHydrated: boolean;
+    testItem: WhatsNewItem | null;
     setHasHydrated: (v: boolean) => void;
     setLastSeenVersion: (version: string) => void;
     markAnnouncementSeen: (id: string) => void;
     initialize: (version: string, announcementIds: string[]) => void;
+    setTestItem: (item: WhatsNewItem | null) => void;
     reset: () => void;
 }
 
@@ -38,14 +40,17 @@ export interface AnnouncementItem {
     id: string;
     title: string;
     message: string;
-    link: { label: string; url: string };
-    type: "community" | "alert"; // more later
+    link?: { label: string; url: string };
+    type?: "community" | "alert";
+    minVersion?: string;
+    maxDate?: string;
+    priority?: number;
+    disabled?: boolean;
 }
 
-export interface GithubChangelog {
-    changelog: ChangelogItem[];
-    announcements: AnnouncementItem[];
-}
+export type GithubAnnouncementsResponse =
+    | AnnouncementItem[]
+    | { announcements: AnnouncementItem[]; changelog?: ChangelogItem[] };
 
 export type WhatsNewItem =
     | { kind: "changelog"; entries: ChangelogItem[] }
@@ -57,22 +62,35 @@ export const useWhatsNewStore = create<WhatsNewStoreState>()(
             lastSeenVersion: null,
             seenAnnouncementIds: [],
             hasHydrated: false,
+            testItem: null,
             setHasHydrated: (v: boolean) => set({ hasHydrated: v }),
             setLastSeenVersion: (v: string) => set({ lastSeenVersion: v }),
             markAnnouncementSeen: (id: string) =>
                 set((s) => ({
-                    seenAnnouncementIds: [...s.seenAnnouncementIds, id],
+                    seenAnnouncementIds: s.seenAnnouncementIds.includes(id)
+                        ? s.seenAnnouncementIds
+                        : [...s.seenAnnouncementIds, id],
                 })),
             initialize: (version, announcementIds) =>
                 set({
                     lastSeenVersion: version,
                     seenAnnouncementIds: announcementIds,
                 }),
-            reset: () => set({ lastSeenVersion: null, seenAnnouncementIds: [] }),
+            setTestItem: (item) => set({ testItem: item }),
+            reset: () =>
+                set({
+                    lastSeenVersion: null,
+                    seenAnnouncementIds: [],
+                    testItem: null,
+                }),
         }),
         {
             name: "whats-new",
             storage: mmkvStorage,
+            partialize: (state) => ({
+                lastSeenVersion: state.lastSeenVersion,
+                seenAnnouncementIds: state.seenAnnouncementIds,
+            }),
             onRehydrateStorage: () => (state) => state?.setHasHydrated(true),
         }
     )
@@ -80,29 +98,43 @@ export const useWhatsNewStore = create<WhatsNewStoreState>()(
 
 // util function
 
-const compareVersions = (a: string, b: string) => {
-    const pa = a.split(".").map(Number);
-    const pb = b.split(".").map(Number);
-    for (let i = 0; i < 3; i++) {
+export const compareVersions = (a: string, b: string) => {
+    const cleanA = String(a || "").split("-")[0];
+    const cleanB = String(b || "").split("-")[0];
+    const pa = cleanA.split(".").map((n) => parseInt(n, 10) || 0);
+    const pb = cleanB.split(".").map((n) => parseInt(n, 10) || 0);
+    const len = Math.max(pa.length, pb.length, 3);
+    for (let i = 0; i < len; i++) {
         const diff = (pa[i] || 0) - (pb[i] || 0);
         if (diff !== 0) return diff;
     }
     return 0;
 };
 
+export const isAnnouncementExpired = (maxDate?: string): boolean => {
+    if (!maxDate) return false;
+    const target = maxDate.includes("T") ? maxDate : `${maxDate}T23:59:59.999`;
+    const expDate = new Date(target);
+    if (isNaN(expDate.getTime())) return false;
+    return Date.now() > expDate.getTime();
+};
+
+const OFFICIAL_ANNOUNCEMENTS_URL =
+    "https://kolybri-lab.github.io/kolybri-announcements/announcements.json";
+
 export function useWhatsNew() {
-    const lastSeenVersion = useWhatsNewStore((s) => s.lastSeenVersion);
     const seenAnnouncementIds = useWhatsNewStore((s) => s.seenAnnouncementIds);
     const setLastSeenVersion = useWhatsNewStore((s) => s.setLastSeenVersion);
     const markAnnouncementSeen = useWhatsNewStore((s) => s.markAnnouncementSeen);
-    const initialize = useWhatsNewStore((s) => s.initialize);
     const hasHydrated = useWhatsNewStore((s) => s.hasHydrated);
 
+    const currentVersion = Application.nativeApplicationVersion ?? "1.0.0";
+
     const { data, isPending } = useQuery({
-        queryKey: ["changelog"],
+        queryKey: ["announcements"],
         queryFn: async () => {
             const res = await fetch(
-                `https://as2pick.github.io/kolybri-changelog/changelog.json?t=${Date.now()}`,
+                `${OFFICIAL_ANNOUNCEMENTS_URL}?t=${Date.now()}`,
                 {
                     headers: {
                         "Cache-Control": "no-cache",
@@ -110,60 +142,79 @@ export function useWhatsNew() {
                     },
                 }
             );
-            if (!res.ok) throw new Error("changelog fetch failed");
-            const json = await res.json();
-            return json as GithubChangelog;
+            if (!res.ok) throw new Error("announcements fetch failed");
+            const text = await res.text();
+            if (!text || !text.trim()) return [] as AnnouncementItem[];
+            const json = JSON.parse(text);
+            return (
+                Array.isArray(json) ? json : (json.announcements ?? [])
+            ) as AnnouncementItem[];
         },
         staleTime: 0,
-        gcTime: 0, // supprime le cache dès que plus utilisé
-        refetchOnMount: "always", // refetch même si la donnée est "fresh"
+        gcTime: 0,
+        refetchOnMount: "always",
         refetchOnWindowFocus: true,
         refetchOnReconnect: true,
         retry: 1,
     });
 
+    const testItem = useWhatsNewStore((s) => s.testItem);
+    const setTestItem = useWhatsNewStore((s) => s.setTestItem);
+
     const settled = hasHydrated && !isPending;
 
-    useEffect(() => {
-        if (hasHydrated && lastSeenVersion === null && data)
-            initialize(
-                Application.nativeApplicationVersion ?? "1.0.0",
-                (data.announcements ?? []).map((a) => a.id)
-            );
-    }, [hasHydrated, lastSeenVersion, data, initialize]);
-
     const item = useMemo<WhatsNewItem | null>(() => {
-        if (!hasHydrated || !data) return null;
-        if (lastSeenVersion === null) return null;
-        const entries = (data.changelog ?? [])
-            .filter(
-                (e: ChangelogItem) =>
-                    compareVersions(e.version, lastSeenVersion) > 0 &&
-                    compareVersions(
-                        e.version,
-                        Application.nativeApplicationVersion ?? "1.0.0"
-                    ) <= 0
-            )
-            .sort((a: ChangelogItem, b: ChangelogItem) =>
-                compareVersions(b.version, a.version)
-            );
-        if (entries.length) return { kind: "changelog", entries };
+        if (testItem) return testItem;
+        if (!hasHydrated || !data || !Array.isArray(data)) return null;
 
-        const announcement = (data.announcements ?? []).find(
-            (a: AnnouncementItem) => !seenAnnouncementIds.includes(a.id)
-        );
+        const eligibleAnnouncements = data
+            .map((item, originalIndex) => ({ item, originalIndex }))
+            .filter(({ item: a }) => {
+                if (!a || !a.id) return false;
+                if (a.disabled) return false;
+                if (seenAnnouncementIds.includes(a.id)) return false;
+                if (isAnnouncementExpired(a.maxDate)) return false;
+                if (
+                    a.minVersion &&
+                    compareVersions(currentVersion, a.minVersion) < 0
+                ) {
+                    return false;
+                }
+                return true;
+            })
+            .sort((a, b) => {
+                const priorityA =
+                    typeof a.item.priority === "number" ? a.item.priority : 3;
+                const priorityB =
+                    typeof b.item.priority === "number" ? b.item.priority : 3;
+
+                // Lower number = higher priority; newest JSON entry wins ties
+                if (priorityA !== priorityB) {
+                    return priorityA - priorityB;
+                }
+                return b.originalIndex - a.originalIndex;
+            })
+            .map(({ item: a }) => a);
+
+        const announcement = eligibleAnnouncements[0] ?? null;
 
         if (announcement) return { kind: "announcement", announcement };
 
         return null;
-    }, [data, hasHydrated, lastSeenVersion, seenAnnouncementIds]);
+    }, [testItem, data, hasHydrated, seenAnnouncementIds, currentVersion]);
 
     const dismiss = () => {
+        if (testItem) {
+            setTestItem(null);
+            return;
+        }
         if (!item) return;
-        if (item.kind === "changelog")
-            setLastSeenVersion(Application.nativeApplicationVersion ?? "1.0.0");
-        else markAnnouncementSeen(item.announcement.id);
+        if (item.kind === "changelog") {
+            setLastSeenVersion(currentVersion);
+        } else {
+            markAnnouncementSeen(item.announcement.id);
+        }
     };
-    return { item, dismiss, settled };
+    return { item, dismiss, settled, currentVersion };
 }
 

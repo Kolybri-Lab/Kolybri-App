@@ -17,7 +17,7 @@ const BUTTON_STATE = {
 };
 
 export default function DataAndConfidentialityScreen({ route }) {
-    const { label } = route.params;
+    const label = route?.params?.label || "Données et confidentialité";
     const [selectedCustomData, setSelectedCustomData] = useState({
         id: "custom_homeworks",
         name: "Devoirs personnalisés",

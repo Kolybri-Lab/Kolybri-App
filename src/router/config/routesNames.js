@@ -1,3 +1,7 @@
+import Constants from "expo-constants";
+
+const currentScheme = Constants.expoConfig?.scheme || "kolybri";
+
 export const routesNames = {
     auth: {
         login: "auth_login",
@@ -43,10 +47,66 @@ export const routesNames = {
             about: "about_setting",
             contributors: "contributors",
             plus: "plus",
+            share: "share_setting",
         },
     },
     navigators: {
         settings: "navigators_variable_settings",
         tabs: "navigators_root",
+    },
+};
+
+export const linking = {
+    prefixes: [
+        `${currentScheme}://`,
+        "kolybri://",
+        "kolybri-dev://",
+        "kolybri-preview://",
+    ],
+    config: {
+        screens: {
+            [routesNames.navigators.tabs]: {
+                screens: {
+                    [routesNames.client.home]: "home",
+                    [routesNames.client.grades.group]: {
+                        screens: {
+                            [routesNames.client.grades.content]: "grades",
+                        },
+                    },
+                    [routesNames.client.homeworks.group]: {
+                        screens: {
+                            [routesNames.client.homeworks.content]: "homeworks",
+                        },
+                    },
+                    [routesNames.client.timetable.group]: {
+                        screens: {
+                            [routesNames.client.timetable.content]: "timetable",
+                        },
+                    },
+                    [routesNames.client.messaging.group]: {
+                        screens: {
+                            [routesNames.client.messaging.content]: "messaging",
+                        },
+                    },
+                },
+            },
+            [routesNames.navigators.settings]: {
+                screens: {
+                    [routesNames.settings.home]: "settings",
+                    [routesNames.settings.about_settings.release_notes]:
+                        "settings/release-notes",
+                    [routesNames.settings.app_settings.theme]: "settings/theme",
+                    [routesNames.settings.about_settings.about]: "settings/about",
+                    [routesNames.settings.about_settings.contributors]:
+                        "settings/contributors",
+                    [routesNames.settings.about_settings.plus]: "settings/plus",
+                    [routesNames.settings.about_settings.share]: "settings/share",
+                    [routesNames.settings.about_settings.feedback]: "settings/feedback",
+                    [routesNames.settings.account_settings.account]: "settings/account",
+                    [routesNames.settings.account_settings.data_and_confidentiality]:
+                        "settings/data-and-confidentiality",
+                },
+            },
+        },
     },
 };
