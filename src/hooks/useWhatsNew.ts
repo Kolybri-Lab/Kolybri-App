@@ -77,7 +77,12 @@ export const useWhatsNewStore = create<WhatsNewStoreState>()(
                     seenAnnouncementIds: announcementIds,
                 }),
             setTestItem: (item) => set({ testItem: item }),
-            reset: () => set({ lastSeenVersion: null, seenAnnouncementIds: [], testItem: null }),
+            reset: () =>
+                set({
+                    lastSeenVersion: null,
+                    seenAnnouncementIds: [],
+                    testItem: null,
+                }),
         }),
         {
             name: "whats-new",
@@ -142,9 +147,9 @@ export function useWhatsNew() {
             const text = await res.text();
             if (!text || !text.trim()) return [] as AnnouncementItem[];
             const json = JSON.parse(text);
-            return (Array.isArray(json)
-                ? json
-                : json.announcements ?? []) as AnnouncementItem[];
+            return (
+                Array.isArray(json) ? json : (json.announcements ?? [])
+            ) as AnnouncementItem[];
         },
         staleTime: 0,
         gcTime: 0,
@@ -167,33 +172,27 @@ export function useWhatsNew() {
             .map((item, originalIndex) => ({ item, originalIndex }))
             .filter(({ item: a }) => {
                 if (!a || !a.id) return false;
-
-                // Désactivée manuellement
                 if (a.disabled) return false;
-
-                // Déjà consultée
                 if (seenAnnouncementIds.includes(a.id)) return false;
-
-                // Date limite dépassée
                 if (isAnnouncementExpired(a.maxDate)) return false;
-
-                // Version minimale requise non atteinte
-                if (a.minVersion && compareVersions(currentVersion, a.minVersion) < 0) {
+                if (
+                    a.minVersion &&
+                    compareVersions(currentVersion, a.minVersion) < 0
+                ) {
                     return false;
                 }
-
                 return true;
             })
             .sort((a, b) => {
-                const priorityA = typeof a.item.priority === "number" ? a.item.priority : 3;
-                const priorityB = typeof b.item.priority === "number" ? b.item.priority : 3;
+                const priorityA =
+                    typeof a.item.priority === "number" ? a.item.priority : 3;
+                const priorityB =
+                    typeof b.item.priority === "number" ? b.item.priority : 3;
 
-                // 1. Comparaison par priorité (1 est prioritaire sur 2, 3...)
+                // Lower number = higher priority; newest JSON entry wins ties
                 if (priorityA !== priorityB) {
                     return priorityA - priorityB;
                 }
-
-                // 2. À priorité égale : la dernière ajoutée dans le JSON (plus grand index) passe en premier
                 return b.originalIndex - a.originalIndex;
             })
             .map(({ item: a }) => a);

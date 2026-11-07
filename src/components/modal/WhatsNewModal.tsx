@@ -1,4 +1,3 @@
-// components/WhatsNewModal.tsx
 import { useTheme } from "@/hooks/useThemeStore";
 import { AnnouncementItem, ChangelogItem, WhatsNewItem } from "@/hooks/useWhatsNew";
 import { openUrl } from "@/utils/url";
@@ -30,8 +29,6 @@ export default function WhatsNewModal({ item, dismiss }: Props) {
                         backgroundColor: colors.surface.default,
                         borderRadius: 28,
                         padding: 20,
-                        //borderColor: colors.border.subtle,
-                        //borderWidth: 1.75,
                         maxHeight: "80%",
                     }}
                 >
@@ -53,7 +50,13 @@ export default function WhatsNewModal({ item, dismiss }: Props) {
                         {item.kind === "announcement" && item.announcement.link ? (
                             <Pressable
                                 accessibilityRole="link"
-                                onPress={() => openUrl(item.announcement.link?.url)}
+                                onPress={() => {
+                                    const url = item.announcement.link?.url;
+                                    if (url?.startsWith("kolybri")) {
+                                        dismiss();
+                                    }
+                                    openUrl(url);
+                                }}
                                 hitSlop={6}
                                 style={({ pressed }) => ({
                                     backgroundColor: colors.brand.primary,
@@ -86,7 +89,10 @@ export default function WhatsNewModal({ item, dismiss }: Props) {
                                         {item.announcement.link.label}
                                     </Text>
                                     <View style={{ flexShrink: 0 }}>
-                                        <Link color={colors.text.onBrand} size={12} />
+                                        <Link
+                                            color={colors.text.onBrand}
+                                            size={12}
+                                        />
                                     </View>
                                 </View>
                             </Pressable>

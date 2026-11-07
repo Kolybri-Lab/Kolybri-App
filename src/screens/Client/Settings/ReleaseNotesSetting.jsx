@@ -27,7 +27,7 @@ const getVersionStyle = (version, index, colors) => {
     const trimmed = (version || "").trim();
     const isMajor = /^\d+\.0\.0$/.test(trimmed);
 
-    // 1. La dernière version en date (index 0) ou les versions majeures x.0.0
+    // Latest release or major version (x.0.0)
     if (index === 0 || isMajor) {
         return {
             color: colors.brand.primary,
@@ -35,7 +35,7 @@ const getVersionStyle = (version, index, colors) => {
         };
     }
 
-    // 2. Les versions x.x.0 (mineures)
+    // Minor version (x.x.0)
     const isMinor = /^\d+\.\d+\.0$/.test(trimmed);
     if (isMinor) {
         return {
@@ -44,7 +44,7 @@ const getVersionStyle = (version, index, colors) => {
         };
     }
 
-    // 3. Le reste (patchs x.x.y)
+    // Patch version (x.x.y)
     return {
         color: colors.brand.soft,
         textColor: colors.text.primary,
@@ -81,7 +81,7 @@ const getBadgeStyle = (type, colors) => {
 };
 
 export default function ReleaseNotesScreen({ route }) {
-    const { label } = route.params;
+    const label = route?.params?.label || "Notes de version";
     const { colors } = useTheme();
 
     const {
@@ -170,7 +170,7 @@ export default function ReleaseNotesScreen({ route }) {
                                     position: "relative",
                                 }}
                             >
-                                {/* Axe vertical de la timeline */}
+                                {/* Timeline axis */}
                                 <View
                                     style={{
                                         width: 22,
@@ -178,7 +178,6 @@ export default function ReleaseNotesScreen({ route }) {
                                         marginRight: 10,
                                     }}
                                 >
-                                    {/* Ligne verticale de liaison */}
                                     {!isLast && (
                                         <View
                                             style={{
@@ -195,7 +194,6 @@ export default function ReleaseNotesScreen({ route }) {
                                         />
                                     )}
 
-                                    {/* Nœud / Point de la version */}
                                     <View
                                         style={{
                                             width: isLatest ? 14 : 10,
@@ -222,7 +220,7 @@ export default function ReleaseNotesScreen({ route }) {
                                     </View>
                                 </View>
 
-                                {/* Conteneur carte de la version (sans bordure) */}
+                                {/* Release card */}
                                 <View
                                     style={{
                                         flex: 1,
@@ -233,7 +231,6 @@ export default function ReleaseNotesScreen({ route }) {
                                         gap: 10,
                                     }}
                                 >
-                                    {/* En-tête : Badge version + Date */}
                                     <View
                                         style={{
                                             flexDirection: "row",
@@ -272,7 +269,6 @@ export default function ReleaseNotesScreen({ route }) {
                                         )}
                                     </View>
 
-                                    {/* Titre optionnel (versions x.x.0 uniquement) */}
                                     {showTitle && (
                                         <Text
                                             style={{
@@ -286,7 +282,6 @@ export default function ReleaseNotesScreen({ route }) {
                                         </Text>
                                     )}
 
-                                    {/* Liste des changements */}
                                     {release.changes &&
                                         release.changes.length > 0 && (
                                             <View style={{ gap: 8, marginTop: 2 }}>

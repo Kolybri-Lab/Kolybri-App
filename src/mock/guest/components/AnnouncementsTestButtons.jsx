@@ -25,7 +25,6 @@ export default function AnnouncementsTestButtons() {
                 </Text>
             </View>
 
-            {/* Test 1 : Annonce standard */}
             <TouchableOpacity
                 onPress={() =>
                     setTestItem({
@@ -50,7 +49,6 @@ export default function AnnouncementsTestButtons() {
                 </Text>
             </TouchableOpacity>
 
-            {/* Test 2 : Annonce avec lien cliquable */}
             <TouchableOpacity
                 onPress={() =>
                     setTestItem({
@@ -75,11 +73,38 @@ export default function AnnouncementsTestButtons() {
                 }}
             >
                 <Text size={13} color="#34D399">
-                    🔗 Ouvrir une annonce avec bouton de lien
+                    🔗 Ouvrir une annonce avec lien web externe
                 </Text>
             </TouchableOpacity>
 
-            {/* Test 3 : Annonce alerte / maintenance */}
+            <TouchableOpacity
+                onPress={() =>
+                    setTestItem({
+                        kind: "announcement",
+                        announcement: {
+                            id: "test-inapp-link",
+                            title: "Mise à jour disponible ! 🎉",
+                            message:
+                                "Découvre toutes les nouveautés et améliorations apportées dans la dernière version de Kolybri directement dans les notes de version.",
+                            link: {
+                                label: "Voir les notes de version",
+                                url: "kolybri://settings/release-notes",
+                            },
+                            type: "community",
+                        },
+                    })
+                }
+                style={{
+                    padding: 10,
+                    borderRadius: 8,
+                    backgroundColor: "rgba(59, 130, 246, 0.2)",
+                }}
+            >
+                <Text size={13} color="#60A5FA">
+                    📱 Ouvrir une annonce avec deep link in-app (Notes de version)
+                </Text>
+            </TouchableOpacity>
+
             <TouchableOpacity
                 onPress={() =>
                     setTestItem({
@@ -108,7 +133,6 @@ export default function AnnouncementsTestButtons() {
                 </Text>
             </TouchableOpacity>
 
-            {/* Test 4 : Annonce longue avec défilement */}
             <TouchableOpacity
                 onPress={() =>
                     setTestItem({
@@ -142,7 +166,6 @@ export default function AnnouncementsTestButtons() {
                 </Text>
             </TouchableOpacity>
 
-            {/* Test 5 : Réinitialiser les annonces vues */}
             <TouchableOpacity
                 onPress={() => reset()}
                 style={{
