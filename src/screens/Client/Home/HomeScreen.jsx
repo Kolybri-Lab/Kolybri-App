@@ -1,4 +1,4 @@
-import { ScreenStack, SharePopup, Text } from "@/components";
+import { ScreenStack, Text } from "@/components";
 import { useGrades } from "@/features/grades";
 import ActiveCourseCard from "@/features/home/components/ActiveCourseCard";
 import GeneralAveragePreview from "@/features/home/components/GeneralAveragePreview";
@@ -13,7 +13,7 @@ import { GuestTestButtons } from "@/mock/guest/components";
 import { routesNames } from "@/router/config/routesNames";
 import { withAlpha } from "@/themes/color";
 import { useNavigation } from "@react-navigation/native";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { Image, Pressable, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -26,11 +26,6 @@ export default function HomeScreen() {
 
     const [greetingMessage] = useState(getGreetingMessage);
 
-    const hasHydrated = useUserStore((s) => s.hasHydrated);
-    const isFirstLaunch = useUserStore((s) => s.isFirstLaunch);
-    const markLaunched = useUserStore((s) => s.markLaunched);
-    const [showPopup, setShowPopup] = useState(false);
-
     const name = profile?.name ?? "";
     const { data: gradesData } = useGrades(token);
     const { data: homeworksData } = useHomeworks(token);
@@ -38,18 +33,6 @@ export default function HomeScreen() {
     const localPhotoUri = profile?.localPhotoUri;
 
     const customDataStore = useCustomDataStore();
-
-    useEffect(() => {
-        if (hasHydrated && isFirstLaunch) {
-            const timer = setTimeout(() => setShowPopup(true), 2000);
-            return () => clearTimeout(timer);
-        }
-    }, [hasHydrated, isFirstLaunch]);
-
-    const handleClosePopup = () => {
-        setShowPopup(false);
-        markLaunched();
-    };
 
     const getProfileImageSource = useCallback(
         () =>
@@ -60,7 +43,6 @@ export default function HomeScreen() {
     );
     return (
         <ScreenStack>
-            <SharePopup visible={showPopup} onClose={handleClosePopup} />
             <View style={{ paddingHorizontal: 20 }}>
                 <ScrollView
                     showsVerticalScrollIndicator={false}
