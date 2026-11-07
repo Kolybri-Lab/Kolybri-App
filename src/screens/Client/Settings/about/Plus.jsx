@@ -10,7 +10,7 @@ const TAP_THRESHOLD = 5;
 const TAP_TIMEOUT = 250;
 
 export default function PlusScreen({ route }) {
-    const { label } = route.params;
+    const label = route?.params?.label || "Plus";
     const { colors } = useTheme();
 
     const { major, minor, patch } = Platform.constants.reactNativeVersion;

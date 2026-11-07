@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import * as Application from "expo-application";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { createMMKV } from "react-native-mmkv";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
@@ -99,8 +99,8 @@ export const useWhatsNewStore = create<WhatsNewStoreState>()(
 // util function
 
 export const compareVersions = (a: string, b: string) => {
-    const cleanA = a.split("-")[0];
-    const cleanB = b.split("-")[0];
+    const cleanA = String(a || "").split("-")[0];
+    const cleanB = String(b || "").split("-")[0];
     const pa = cleanA.split(".").map((n) => parseInt(n, 10) || 0);
     const pb = cleanB.split(".").map((n) => parseInt(n, 10) || 0);
     const len = Math.max(pa.length, pb.length, 3);
@@ -123,7 +123,6 @@ const OFFICIAL_ANNOUNCEMENTS_URL =
     "https://kolybri-lab.github.io/kolybri-announcements/announcements.json";
 
 export function useWhatsNew() {
-    const lastSeenVersion = useWhatsNewStore((s) => s.lastSeenVersion);
     const seenAnnouncementIds = useWhatsNewStore((s) => s.seenAnnouncementIds);
     const setLastSeenVersion = useWhatsNewStore((s) => s.setLastSeenVersion);
     const markAnnouncementSeen = useWhatsNewStore((s) => s.markAnnouncementSeen);

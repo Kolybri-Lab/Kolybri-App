@@ -7,7 +7,7 @@ import { Pressable, TextInput, View } from "react-native";
 import SettingSectionLayout from "./components/SettingSectionLayout";
 
 export default function AccountScreen({ route }) {
-    const { label } = route.params;
+    const label = route?.params?.label || "Compte";
     const profile = useUserStore((state) => state.profile);
     const setProfile = useUserStore((state) => state.setProfile);
     const nameInputRef = useRef(null);

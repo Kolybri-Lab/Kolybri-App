@@ -50,7 +50,7 @@ const MESSAGE_MAX_LENGTH = 500;
 const TITLE_MAX_LENGTH = 50;
 
 export default function FeedbackScreen({ route }) {
-    const { label } = route.params;
+    const label = route?.params?.label || "Vos retours";
     const colorScheme = useUserStore((state) => state.preferences.theme);
     const navigation = useNavigation();
     const [error, setError] = useState("");

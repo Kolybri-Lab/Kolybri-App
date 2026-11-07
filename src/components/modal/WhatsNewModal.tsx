@@ -1,6 +1,6 @@
 import { useTheme } from "@/hooks/useThemeStore";
 import { AnnouncementItem, ChangelogItem, WhatsNewItem } from "@/hooks/useWhatsNew";
-import { openUrl } from "@/utils/url";
+import { isInternalUrl, openUrl } from "@/utils/url";
 import * as Application from "expo-application";
 import { Link } from "lucide-react-native";
 import { Modal, Pressable, ScrollView, Text, View } from "react-native";
@@ -52,7 +52,7 @@ export default function WhatsNewModal({ item, dismiss }: Props) {
                                 accessibilityRole="link"
                                 onPress={() => {
                                     const url = item.announcement.link?.url;
-                                    if (url?.startsWith("kolybri")) {
+                                    if (isInternalUrl(url)) {
                                         dismiss();
                                     }
                                     openUrl(url);
