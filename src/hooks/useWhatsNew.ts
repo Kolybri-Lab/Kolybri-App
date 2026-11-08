@@ -99,8 +99,8 @@ export const useWhatsNewStore = create<WhatsNewStoreState>()(
 // util function
 
 export const compareVersions = (a: string, b: string) => {
-    const cleanA = String(a || "").split("-")[0];
-    const cleanB = String(b || "").split("-")[0];
+    const cleanA = String(a || "").replace(/^v/i, "").split("-")[0];
+    const cleanB = String(b || "").replace(/^v/i, "").split("-")[0];
     const pa = cleanA.split(".").map((n) => parseInt(n, 10) || 0);
     const pb = cleanB.split(".").map((n) => parseInt(n, 10) || 0);
     const len = Math.max(pa.length, pb.length, 3);

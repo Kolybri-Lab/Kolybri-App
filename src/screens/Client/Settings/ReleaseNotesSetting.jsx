@@ -1,8 +1,10 @@
 import { LoadingSpinner, Text } from "@/components";
+import { compareVersions } from "@/hooks/useWhatsNew";
 import { useTheme } from "@/hooks/useThemeStore";
 import { withAlpha } from "@/themes/color";
 import { useQuery } from "@tanstack/react-query";
 import { View } from "react-native";
+import packageJson from "../../../../package.json";
 import SettingSectionLayout from "./components/SettingSectionLayout";
 
 const OFFICIAL_CHANGELOG_URL =
@@ -89,7 +91,7 @@ export default function ReleaseNotesScreen({ route }) {
         isLoading,
         isError,
     } = useQuery({
-        queryKey: ["app-changelog"],
+        queryKey: ["app-changelog", packageJson.version],
         queryFn: async () => {
             const res = await fetch(`${OFFICIAL_CHANGELOG_URL}?t=${Date.now()}`, {
                 headers: {
@@ -101,7 +103,12 @@ export default function ReleaseNotesScreen({ route }) {
             const text = await res.text();
             if (!text || !text.trim()) return [];
             const json = JSON.parse(text);
-            return Array.isArray(json) ? json : (json.changelog ?? []);
+            const allReleases = Array.isArray(json) ? json : (json.changelog ?? []);
+            return allReleases.filter(
+                (release) =>
+                    release?.version &&
+                    compareVersions(release.version, packageJson.version) <= 0
+            );
         },
         staleTime: 1000 * 60 * 5,
     });
