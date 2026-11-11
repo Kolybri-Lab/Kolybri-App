@@ -8,7 +8,7 @@ import { Pressable, View } from "react-native";
 import SettingSectionLayout from "./components/SettingSectionLayout";
 
 export default function ThemeScreen({ route }) {
-    const { label } = route.params;
+    const label = route?.params?.label || "Thème";
 
     const hapticsEnabled = useThemeStore((state) => state.hapticsEnabled);
     const setHapticsEnabled = useThemeStore((state) => state.setHapticsEnabled);

@@ -1,3 +1,4 @@
+import { SharePopup } from "@/components";
 import createScreen from "@/router/helpers/createScreen";
 import ContributorsScreen from "@/screens/Client/Settings/about/Contributors";
 import PlusScreen from "@/screens/Client/Settings/about/Plus";
@@ -15,7 +16,7 @@ const {
         home,
         account_settings: { account, data_and_confidentiality },
         app_settings: { theme },
-        about_settings: { release_notes, about, contributors, plus, feedback },
+        about_settings: { release_notes, about, contributors, plus, feedback, share },
     },
 } = routesNames;
 
@@ -29,6 +30,10 @@ const settingsClientScreen = [
     createScreen(about, AboutScreen),
     createScreen(contributors, ContributorsScreen),
     createScreen(plus, PlusScreen),
+    createScreen(share, SharePopup, {
+        presentation: "transparentModal",
+        animation: "fade",
+    }),
 ];
 
 export default settingsClientScreen;

@@ -8,13 +8,13 @@ import { routesNames } from "@/router/config/routesNames";
 import { withAlpha } from "@/themes/color";
 import { openUrl } from "@/utils/url";
 import { useNavigation } from "@react-navigation/native";
-import { Heart } from "lucide-react-native";
+import { Heart, Share2 } from "lucide-react-native";
 import { Image, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AnimatedFrenchFlag from "./components/AnimatedFrenchFlag";
 import SettingSectionLayout from "./components/SettingSectionLayout";
 export default function AboutScreen({ route }) {
-    const { label } = route.params;
+    const label = route?.params?.label || "À propos";
     const navigation = useNavigation();
     const { colors } = useTheme();
     return (
@@ -63,7 +63,7 @@ export default function AboutScreen({ route }) {
                 </View>
             </View>
 
-            <View style={{ gap: 9, flex: 1, justifyContent: "center" }}>
+            <View style={{ gap: 4, flex: 1, justifyContent: "center" }}>
                 <Text
                     preset="label2"
                     style={{ marginTop: 26 }}
@@ -161,20 +161,39 @@ export default function AboutScreen({ route }) {
                         </Section>
                     </View>
                 </View>
-                <View style={{ gap: 9 }}>
+                <View style={{ gap: 4 }}>
                     <Section
                         index={0}
-                        totalLength={2}
-                        label={"Discord"}
-                        icon={<DiscordLogo size={24} fill={colors.text.primary} />}
+                        totalLength={3}
+                        label={"Partager l'application"}
+                        icon={<Share2 size={22} color={colors.text.primary} />}
                         height={48}
-                        onPress={() => openUrl("https://discord.gg/AKAqXfTgvE")}
+                        onPress={() =>
+                            navigation.navigate(
+                                routesNames.settings.about_settings.share
+                            )
+                        }
                     >
-                        <Link size={24} fill={withAlpha(colors.text.primary, 0.3)} />
+                        <Chevron
+                            size={16}
+                            fill={withAlpha(colors.text.primary, 0.3)}
+                        />
                     </Section>
+                    <View style={{ opacity: 0.4 }}>
+                        <Section
+                            disabled
+                            index={1}
+                            totalLength={3}
+                            label={"Discord"}
+                            icon={<DiscordLogo size={24} fill={colors.text.primary} />}
+                            height={48}
+                        >
+                            <Link size={24} fill={withAlpha(colors.text.primary, 0.3)} />
+                        </Section>
+                    </View>
                     <Section
-                        index={1}
-                        totalLength={2}
+                        index={2}
+                        totalLength={3}
                         label={"Plus..."}
                         icon={<Info size={24} fill={colors.text.primary} />}
                         height={48}
@@ -190,7 +209,6 @@ export default function AboutScreen({ route }) {
                             fill={withAlpha(colors.text.primary, 0.3)}
                         />
                     </Section>
-                    {/* <View style={{pheight: 20 }} /> */}
                 </View>
             </View>
 
@@ -218,3 +236,4 @@ export default function AboutScreen({ route }) {
         </SettingSectionLayout>
     );
 }
+
