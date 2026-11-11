@@ -63,7 +63,7 @@ export default function AboutScreen({ route }) {
                 </View>
             </View>
 
-            <View style={{ gap: 9, flex: 1, justifyContent: "center" }}>
+            <View style={{ gap: 4, flex: 1, justifyContent: "center" }}>
                 <Text
                     preset="label2"
                     style={{ marginTop: 26 }}
