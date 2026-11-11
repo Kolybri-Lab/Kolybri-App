@@ -42,7 +42,7 @@
     "submit": {
         "production": {
             "android": {
-                "track": "internal", // change to production after checking if the workflow work correctly
+                "track": "production",
                 "releaseStatus": "completed"
             }
         }
