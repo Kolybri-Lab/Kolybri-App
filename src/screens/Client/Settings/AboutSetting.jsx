@@ -179,16 +179,18 @@ export default function AboutScreen({ route }) {
                             fill={withAlpha(colors.text.primary, 0.3)}
                         />
                     </Section>
-                    <Section
-                        index={1}
-                        totalLength={3}
-                        label={"Discord"}
-                        icon={<DiscordLogo size={24} fill={colors.text.primary} />}
-                        height={48}
-                        onPress={() => openUrl("https://discord.gg/AKAqXfTgvE")}
-                    >
-                        <Link size={24} fill={withAlpha(colors.text.primary, 0.3)} />
-                    </Section>
+                    <View style={{ opacity: 0.4 }}>
+                        <Section
+                            disabled
+                            index={1}
+                            totalLength={3}
+                            label={"Discord"}
+                            icon={<DiscordLogo size={24} fill={colors.text.primary} />}
+                            height={48}
+                        >
+                            <Link size={24} fill={withAlpha(colors.text.primary, 0.3)} />
+                        </Section>
+                    </View>
                     <Section
                         index={2}
                         totalLength={3}
