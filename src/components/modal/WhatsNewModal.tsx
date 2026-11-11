@@ -3,7 +3,7 @@ import { AnnouncementItem, ChangelogItem, WhatsNewItem } from "@/hooks/useWhatsN
 import { isInternalUrl, openUrl } from "@/utils/url";
 import * as Application from "expo-application";
 import { Link } from "lucide-react-native";
-import { Modal, Pressable, ScrollView, Text, View } from "react-native";
+import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 type Props = {
     item: WhatsNewItem | null;
@@ -24,6 +24,10 @@ export default function WhatsNewModal({ item, dismiss }: Props) {
                     backgroundColor: colors.background.modal,
                 }}
             >
+                <Pressable
+                    onPress={dismiss}
+                    style={StyleSheet.absoluteFill}
+                />
                 <View
                     style={{
                         backgroundColor: colors.surface.default,
