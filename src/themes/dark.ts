@@ -29,14 +29,14 @@ const colors = {
         /** Blue text for large or bold text only (contrast ~3:1 on dark). Not for small body text or links. */
         accent: "hsl(213, 96%, 71%)",
         /** Brand-colored text on dark surfaces: titles, links, checkbox labels, active chips. */
-        brand: "hsl(234, 90%, 78%)",
+        brand: "hsl(213, 86%, 54%)", //"hsl(234, 90%, 78%)",
         /** Text and icons placed on brand.primary (filled buttons, active switch label). */
         onBrand: "hsl(0, 0%, 100%)",
     },
 
     brand: {
         /** Main interactive color: filled buttons, switch/checkbox/radio/slider active state, outline button text. */
-        primary: "hsl(213, 98%, 39%)",
+        primary: "hsl(213, 86%, 54%)",
         /** Tinted soft background: chips, badges, selected list item, secondary button background. */
         soft: "hsl(234, 45%, 22%)",
         /** Large brand surfaces and illustrations: home header, avatar, hero. Not for buttons with small text. */
