@@ -1,5 +1,5 @@
 import { useTheme } from "@/hooks/useThemeStore";
-import { AnnouncementItem, ChangelogItem, WhatsNewItem } from "@/hooks/useWhatsNew";
+import { AnnouncementItem, WhatsNewItem } from "@/hooks/useWhatsNew";
 import { isInternalUrl, openUrl } from "@/utils/url";
 import * as Application from "expo-application";
 import { Link } from "lucide-react-native";
@@ -36,11 +36,7 @@ export default function WhatsNewModal({ item, dismiss }: Props) {
                         maxHeight: "80%",
                     }}
                 >
-                    {item.kind === "changelog" ? (
-                        <ChangelogLayout entries={item.entries} />
-                    ) : (
-                        <AnnouncementLayout announcement={item.announcement} />
-                    )}
+                    <AnnouncementLayout announcement={item.announcement} />
 
                     <View
                         style={{
@@ -51,7 +47,7 @@ export default function WhatsNewModal({ item, dismiss }: Props) {
                             gap: 10,
                         }}
                     >
-                        {item.kind === "announcement" && item.announcement.link ? (
+                        {item.announcement.link ? (
                             <Pressable
                                 accessibilityRole="link"
                                 onPress={() => {
@@ -132,7 +128,7 @@ export default function WhatsNewModal({ item, dismiss }: Props) {
                             <Text
                                 numberOfLines={1}
                                 style={{
-                                    color: colors.text.brand,
+                                    color: colors.brand.primary,
                                     fontSize: 13,
                                     fontFamily: "SemiBold",
                                     includeFontPadding: false,
@@ -145,46 +141,6 @@ export default function WhatsNewModal({ item, dismiss }: Props) {
                 </View>
             </View>
         </Modal>
-    );
-}
-
-function ChangelogLayout({ entries }: { entries: ChangelogItem[] }) {
-    const { colors } = useTheme();
-    return (
-        <ScrollView showsVerticalScrollIndicator={false}>
-            {entries.map((e) => (
-                <View key={e.version} style={{ marginBottom: 16 }}>
-                    <Text
-                        style={{
-                            fontFamily: "Petrona-SemiBold",
-                            textDecorationStyle: "solid",
-                            textDecorationLine: "underline",
-                            fontSize: 22,
-                            color: colors.text.primary,
-                            marginLeft: 6,
-                            marginBottom: 8,
-                        }}
-                    >
-                        {e.title ?? `Version ${e.version} 🎉`} :
-                    </Text>
-                    <View
-                        style={{
-                            flexShrink: 1,
-                            marginTop: 10,
-                            borderRadius: 18,
-                            backgroundColor: colors.surface.muted,
-                            padding: 10,
-                        }}
-                    >
-                        {e.changes.map((c, i) => (
-                            <Text key={i} style={{ color: colors.text.primary }}>
-                                • [{c.type}] {c.text}
-                            </Text>
-                        ))}
-                    </View>
-                </View>
-            ))}
-        </ScrollView>
     );
 }
 

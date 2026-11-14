@@ -27,15 +27,6 @@ export interface WhatsNewStoreState {
     reset: () => void;
 }
 
-export interface ChangelogItem {
-    version: string;
-    date: string;
-    title: string;
-    changes: {
-        type: string;
-        text: string;
-    }[];
-}
 export interface AnnouncementItem {
     id: string;
     title: string;
@@ -50,11 +41,12 @@ export interface AnnouncementItem {
 
 export type GithubAnnouncementsResponse =
     | AnnouncementItem[]
-    | { announcements: AnnouncementItem[]; changelog?: ChangelogItem[] };
+    | { announcements: AnnouncementItem[] };
 
-export type WhatsNewItem =
-    | { kind: "changelog"; entries: ChangelogItem[] }
-    | { kind: "announcement"; announcement: AnnouncementItem };
+export type WhatsNewItem = {
+    kind: "announcement";
+    announcement: AnnouncementItem;
+};
 
 export const useWhatsNewStore = create<WhatsNewStoreState>()(
     persist(
@@ -124,7 +116,6 @@ const OFFICIAL_ANNOUNCEMENTS_URL =
 
 export function useWhatsNew() {
     const seenAnnouncementIds = useWhatsNewStore((s) => s.seenAnnouncementIds);
-    const setLastSeenVersion = useWhatsNewStore((s) => s.setLastSeenVersion);
     const markAnnouncementSeen = useWhatsNewStore((s) => s.markAnnouncementSeen);
     const hasHydrated = useWhatsNewStore((s) => s.hasHydrated);
 
@@ -209,11 +200,7 @@ export function useWhatsNew() {
             return;
         }
         if (!item) return;
-        if (item.kind === "changelog") {
-            setLastSeenVersion(currentVersion);
-        } else {
-            markAnnouncementSeen(item.announcement.id);
-        }
+        markAnnouncementSeen(item.announcement.id);
     };
     return { item, dismiss, settled, currentVersion };
 }
