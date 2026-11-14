@@ -21,7 +21,6 @@ import { useUserStore } from "@/hooks/useUserStore";
 import { objectsEqual } from "@/utils/json";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTheme } from "@/hooks/useThemeStore";
-import { addOpacityToCssRgb } from "@/utils/colorGenerator";
 import Animated, { LinearTransition } from "react-native-reanimated";
 
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);

@@ -1,7 +1,7 @@
 import { Text as CoreText } from "@/components/core";
 import { formatGradeText } from "@/features/grades/utils/helpers";
 import { useTheme } from "@/hooks/useThemeStore";
-import { addOpacityToCssRgb } from "@/utils/colorGenerator";
+import { withAlpha } from "@/themes/color";
 import { useEffect, useState } from "react";
 import { TouchableOpacity, View } from "react-native";
 import Animated, {
@@ -122,7 +122,7 @@ export default function DisciplineItem({
     const txt1Color = colors?.text?.primary ?? colors?.text?.primary ?? "#FFFFFF";
 
     const boxStyle = {
-        backgroundColor: addOpacityToCssRgb(mainColor, 0.3),
+        backgroundColor: withAlpha(mainColor, 0.3),
         paddingHorizontal: 20,
         paddingVertical: 8,
         borderRadius: 8,
@@ -228,14 +228,14 @@ export default function DisciplineItem({
                         style={{
                             width: 86,
                             height: 40,
-                            backgroundColor: addOpacityToCssRgb(
+                            backgroundColor: withAlpha(
                                 discipline.color,
                                 0.12
                             ),
                             alignItems: "center",
                             justifyContent: "center",
                             borderWidth: 1,
-                            borderColor: addOpacityToCssRgb(discipline.color, 0.2),
+                            borderColor: withAlpha(discipline.color, 0.2),
                             borderRadius: 7,
                         }}
                     >
@@ -255,7 +255,7 @@ export default function DisciplineItem({
                 <Animated.View style={[{ gap: 8 }, contentAnimatedStyle]}>
                     <View
                         style={{
-                            backgroundColor: addOpacityToCssRgb(txt1Color, 0.4),
+                            backgroundColor: withAlpha(txt1Color, 0.4),
                             height: 2,
                             borderRadius: 5,
                             marginHorizontal: 20,
@@ -317,7 +317,7 @@ export default function DisciplineItem({
                                 style={{
                                     alignItems: "center",
                                     justifyContent: "center",
-                                    backgroundColor: addOpacityToCssRgb(
+                                    backgroundColor: withAlpha(
                                         mainColor,
                                         0.8
                                     ),

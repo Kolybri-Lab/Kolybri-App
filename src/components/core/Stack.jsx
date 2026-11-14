@@ -1,6 +1,6 @@
 import { useTheme } from "@/hooks/useThemeStore";
 import { getShadow } from "@/themes/tokens";
-import { addOpacity } from "@/utils/colorGenerator";
+import { withAlpha } from "@/themes/color";
 import React from "react";
 import { StyleSheet, View } from "react-native";
 
@@ -173,7 +173,7 @@ function Stack({
                     shadowColor: "transparent",
                     shadowOpacity: 0,
                     borderWidth: 1,
-                    borderColor: addOpacity(colors.text.primary, 0.15),
+                    borderColor: withAlpha(colors.text.primary, 0.15),
                 });
             } else {
                 // Style card avec ombrage
@@ -184,7 +184,7 @@ function Stack({
                     shadowRadius: 1.5,
                     elevation: 1,
                     borderWidth: 0.5,
-                    borderColor: addOpacity(colors.text.primary, 0.15),
+                    borderColor: withAlpha(colors.text.primary, 0.15),
                 });
             }
         }

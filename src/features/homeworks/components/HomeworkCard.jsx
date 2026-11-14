@@ -3,7 +3,7 @@ import { serializeHomework } from "@/features/homeworks/utils/homeworks";
 import { useCustomDataStore } from "@/hooks/useCustomDataStore";
 import { useHaptic } from "@/hooks/useHaptics";
 import { useTheme } from "@/hooks/useThemeStore";
-import { addOpacity } from "@/utils/colorGenerator";
+import { withAlpha } from "@/themes/color";
 import { formatShortDate } from "@/utils/date";
 import { FolderOpen, Maximize2, Trash2 } from "lucide-react-native";
 import { useCallback } from "react";
@@ -123,8 +123,8 @@ export default function HomeworkCard({
                                     paddingHorizontal: 8,
                                     borderWidth: 1,
                                     borderRadius: 7,
-                                    borderColor: addOpacity("#F87171", 0.2),
-                                    backgroundColor: addOpacity("#F87171", 0.12),
+                                    borderColor: withAlpha("#F87171", 0.2),
+                                    backgroundColor: withAlpha("#F87171", 0.12),
                                     flexShrink: 0,
                                 }}
                             >
@@ -171,7 +171,7 @@ export default function HomeworkCard({
                         height: 1.5,
                         width: "95%",
                         borderRadius: 2,
-                        backgroundColor: addOpacity(colors.text.primary, 0.4),
+                        backgroundColor: withAlpha(colors.text.primary, 0.4),
                         marginTop: 12,
                     }}
                 />
@@ -192,7 +192,7 @@ export default function HomeworkCard({
                         height: 1.5,
                         width: "95%",
                         borderRadius: 2,
-                        backgroundColor: addOpacity(colors.text.primary, 0.4),
+                        backgroundColor: withAlpha(colors.text.primary, 0.4),
                         marginBottom: 12,
                     }}
                 />
