@@ -23,7 +23,7 @@ Enjoy the most-requested features along with a bunch of small yet impactful impr
 
 ## Getting started
 
-- Install Kolybri from [Google Play](#) _(links coming soon)_
+- Install Kolybri from [Google Play](https://play.google.com/store/apps/details?id=org.kolybri.app)
 - Log in with your existing EcoleDirecte credentials
 - That's it, enjoy!
 
