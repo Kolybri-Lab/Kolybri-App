@@ -86,7 +86,8 @@ const formatCourse = (entry: ApiTimetableEntry, id: number): Course => {
 
     return {
         id, // index
-        color: useColorStore.getState().getOrAssignColor(entry.codeMatiere),
+        codeMatiere: entry.codeMatiere,
+        color: useColorStore.getState().getSubjectColor(entry.codeMatiere),
         libelle: entry.matiere?.trim() || entry.text?.trim() || "Cours sans titre",
         teacher: entry?.prof?.trim() || "Pas de prof",
         room: entry.salle?.trim() || "Aucune salle",
@@ -110,8 +111,7 @@ const formatCourse = (entry: ApiTimetableEntry, id: number): Course => {
         dayView: {
             height: Math.max(
                 timetableConfig.minHeight,
-                (Math.round(duration.int) - 1) *
-                    timetableConfig.pxPerHour +
+                (Math.round(duration.int) - 1) * timetableConfig.pxPerHour +
                     timetableConfig.minHeight
             ),
         },

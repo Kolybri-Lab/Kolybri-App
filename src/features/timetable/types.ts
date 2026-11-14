@@ -42,6 +42,7 @@ interface Schedules {
 
 export interface Course {
     id: number;
+    codeMatiere?: string;
     libelle: string;
     teacher: string;
     room: string;

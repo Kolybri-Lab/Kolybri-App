@@ -20,6 +20,7 @@ const countCourses = (w: Week) =>
 export function useTimetable(token?: string, selectedDate?: string) {
     const [range, setRange] = useState(DEFAULT_RANGE);
     const { isDark } = useTheme();
+    const officialVersion = useColorStore((state) => state.officialVersion);
 
     const storeUserId = useUserStore((state) => state.profile?.id);
     const storeToken = useUserStore((state) => state.token);
@@ -117,7 +118,7 @@ export function useTimetable(token?: string, selectedDate?: string) {
             }
         }
 
-        const resolve = useColorStore.getState().resolveColorForTheme;
+        const getSubjectColor = useColorStore.getState().getSubjectColor;
 
         return [...byFrom.values()]
             .sort((a, b) => a.from.date.localeCompare(b.from.date))
@@ -127,12 +128,12 @@ export function useTimetable(token?: string, selectedDate?: string) {
                     ...day,
                     courses: day.courses.map((course) => ({
                         ...course,
-                        color: resolve(course.color, isDark),
+                        color: getSubjectColor(course.codeMatiere),
                     })),
                 })),
             }));
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dataUpdatedAtKey, isDark]);
+    }, [dataUpdatedAtKey, isDark, officialVersion]);
 
     return {
         data: allWeeks,

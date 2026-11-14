@@ -101,7 +101,7 @@ function formatHomeworksDetails(
             name: matiere,
             code: codeMatiere,
             teacher: nomProf,
-            color: useColorStore.getState().getOrAssignColor(codeMatiere),
+            color: useColorStore.getState().getSubjectColor(codeMatiere),
         },
         student: {
             class: entityLibelle,

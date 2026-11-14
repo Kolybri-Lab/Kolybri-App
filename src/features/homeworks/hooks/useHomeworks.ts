@@ -31,6 +31,7 @@ const updateHomeworkInCache = (
 export function useHomeworks(token: string) {
     const queryClient = useQueryClient();
     const { isDark } = useTheme();
+    const officialVersion = useColorStore((state) => state.officialVersion);
 
     const query = useQuery<ResolvedHomeworks>({
         queryKey: ["homeworks"],
@@ -83,18 +84,18 @@ export function useHomeworks(token: string) {
 
     const data = useMemo(() => {
         if (!query.data) return {} as ResolvedHomeworks;
-        const resolve = useColorStore.getState().resolveColorForTheme;
+        const getSubjectColor = useColorStore.getState().getSubjectColor;
         const next: Record<string, unknown> = {};
 
         for (const [key, value] of Object.entries(query.data)) {
             if (key !== "formatedDates" && Array.isArray(value)) {
                 next[key] = value.map((hw) =>
-                    hw.discipline?.color
+                    hw.discipline
                         ? {
                               ...hw,
                               discipline: {
                                   ...hw.discipline,
-                                  color: resolve(hw.discipline.color, isDark),
+                                  color: getSubjectColor(hw.discipline.code),
                               },
                           }
                         : hw
@@ -105,7 +106,7 @@ export function useHomeworks(token: string) {
         }
 
         return next as ResolvedHomeworks;
-    }, [query.data, isDark]);
+    }, [query.data, isDark, officialVersion]);
 
     return {
         ...query,

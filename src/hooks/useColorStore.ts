@@ -27,8 +27,10 @@ const pickVariant = (pair: SubjectColor, isDark: boolean): string =>
 interface ColorStoreState {
     subjectColors: Record<string, SubjectColorContext>;
     nextIndex: number;
+    officialVersion: number;
     // Warning: This updates store state, do not call inside render methods!
     getOrAssignColor: (subject: string) => string;
+    getSubjectColor: (subject?: string) => string;
     resolveColorForTheme: (color: string | undefined, isDark: boolean) => string;
     setSubjectIndex: (subject: string, index: number) => void;
     setSubjectColor: (subject: string, color: SubjectColor | string) => void;
@@ -40,12 +42,16 @@ export const useColorStore = create<ColorStoreState>()(
         (set, get) => ({
             subjectColors: {},
             nextIndex: 0,
+            officialVersion: 0,
 
             // Warning: This updates store state, do not call inside render methods!
             getOrAssignColor: (subject: string): string => {
-                const { subjectColors, nextIndex } = get();
+                const key = subject?.trim();
+                if (!key) return get().getSubjectColor(subject);
+
+                const { subjectColors, nextIndex, officialVersion } = get();
                 const isDark = useThemeStore.getState().getTheme().isDark;
-                const existing = subjectColors[subject];
+                const existing = subjectColors[key];
 
                 if (existing && isSubjectColor(existing.color)) {
                     return pickVariant(existing.color, isDark);
@@ -58,8 +64,9 @@ export const useColorStore = create<ColorStoreState>()(
                     set({
                         subjectColors: {
                             ...subjectColors,
-                            [subject]: { index: existing.index, color: pair },
+                            [key]: { index: existing.index, color: pair },
                         },
+                        officialVersion: officialVersion + 1,
                     });
                     return pickVariant(pair, isDark);
                 }
@@ -69,12 +76,37 @@ export const useColorStore = create<ColorStoreState>()(
                 set({
                     subjectColors: {
                         ...subjectColors,
-                        [subject]: { index: newIndex, color: pair },
+                        [key]: { index: newIndex, color: pair },
                     },
                     nextIndex: newIndex + 1,
+                    officialVersion: officialVersion + 1,
                 });
 
                 return pickVariant(pair, isDark);
+            },
+
+            getSubjectColor: (subject?: string): string => {
+                const { subjectColors } = get();
+                const theme = useThemeStore.getState().getTheme();
+
+                if (Object.keys(subjectColors).length === 0) {
+                    return theme.colors.brand.primary;
+                }
+
+                const key = subject?.trim();
+                const existing = key ? subjectColors[key] : undefined;
+                if (!existing) {
+                    return theme.colors.text.secondary;
+                }
+
+                if (isSubjectColor(existing.color)) {
+                    return pickVariant(existing.color, theme.isDark);
+                }
+
+                const pair = generateSubjectColor(
+                    (existing.index * GOLDEN) % 360
+                );
+                return pickVariant(pair, theme.isDark);
             },
 
             resolveColorForTheme: (
@@ -127,7 +159,7 @@ export const useColorStore = create<ColorStoreState>()(
         }),
         {
             name: "color-store",
-            version: 4,
+            version: 5,
             storage: mmkvStorage,
             migrate: () => ({ subjectColors: {}, nextIndex: 0 }),
             partialize: (state) => ({
