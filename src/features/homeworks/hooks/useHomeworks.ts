@@ -1,7 +1,10 @@
+import { useMemo } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import homeworksResolver, {
     toggleHomeworkInApi,
 } from "@/features/homeworks/resolver/homeworks";
+import { useColorStore } from "@/hooks/useColorStore";
+import { useTheme } from "@/hooks/useThemeStore";
 import { Homework, ResolvedHomeworks } from "../types";
 
 const updateHomeworkInCache = (
@@ -27,6 +30,7 @@ const updateHomeworkInCache = (
 
 export function useHomeworks(token: string) {
     const queryClient = useQueryClient();
+    const { isDark } = useTheme();
 
     const query = useQuery<ResolvedHomeworks>({
         queryKey: ["homeworks"],
@@ -77,9 +81,35 @@ export function useHomeworks(token: string) {
         },
     });
 
+    const data = useMemo(() => {
+        if (!query.data) return {} as ResolvedHomeworks;
+        const resolve = useColorStore.getState().resolveColorForTheme;
+        const next: Record<string, unknown> = {};
+
+        for (const [key, value] of Object.entries(query.data)) {
+            if (key !== "formatedDates" && Array.isArray(value)) {
+                next[key] = value.map((hw) =>
+                    hw.discipline?.color
+                        ? {
+                              ...hw,
+                              discipline: {
+                                  ...hw.discipline,
+                                  color: resolve(hw.discipline.color, isDark),
+                              },
+                          }
+                        : hw
+                );
+            } else {
+                next[key] = value;
+            }
+        }
+
+        return next as ResolvedHomeworks;
+    }, [query.data, isDark]);
+
     return {
         ...query,
-        data: query.data ?? ({} as ResolvedHomeworks),
+        data,
         toggleHomework: mutation.mutate,
     };
 }

@@ -29,12 +29,14 @@ function CourseCardItem({
     slotHeight,
     colors,
 }: CourseCardItemProps) {
+    const { isDark } = useTheme();
+
     return (
         <View
             style={{
                 flex: 1,
                 minHeight: slotHeight,
-                backgroundColor: colors.surface.default,
+                backgroundColor: isDark ? "hsl(0, 0%, 9%)" : colors.surface.default,
                 borderRadius: 18,
                 borderColor: course.states?.cancelled
                     ? colors.state.warning
@@ -58,7 +60,7 @@ function CourseCardItem({
                     flex: 1,
                     justifyContent: "space-between",
                     padding: isMulti ? 10 : 14,
-                    backgroundColor: withAlpha(course.color, 0.25),
+                    backgroundColor: withAlpha(course.color, isDark ? 0.35 : 0.25),
                 }}
             >
                 <View

@@ -1,7 +1,9 @@
 import type { Week } from "@/features/timetable";
 import timetableResolver from "@/features/timetable/resolver/timetable";
 import { useAuthStore } from "@/hooks/useAuthStore";
+import { useColorStore } from "@/hooks/useColorStore";
 import { useCurrentTime } from "@/hooks/useCurrentTime";
+import { useTheme } from "@/hooks/useThemeStore";
 import { useUserStore } from "@/hooks/useUserStore";
 import { useQueries } from "@tanstack/react-query";
 import dayjs from "dayjs";
@@ -17,6 +19,7 @@ const countCourses = (w: Week) =>
 
 export function useTimetable(token?: string, selectedDate?: string) {
     const [range, setRange] = useState(DEFAULT_RANGE);
+    const { isDark } = useTheme();
 
     const storeUserId = useUserStore((state) => state.profile?.id);
     const storeToken = useUserStore((state) => state.token);
@@ -28,7 +31,9 @@ export function useTimetable(token?: string, selectedDate?: string) {
     const { date: todayDate } = useCurrentTime();
 
     const baseMonday = useMemo(() => {
-        return dayjs(todayDate || undefined).startOf("isoWeek").format("YYYY-MM-DD");
+        return dayjs(todayDate || undefined)
+            .startOf("isoWeek")
+            .format("YYYY-MM-DD");
     }, [todayDate]);
 
     // Si selectedDate pointe loin en avant ou en arrière, étendre range pour l'englober
@@ -57,7 +62,11 @@ export function useTimetable(token?: string, selectedDate?: string) {
     const weekMondays = useMemo(() => {
         const arr: string[] = [];
         for (let i = range.min; i <= range.max; i++) {
-            arr.push(dayjs(baseMonday).add(i * 7, "day").format("YYYY-MM-DD"));
+            arr.push(
+                dayjs(baseMonday)
+                    .add(i * 7, "day")
+                    .format("YYYY-MM-DD")
+            );
         }
         return arr;
     }, [baseMonday, range.min, range.max]);
@@ -81,7 +90,7 @@ export function useTimetable(token?: string, selectedDate?: string) {
     );
     const lastQueryLoading = Boolean(
         queries[queries.length - 1]?.isLoading ||
-            queries[queries.length - 1]?.isFetching
+        queries[queries.length - 1]?.isFetching
     );
 
     const extendForward = useCallback(() => {
@@ -108,11 +117,22 @@ export function useTimetable(token?: string, selectedDate?: string) {
             }
         }
 
-        return [...byFrom.values()].sort((a, b) =>
-            a.from.date.localeCompare(b.from.date)
-        );
+        const resolve = useColorStore.getState().resolveColorForTheme;
+
+        return [...byFrom.values()]
+            .sort((a, b) => a.from.date.localeCompare(b.from.date))
+            .map((week) => ({
+                ...week,
+                days: week.days.map((day) => ({
+                    ...day,
+                    courses: day.courses.map((course) => ({
+                        ...course,
+                        color: resolve(course.color, isDark),
+                    })),
+                })),
+            }));
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dataUpdatedAtKey]);
+    }, [dataUpdatedAtKey, isDark]);
 
     return {
         data: allWeeks,
@@ -124,3 +144,4 @@ export function useTimetable(token?: string, selectedDate?: string) {
         range,
     };
 }
+

@@ -1,5 +1,10 @@
+export interface SubjectColor {
+    light: string;
+    dark: string;
+}
+
 export interface SubjectColorContext {
-    color?: string;
+    color?: SubjectColor;
     index: number;
 }
 
