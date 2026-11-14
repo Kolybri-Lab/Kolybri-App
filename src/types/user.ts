@@ -3,9 +3,12 @@ export interface SubjectColor {
     dark: string;
 }
 
-export interface SubjectColorContext {
-    color?: SubjectColor;
+export interface OfficialSubject {
+    code: string;
+    name: string;
+    teachers: string[];
     index: number;
+    color: SubjectColor;
 }
 
 export interface UserProfile {

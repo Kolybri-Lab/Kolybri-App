@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import homeworksResolver, {
     toggleHomeworkInApi,
 } from "@/features/homeworks/resolver/homeworks";
-import { useColorStore } from "@/hooks/useColorStore";
+import { useSubjectStore } from "@/hooks/useSubjectStore";
 import { useTheme } from "@/hooks/useThemeStore";
 import { Homework, ResolvedHomeworks } from "../types";
 
@@ -31,7 +31,7 @@ const updateHomeworkInCache = (
 export function useHomeworks(token: string) {
     const queryClient = useQueryClient();
     const { isDark } = useTheme();
-    const officialVersion = useColorStore((state) => state.officialVersion);
+    const officialVersion = useSubjectStore((state) => state.officialVersion);
 
     const query = useQuery<ResolvedHomeworks>({
         queryKey: ["homeworks"],
@@ -84,7 +84,7 @@ export function useHomeworks(token: string) {
 
     const data = useMemo(() => {
         if (!query.data) return {} as ResolvedHomeworks;
-        const getSubjectColor = useColorStore.getState().getSubjectColor;
+        const getSubjectColor = useSubjectStore.getState().getSubjectColor;
         const next: Record<string, unknown> = {};
 
         for (const [key, value] of Object.entries(query.data)) {

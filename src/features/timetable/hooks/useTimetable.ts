@@ -1,7 +1,7 @@
 import type { Week } from "@/features/timetable";
 import timetableResolver from "@/features/timetable/resolver/timetable";
 import { useAuthStore } from "@/hooks/useAuthStore";
-import { useColorStore } from "@/hooks/useColorStore";
+import { useSubjectStore } from "@/hooks/useSubjectStore";
 import { useCurrentTime } from "@/hooks/useCurrentTime";
 import { useTheme } from "@/hooks/useThemeStore";
 import { useUserStore } from "@/hooks/useUserStore";
@@ -20,7 +20,7 @@ const countCourses = (w: Week) =>
 export function useTimetable(token?: string, selectedDate?: string) {
     const [range, setRange] = useState(DEFAULT_RANGE);
     const { isDark } = useTheme();
-    const officialVersion = useColorStore((state) => state.officialVersion);
+    const officialVersion = useSubjectStore((state) => state.officialVersion);
 
     const storeUserId = useUserStore((state) => state.profile?.id);
     const storeToken = useUserStore((state) => state.token);
@@ -118,7 +118,7 @@ export function useTimetable(token?: string, selectedDate?: string) {
             }
         }
 
-        const getSubjectColor = useColorStore.getState().getSubjectColor;
+        const getSubjectColor = useSubjectStore.getState().getSubjectColor;
 
         return [...byFrom.values()]
             .sort((a, b) => a.from.date.localeCompare(b.from.date))

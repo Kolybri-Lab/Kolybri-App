@@ -1,4 +1,4 @@
-import { useColorStore } from "@/hooks/useColorStore";
+import { useSubjectStore } from "@/hooks/useSubjectStore";
 import fetchApi from "@/services/fetchApi";
 import { FetchApiResponse } from "@/types";
 import { isInDateInterval } from "@/utils/date";
@@ -163,7 +163,11 @@ function parseDiscipline(discipline: ApiDiscipline) {
         code: discipline.codeMatiere,
         codeSousMatiere: (discipline as any).codeSousMatiere || "",
         libelle: discipline.discipline,
-        color: useColorStore.getState().getOrAssignColor(discipline.codeMatiere),
+        color: useSubjectStore.getState().registerSubject({
+            code: discipline.codeMatiere,
+            name: discipline.discipline,
+            teachers: teachersWithoutId,
+        }),
         averageDatas: {
             classAverage: parseNumber(discipline.moyenneClasse),
             minAverage: parseNumber(discipline.moyenneMin),
@@ -318,9 +322,9 @@ export function getLatestGrades(rawNotes: ApiGrade[], limit = 5): any[] {
                 libelle: note.devoir,
                 date: note.date,
                 disciplineName: note.libelleMatiere,
-                disciplineColor: useColorStore
+                disciplineColor: useSubjectStore
                     .getState()
-                    .getOrAssignColor(note.codeMatiere),
+                    .getSubjectColor(note.codeMatiere),
                 codes: {
                     period: note.codePeriode,
                     discipline: note.codeMatiere,

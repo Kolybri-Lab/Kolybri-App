@@ -14,7 +14,7 @@ import type {
     TimelineItem,
     Week,
 } from "..";
-import { useColorStore } from "@/hooks/useColorStore";
+import { useSubjectStore } from "@/hooks/useSubjectStore";
 
 dayjs.extend(isoWeek);
 
@@ -87,7 +87,7 @@ const formatCourse = (entry: ApiTimetableEntry, id: number): Course => {
     return {
         id, // index
         codeMatiere: entry.codeMatiere,
-        color: useColorStore.getState().getSubjectColor(entry.codeMatiere),
+        color: useSubjectStore.getState().getSubjectColor(entry.codeMatiere),
         libelle: entry.matiere?.trim() || entry.text?.trim() || "Cours sans titre",
         teacher: entry?.prof?.trim() || "Pas de prof",
         room: entry.salle?.trim() || "Aucune salle",

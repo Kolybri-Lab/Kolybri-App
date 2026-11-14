@@ -1,4 +1,4 @@
-import { useColorStore } from "@/hooks/useColorStore";
+import { useSubjectStore } from "@/hooks/useSubjectStore";
 import { createHomework } from "../utils/homeworks";
 import { extractDates } from "../utils/dates";
 import fetchApi from "@/services/fetchApi";
@@ -101,7 +101,7 @@ function formatHomeworksDetails(
             name: matiere,
             code: codeMatiere,
             teacher: nomProf,
-            color: useColorStore.getState().getSubjectColor(codeMatiere),
+            color: useSubjectStore.getState().getSubjectColor(codeMatiere),
         },
         student: {
             class: entityLibelle,

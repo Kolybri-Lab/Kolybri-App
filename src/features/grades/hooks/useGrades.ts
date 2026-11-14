@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import gradesResolver from "@/features/grades/resolver/grades";
-import { useColorStore } from "@/hooks/useColorStore";
+import { useSubjectStore } from "@/hooks/useSubjectStore";
 import { useTheme } from "@/hooks/useThemeStore";
 import {
     FormattedDiscipline,
@@ -39,7 +39,7 @@ export function useGrades(token: string) {
 
     const data = useMemo(() => {
         if (!query.data) return {} as ResolvedGrades;
-        const resolve = useColorStore.getState().resolveColorForTheme;
+        const resolve = useSubjectStore.getState().resolveColorForTheme;
         const next: Record<string, unknown> = {};
 
         for (const [key, value] of Object.entries(query.data)) {

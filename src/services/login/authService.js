@@ -1,6 +1,6 @@
 import { CONFIG } from "@/constants/config";
 import { payloadHelper } from "@/helpers/cryptoHelper";
-import { useColorStore } from "@/hooks/useColorStore";
+import { useSubjectStore } from "@/hooks/useSubjectStore";
 import { useUserStore } from "@/hooks/useUserStore";
 import * as SecureStore from "expo-secure-store";
 import { createMMKV } from "react-native-mmkv";
@@ -100,7 +100,7 @@ const authService = {
         ];
         await Promise.all(keyNames.map((key) => SecureStore.deleteItemAsync(key)));
         useUserStore.getState().reset();
-        useColorStore.getState().reset();
+        useSubjectStore.getState().reset();
         storage.clearAll();
     },
 };
