@@ -88,10 +88,8 @@ export default function GeneralAveragePreview({ gradesData }) {
                 color={colors.brand.primary}
             >
                 {formatGradeText(generalAverage)}
-                <Text size={16} color={colors.text.secondary} fontFamily="Medium">
-                    /20
-                </Text>
             </Text>
         </TouchableOpacity>
     );
 }
+

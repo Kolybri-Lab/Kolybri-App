@@ -196,10 +196,7 @@ const Homework = ({ homework, index, countForDate }) => {
                 <View
                     style={{
                         flexShrink: 1,
-                        backgroundColor: withAlpha(
-                            colors.brand.primary,
-                            0.9
-                        ),
+                        backgroundColor: colors.brand.primary,
                         borderRadius: 10,
                         paddingHorizontal: 8,
                         paddingVertical: 2,

@@ -172,7 +172,7 @@ export default function ActiveCourseCard() {
                             }}
                         />
                         <Text
-                            color={colors.brand.primary}
+                            color={colors.text.primary}
                             style={{ fontFamily: "SemiBold", fontSize: 16 }}
                         >
                             {isLastCourseOfTheDay
@@ -208,7 +208,7 @@ export default function ActiveCourseCard() {
                             }}
                         >
                             <Text
-                                color={colors.brand.primary}
+                                color={colors.text.primary}
                                 style={{ fontFamily: "SemiBold", fontSize: 16 }}
                             >
                                 PROCHAIN COURS
