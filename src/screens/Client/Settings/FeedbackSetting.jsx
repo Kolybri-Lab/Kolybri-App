@@ -257,7 +257,7 @@ export default function FeedbackScreen({ route }) {
                                         preset="body1"
                                         color={
                                             isActive
-                                                ? colors.text.brand
+                                                ? colors.brand.primary
                                                 : withAlpha(colors.text.primary, 0.6)
                                         }
                                     >
@@ -416,7 +416,7 @@ export default function FeedbackScreen({ route }) {
                         onPress={sendFeedback}
                         disabled={isSending}
                         style={{
-                            backgroundColor: colors.brand.highlight,
+                            backgroundColor: colors.brand.primary,
                             paddingVertical: 14,
                             borderRadius: 14,
                             alignItems: "center",

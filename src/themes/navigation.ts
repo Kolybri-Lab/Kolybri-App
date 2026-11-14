@@ -14,7 +14,7 @@ export function toNavigationTheme(theme: Theme): NavigationTheme {
             card: colors.surface.default,
             text: colors.text.primary,
             border: colors.border.subtle,
-            notification: colors.state.danger,
+            notification: colors.state.warning,
         },
         fonts: {
             regular: { fontFamily: fontFamily.body, fontWeight: "400" },

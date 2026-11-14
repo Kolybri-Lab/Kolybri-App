@@ -124,7 +124,7 @@ export default function ViewSelector({ value, onChange }) {
                         label={option.label}
                         index={index}
                         progress={progress}
-                        activeColor={colors.text.brand}
+                        activeColor={colors.brand.primary}
                         inactiveColor={colors.text.secondary}
                         selected={value === option.value}
                         onPress={() => handleSelect(option.value)}

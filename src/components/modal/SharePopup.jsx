@@ -93,7 +93,7 @@ export default function SharePopup({ navigation }) {
 
                 <Pressable
                     style={({ pressed }) => ({
-                        backgroundColor: colors.brand.highlight,
+                        backgroundColor: colors.brand.primary,
                         paddingVertical: 13,
                         paddingHorizontal: 32,
                         borderRadius: 12,

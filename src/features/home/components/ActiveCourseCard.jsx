@@ -8,7 +8,6 @@ import { useTheme } from "@/hooks/useThemeStore";
 import { useUserStore } from "@/hooks/useUserStore";
 import { routesNames } from "@/router/config/routesNames";
 import { withAlpha } from "@/themes/color";
-import { addOpacityToCssRgb } from "@/utils/colorGenerator";
 import {
     convertTimeHoursMinToMinutes,
     isAfter,
@@ -64,7 +63,8 @@ export default function ActiveCourseCard() {
                 activeCourse.schedules.end.time
             );
         if (endMinutes <= startMinutes) return 0;
-        const progress = (activeMinutes - startMinutes) / (endMinutes - startMinutes);
+        const progress =
+            (activeMinutes - startMinutes) / (endMinutes - startMinutes);
         return Math.min(Math.max(parseFloat(progress.toFixed(4)), 0), 1);
     }, [activeCourse, currentTime.time]);
 
@@ -165,14 +165,14 @@ export default function ActiveCourseCard() {
                     >
                         <View
                             style={{
-                                backgroundColor: colors.brand.highlight,
+                                backgroundColor: colors.brand.primary,
                                 width: 6,
                                 height: 6,
                                 borderRadius: 5,
                             }}
                         />
                         <Text
-                            color={colors.text.accent}
+                            color={colors.brand.primary}
                             style={{ fontFamily: "SemiBold", fontSize: 16 }}
                         >
                             {isLastCourseOfTheDay
@@ -183,12 +183,9 @@ export default function ActiveCourseCard() {
                     <TouchableOpacity
                         onPress={() => {
                             haptic();
-                            navigation.navigate(
-                                routesNames.client.timetable.group,
-                                {
-                                    screen: routesNames.client.timetable.content,
-                                }
-                            );
+                            navigation.navigate(routesNames.client.timetable.group, {
+                                screen: routesNames.client.timetable.content,
+                            });
                         }}
                         style={{ width: "100%" }}
                     >
@@ -211,7 +208,7 @@ export default function ActiveCourseCard() {
                             }}
                         >
                             <Text
-                                color={addOpacityToCssRgb(colors.text.brand, 0.9)}
+                                color={colors.brand.primary}
                                 style={{ fontFamily: "SemiBold", fontSize: 16 }}
                             >
                                 PROCHAIN COURS
@@ -221,12 +218,9 @@ export default function ActiveCourseCard() {
                     <TouchableOpacity
                         onPress={() => {
                             haptic();
-                            navigation.navigate(
-                                routesNames.client.timetable.group,
-                                {
-                                    screen: routesNames.client.timetable.content,
-                                }
-                            );
+                            navigation.navigate(routesNames.client.timetable.group, {
+                                screen: routesNames.client.timetable.content,
+                            });
                         }}
                         style={{ width: "100%" }}
                     >
@@ -241,7 +235,7 @@ export default function ActiveCourseCard() {
 
 const Course = ({ course, progression, isLast }) => {
     const { colors, components } = useTheme();
-    const textColor = addOpacityToCssRgb(colors.text.primary, 0.9);
+    const textColor = withAlpha(colors.text.primary, 0.9);
 
     return (
         <View
@@ -497,7 +491,7 @@ const AnyCourse = () => {
                     Aucun cours pour le moment
                 </Text>
                 <Text
-                    color={addOpacityToCssRgb(colors.text.primary, 0.6)}
+                    color={withAlpha(colors.text.primary, 0.6)}
                     style={{ fontFamily: "Medium", fontSize: 14 }}
                 >
                     Profites-en pour souffler un peu 😌
@@ -506,3 +500,4 @@ const AnyCourse = () => {
         </View>
     );
 };
+

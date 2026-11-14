@@ -12,7 +12,6 @@ export type Theme = {
     colors: {
         background: {
             app: string;
-            auth: string;
             modal: string;
         };
         surface: {
@@ -23,22 +22,18 @@ export type Theme = {
         text: {
             primary: string;
             secondary: string;
-            accent: string;
-            brand: string;
             onBrand: string;
         };
         brand: {
             primary: string;
             soft: string;
             vivid: string;
-            highlight: string;
         };
         border: {
             subtle: string;
             strong: string;
         };
         state: {
-            danger: string;
             success: string;
             warning: string;
         };

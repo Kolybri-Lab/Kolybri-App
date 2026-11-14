@@ -288,7 +288,7 @@ function Selector({
                                                 : "Medium",
                                             fontSize: 16,
                                             color: isSelected
-                                                ? colors.text.accent
+                                                ? colors.brand.primary
                                                 : colors.text.primary,
                                         }}
                                     >
@@ -298,7 +298,7 @@ function Selector({
                                         style={{
                                             width: 6,
                                             aspectRatio: 1,
-                                            backgroundColor: colors.text.accent,
+                                            backgroundColor: colors.brand.primary,
                                             opacity: isSelected ? 0.7 : 0,
                                             borderRadius: 50,
                                         }}

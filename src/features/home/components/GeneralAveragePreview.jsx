@@ -85,7 +85,7 @@ export default function GeneralAveragePreview({ gradesData }) {
             </View>
             <Text
                 style={{ fontFamily: "Bold", fontSize: 32, marginTop: 3 }}
-                color={colors.text.accent}
+                color={colors.brand.primary}
             >
                 {formatGradeText(generalAverage)}
                 <Text size={16} color={colors.text.secondary} fontFamily="Medium">

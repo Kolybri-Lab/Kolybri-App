@@ -206,7 +206,7 @@ export default function HomeworkDetails({ route }) {
                                         <Text
                                             align="center"
                                             preset="label2"
-                                            color={colors.text.brand}
+                                            color={colors.brand.primary}
                                         >
                                             Documents (
                                             {
@@ -231,7 +231,7 @@ export default function HomeworkDetails({ route }) {
                                     <Text
                                         align="center"
                                         preset="label2"
-                                        color={colors.text.brand}
+                                        color={colors.brand.primary}
                                     >
                                         Contenu séance
                                     </Text>

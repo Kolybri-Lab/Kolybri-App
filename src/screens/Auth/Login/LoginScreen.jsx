@@ -23,7 +23,7 @@ import { Text } from "@/components/core";
 import { getApiMessage } from "@/constants/api/codes";
 import { useSignIn } from "@/hooks/useSignIn";
 import { routesNames } from "@/router/config/routesNames";
-import { addOpacityToCssRgb } from "@/utils/colorGenerator";
+import { withAlpha } from "@/themes/color";
 import MaskedView from "@react-native-masked-view/masked-view";
 import { LinearGradient } from "expo-linear-gradient";
 import { EyeClosedIcon, EyeIcon } from "lucide-react-native";
@@ -31,7 +31,7 @@ import { EyeClosedIcon, EyeIcon } from "lucide-react-native";
 export default function LoginScreen() {
     const navigation = useNavigation();
     const theme = useTheme();
-    const caseColor = addOpacityToCssRgb(theme.colors.surface.raised, 0.3);
+    const caseColor = withAlpha(theme.colors.surface.raised, 0.3);
 
     const styles = createStyles(theme, caseColor); //Temporary
     const { signIn, mcqDatas, setChoice, setMcqDatas, apiError, setApiError } =
@@ -237,7 +237,7 @@ export default function LoginScreen() {
                 </TouchableOpacity>
             </View>
             {apiError && (
-                <Text style={styles.error} color={theme.colors.state.danger}>
+                <Text style={styles.error} color={theme.colors.state.warning}>
                     {apiError}
                 </Text>
             )}
@@ -257,7 +257,7 @@ export default function LoginScreen() {
                     <Text
                         style={[styles.privacyPolicy]}
                         align="center"
-                        color={theme.colors.text.brand}
+                        color={theme.colors.brand.primary}
                         preset="body2"
                     >
                         Politique de confidentialité et Conditions d'utilisation
@@ -293,7 +293,7 @@ const createStyles = (theme, caseColor) =>
             left: 8,
             marginLeft: 12,
             gap: 16,
-            color: theme.colors.text.brand,
+            color: theme.colors.brand.primary,
         },
         checkBox: {
             marginLeft: "5%",
@@ -382,7 +382,7 @@ const createStyles = (theme, caseColor) =>
         error: {
             padding: 12,
             backgroundColor: theme.colors.surface.default,
-            borderColor: theme.colors.state.danger,
+            borderColor: theme.colors.state.warning,
             borderWidth: 0.9,
             borderRadius: 12,
         },

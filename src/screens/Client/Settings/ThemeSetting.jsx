@@ -90,7 +90,7 @@ const ThemeSelector = memo(function ThemeSelector() {
         [setFollowSystem, setThemeMode]
     );
 
-    const activeBackground = withAlpha(colors.brand.primary, 0.5);
+    const activeBackground = colors.brand.primary;
 
     return (
         <View
@@ -152,3 +152,4 @@ const ThemeOption = memo(function ThemeOption({
         </Pressable>
     );
 });
+

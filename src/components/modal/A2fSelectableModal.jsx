@@ -1,5 +1,5 @@
 import { useTheme } from "@/hooks/useThemeStore";
-import { addOpacityToCssRgb } from "@/utils/colorGenerator";
+import { withAlpha } from "@/themes/color";
 import { useState } from "react";
 import { FlatList, Modal, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Text } from "../core";
@@ -47,7 +47,7 @@ export default function A2fSelectableModal({
             <Text
                 size={16}
                 weight={selectedItem === item && "bold"}
-                color={colors.text.brand}
+                color={colors.brand.primary}
             >
                 {item}
             </Text>
@@ -74,7 +74,7 @@ export default function A2fSelectableModal({
                         style={[
                             styles.a2fText,
                             {
-                                backgroundColor: addOpacityToCssRgb(
+                                backgroundColor: withAlpha(
                                     colors.surface.muted,
                                     0.5
                                 ),
@@ -87,7 +87,7 @@ export default function A2fSelectableModal({
                         style={[
                             styles.a2fTextInfo,
                             {
-                                color: colors.text.brand,
+                                color: colors.brand.primary,
                             },
                         ]}
                     >
@@ -112,7 +112,7 @@ export default function A2fSelectableModal({
                         style={[
                             styles.buttonsContainer,
                             {
-                                backgroundColor: addOpacityToCssRgb(
+                                backgroundColor: withAlpha(
                                     colors.surface.muted,
                                     0.5
                                 ),
@@ -129,7 +129,7 @@ export default function A2fSelectableModal({
                             <Text
                                 style={[
                                     styles.buttonText,
-                                    { color: colors.text.brand },
+                                    { color: colors.brand.primary },
                                 ]}
                             >
                                 Annuler

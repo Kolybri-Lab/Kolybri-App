@@ -165,7 +165,7 @@ export default function GradeDetails({ route }) {
                         padding: 14,
                     }}
                 >
-                    <Text preset="h2" color={colors.text.accent}>
+                    <Text preset="h2" color={colors.brand.primary}>
                         Informations
                     </Text>
 

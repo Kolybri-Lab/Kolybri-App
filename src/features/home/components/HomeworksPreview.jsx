@@ -7,7 +7,6 @@ import { routesNames } from "@/router/config/routesNames";
 import { withAlpha } from "@/themes/color";
 import dynamicBorderRadius from "@/utils/borderRadius";
 
-import { addOpacityToCssRgb } from "@/utils/colorGenerator";
 import { formatFrenchDate } from "@/utils/date";
 import { useNavigation } from "@react-navigation/native";
 
@@ -99,7 +98,7 @@ const DateHeader = ({ date, meta, progress }) => {
             <Text style={{ fontSize: 18, fontFamily: "SemiBold" }}>
                 {(meta?.long ?? `POUR ${formatFrenchDate(date)}`).toUpperCase()}
             </Text>
-            {/* <Text style={{ fontSize: 18, fontFamily: "Bold", color: colors.text.brand }}>
+            {/* <Text style={{ fontSize: 18, fontFamily: "Bold", color: colors.brand.primary }}>
                 {countForDate} restant{countForDate > 1 ? "s" : null}
             </Text> */}
             {/* {console.log(progress)} */}
@@ -175,7 +174,7 @@ const Homework = ({ homework, index, countForDate }) => {
                     {homework.isCustom ? (
                         <Text
                             style={{
-                                color: addOpacityToCssRgb(colors.text.primary, 0.55),
+                                color: withAlpha(colors.text.primary, 0.55),
                                 fontSize: 14,
                                 fontFamily: "Medium",
                                 flexShrink: 1,
@@ -197,7 +196,7 @@ const Homework = ({ homework, index, countForDate }) => {
                 <View
                     style={{
                         flexShrink: 1,
-                        backgroundColor: addOpacityToCssRgb(
+                        backgroundColor: withAlpha(
                             colors.brand.primary,
                             0.9
                         ),
