@@ -1,9 +1,12 @@
 import { Text } from "@/components";
+import { useTheme } from "@/hooks/useThemeStore";
+import { withAlpha } from "@/themes/color";
 import { useWhatsNewStore } from "@/hooks/useWhatsNew";
 import React from "react";
 import { TouchableOpacity, View } from "react-native";
 
 export default function AnnouncementsTestButtons() {
+    const { colors } = useTheme();
     const setTestItem = useWhatsNewStore((s) => s.setTestItem);
     const reset = useWhatsNewStore((s) => s.reset);
     const seenAnnouncementIds = useWhatsNewStore((s) => s.seenAnnouncementIds);
@@ -17,10 +20,10 @@ export default function AnnouncementsTestButtons() {
                     alignItems: "center",
                 }}
             >
-                <Text size={13} color="rgba(255, 255, 255, 0.5)">
+                <Text size={13} color={colors.text.secondary}>
                     📢 ANNONCES & POPUP
                 </Text>
-                <Text size={11} color="rgba(255, 255, 255, 0.35)">
+                <Text size={11} color={withAlpha(colors.text.secondary, 0.7)}>
                     Vues : {seenAnnouncementIds.length}
                 </Text>
             </View>
@@ -41,10 +44,10 @@ export default function AnnouncementsTestButtons() {
                 style={{
                     padding: 10,
                     borderRadius: 8,
-                    backgroundColor: "rgba(59, 130, 246, 0.2)",
+                    backgroundColor: withAlpha(colors.brand.primary, 0.15),
                 }}
             >
-                <Text size={13} color="#60A5FA">
+                <Text size={13} color={colors.brand.primary}>
                     🟢 Ouvrir une annonce standard (texte seul)
                 </Text>
             </TouchableOpacity>
@@ -69,10 +72,10 @@ export default function AnnouncementsTestButtons() {
                 style={{
                     padding: 10,
                     borderRadius: 8,
-                    backgroundColor: "rgba(16, 185, 129, 0.2)",
+                    backgroundColor: withAlpha(colors.state.success, 0.15),
                 }}
             >
-                <Text size={13} color="#34D399">
+                <Text size={13} color={colors.state.success}>
                     🔗 Ouvrir une annonce avec lien web externe
                 </Text>
             </TouchableOpacity>
@@ -97,10 +100,10 @@ export default function AnnouncementsTestButtons() {
                 style={{
                     padding: 10,
                     borderRadius: 8,
-                    backgroundColor: "rgba(59, 130, 246, 0.2)",
+                    backgroundColor: withAlpha(colors.brand.primary, 0.15),
                 }}
             >
-                <Text size={13} color="#60A5FA">
+                <Text size={13} color={colors.brand.primary}>
                     📱 Ouvrir une annonce avec deep link in-app (Notes de version)
                 </Text>
             </TouchableOpacity>
@@ -125,10 +128,10 @@ export default function AnnouncementsTestButtons() {
                 style={{
                     padding: 10,
                     borderRadius: 8,
-                    backgroundColor: "rgba(239, 68, 68, 0.2)",
+                    backgroundColor: withAlpha(colors.state.warning, 0.15),
                 }}
             >
-                <Text size={13} color="#F87171">
+                <Text size={13} color={colors.state.warning}>
                     🚨 Ouvrir une annonce d'alerte / maintenance
                 </Text>
             </TouchableOpacity>
@@ -158,10 +161,10 @@ export default function AnnouncementsTestButtons() {
                 style={{
                     padding: 10,
                     borderRadius: 8,
-                    backgroundColor: "rgba(168, 85, 247, 0.2)",
+                    backgroundColor: withAlpha(colors.brand.primary, 0.15),
                 }}
             >
-                <Text size={13} color="#C084FC">
+                <Text size={13} color={colors.brand.primary}>
                     📜 Ouvrir une annonce longue (défilement)
                 </Text>
             </TouchableOpacity>
@@ -171,10 +174,10 @@ export default function AnnouncementsTestButtons() {
                 style={{
                     padding: 10,
                     borderRadius: 8,
-                    backgroundColor: "rgba(245, 158, 11, 0.2)",
+                    backgroundColor: withAlpha(colors.state.warning, 0.15),
                 }}
             >
-                <Text size={13} color="#FBBF24">
+                <Text size={13} color={colors.state.warning}>
                     🔁 Réinitialiser l'historique des annonces (MMKV)
                 </Text>
             </TouchableOpacity>

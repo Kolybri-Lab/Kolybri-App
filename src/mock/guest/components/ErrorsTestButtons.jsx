@@ -1,10 +1,13 @@
 import { Text } from "@/components";
+import { useTheme } from "@/hooks/useThemeStore";
+import { withAlpha } from "@/themes/color";
 import { useErrorStore } from "@/hooks/useErrorStore";
 import { useSignIn } from "@/hooks/useSignIn";
 import React, { useState } from "react";
 import { TouchableOpacity, View } from "react-native";
 
 export default function ErrorsTestButtons() {
+    const { colors } = useTheme();
     const { signOut } = useSignIn();
     const [shouldCrashRender, setShouldCrashRender] = useState(false);
 
@@ -31,7 +34,7 @@ export default function ErrorsTestButtons() {
 
     return (
         <View style={{ gap: 8, width: "100%" }}>
-            <Text size={13} color="rgba(255, 255, 255, 0.5)">
+            <Text size={13} color={colors.text.secondary}>
                 ⚠️ ERREURS, TOASTS & CRASHS
             </Text>
 
@@ -47,10 +50,10 @@ export default function ErrorsTestButtons() {
                 style={{
                     padding: 10,
                     borderRadius: 8,
-                    backgroundColor: "rgba(239, 68, 68, 0.2)",
+                    backgroundColor: withAlpha(colors.state.warning, 0.15),
                 }}
             >
-                <Text size={13} color="#EF4444">
+                <Text size={13} color={colors.state.warning}>
                     🔴 Bandeau : Panne Réseau
                 </Text>
             </TouchableOpacity>
@@ -62,10 +65,10 @@ export default function ErrorsTestButtons() {
                 style={{
                     padding: 10,
                     borderRadius: 8,
-                    backgroundColor: "rgba(245, 158, 11, 0.2)",
+                    backgroundColor: withAlpha(colors.state.warning, 0.15),
                 }}
             >
-                <Text size={13} color="#F59E0B">
+                <Text size={13} color={colors.state.warning}>
                     🟡 Bandeau : Données Obsolètes
                 </Text>
             </TouchableOpacity>
@@ -82,10 +85,10 @@ export default function ErrorsTestButtons() {
                 style={{
                     padding: 10,
                     borderRadius: 8,
-                    backgroundColor: "rgba(249, 115, 22, 0.2)",
+                    backgroundColor: withAlpha(colors.state.warning, 0.15),
                 }}
             >
-                <Text size={13} color="#F97316">
+                <Text size={13} color={colors.state.warning}>
                     🟠 Toast : ED Code 403 (WAF Rate-limit)
                 </Text>
             </TouchableOpacity>
@@ -101,10 +104,10 @@ export default function ErrorsTestButtons() {
                 style={{
                     padding: 10,
                     borderRadius: 8,
-                    backgroundColor: "rgba(236, 72, 153, 0.2)",
+                    backgroundColor: withAlpha(colors.brand.primary, 0.15),
                 }}
             >
-                <Text size={13} color="#EC4899">
+                <Text size={13} color={colors.brand.primary}>
                     🏢 Toast : ED Code 535 (Établissement fermé)
                 </Text>
             </TouchableOpacity>
@@ -120,10 +123,10 @@ export default function ErrorsTestButtons() {
                 style={{
                     padding: 10,
                     borderRadius: 8,
-                    backgroundColor: "rgba(168, 85, 247, 0.2)",
+                    backgroundColor: withAlpha(colors.brand.primary, 0.15),
                 }}
             >
-                <Text size={13} color="#A855F7">
+                <Text size={13} color={colors.brand.primary}>
                     ⚠️ Toast : ED Code 517 (API périmée)
                 </Text>
             </TouchableOpacity>
@@ -139,10 +142,10 @@ export default function ErrorsTestButtons() {
                 style={{
                     padding: 10,
                     borderRadius: 8,
-                    backgroundColor: "rgba(99, 102, 241, 0.2)",
+                    backgroundColor: withAlpha(colors.brand.primary, 0.15),
                 }}
             >
-                <Text size={13} color="#6366F1">
+                <Text size={13} color={colors.brand.primary}>
                     ❓ Toast : Erreur Inconnue / Mapping
                 </Text>
             </TouchableOpacity>
@@ -153,12 +156,12 @@ export default function ErrorsTestButtons() {
                 style={{
                     padding: 10,
                     borderRadius: 8,
-                    backgroundColor: "rgba(220, 38, 38, 0.3)",
+                    backgroundColor: withAlpha(colors.state.warning, 0.2),
                     borderWidth: 1,
-                    borderColor: "#DC2626",
+                    borderColor: colors.state.warning,
                 }}
             >
-                <Text size={13} color="#FCA5A5">
+                <Text size={13} color={colors.state.warning}>
                     💥 Crash : Rendu Component React (ErrorBoundary)
                 </Text>
             </TouchableOpacity>
@@ -171,12 +174,12 @@ export default function ErrorsTestButtons() {
                 style={{
                     padding: 10,
                     borderRadius: 8,
-                    backgroundColor: "rgba(185, 28, 28, 0.3)",
+                    backgroundColor: withAlpha(colors.state.warning, 0.2),
                     borderWidth: 1,
-                    borderColor: "#B91C1C",
+                    borderColor: colors.state.warning,
                 }}
             >
-                <Text size={13} color="#FCA5A5">
+                <Text size={13} color={colors.state.warning}>
                     💣 Crash : Exception JS Null Pointer / TypeError
                 </Text>
             </TouchableOpacity>
@@ -193,12 +196,12 @@ export default function ErrorsTestButtons() {
                 style={{
                     padding: 10,
                     borderRadius: 8,
-                    backgroundColor: "rgba(217, 119, 6, 0.3)",
+                    backgroundColor: withAlpha(colors.state.warning, 0.2),
                     borderWidth: 1,
-                    borderColor: "#D97706",
+                    borderColor: colors.state.warning,
                 }}
             >
-                <Text size={13} color="#FDE68A">
+                <Text size={13} color={colors.state.warning}>
                     🔑 Crash : Session Expirée ED (Auto-Logout)
                 </Text>
             </TouchableOpacity>
@@ -211,10 +214,10 @@ export default function ErrorsTestButtons() {
                 style={{
                     padding: 10,
                     borderRadius: 8,
-                    backgroundColor: "rgba(16, 185, 129, 0.2)",
+                    backgroundColor: withAlpha(colors.state.success, 0.15),
                 }}
             >
-                <Text size={13} color="#34D399">
+                <Text size={13} color={colors.state.success}>
                     🔄 Reset Tests Erreurs
                 </Text>
             </TouchableOpacity>

@@ -1,4 +1,6 @@
 import { Text } from "@/components";
+import { useTheme } from "@/hooks/useThemeStore";
+import { withAlpha } from "@/themes/color";
 import { queryClient } from "@/provider/QueryProvider";
 import React from "react";
 import { TouchableOpacity, View } from "react-native";
@@ -9,9 +11,10 @@ import {
 } from "../guestData";
 
 export default function TimetableTestButtons() {
+    const { colors } = useTheme();
     return (
         <View style={{ gap: 8, width: "100%" }}>
-            <Text size={13} color="rgba(255, 255, 255, 0.5)">
+            <Text size={13} color={colors.text.secondary}>
                 📅 EMPLOI DU TEMPS
             </Text>
 
@@ -23,10 +26,10 @@ export default function TimetableTestButtons() {
                 style={{
                     padding: 10,
                     borderRadius: 8,
-                    backgroundColor: "rgba(59, 130, 246, 0.2)",
+                    backgroundColor: withAlpha(colors.brand.primary, 0.15),
                 }}
             >
-                <Text size={13} color="#60A5FA">
+                <Text size={13} color={colors.brand.primary}>
                     ⏱️ Activer / Désactiver Cours en Cours (Test)
                 </Text>
             </TouchableOpacity>
@@ -39,10 +42,10 @@ export default function TimetableTestButtons() {
                 style={{
                     padding: 10,
                     borderRadius: 8,
-                    backgroundColor: "rgba(245, 158, 11, 0.2)",
+                    backgroundColor: withAlpha(colors.state.warning, 0.15),
                 }}
             >
-                <Text size={13} color="#FBBF24">
+                <Text size={13} color={colors.state.warning}>
                     📭 EDT : Simuler Aucune Donnée
                 </Text>
             </TouchableOpacity>
@@ -55,10 +58,10 @@ export default function TimetableTestButtons() {
                 style={{
                     padding: 10,
                     borderRadius: 8,
-                    backgroundColor: "rgba(16, 185, 129, 0.2)",
+                    backgroundColor: withAlpha(colors.state.success, 0.15),
                 }}
             >
-                <Text size={13} color="#34D399">
+                <Text size={13} color={colors.state.success}>
                     🔄 Reset Tests Emploi du Temps
                 </Text>
             </TouchableOpacity>
