@@ -45,15 +45,15 @@ const findLightnessForLuminance = (
 
 /**
  * Generates theme-adapted light and dark variants for a subject hue.
- * - light: S=82%, Y=0.30 clamped [48%, 62%] (punchy/vivid on white cards).
+ * - light: S=85%, Y=0.30 clamped [52%, 62%] (keeps yellow/green above the 50% dull zone).
  * - dark:  S=80%, Y=0.35 clamped [54%, 64%] (uniform tinted cards over neutral dark).
  */
 export const generateSubjectColor = (hue: number): SubjectColor => {
     const h = Math.round(((hue % 360) + 360) % 360);
-    const lightL = findLightnessForLuminance(h, 82, 0.3, 48, 62);
+    const lightL = findLightnessForLuminance(h, 85, 0.3, 55, 62);
     const darkL = findLightnessForLuminance(h, 80, 0.35, 54, 64);
     return {
-        light: `hsl(${h}, 82%, ${lightL}%)`,
+        light: `hsl(${h}, 85%, ${lightL}%)`,
         dark: `hsl(${h}, 80%, ${darkL}%)`,
     };
 };

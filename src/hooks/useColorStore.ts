@@ -127,7 +127,7 @@ export const useColorStore = create<ColorStoreState>()(
         }),
         {
             name: "color-store",
-            version: 3,
+            version: 4,
             storage: mmkvStorage,
             migrate: () => ({ subjectColors: {}, nextIndex: 0 }),
             partialize: (state) => ({

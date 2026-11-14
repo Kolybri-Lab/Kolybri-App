@@ -36,7 +36,7 @@ function CourseCardItem({
             style={{
                 flex: 1,
                 minHeight: slotHeight,
-                backgroundColor: isDark ? "hsl(0, 0%, 9%)" : colors.surface.default,
+                backgroundColor: isDark ? "hsl(0, 0%, 0%)" : "hsl(0, 0%, 100%)",
                 borderRadius: 18,
                 borderColor: course.states?.cancelled
                     ? colors.state.warning
@@ -60,7 +60,7 @@ function CourseCardItem({
                     flex: 1,
                     justifyContent: "space-between",
                     padding: isMulti ? 10 : 14,
-                    backgroundColor: withAlpha(course.color, isDark ? 0.35 : 0.25),
+                    backgroundColor: withAlpha(course.color, isDark ? 0.4 : 0.3),
                 }}
             >
                 <View
