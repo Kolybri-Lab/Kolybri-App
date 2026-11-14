@@ -133,7 +133,7 @@
             "isFlexible": false,
             "groupeId": 0,
             "icone": "",
-            "isModifie": true,
+            "isModifie": false,
             "contenuDeSeance": false,
             "devoirAFaire": false,
             "isAnnule": false
