@@ -8,6 +8,10 @@ import { useTimetablePagerStore } from "./timetablePagerStore";
 const HORIZONTAL_PADDING = 22;
 const PAGE_GAP = 16;
 
+const PageSeparator = memo(function PageSeparator() {
+    return <View style={{ width: PAGE_GAP }} />;
+});
+
 export const isLeaveDay = (day: FlatDay): boolean => {
     const hasCourses = day.items.some((item) => item.kind === "course");
     return (
@@ -179,24 +183,19 @@ function DayPager({
         [snapInterval, onIndexChange, checkThresholds, days]
     );
 
+    const keyExtractor = useCallback((day: FlatDay) => day.date, []);
+
     const renderItem = useCallback(
         ({ item, index: itemIndex }: { item: FlatDay; index: number }) => {
             return (
-                <View
-                    style={{
-                        width: pageWidth,
-                        marginRight: itemIndex < days.length - 1 ? PAGE_GAP : 0,
-                    }}
-                >
-                    <DayPage
-                        day={item}
-                        width={pageWidth}
-                        pageIndex={itemIndex}
-                    />
-                </View>
+                <DayPage
+                    day={item}
+                    width={pageWidth}
+                    pageIndex={itemIndex}
+                />
             );
         },
-        [pageWidth, days.length]
+        [pageWidth]
     );
 
     const getItemLayout = useCallback(
@@ -217,8 +216,9 @@ function DayPager({
                 <FlatList
                     ref={listRef}
                     data={days}
-                    keyExtractor={(day) => day.date}
+                    keyExtractor={keyExtractor}
                     renderItem={renderItem}
+                    ItemSeparatorComponent={PageSeparator}
                     getItemLayout={getItemLayout}
                     initialScrollIndex={index >= 0 ? index : 0}
                     horizontal

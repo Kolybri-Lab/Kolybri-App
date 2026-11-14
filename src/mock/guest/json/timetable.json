@@ -25,7 +25,7 @@
             "isFlexible": false,
             "groupeId": 0,
             "icone": "",
-            "isModifie": false,
+            "isModifie": true,
             "contenuDeSeance": false,
             "devoirAFaire": false,
             "isAnnule": false
@@ -52,10 +52,10 @@
             "isFlexible": false,
             "groupeId": 0,
             "icone": "",
-            "isModifie": false,
+            "isModifie": true,
             "contenuDeSeance": false,
             "devoirAFaire": false,
-            "isAnnule": false
+            "isAnnule": true
         },
         {
             "id": 3,
@@ -82,7 +82,7 @@
             "isModifie": false,
             "contenuDeSeance": false,
             "devoirAFaire": false,
-            "isAnnule": false
+            "isAnnule": true
         },
         {
             "id": 4,
@@ -133,7 +133,7 @@
             "isFlexible": false,
             "groupeId": 0,
             "icone": "",
-            "isModifie": false,
+            "isModifie": true,
             "contenuDeSeance": false,
             "devoirAFaire": false,
             "isAnnule": false
@@ -214,7 +214,7 @@
             "isFlexible": false,
             "groupeId": 0,
             "icone": "",
-            "isModifie": false,
+            "isModifie": true,
             "contenuDeSeance": false,
             "devoirAFaire": false,
             "isAnnule": false
@@ -352,7 +352,7 @@
             "isModifie": false,
             "contenuDeSeance": false,
             "devoirAFaire": false,
-            "isAnnule": false
+            "isAnnule": true
         },
         {
             "id": 14,
@@ -430,7 +430,7 @@
             "isFlexible": false,
             "groupeId": 0,
             "icone": "",
-            "isModifie": false,
+            "isModifie": true,
             "contenuDeSeance": false,
             "devoirAFaire": false,
             "isAnnule": false
@@ -545,3 +545,4 @@
         }
     ]
 }
+

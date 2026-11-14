@@ -36,6 +36,19 @@ function CourseCardItem({
                 minHeight: slotHeight,
                 backgroundColor: colors.surface.default,
                 borderRadius: 18,
+                borderColor: course.states?.cancelled
+                    ? colors.state.warning
+                    : course.states?.edited
+                      ? colors.brand.primary
+                      : course.states?.dispensed
+                        ? colors.text.secondary
+                        : "transparent",
+                borderWidth:
+                    course.states?.cancelled ||
+                    course.states?.dispensed ||
+                    course.states?.edited
+                        ? 2
+                        : 0,
                 overflow: "hidden",
                 opacity: course.states?.cancelled ? 0.6 : 1,
             }}
@@ -45,13 +58,6 @@ function CourseCardItem({
                     flex: 1,
                     justifyContent: "space-between",
                     padding: isMulti ? 10 : 14,
-                    /*backgroundColor: course.states?.cancelled
-                        ? withAlpha(colors.state.danger, 0.3)
-                        : course.states?.edited
-                          ? withAlpha(colors.brand.primary, 0.3)
-                          : course.states?.dispensed
-                            ? withAlpha(colors.text.secondary, 0.3)
-                            : "transparent",*/
                     backgroundColor: withAlpha(course.color, 0.25),
                 }}
             >
