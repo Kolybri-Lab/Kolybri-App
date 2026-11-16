@@ -116,7 +116,7 @@ export default function GradeDetails({ route }) {
                     preset="label2"
                     color={SKILLS_COLORS[item?.value]?.color}
                 >
-                    {item?.value}?.label
+                    {SKILLS_COLORS[item?.value]?.label}
                 </Text>
             </View>
         </View>
