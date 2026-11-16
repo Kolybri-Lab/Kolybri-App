@@ -29,10 +29,10 @@ const UI_BADGES = {
 };
 
 const SKILLS_COLORS = {
-    "Non acquis": "hsl(0, 40%, 50%)",
-    "Partiellement acquis": "hsl(60, 70%, 40%)",
-    Acquis: "hsl(200, 40%, 50%)",
-    Dépassé: "hsl(130, 50%, 60%)",
+    "red": "hsl(0, 40%, 50%)",
+    "orange": "hsl(60, 70%, 40%)",
+    "paleGreen": "hsl(200, 40%, 50%)",
+    "green": "hsl(130, 50%, 60%)",
 };
 
 export default function GradeDetails({ route }) {
