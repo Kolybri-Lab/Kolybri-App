@@ -29,10 +29,10 @@ const UI_BADGES = {
 };
 
 const SKILLS_COLORS = {
-    "Non acquis": "hsl(0, 40%, 50%)",
-    "Partiellement acquis": "hsl(60, 70%, 40%)",
-    Acquis: "hsl(200, 40%, 50%)",
-    Dépassé: "hsl(130, 50%, 60%)",
+  red:       { label: "Non acquis",           color: "hsl(0, 40%, 50%)" },
+  orange:    { label: "Partiellement acquis", color: "hsl(60, 70%, 40%)" },
+  paleGreen: { label: "Acquis",               color: "hsl(200, 40%, 50%)" },
+  green:     { label: "Dépassé",              color: "hsl(130, 50%, 60%)" },
 };
 
 export default function GradeDetails({ route }) {
@@ -114,9 +114,9 @@ export default function GradeDetails({ route }) {
                     }}
                     align="right"
                     preset="label2"
-                    color={SKILLS_COLORS[item?.value]}
+                    color={SKILLS_COLORS[item?.value]?.color}
                 >
-                    {item?.value}
+                    {SKILLS_COLORS[item?.value]?.label}
                 </Text>
             </View>
         </View>
