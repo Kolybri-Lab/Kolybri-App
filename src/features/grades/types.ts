@@ -73,7 +73,7 @@ export interface FormattedGrade {
         classMin: number | null;
         grade: number | null;
     };
-    skills: Array<{ name: string; description: string; value: string | null }>;
+    skills: Array<{ name: string; description: string; value: SkillLevel | null }>;
     onlySkills: boolean;
     actionOnStreak?: "up" | "down" | "equal" | "nothing" | "previous up";
     badges: string[];
