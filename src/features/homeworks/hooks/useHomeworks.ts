@@ -42,23 +42,18 @@ export function useHomeworks(token: string) {
     const mutation = useMutation<
         void,
         Error,
-        { id: number; state: boolean },
-        { previousHomeworks: ResolvedHomeworks | undefined }
+        { id: number; state: boolean }
     >({
         mutationFn: ({ id, state }) =>
             toggleHomeworkInApi({ token, id, state }),
         onMutate: async ({ id }) => {
             await queryClient.cancelQueries({ queryKey: ["homeworks"] });
-            const previousHomeworks =
-                queryClient.getQueryData<ResolvedHomeworks>(["homeworks"]);
 
             updateHomeworkInCache(queryClient, id, (hw) => ({
                 ...hw,
                 isDone: hw.isDone === "done" ? "todo" : "done",
                 loadingState: "loading",
             }));
-
-            return { previousHomeworks };
         },
         onSuccess: (_data, { id }) => {
             updateHomeworkInCache(queryClient, id, (hw) => ({
@@ -66,19 +61,19 @@ export function useHomeworks(token: string) {
                 loadingState: "idle",
             }));
         },
-        onError: (_err, { id }, context) => {
-            const previousHomeworks = context?.previousHomeworks;
+        onError: (_err, { id, state }) => {
+            updateHomeworkInCache(queryClient, id, (hw) => ({
+                ...hw,
+                loadingState: "error",
+            }));
 
-            if (previousHomeworks) {
+            setTimeout(() => {
                 updateHomeworkInCache(queryClient, id, (hw) => ({
                     ...hw,
-                    loadingState: "error",
+                    isDone: state ? "todo" : "done",
+                    loadingState: "idle",
                 }));
-
-                setTimeout(() => {
-                    queryClient.setQueryData(["homeworks"], previousHomeworks);
-                }, 3000);
-            }
+            }, 3000);
         },
     });
 

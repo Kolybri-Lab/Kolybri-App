@@ -136,12 +136,16 @@ export function injectHomeworksIntoModel(model = {}, homeworksList = []) {
         const totalEvaluations = dayHomeworks.filter((h) => h.isEvaluation).length;
         const allTasksCompleted = dayHomeworks.every((h) => h.isDone === "done");
 
+        const long = formatedDates[date]?.long ?? formatFrenchDate(date);
         formatedDates[date] = {
             allTasksCompleted,
             isEvaluation: totalEvaluations > 0,
             totalEvaluations,
-            long: formatedDates[date]?.long ?? formatFrenchDate(date),
-            contracted: formatedDates[date]?.contracted ?? formatFrenchDate(date),
+            long,
+            contracted: formatedDates[date]?.contracted ?? [
+                long.charAt(0).toLowerCase() + long.slice(1, 3),
+                long.split(" ")[1],
+            ],
         };
     }
 
