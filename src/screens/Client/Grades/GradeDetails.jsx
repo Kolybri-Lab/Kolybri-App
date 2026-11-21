@@ -16,7 +16,7 @@ import { useUserStore } from "@/hooks/useUserStore";
 import { routesNames } from "@/router/config/routesNames";
 import { formatFrenchDate } from "@/utils/date";
 import { useMemo } from "react";
-import { FlatList, View } from "react-native";
+import { ScrollView, View } from "react-native";
 import { GoBackHeader } from "../../../components";
 
 const UI_BADGES = {
@@ -77,47 +77,8 @@ export default function GradeDetails({ route }) {
         [disciplineData]
     );
 
-    const renderItem = ({ item }) => (
-        <View style={{ minWidth: "90%", marginVertical: 10 }}>
-            <Text
-                style={{
-                    marginBottom: 4,
-                }}
-                decoration="underline"
-                color={"hsl(240, 40%, 75%)"} // EDIT
-                preset="body1"
-            >
-                {item?.name}
-            </Text>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Text
-                    style={{
-                        marginLeft: 16,
-                        flex: 1,
-                    }}
-                    color={"hsl(240, 40%, 68%)"} // EDIT
-                    preset="body2"
-                >
-                    {item?.description}
-                </Text>
-                <Text
-                    style={{
-                        marginLeft: 8,
-                        width: "30%",
-                        flexShrink: 1,
-                    }}
-                    align="right"
-                    preset="label2"
-                    color={item?.value?.color}
-                >
-                    {item?.value?.label}
-                </Text>
-            </View>
-        </View>
-    );
-
     return (
-        <View style={{ flex: 1 }}>
+        <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
             <View style={{ marginHorizontal: 22, flex: 1 }}>
                 <GoBackHeader fallbackRoute={routesNames.client.grades.content} />
                 <View
@@ -211,17 +172,56 @@ export default function GradeDetails({ route }) {
                         </Text>
                     </View>
 
-                    <FlatList
-                        data={grade.skills || []}
-                        renderItem={renderItem}
-                        keyExtractor={(_, i) => i.toString()}
-                        showsVerticalScrollIndicator={false}
-                        showsHorizontalScrollIndicator={false}
-                        style={{ width: "100%" }}
-                    />
+                    <View>
+                        {(grade.skills || []).map((item, index) => (
+                            <View
+                                key={index}
+                                style={{ minWidth: "90%", marginVertical: 10 }}
+                            >
+                                <Text
+                                    style={{
+                                        marginBottom: 4,
+                                    }}
+                                    color={colors.text.primary} // EDIT
+                                    preset="body1"
+                                >
+                                    {item?.name}
+                                </Text>
+                                <View
+                                    style={{
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                    }}
+                                >
+                                    <Text
+                                        style={{
+                                            marginLeft: 16,
+                                            flex: 1,
+                                        }}
+                                        color={colors.text.secondary} // EDIT
+                                        preset="body2"
+                                    >
+                                        {item?.description}
+                                    </Text>
+                                    <Text
+                                        style={{
+                                            marginLeft: 8,
+                                            width: "30%",
+                                            flexShrink: 1,
+                                        }}
+                                        align="right"
+                                        preset="label2"
+                                        color={item?.value?.color}
+                                    >
+                                        {item?.value?.label}
+                                    </Text>
+                                </View>
+                            </View>
+                        ))}
+                    </View>
                 </View>
             </View>
-        </View>
+        </ScrollView>
     );
 }
 

@@ -2309,7 +2309,40 @@
                 "moyenneClasse": "15.18",
                 "minClasse": "11.50",
                 "maxClasse": "19.00",
-                "elementsProgramme": []
+                "elementsProgramme": [
+                    {
+                        "idElemProg": 1001,
+                        "idCompetence": 101,
+                        "descriptif": "Saisir l'implicite et les enjeux dramatiques de la pièce",
+                        "valeur": 4,
+                        "libelleCompetence": "Comprendre et interpréter",
+                        "cdt": false
+                    },
+                    {
+                        "idElemProg": 1002,
+                        "idCompetence": 102,
+                        "descriptif": "Citer précisément les scènes clés pour justifier sa réponse",
+                        "valeur": 3,
+                        "libelleCompetence": "Mobiliser des références culturelles",
+                        "cdt": false
+                    },
+                    {
+                        "idElemProg": 1003,
+                        "idCompetence": 103,
+                        "descriptif": "Structurer un paragraphe argumenté avec des connecteurs logiques",
+                        "valeur": 2,
+                        "libelleCompetence": "Rédiger une réponse organisée",
+                        "cdt": false
+                    },
+                    {
+                        "idElemProg": 1004,
+                        "idCompetence": 104,
+                        "descriptif": "Respecter l'orthographe grammaticale et la ponctuation",
+                        "valeur": 1,
+                        "libelleCompetence": "Maîtriser la langue écrite",
+                        "cdt": false
+                    }
+                ]
             },
             {
                 "id": 20972042,
@@ -2333,7 +2366,24 @@
                 "moyenneClasse": "3.44",
                 "minClasse": "1.50",
                 "maxClasse": "4.50",
-                "elementsProgramme": []
+                "elementsProgramme": [
+                    {
+                        "idElemProg": 1005,
+                        "idCompetence": 105,
+                        "descriptif": "Suivre les étapes de manipulation en respectant les consignes de sécurité",
+                        "valeur": 1,
+                        "libelleCompetence": "Réaliser un protocole expérimental",
+                        "cdt": false
+                    },
+                    {
+                        "idElemProg": 1006,
+                        "idCompetence": 106,
+                        "descriptif": "Exploiter les mesures relevées pour conclure",
+                        "valeur": 2,
+                        "libelleCompetence": "Analyser des résultats",
+                        "cdt": false
+                    }
+                ]
             },
             {
                 "id": 20971663,
@@ -2357,7 +2407,73 @@
                 "moyenneClasse": "14.42",
                 "minClasse": "10.00",
                 "maxClasse": "16.00",
-                "elementsProgramme": []
+                "elementsProgramme": [
+                    {
+                        "idElemProg": 1007,
+                        "idCompetence": 107,
+                        "descriptif": "Formuler un point de vue nuancé en écoutant les arguments d'autrui",
+                        "valeur": 4,
+                        "libelleCompetence": "Débattre de manière constructive",
+                        "cdt": false
+                    },
+                    {
+                        "idElemProg": 1008,
+                        "idCompetence": 108,
+                        "descriptif": "Participer activement à la préparation et à la présentation collective",
+                        "valeur": 3,
+                        "libelleCompetence": "Coopérer dans un travail de groupe",
+                        "cdt": false
+                    }
+                ]
+            },
+            {
+                "id": 20971664,
+                "devoir": "Évaluation par compétences - Sécurité au labo",
+                "codePeriode": "A001",
+                "codeMatiere": "PH-CH",
+                "libelleMatiere": "PHYSIQUE-CHIMIE",
+                "codeSousMatiere": "",
+                "typeDevoir": "Évaluation par compétences",
+                "enLettre": false,
+                "commentaire": "",
+                "uncSujet": "",
+                "uncCorrige": "",
+                "date": "2025-09-22",
+                "dateSaisie": "2025-09-22",
+                "coef": "0",
+                "noteSur": "20",
+                "valeur": "",
+                "valeurisee": false,
+                "nonSignificatif": false,
+                "moyenneClasse": "",
+                "minClasse": "",
+                "maxClasse": "",
+                "elementsProgramme": [
+                    {
+                        "idElemProg": 1009,
+                        "idCompetence": 109,
+                        "descriptif": "Identifier les pictogrammes de danger et adapter sa tenue",
+                        "valeur": 4,
+                        "libelleCompetence": "Appliquer les règles de sécurité",
+                        "cdt": false
+                    },
+                    {
+                        "idElemProg": 1010,
+                        "idCompetence": 110,
+                        "descriptif": "Choisir la verrerie adaptée au volume à prélever",
+                        "valeur": 3,
+                        "libelleCompetence": "Utiliser le matériel de laboratoire",
+                        "cdt": false
+                    },
+                    {
+                        "idElemProg": 1011,
+                        "idCompetence": 111,
+                        "descriptif": "Rédiger un compte rendu schématisé et légendé",
+                        "valeur": 2,
+                        "libelleCompetence": "Rendre compte d'une expérience",
+                        "cdt": false
+                    }
+                ]
             },
             {
                 "id": 20971729,
@@ -3581,7 +3697,24 @@
                 "moyenneClasse": "17.97",
                 "minClasse": "17.00",
                 "maxClasse": "20.00",
-                "elementsProgramme": []
+                "elementsProgramme": [
+                    {
+                        "idElemProg": 1012,
+                        "idCompetence": 112,
+                        "descriptif": "Réinvestir le style et les procédés de l'autrice avec pertinence",
+                        "valeur": 4,
+                        "libelleCompetence": "S'approprier un texte littéraire",
+                        "cdt": false
+                    },
+                    {
+                        "idElemProg": 1013,
+                        "idCompetence": 113,
+                        "descriptif": "Employer un vocabulaire précis et varié",
+                        "valeur": 3,
+                        "libelleCompetence": "Enrichir son expression écrite",
+                        "cdt": false
+                    }
+                ]
             },
             {
                 "id": 20976581,
@@ -3677,7 +3810,40 @@
                 "moyenneClasse": "15.10",
                 "minClasse": "11.50",
                 "maxClasse": "19.50",
-                "elementsProgramme": []
+                "elementsProgramme": [
+                    {
+                        "idElemProg": 1014,
+                        "idCompetence": 114,
+                        "descriptif": "Traduire un problème concret à l'aide d'une suite récurrente",
+                        "valeur": 4,
+                        "libelleCompetence": "Modéliser une situation",
+                        "cdt": false
+                    },
+                    {
+                        "idElemProg": 1015,
+                        "idCompetence": 115,
+                        "descriptif": "Déterminer le terme général et le sens de variation d'une suite",
+                        "valeur": 3,
+                        "libelleCompetence": "Calculer",
+                        "cdt": false
+                    },
+                    {
+                        "idElemProg": 1016,
+                        "idCompetence": 116,
+                        "descriptif": "Rédiger une démonstration par récurrence complète",
+                        "valeur": 2,
+                        "libelleCompetence": "Raisonner et démontrer",
+                        "cdt": false
+                    },
+                    {
+                        "idElemProg": 1017,
+                        "idCompetence": 117,
+                        "descriptif": "Justifier chaque étape de calcul sans raccourci",
+                        "valeur": 1,
+                        "libelleCompetence": "Communiquer à l'écrit",
+                        "cdt": false
+                    }
+                ]
             },
             {
                 "id": 20976652,
@@ -4510,7 +4676,7 @@
             "affichagePositionMatiere": false,
             "affichageOngletCompetence": 0,
             "affichageNote": true,
-            "affichageCompetence": false,
+            "affichageCompetence": true,
             "affichageEvaluationsComposantes": false,
             "affichageGraphiquesComposantes": true,
             "modeCalculGraphiquesComposantes": "eval",
