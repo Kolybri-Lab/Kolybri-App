@@ -59,8 +59,8 @@ export const useSignIn = () => {
                 });
 
                 setA2fInfos({
-                    identifiant: encodeURIComponent(username),
-                    motdepasse: encodeURIComponent(password),
+                    identifiant: username,
+                    motdepasse: password,
                 });
 
                 const { token } = apiLoginData;
@@ -78,8 +78,8 @@ export const useSignIn = () => {
                                 token,
                                 accountData.id,
                                 {
-                                    identifiant: encodeURIComponent(username),
-                                    motdepasse: encodeURIComponent(password),
+                                    identifiant: username,
+                                    motdepasse: password,
                                 }
                             );
                         }

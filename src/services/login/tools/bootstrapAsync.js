@@ -4,8 +4,11 @@ import { useAuthStore } from "@/hooks/useAuthStore";
 import { useUserStore } from "@/hooks/useUserStore";
 import { queryClient } from "@/provider/QueryProvider";
 import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 import authService from "../authService";
 import storeDatas from "./storeLoginDatas";
+
+dayjs.extend(customParseFormat);
 
 /**
  * Get token and user data from storage
@@ -84,18 +87,6 @@ export async function tryRestoreToken({ credentialsPassword }) {
             },
         });
 
-        if (loginResponse?.code === 505 || loginResponse?.code === 522) {
-            console.warn(
-                "Stored credentials are no longer valid (505/522). Clearing credentials."
-            );
-            await authService.deleteCredentials();
-            useAuthStore
-                .getState()
-                .setError("Votre session a expiré. Veuillez vous reconnecter.");
-            useAuthStore.getState().setAuthenticated(false);
-            return false;
-        }
-
         const { data, token } = loginResponse;
 
         const accountData = data?.accounts?.[0];
@@ -117,6 +108,17 @@ export async function tryRestoreToken({ credentialsPassword }) {
 
         return true;
     } catch (error) {
+        if (error?.code === 505 || error?.code === 522) {
+            console.warn(
+                "Stored credentials are no longer valid (505/522). Clearing credentials."
+            );
+            await authService.deleteCredentials();
+            useAuthStore
+                .getState()
+                .setError("Votre session a expiré. Veuillez vous reconnecter.");
+            useAuthStore.getState().setAuthenticated(false);
+            return false;
+        }
         console.warn(
             "Erreur lors du rafraîchissement du token en arrière-plan (session hors-ligne conservée) :",
             error

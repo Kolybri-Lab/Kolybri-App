@@ -131,7 +131,6 @@ export const useUserStore = create<UserStoreState>()(
                 profile: state.profile,
                 preferences: state.preferences,
                 sharePrompt: state.sharePrompt,
-                token: state.token,
             }),
             onRehydrateStorage: () => (state) => {
                 state?.setHasHydrated(true);

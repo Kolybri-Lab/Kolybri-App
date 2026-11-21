@@ -33,7 +33,7 @@ export default async function fetchApi<T>(
         const reqBody =
             reqMethod !== "GET"
                 ? requestPayload?.body
-                    ? `data=${JSON.stringify(requestPayload?.body)}`
+                    ? `data=${encodeURIComponent(JSON.stringify(requestPayload?.body))}`
                     : "data={}"
                 : null;
         const requestConfig = {

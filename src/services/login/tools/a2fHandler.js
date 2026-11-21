@@ -10,22 +10,32 @@ export const handleA2fSubmit = async ({
     setGtk,
     keepConnected,
 }) => {
-    const fa = await authService.submitFormA2f(a2fToken, choice);
-    const updatedA2fInfos = {
-        ...useAuthStore.getState().a2fInfos,
-        fa: [{ ...fa.data }],
-    };
-    setA2fInfos(updatedA2fInfos);
-    setSelectedChoice("");
-    const gtkCookie = await authService.generateGTK();
-    setGtk(gtkCookie);
+    try {
+        const fa = await authService.submitFormA2f(a2fToken, choice);
+        const updatedA2fInfos = {
+            ...useAuthStore.getState().a2fInfos,
+            fa: [{ ...fa.data }],
+        };
+        setA2fInfos(updatedA2fInfos);
+        const gtkCookie = await authService.generateGTK();
+        setGtk(gtkCookie);
 
-    await completeA2fLogin({
-        a2fInfos: updatedA2fInfos,
-        gtk: gtkCookie,
-        a2fToken,
-        keepConnected,
-    });
+        await completeA2fLogin({
+            a2fInfos: updatedA2fInfos,
+            gtk: gtkCookie,
+            a2fToken,
+            keepConnected,
+        });
+    } catch (error) {
+        useAuthStore
+            .getState()
+            .setError(
+                error?.message ||
+                    "Une erreur est survenue lors de la double authentification."
+            );
+    } finally {
+        setSelectedChoice("");
+    }
 };
 
 export const completeA2fLogin = async ({
