@@ -12,6 +12,7 @@ import {
     FormattedGrade,
     FormattedPeriod,
     ResolvedGrades,
+    SkillLevel,
 } from "../types";
 import { parseNumber } from "../utils/averages";
 import { streakDataInjectedIntoGrades } from "../utils/streaks";
