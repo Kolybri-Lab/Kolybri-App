@@ -16,7 +16,7 @@ const colors = {
         /** Default container: cards, modals, bottom sheets, list rows. */
         default: "hsl(0, 0%, 100%)",
         /** Emphasized container that must stand out from a card (highlighted block, selected tile). */
-        raised: "hsl(213, 20%, 85%)",
+        raised: "hsl(212, 100%, 91%)",
         /** Quiet area inside a card or screen: input background, grouped section, skeleton. */
         muted: "hsl(213, 50%, 97%)",
     },
