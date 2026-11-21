@@ -3,6 +3,9 @@ import { useErrorStore } from "@/hooks/useErrorStore";
 import authService from "@/services/login/authService";
 import storeDatas from "@/services/login/tools/storeLoginDatas";
 import dayjs from "dayjs";
+import isoWeek from "dayjs/plugin/isoWeek";
+
+dayjs.extend(isoWeek);
 
 import { GUEST_CREDENTIALS } from "@/constants/config";
 import {
@@ -45,6 +48,19 @@ export const resetGuestTimetable = () => {
     guestOverrides.hiddenCurrentCourse = false;
 };
 
+const isVisibleCourse = (c: any) =>
+    !c.isAnnule && c.typeCours !== "CONGE" && c.typeCours !== "PERMANENCE";
+
+const isActiveCourseAt = (c: any, nowStr: string) =>
+    Boolean(
+        c.start_date &&
+            c.end_date &&
+            c.start_date <= nowStr &&
+            c.end_date >= nowStr &&
+            !c.isTestCourse &&
+            isVisibleCourse(c)
+    );
+
 export const toggleGuestActiveCourse = () => {
     if (guestOverrides.activeTestCourse) {
         guestOverrides.activeTestCourse = false;
@@ -59,15 +75,7 @@ export const toggleGuestActiveCourse = () => {
     const nowStr = now.format("YYYY-MM-DD HH:mm");
     const rawShifted = getShiftedTimetable();
     const courses = rawShifted.data || [];
-    const hasActiveNow = courses.some((c: any) => {
-        return (
-            c.start_date &&
-            c.end_date &&
-            c.start_date <= nowStr &&
-            c.end_date >= nowStr &&
-            !c.isTestCourse
-        );
-    });
+    const hasActiveNow = courses.some((c: any) => isActiveCourseAt(c, nowStr));
 
     if (hasActiveNow) {
         guestOverrides.hiddenCurrentCourse = true;
@@ -341,8 +349,8 @@ const getShiftedTimetable = (requestedMonday?: string) => {
     const mockMonday = mockFirstDate.subtract(daysToSubtract, "day");
 
     const reqMonday = requestedMonday
-        ? dayjs(requestedMonday)
-        : dayjs().startOf("week").add(1, "day");
+        ? dayjs(requestedMonday).startOf("isoWeek")
+        : dayjs().startOf("isoWeek");
     const diffInDays = reqMonday.diff(mockMonday, "day");
 
     let shiftedCourses = courses.map((course: any) => {
@@ -364,13 +372,7 @@ const getShiftedTimetable = (requestedMonday?: string) => {
 
     if (guestOverrides.hiddenCurrentCourse) {
         shiftedCourses = shiftedCourses.map((c: any) => {
-            if (
-                c.start_date &&
-                c.end_date &&
-                c.start_date <= nowTimeStr &&
-                c.end_date >= nowTimeStr &&
-                !c.isTestCourse
-            ) {
+            if (isActiveCourseAt(c, nowTimeStr)) {
                 return {
                     ...c,
                     end_date: now.subtract(1, "minute").format("YYYY-MM-DD HH:mm"),
@@ -386,7 +388,8 @@ const getShiftedTimetable = (requestedMonday?: string) => {
                 (c: any) =>
                     c.start_date &&
                     c.start_date.startsWith(todayStr) &&
-                    c.start_date > nowTimeStr
+                    c.start_date > nowTimeStr &&
+                    isVisibleCourse(c)
             )
             .sort((a: any, b: any) => a.start_date.localeCompare(b.start_date));
 
