@@ -1,4 +1,5 @@
 import { deepCopyObject } from "@/utils/json";
+import { parseNumber } from "./averages";
 
 export function badgesDataInjectedIntoGrades(userGrades) {
     const result = deepCopyObject(userGrades);
@@ -15,15 +16,27 @@ export function badgesDataInjectedIntoGrades(userGrades) {
                 const { classAverage, classMax, outOf, grade } =
                     gradeObj?.data || {};
                 const badges = [];
-                if (!grade) return;
+                if (grade == null) return;
+
+                const normalizedGrade =
+                    outOf > 0 ? parseNumber((grade / outOf) * 20) : null;
 
                 if (gradeObj.actionOnStreak === "up") badges.push("up_the_streak");
-                if (grade === outOf) badges.push("max_grade");
-                if (grade === classMax) badges.push("best_grade");
-                if (grade > classAverage) badges.push("upper_than_class_average");
-                if (currentDisciplineAverage && grade > currentDisciplineAverage)
+                if (outOf != null && grade === outOf) badges.push("max_grade");
+                if (classMax != null && grade === classMax) badges.push("best_grade");
+                if (classAverage != null && grade > classAverage)
+                    badges.push("upper_than_class_average");
+                if (
+                    currentDisciplineAverage != null &&
+                    normalizedGrade != null &&
+                    normalizedGrade > currentDisciplineAverage
+                )
                     badges.push("upper_than_discipline_average");
-                if (grade === currentDisciplineAverage)
+                if (
+                    currentDisciplineAverage != null &&
+                    normalizedGrade != null &&
+                    normalizedGrade === currentDisciplineAverage
+                )
                     badges.push("equal_to_discipline_average");
 
                 gradeObj.badges = badges;

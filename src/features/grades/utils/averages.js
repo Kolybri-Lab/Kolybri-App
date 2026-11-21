@@ -34,9 +34,11 @@ export const createValidGradesArray = (gradesData, periodCode) => {
                       !isNaN(gradeValue) &&
                       coef !== 0 &&
                       coef !== "" &&
+                      coef != null &&
                       !isNaN(coef) &&
                       outOf !== 0 &&
                       outOf !== "" &&
+                      outOf != null &&
                       !isNaN(outOf)
                   );
               })

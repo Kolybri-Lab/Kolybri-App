@@ -18,7 +18,11 @@ export const calculateStreak = (gradesArrayChronologicaly, periodCode, apiData) 
 
     for (const grade of gradesArrayChronologicaly) {
         if (gradesItered.length === 0) {
-            grade.actionOnStreak = grade.data.grade >= 10 ? "up" : "nothing";
+            const normalizedGrade =
+                grade.data.outOf > 0
+                    ? (grade.data.grade / grade.data.outOf) * 20
+                    : 0;
+            grade.actionOnStreak = normalizedGrade >= 10 ? "up" : "nothing";
 
             if (grade.actionOnStreak === "up") {
                 streakScores[periodCode][grade.codes.discipline] += 1;
