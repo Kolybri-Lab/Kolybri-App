@@ -28,12 +28,6 @@ const UI_BADGES = {
     equal_to_discipline_average: EqualToDisciplineAverage,
 };
 
-const SKILLS_COLORS = {
-  red:       { label: "Non acquis",           color: "hsl(0, 40%, 50%)" },
-  orange:    { label: "Partiellement acquis", color: "hsl(60, 70%, 40%)" },
-  paleGreen: { label: "Acquis",               color: "hsl(200, 40%, 50%)" },
-  green:     { label: "Dépassé",              color: "hsl(130, 50%, 60%)" },
-};
 
 export default function GradeDetails({ route }) {
     const token = useUserStore((state) => state.token);
