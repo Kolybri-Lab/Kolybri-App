@@ -17,7 +17,6 @@ import {
 import { parseNumber } from "../utils/averages";
 import { streakDataInjectedIntoGrades } from "../utils/streaks";
 
-export type SkillLevel = { label: string; color: string };
 
 const SKILL_LEVELS: Record<string, SkillLevel> = {
     "1": { label: "Non acquis",           color: "hsl(0, 40%, 50%)" },
