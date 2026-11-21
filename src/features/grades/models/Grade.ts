@@ -15,7 +15,7 @@ export default class Grade {
         classMin: number | null;
         grade: number | null;
     };
-    skills: Array<{ name: string; description: string; value: string | null }>;
+    skills: FormattedGrade["skills"];
     onlySkills: boolean;
     isExam: boolean;
     actionOnStreak: "up" | "down" | "equal" | "nothing" | "previous up";

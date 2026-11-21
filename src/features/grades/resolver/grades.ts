@@ -12,15 +12,17 @@ import {
     FormattedGrade,
     FormattedPeriod,
     ResolvedGrades,
+    SkillLevel,
 } from "../types";
 import { parseNumber } from "../utils/averages";
 import { streakDataInjectedIntoGrades } from "../utils/streaks";
 
-const skillColorsCodes: Record<string, string> = {
-    "1": "red",
-    "2": "orange",
-    "3": "paleGreen",
-    "4": "green",
+
+const SKILL_LEVELS: Record<string, SkillLevel> = {
+    "1": { label: "Non acquis",           color: "hsl(0, 40%, 50%)" },
+    "2": { label: "Partiellement acquis", color: "hsl(60, 70%, 40%)" },
+    "3": { label: "Acquis",               color: "hsl(200, 40%, 50%)" },
+    "4": { label: "Dépassé",              color: "hsl(130, 50%, 60%)" },
 };
 
 export default async function gradesResolver(
@@ -225,7 +227,7 @@ function formatGrade(grade: ApiGrade, periodCode: string): FormattedGrade {
             ({ descriptif, valeur, libelleCompetence }: any) => ({
                 name: libelleCompetence,
                 description: descriptif,
-                value: skillColorsCodes[String(valeur)] || null,
+                value: SKILL_LEVELS[String(valeur)] ?? null,
             })
         ),
         onlySkills:
