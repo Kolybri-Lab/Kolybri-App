@@ -79,6 +79,7 @@ export interface FormattedGrade {
     badges: string[];
     isSimulation?: boolean;
 }
+export type SkillLevel = { label: string; color: string };
 
 export interface FormattedDiscipline {
     code: string;
