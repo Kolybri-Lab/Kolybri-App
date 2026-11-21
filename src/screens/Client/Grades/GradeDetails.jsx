@@ -108,9 +108,9 @@ export default function GradeDetails({ route }) {
                     }}
                     align="right"
                     preset="label2"
-                    color={SKILLS_COLORS[item?.value]?.color}
+                    color={item?.value?.color}
                 >
-                    {SKILLS_COLORS[item?.value]?.label}
+                    {item?.value?.label}
                 </Text>
             </View>
         </View>
