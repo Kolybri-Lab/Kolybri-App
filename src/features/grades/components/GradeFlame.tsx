@@ -1,12 +1,12 @@
-import { AnimatedLottie } from "@/components";
+import { FlameOrangeLottie, FlamePurpleLottie } from "@/components/lottie";
 import { useTheme } from "@/hooks/useThemeStore";
 import { StyleSheet, Text, View, useWindowDimensions } from "react-native";
 
 const ASPECT_RATIO = 1.34;
 
-const FLAME_SOURCES: Record<string, any> = {
-    orange: require("assets/lottie/flamme.json"),
-    purple: require("assets/lottie/flamme2.json"),
+const FLAME_COMPONENTS: Record<string, typeof FlameOrangeLottie> = {
+    orange: FlameOrangeLottie,
+    purple: FlamePurpleLottie,
 };
 
 interface GradeFlameProps {
@@ -26,7 +26,7 @@ export default function GradeFlame({
 }: GradeFlameProps) {
     const { width: windowWidth } = useWindowDimensions();
     const { colors } = useTheme();
-    const flameSource = FLAME_SOURCES[color] || FLAME_SOURCES.orange;
+    const FlameLottie = FLAME_COMPONENTS[color] || FLAME_COMPONENTS.orange;
 
     let finalWidth: number;
     if (typeof width === "number") {
@@ -48,8 +48,7 @@ export default function GradeFlame({
                 style,
             ]}
         >
-            <AnimatedLottie
-                source={flameSource}
+            <FlameLottie
                 autoPlay
                 loop
                 style={[styles.flamme, { width: finalWidth, height: finalHeight }]}

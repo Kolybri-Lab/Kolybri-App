@@ -1,6 +1,7 @@
-import { AnimatedLottie } from "@/components";
-import FreeAnimation from "assets/lottie/00_anim_free_tier3_1.json";
-import LottieView from "lottie-react-native";
+import {
+    KolybriFreeLottie,
+    type AnimatedLottieHandle,
+} from "@/components/lottie";
 import { memo, useEffect, useRef } from "react";
 import { Pressable, View } from "react-native";
 import { useTimetablePagerStore } from "./timetablePagerStore";
@@ -26,7 +27,7 @@ function DayViewLeaveComponent({
     const shouldAnimate =
         pageIndex !== undefined ? !isOriginLeave : (propShouldAnimate ?? true);
 
-    const animRef = useRef<LottieView>(null);
+    const animRef = useRef<AnimatedLottieHandle>(null);
     const hasStartedRef = useRef(false);
 
     useEffect(() => {
@@ -64,9 +65,8 @@ function DayViewLeaveComponent({
                     width: "100%",
                 }}
             >
-                <AnimatedLottie
+                <KolybriFreeLottie
                     ref={animRef}
-                    source={FreeAnimation}
                     loop={false}
                     progress={
                         !shouldAnimate && !hasStartedRef.current ? 1 : undefined

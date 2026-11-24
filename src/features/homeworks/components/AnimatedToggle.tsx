@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { StyleProp, TouchableOpacity, ViewStyle } from "react-native";
 
-import { AnimatedLottie } from "@/components";
-import FailAnimation from "../../../../assets/lottie/Fail.json";
-import Loading1Animation from "../../../../assets/lottie/Loading1.json";
-import Loading2Animation from "../../../../assets/lottie/Loading2.json";
-import SuccessAnimation from "../../../../assets/lottie/Success.json";
+import {
+    ToggleFailLottie,
+    ToggleLoading1Lottie,
+    ToggleLoading2Lottie,
+    ToggleSuccessLottie,
+} from "@/components/lottie";
 
 export interface AnimatedToggleProps {
     isDone?: "done" | "todo" | boolean;
@@ -213,54 +214,54 @@ export default function AnimatedToggle({
         switch (currentStep) {
             case "static_loading1":
                 return {
-                    source: Loading1Animation,
+                    Component: ToggleLoading1Lottie,
                     speed: 1,
                 };
             case "static_success":
                 return {
-                    source: SuccessAnimation,
+                    Component: ToggleSuccessLottie,
                     speed: 1,
                 };
             case "static_fail":
                 return {
-                    source: FailAnimation,
+                    Component: ToggleFailLottie,
                     speed: 1,
                 };
             case "loading1_forward":
                 return {
-                    source: Loading1Animation,
+                    Component: ToggleLoading1Lottie,
                     speed: speed,
                 };
             case "loading2_forward":
                 return {
-                    source: Loading2Animation,
+                    Component: ToggleLoading2Lottie,
                     speed: speed,
                 };
             case "unwind_icon":
                 return {
-                    source:
+                    Component:
                         previousIconRef.current === "success"
-                            ? SuccessAnimation
-                            : FailAnimation,
+                            ? ToggleSuccessLottie
+                            : ToggleFailLottie,
                     speed: -speed,
                 };
             case "loading2_reverse":
                 return {
-                    source: Loading2Animation,
+                    Component: ToggleLoading2Lottie,
                     speed: -speed,
                 };
             case "loading1_reverse":
                 return {
-                    source: Loading1Animation,
+                    Component: ToggleLoading1Lottie,
                     speed: -speed,
                 };
             case "target_icon":
                 return {
-                    source:
+                    Component:
                         loadingStateRef.current === "error" ||
                         !isCompletedRef.current
-                            ? FailAnimation
-                            : SuccessAnimation,
+                            ? ToggleFailLottie
+                            : ToggleSuccessLottie,
                     speed: speed,
                 };
         }
@@ -275,6 +276,7 @@ export default function AnimatedToggle({
     };
 
     const animConfig = getAnimConfig();
+    const LottieComponent = animConfig.Component;
 
     return (
         <TouchableOpacity
@@ -293,9 +295,8 @@ export default function AnimatedToggle({
             disabled={disabled || isPlaying || loadingState === "loading"}
             activeOpacity={0.7}
         >
-            <AnimatedLottie
+            <LottieComponent
                 key={`${currentStep}_${cycle}`}
-                source={animConfig.source}
                 speed={animConfig.speed}
                 autoPlay={isPlaying}
                 loop={false}

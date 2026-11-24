@@ -1,9 +1,8 @@
 import { useTheme } from "@/hooks/useThemeStore";
 import appConfig from "app.config";
 import { Pressable, Share, View } from "react-native";
-import WinnerBadge from "../../../assets/lottie/Winner Badge.json";
 import { Text } from "../core";
-import AnimatedLottie from "../display/AnimatedLottie";
+import { WinnerBadgeLottie } from "../lottie";
 
 export default function SharePopup({ navigation }) {
     const { colors } = useTheme();
@@ -57,10 +56,9 @@ export default function SharePopup({ navigation }) {
                         marginBottom: 16,
                     }}
                 >
-                    <AnimatedLottie
+                    <WinnerBadgeLottie
                         loop={false}
                         autoPlay
-                        source={WinnerBadge}
                         speed={0.65}
                         style={{ width: 90, aspectRatio: 1 }}
                     />

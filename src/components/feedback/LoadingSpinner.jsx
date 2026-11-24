@@ -1,14 +1,12 @@
-import { useTheme } from "@/hooks/useThemeStore";
-import AnimatedLottie from "../display/AnimatedLottie";
+import { LoaderLottie } from "../lottie";
 
-const LoadingSpinner = ({ size }) => {
-    const { colors } = useTheme();
+const LoadingSpinner = ({ size, color }) => {
     return (
-        <AnimatedLottie
+        <LoaderLottie
             autoPlay
-            source={require("assets/lottie/loader.json")}
             loop
             speed={1.5}
+            color={color}
             style={{
                 width: size,
                 height: size,

@@ -1,4 +1,5 @@
-import { AnimatedLottie, Switch, Text } from "@/components";
+import { Switch, Text } from "@/components";
+import { SendingCheckLottie } from "@/components/lottie";
 import { useTheme } from "@/hooks/useThemeStore";
 import { useUserStore } from "@/hooks/useUserStore";
 import { routesNames } from "@/router/config/routesNames";
@@ -18,7 +19,6 @@ import {
     View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import SendingCheckAnimation from "../../../../assets/lottie/Sending Check.json";
 import SettingSectionLayout from "./components/SettingSectionLayout";
 
 const THEMES_OPT = { dark: "Sombre", light: "Clair" };
@@ -172,16 +172,15 @@ export default function FeedbackScreen({ route }) {
                             width: 94,
                             height: 94,
                             borderRadius: 90,
-                            backgroundColor: "hsla(140, 60%, 55%, .16)",
+                            backgroundColor: withAlpha(colors.state.success, 0.16),
                             alignItems: "center",
                             justifyContent: "center",
                             marginBottom: 8,
                         }}
                     >
-                        <AnimatedLottie
+                        <SendingCheckLottie
                             loop={false}
                             autoPlay
-                            source={SendingCheckAnimation}
                             style={{ width: 140, height: 140 }}
                         />
                     </View>
