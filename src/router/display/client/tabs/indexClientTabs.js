@@ -4,7 +4,7 @@ import {
     HomeworksIcon,
     MessagingIcon,
     TimetableIcon,
-} from "@/components/svg/navigation";
+} from "@/components/svg";
 import createScreen from "@/router/helpers/createScreen";
 import GradesScreen from "@/screens/Client/Grades/GradesScreen";
 import HomeScreen from "@/screens/Client/Home/HomeScreen";

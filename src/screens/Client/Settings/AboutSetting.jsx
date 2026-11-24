@@ -1,8 +1,13 @@
 import { Section, Text } from "@/components";
-import { Chevron, Info, Link, Person } from "@/components/svg";
-import DiscordLogo from "@/components/svg/logos/Discord";
-import GithubLogo from "@/components/svg/logos/Github";
-import KolybriLogo from "@/components/svg/logos/Kolybri";
+import {
+    Chevron,
+    Discord as DiscordLogo,
+    Github as GithubLogo,
+    Info,
+    Kolybri as KolybriLogo,
+    Link,
+    Person,
+} from "@/components/svg";
 import { useTheme } from "@/hooks/useThemeStore";
 import { routesNames } from "@/router/config/routesNames";
 import { withAlpha } from "@/themes/color";
