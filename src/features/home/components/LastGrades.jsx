@@ -3,9 +3,8 @@ import { formatGradeText } from "@/features/grades/utils/helpers";
 import { useHaptic } from "@/hooks/useHaptics";
 import { useTheme } from "@/hooks/useThemeStore";
 import { routesNames } from "@/router/config/routesNames";
-import { blendWithWhite } from "@/utils/colorGenerator";
+import { withAlpha } from "@/themes/color";
 import { useNavigation } from "@react-navigation/native";
-import { useMemo } from "react";
 import { FlatList, TouchableOpacity, View } from "react-native";
 
 const RADIUS_IN = 4;
@@ -15,8 +14,8 @@ export default function LastGrades({ lastGradesObject }) {
     const haptic = useHaptic("light");
 
     const count = lastGradesObject?.length || 0;
-    if (lastGradesObject?.lenght === 0) {
-        return;
+    if (count === 0) {
+        return null;
     }
 
     return (
@@ -55,10 +54,6 @@ export default function LastGrades({ lastGradesObject }) {
     );
 }
 const GradeCard = ({ disciplineColor, disciplineName, data, index, count }) => {
-    const lightColor = useMemo(
-        () => blendWithWhite(disciplineColor, 0.35),
-        [disciplineColor]
-    );
     const { colors } = useTheme();
 
     if (!disciplineName || !data) return null;
@@ -125,7 +120,8 @@ const GradeCard = ({ disciplineColor, disciplineName, data, index, count }) => {
             >
                 <Text
                     style={{ fontSize: 22, fontFamily: "Bold" }}
-                    color={lightColor}
+                    color={withAlpha(disciplineColor, 0.9)}
+                    //color={colors.text.secondary}
                 >
                     {formatGradeText(data.grade)}
                     <Text

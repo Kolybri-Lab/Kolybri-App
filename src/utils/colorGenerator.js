@@ -218,20 +218,3 @@ export const adjustSaturation = (hslString, amount) => {
     return `hsl(${h}, ${newS}%, ${l}%)`;
 };
 
-export const blendWithWhite = (hslColor, opacity = 0.35) => {
-    const match = hslColor.match(
-        /hsla?\(\s*([\d.]+)\s*,\s*([\d.]+)%\s*,\s*([\d.]+)%/i
-    );
-
-    if (!match) return hslColor;
-
-    const [, h, s, l] = match.map(Number);
-    const [r, g, b] = hslToRgb(h, s / 100, l / 100);
-
-    const blendedR = Math.round(r * opacity + 255 * (1 - opacity));
-    const blendedG = Math.round(g * opacity + 255 * (1 - opacity));
-    const blendedB = Math.round(b * opacity + 255 * (1 - opacity));
-
-    return `rgb(${blendedR}, ${blendedG}, ${blendedB})`;
-};
-
