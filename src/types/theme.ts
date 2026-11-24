@@ -22,6 +22,7 @@ export type Theme = {
         text: {
             primary: string;
             secondary: string;
+            raised: string;
             onBrand: string;
         };
         brand: {

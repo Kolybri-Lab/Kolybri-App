@@ -25,6 +25,8 @@ const colors = {
         primary: "hsl(213, 20%, 94%)",
         /** Secondary text: descriptions, captions, timestamps, placeholders. */
         secondary: "hsl(0, 0%, 65%)",
+        /** Muted/subtle text or inactive icon strokes (softer than secondary). */
+        raised: "hsl(0, 0%, 40%)",
         /** Text and icons placed on brand.primary (filled buttons, active switch label). */
         onBrand: "hsl(0, 0%, 100%)",
     },

@@ -25,7 +25,8 @@ const colors = {
         /** Body text, titles, labels. Default text color everywhere. */
         primary: "hsl(0, 0%, 0%)",
         /** Secondary text: descriptions, captions, timestamps, placeholders. */
-        secondary: "hsl(0, 0%, 38%)",
+        secondary: "hsl(0, 0%, 40%)",
+        raised: "hsl(0, 0%, 70%)",
         /** Text and icons placed on brand.primary (filled buttons, active switch label). */
         onBrand: "hsl(0, 0%, 100%)",
     },
@@ -48,7 +49,7 @@ const colors = {
 
     state: {
         /** Success confirmations, completed steps, positive values. */
-        success: "hsl(159, 80%, 30%)",
+        success: "hsl(159, 76%, 42%)",
         /** Errors, destructive actions, warnings, notification badge. */
         warning: "hsl(7, 81%, 46%)",
     },

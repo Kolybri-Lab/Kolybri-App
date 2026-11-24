@@ -374,7 +374,7 @@ const NextCourse = ({ course, inClass }) => {
                 }}
             >
                 <Text
-                    color={withAlpha(colors.text.secondary, 0.7)}
+                    color={colors.text.secondary}
                     style={{ fontFamily: "Medium", fontSize: 14, lineHeight: 18 }}
                 >
                     {course.schedules.start.time}
@@ -384,11 +384,11 @@ const NextCourse = ({ course, inClass }) => {
                         width: 2,
                         height: 8,
                         borderRadius: 2,
-                        backgroundColor: colors.border.subtle,
+                        backgroundColor: colors.text.secondary,
                     }}
                 />
                 <Text
-                    color={withAlpha(colors.text.secondary, 0.7)}
+                    color={colors.text.secondary}
                     style={{ fontFamily: "Medium", fontSize: 14, lineHeight: 18 }}
                 >
                     {course.schedules.end.time}
@@ -422,7 +422,7 @@ const NextCourse = ({ course, inClass }) => {
                 >
                     <Text
                         oneLine
-                        color={withAlpha(colors.text.secondary, 0.7)}
+                        color={colors.text.secondary}
                         style={{
                             flexShrink: 1,
                             fontSize: 15,
@@ -434,7 +434,7 @@ const NextCourse = ({ course, inClass }) => {
                     </Text>
                     <Text
                         oneLine
-                        color={withAlpha(colors.text.secondary, 0.7)}
+                        color={colors.text.secondary}
                         style={{
                             flexShrink: 0,
                             fontSize: 15,
