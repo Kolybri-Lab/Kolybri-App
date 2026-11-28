@@ -67,6 +67,11 @@ export const deepEqualExcept = (obj1, obj2, excludedKeys = []) => {
     return obj1 === obj2;
 };
 
+/**
+ * @param {number | null | undefined} [gradeInt]
+ * @param {number | "auto"} [extraNumbers]
+ * @returns {string}
+ */
 export const formatGradeText = (gradeInt = 0.0, extraNumbers = 2) => {
     try {
         const grade = parseFloat(gradeInt);
