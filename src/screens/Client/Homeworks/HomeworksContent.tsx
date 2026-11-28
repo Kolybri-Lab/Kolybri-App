@@ -1,29 +1,31 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Pressable, ScrollView, TouchableOpacity, View } from "react-native";
 
+import { ScreenStack } from "@/components";
 import { Text } from "@/components/core";
-import { KolybriFreeLottie } from "@/components/lottie";
-import { Plus } from "lucide-react-native";
+import { KolybriFreeLottie, type AnimatedLottieHandle } from "@/components/lottie";
 import { motivationSentences } from "@/constants/features/homeworksConfig";
+import { useHomeworks } from "@/features/homeworks";
+import DocumentModal, {
+    type HomeworkDocument,
+} from "@/features/homeworks/components/DocumentModal";
 import HomeworkCard from "@/features/homeworks/components/HomeworkCard";
 import HomeworkDatesRow from "@/features/homeworks/components/HomeworkDatesRow";
 import HomeworkProgress from "@/features/homeworks/components/HomeworkProgress";
-
-import DocumentModal from "@/features/homeworks/components/DocumentModal";
 import NewHomeworkModal from "@/features/homeworks/components/NewHomeworkModal";
 import { useHomework } from "@/features/homeworks/context/HomeworkContext";
 import { useHomeworksHandler } from "@/features/homeworks/hooks/useHomeworksHandler";
-import { formatFrenchDate } from "@/utils/date";
-
-import { ScreenStack } from "@/components";
-import { useHomeworks } from "@/features/homeworks";
-import { useCustomDataStore } from "@/hooks/useCustomDataStore";
-import { useUserStore } from "@/hooks/useUserStore";
-import { SafeAreaView } from "react-native-safe-area-context";
+import type { Homework } from "@/features/homeworks/types";
 import { useTheme } from "@/hooks/useThemeStore";
+import { useUserStore } from "@/hooks/useUserStore";
+import { Plus } from "lucide-react-native";
+import type { ComponentType } from "react";
 import Animated, { LinearTransition } from "react-native-reanimated";
 
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
+const ScreenStackView = ScreenStack as ComponentType<any>;
+const HomeworkProgressView = HomeworkProgress as ComponentType<any>;
+const HomeworkDatesRowView = HomeworkDatesRow as ComponentType<any>;
 
 export default function HomeworksContent() {
     const { colors } = useTheme();
@@ -31,53 +33,23 @@ export default function HomeworksContent() {
     const {
         data: homeworksData,
         isLoading,
-        isError,
         toggleHomework,
-        error,
-        isDataEmpty,
     } = useHomeworks(token);
-    const customHomeworksData = useCustomDataStore((state) => state.customHomeworks);
     const { dispatch } = useHomework();
 
-    const mergedHomeworks = useMemo(() => {
-        if (!homeworksData && customHomeworksData.length === 0) return null;
-        const merged = homeworksData
-            ? JSON.parse(JSON.stringify(homeworksData))
-            : {};
-        customHomeworksData.forEach((hw) => {
-            if (!merged[hw.date]) {
-                merged[hw.date] = [];
-                if (!merged.formatedDates) merged.formatedDates = {};
-                const frenchDate = formatFrenchDate(hw.date);
-                const contractedDate = [
-                    frenchDate.charAt(0).toLowerCase() + frenchDate.slice(1, 3),
-                    frenchDate.split(" ")[1],
-                ];
-                merged.formatedDates[hw.date] = {
-                    long: frenchDate,
-                    contracted: contractedDate,
-                    isEvaluation: hw.isEvaluation,
-                    allTasksCompleted: false,
-                };
-            }
-            const alreadyExists = merged[hw.date].some((h) => h.id === hw.id);
-            if (!alreadyExists) {
-                merged[hw.date].push(hw);
-            }
-        });
-        return merged;
-    }, [homeworksData, customHomeworksData]);
-
-    const [activeDate, setActiveDate] = useState("");
+    const [activeDate, setActiveDate] = useState<string>("");
     const [modalOpen, setModalOpen] = useState(false);
-    const [documentModal, setDocumentModal] = useState({
+    const [documentModal, setDocumentModal] = useState<{
+        open: boolean;
+        documents: HomeworkDocument[];
+    }>({
         open: false,
         documents: [],
     });
-    const [expandedHomeworkId, setExpandedHomeworkId] = useState(null);
-    const freeAnimRef = useRef(null);
+    const [expandedHomeworkId, setExpandedHomeworkId] = useState<number | null>(null);
+    const freeAnimRef = useRef<AnimatedLottieHandle | null>(null);
 
-    const handleItemPress = useCallback((id) => {
+    const handleItemPress = useCallback((id: number) => {
         setExpandedHomeworkId((prev) => (prev === id ? null : id));
     }, []);
 
@@ -91,31 +63,26 @@ export default function HomeworksContent() {
         setDocumentModal,
     });
 
-    const homeworksDates = mergedHomeworks?.formatedDates;
+    const homeworksDates = homeworksData?.formatedDates;
 
     useEffect(() => {
-        if (
-            !mergedHomeworks?.formatedDates ||
-            Object.keys(mergedHomeworks.formatedDates).length === 0
-        )
-            return;
+        if (!homeworksDates || Object.keys(homeworksDates).length === 0) return;
 
-        if (!activeDate || !mergedHomeworks.formatedDates[activeDate]) {
-            setActiveDate(Object.keys(mergedHomeworks.formatedDates)[0]);
+        if (!activeDate || !homeworksDates[activeDate]) {
+            setActiveDate(Object.keys(homeworksDates)[0]);
         }
-    }, [mergedHomeworks, activeDate]);
+    }, [homeworksDates, activeDate]);
 
-    const displayTasks = useMemo(() => {
-        if (!activeDate || !mergedHomeworks) return [];
-        return mergedHomeworks[activeDate] || [];
-    }, [activeDate, mergedHomeworks]);
+    const displayTasks = useMemo<Homework[]>(() => {
+        if (!activeDate || !homeworksData) return [];
+        const tasks = homeworksData[activeDate];
+        return Array.isArray(tasks) ? tasks : [];
+    }, [activeDate, homeworksData]);
 
     const hasDates = Boolean(homeworksDates && Object.keys(homeworksDates).length > 0);
     const isEmpty =
         !isLoading &&
-        ((isDataEmpty && customHomeworksData.length === 0) ||
-            !hasDates ||
-            (Boolean(activeDate) && displayTasks.length === 0));
+        (!hasDates || (Boolean(activeDate) && displayTasks.length === 0));
 
     useEffect(() => {
         if (isEmpty) {
@@ -135,12 +102,12 @@ export default function HomeworksContent() {
     }, [displayTasks, completedTasks]);
 
     const encouragementSentence = useMemo(() => {
-        let key;
-        if (progression === 0) key = "0";
-        else if (progression < 0.25) key = "0.25";
-        else if (progression < 0.5) key = "0.5";
-        else if (progression < 1) key = "0.75";
-        else key = "1";
+        let key: keyof typeof motivationSentences;
+        if (progression === 0) key = 0;
+        else if (progression < 0.25) key = 0.25;
+        else if (progression < 0.5) key = 0.5;
+        else if (progression < 1) key = 0.75;
+        else key = 1;
 
         const sentences = motivationSentences[key];
         return sentences
@@ -153,12 +120,15 @@ export default function HomeworksContent() {
             <NewHomeworkModal visible={modalOpen} defaultDate={activeDate} />
             <DocumentModal
                 visible={documentModal.open}
-                setVisible={(open) =>
-                    setDocumentModal((prev) => ({ ...prev, open }))
+                setVisible={(open: boolean | ((prev: boolean) => boolean)) =>
+                    setDocumentModal((prev) => ({
+                        ...prev,
+                        open: typeof open === "function" ? open(prev.open) : open,
+                    }))
                 }
                 documents={documentModal.documents}
             />
-            <ScreenStack>
+            <ScreenStackView>
                 {isEmpty ? (
                     <View
                         style={{
@@ -168,7 +138,6 @@ export default function HomeworksContent() {
                             paddingHorizontal: 24,
                             paddingBottom: 40,
                             gap: 14,
-                            paddingTop: 20,
                         }}
                     >
                         <Text
@@ -176,7 +145,7 @@ export default function HomeworksContent() {
                             weight="bold"
                             align="center"
                         >
-                            Nous n'avons pas trouvé de devoir ! Tu es libre !
+                            Pas de devoir ! Tu es libre !
                         </Text>
                         <Pressable
                             onPress={() => freeAnimRef.current?.play(10, 60)}
@@ -230,18 +199,18 @@ export default function HomeworksContent() {
                             paddingBottom: 40,
                         }}
                     >
-                        <HomeworkProgress
+                        <HomeworkProgressView
                             completedCount={completedTasks.length}
                             totalCount={displayTasks.length}
                             progression={progression}
                             encouragementSentence={encouragementSentence}
                         />
 
-                        <HomeworkDatesRow
+                        <HomeworkDatesRowView
                             homeworksDates={homeworksDates}
                             activeDate={activeDate}
                             setActiveDate={setActiveDate}
-                            mergedHomeworks={mergedHomeworks}
+                            mergedHomeworks={homeworksData}
                         />
 
                         <View
@@ -258,7 +227,7 @@ export default function HomeworksContent() {
                                     homework={homework}
                                     isExpanded={expandedHomeworkId === homework.id}
                                     onToggleExpand={() => handleItemPress(homework.id)}
-                                    onOpenDocuments={(documents) =>
+                                    onOpenDocuments={(documents: HomeworkDocument[]) =>
                                         setDocumentModal({ open: true, documents })
                                     }
                                 />
@@ -287,8 +256,7 @@ export default function HomeworksContent() {
                         </View>
                     </ScrollView>
                 )}
-            </ScreenStack>
+            </ScreenStackView>
         </>
     );
 }
-

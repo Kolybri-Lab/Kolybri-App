@@ -66,7 +66,7 @@ export default function DaySummary({ day }: DaySummaryProps) {
                         infos.totalCancelled > 0
                             ? colors.state.warning
                             : colors.surface.default,
-                    paddingVertical: 2,
+                    paddingVertical: 4,
                     paddingHorizontal: 10,
                     borderRadius: 50,
                 }}
@@ -84,7 +84,7 @@ export default function DaySummary({ day }: DaySummaryProps) {
                         infos.totalEdited > 0
                             ? colors.brand.primary
                             : colors.surface.default,
-                    paddingVertical: 2,
+                    paddingVertical: 4,
                     paddingHorizontal: 10,
                     borderRadius: 50,
                 }}

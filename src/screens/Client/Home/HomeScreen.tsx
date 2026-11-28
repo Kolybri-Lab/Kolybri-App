@@ -6,25 +6,30 @@ import HomeworksPreview from "@/features/home/components/HomeworksPreview";
 import LastGrades from "@/features/home/components/LastGrades";
 import getGreetingMessage from "@/features/home/utils/getGreetingMessage";
 import { useHomeworks } from "@/features/homeworks";
-import { useCustomDataStore } from "@/hooks/useCustomDataStore";
 import { useTheme } from "@/hooks/useThemeStore";
 import { useUserStore } from "@/hooks/useUserStore";
 import { GuestTestButtons } from "@/mock/guest/components";
 import { routesNames } from "@/router/config/routesNames";
 import { withAlpha } from "@/themes/color";
 import { useNavigation } from "@react-navigation/native";
-import { useCallback, useState } from "react";
-import { Image, Pressable, View } from "react-native";
+import { type ComponentType, useCallback, useState } from "react";
+import { Image, type ImageSourcePropType, Pressable, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+const ScreenStackView = ScreenStack as ComponentType<any>;
+const ActiveCourseCardView = ActiveCourseCard as ComponentType<any>;
+const GeneralAveragePreviewView = GeneralAveragePreview as ComponentType<any>;
+const LastGradesView = LastGrades as ComponentType<any>;
+const GuestTestButtonsView = GuestTestButtons as ComponentType<any>;
+
 export default function HomeScreen() {
-    const navigation = useNavigation();
+    const navigation = useNavigation<any>();
     const { colors } = useTheme();
     const token = useUserStore((state) => state.token);
     const profile = useUserStore((state) => state.profile);
 
-    const [greetingMessage] = useState(getGreetingMessage);
+    const [greetingMessage] = useState<string>(getGreetingMessage);
 
     const name = profile?.name ?? "";
     const { data: gradesData } = useGrades(token);
@@ -32,17 +37,16 @@ export default function HomeScreen() {
 
     const localPhotoUri = profile?.localPhotoUri;
 
-    const customDataStore = useCustomDataStore();
-
     const getProfileImageSource = useCallback(
-        () =>
+        (): ImageSourcePropType =>
             localPhotoUri
                 ? { uri: localPhotoUri }
                 : require("../../../../assets/custom/default-user-picture.png"),
         [localPhotoUri]
     );
+
     return (
-        <ScreenStack>
+        <ScreenStackView>
             <View style={{ paddingHorizontal: 20 }}>
                 <ScrollView
                     showsVerticalScrollIndicator={false}
@@ -130,25 +134,23 @@ export default function HomeScreen() {
                         </View>
                     </SafeAreaView>
                     <View style={{ gap: 26, marginTop: 10 }}>
-                        <ActiveCourseCard />
+                        <ActiveCourseCardView />
                         <View style={{ gap: 3 }}>
-                            <GeneralAveragePreview gradesData={gradesData} />
-                            {gradesData?.lastGrades?.length >= 1 && (
-                                <LastGrades
-                                    lastGradesObject={gradesData.lastGrades}
+                            <GeneralAveragePreviewView
+                                gradesData={gradesData}
+                            />
+                            {(gradesData?.lastGrades?.length ?? 0) >= 1 && (
+                                <LastGradesView
+                                    lastGradesObject={gradesData?.lastGrades}
                                 />
                             )}
                         </View>
-                        <HomeworksPreview
-                            customHomeworks={customDataStore?.customHomeworks ?? {}}
-                            homeworksDatas={homeworksData}
-                        />
+                        <HomeworksPreview homeworksDatas={homeworksData} />
                     </View>
-                    {token === "guest_token" && <GuestTestButtons />}
+                    {token === "guest_token" && <GuestTestButtonsView />}
                     <View style={{ height: 25 }} />
                 </ScrollView>
             </View>
-        </ScreenStack>
+        </ScreenStackView>
     );
 }
-

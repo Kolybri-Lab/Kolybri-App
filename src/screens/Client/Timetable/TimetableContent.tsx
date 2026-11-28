@@ -2,6 +2,7 @@ import { Selector, Text } from "@/components";
 import { DayViewProps, useTimetable } from "@/features/timetable";
 import { flattenDays } from "@/features/timetable/utils/sort";
 import { useCurrentTime } from "@/hooks/useCurrentTime";
+import { useNetworkStore } from "@/hooks/useNetworkStore";
 import { useTheme } from "@/hooks/useThemeStore";
 import { useUserStore } from "@/hooks/useUserStore";
 import dayjs from "dayjs";
@@ -25,15 +26,27 @@ export default function TimetableContent() {
     const [selectedDate, setSelectedDate] = useState(dayjs().format("YYYY-MM-DD"));
     const {
         data: weeks,
+        isLoading,
         extendForward,
         extendBackward,
     } = useTimetable(token, selectedDate);
+    const isConnected = useNetworkStore(
+        (state) => state.activeNetworkStatus.isConnected
+    );
     const { date: isoDate } = useCurrentTime();
 
     const days = useMemo(() => flattenDays(weeks), [weeks]);
     const [view, setView] = useState("day"); // "day" | "week"
 
     const isToday = selectedDate === (isoDate || dayjs().format("YYYY-MM-DD"));
+    const selectedMonday = useMemo(
+        () => dayjs(selectedDate).startOf("isoWeek").format("YYYY-MM-DD"),
+        [selectedDate]
+    );
+    const hasSelectedWeek = useMemo(
+        () => weeks.some((w) => w.from.date === selectedMonday),
+        [weeks, selectedMonday]
+    );
 
     const dayIndex = useMemo(() => {
         if (days.length === 0) return -1;
@@ -44,6 +57,8 @@ export default function TimetableContent() {
     }, [days, selectedDate]);
 
     const day = useMemo(() => days[dayIndex], [days, dayIndex]);
+    const isWeekUnavailableOffline =
+        isConnected === false && !isLoading && (!day || !hasSelectedWeek);
 
     const goToToday = useCallback(() => {
         setSelectedDate(isoDate || dayjs().format("YYYY-MM-DD"));
@@ -103,20 +118,73 @@ export default function TimetableContent() {
             </View>
 
             <View style={{ flex: 1 }}>
-                <Panel visible={view === "day"}>
-                    <DayView
-                        dayIndex={dayIndex}
-                        days={days}
-                        setSelectedDate={setSelectedDate}
-                        day={day}
-                        extendForward={extendForward}
-                        extendBackward={extendBackward}
-                    />
-                </Panel>
+                {isConnected === false && !isWeekUnavailableOffline && (
+                    <View
+                        style={{
+                            marginTop: 10,
+                            alignSelf: "flex-start",
+                            paddingHorizontal: 10,
+                            paddingVertical: 4,
+                            borderRadius: 999,
+                            backgroundColor: colors.surface.default,
+                        }}
+                    >
+                        <Text preset="body.sm" color={colors.text.secondary}>
+                            Hors connexion (cache local)
+                        </Text>
+                    </View>
+                )}
+                {isWeekUnavailableOffline ? (
+                    <View
+                        style={{
+                            flex: 1,
+                            alignItems: "center",
+                            justifyContent: "center",
+                            paddingHorizontal: 24,
+                            gap: 14,
+                        }}
+                    >
+                        <Text
+                            preset="body.lg"
+                            align="center"
+                            color={colors.text.secondary}
+                        >
+                            Emploi du temps non disponible hors connexion pour cette semaine.
+                        </Text>
+                        {!isToday && (
+                            <Pressable
+                                onPress={goToToday}
+                                style={{
+                                    backgroundColor: colors.brand.primary,
+                                    paddingHorizontal: 16,
+                                    paddingVertical: 10,
+                                    borderRadius: 12,
+                                }}
+                            >
+                                <Text preset="control.sm" color={colors.text.onBrand}>
+                                    Revenir à aujourd'hui
+                                </Text>
+                            </Pressable>
+                        )}
+                    </View>
+                ) : (
+                    <>
+                        <Panel visible={view === "day"}>
+                            <DayView
+                                dayIndex={dayIndex}
+                                days={days}
+                                setSelectedDate={setSelectedDate}
+                                day={day}
+                                extendForward={extendForward}
+                                extendBackward={extendBackward}
+                            />
+                        </Panel>
 
-                <Panel visible={view === "week"}>
-                    <WeekView />
-                </Panel>
+                        <Panel visible={view === "week"}>
+                            <WeekView />
+                        </Panel>
+                    </>
+                )}
             </View>
         </SafeAreaView>
     );

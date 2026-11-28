@@ -1,56 +1,66 @@
 import { Text } from "@/components";
 import { ProgressBar } from "@/components/progression/ProgressBar";
-import { injectHomeworksIntoModel } from "@/features/homeworks/utils/homeworks";
+import type {
+    FormattedDate,
+    Homework as HomeworkModel,
+    ResolvedHomeworks,
+} from "@/features/homeworks/types";
 import { useHaptic } from "@/hooks/useHaptics";
 import { useTheme } from "@/hooks/useThemeStore";
 import { routesNames } from "@/router/config/routesNames";
 import { withAlpha } from "@/themes/color";
 import dynamicBorderRadius from "@/utils/borderRadius";
-
 import { formatFrenchDate } from "@/utils/date";
 import { useNavigation } from "@react-navigation/native";
-
 import { useMemo } from "react";
-import { TouchableOpacity, View, useWindowDimensions } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 
-export default function HomeworksPreview({ homeworksDatas, customHomeworks }) {
-    const navigation = useNavigation();
+interface HomeworksPreviewProps {
+    homeworksDatas?: Partial<ResolvedHomeworks>;
+}
+
+interface GroupedDateHomeworks {
+    date: string;
+    homeworks: HomeworkModel[];
+    meta?: FormattedDate;
+    total: number;
+    progress: number;
+}
+
+export default function HomeworksPreview({ homeworksDatas }: HomeworksPreviewProps) {
+    const navigation = useNavigation<any>();
     const haptic = useHaptic("light");
 
-    const mergedHomeworks = useMemo(() => {
-        return injectHomeworksIntoModel(homeworksDatas, customHomeworks ?? []);
-    }, [homeworksDatas, customHomeworks]);
-
-    const groupedHomeworks = useMemo(() => {
-        const { formatedDates = {}, ...dateGroups } = mergedHomeworks;
+    const groupedHomeworks = useMemo<GroupedDateHomeworks[]>(() => {
+        if (!homeworksDatas) return [];
+        const { formatedDates = {}, ...dateGroups } = homeworksDatas;
 
         return Object.entries(dateGroups)
-            .sort(([a], [b]) => new Date(a) - new Date(b))
+            .sort(([a], [b]) => new Date(a).getTime() - new Date(b).getTime())
             .map(([date, all]) => {
-                const todo = all.filter((item) => item.isDone === "todo");
+                const list = Array.isArray(all) ? all : [];
+                const todo = list.filter((item) => item.isDone === "todo");
                 return {
                     date,
                     homeworks: todo,
                     meta: formatedDates[date],
-                    total: all.length,
-                    progress: all.length
-                        ? (all.length - todo.length) / all.length
+                    total: list.length,
+                    progress: list.length
+                        ? (list.length - todo.length) / list.length
                         : 0,
                 };
             })
             .filter(({ total }) => total > 0);
-    }, [mergedHomeworks]);
+    }, [homeworksDatas]);
 
     return (
         <View style={{ width: "100%", flex: 1, gap: 16 }}>
-            {groupedHomeworks.map(({ date, homeworks, meta }) => (
+            {groupedHomeworks.map(({ date, homeworks, meta, total }) => (
                 <View key={date}>
                     <DateHeader
                         date={date}
                         meta={meta}
-                        progress={
-                            1 - homeworks?.length / mergedHomeworks[date].length ?? 0
-                        }
+                        progress={total > 0 ? 1 - homeworks.length / total : 0}
                     />
 
                     {homeworks.map((item, index) => (
@@ -67,10 +77,7 @@ export default function HomeworksPreview({ homeworksDatas, customHomeworks }) {
                                 );
                             }}
                         >
-                            <Homework
-                                key={
-                                    item.customHomeworkMd5Key ?? `${date}-${item.id}`
-                                }
+                            <HomeworkItem
                                 homework={item}
                                 index={index}
                                 countForDate={homeworks.length}
@@ -83,7 +90,15 @@ export default function HomeworksPreview({ homeworksDatas, customHomeworks }) {
     );
 }
 
-const DateHeader = ({ date, meta, progress }) => {
+const DateHeader = ({
+    date,
+    meta,
+    progress,
+}: {
+    date: string;
+    meta?: FormattedDate;
+    progress: number;
+}) => {
     const { colors, components } = useTheme();
     return (
         <View
@@ -98,10 +113,6 @@ const DateHeader = ({ date, meta, progress }) => {
             <Text preset="heading.section" size={18}>
                 {(meta?.long ?? `POUR ${formatFrenchDate(date)}`).toUpperCase()}
             </Text>
-            {/* <Text style={{ fontSize: 18, fontFamily: "Bold", color: colors.brand.primary }}>
-                {countForDate} restant{countForDate > 1 ? "s" : null}
-            </Text> */}
-            {/* {console.log(progress)} */}
             <ProgressBar
                 progression={progress}
                 delay={700}
@@ -122,9 +133,17 @@ const DateHeader = ({ date, meta, progress }) => {
 
 const BORDER_RADIUS_EXT = 16;
 const BORDER_RADIUS_INT = 4;
-const Homework = ({ homework, index, countForDate }) => {
+
+const HomeworkItem = ({
+    homework,
+    index,
+    countForDate,
+}: {
+    homework: HomeworkModel;
+    index: number;
+    countForDate: number;
+}) => {
     const { colors } = useTheme();
-    const { width } = useWindowDimensions();
 
     return (
         <View
@@ -211,4 +230,3 @@ const Homework = ({ homework, index, countForDate }) => {
         </View>
     );
 };
-

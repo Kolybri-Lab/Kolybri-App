@@ -6,6 +6,7 @@ import {
     openDocument,
 } from "@/features/homeworks/utils/documents";
 import { assignUnit } from "@/features/homeworks/utils/homeworks";
+import { useNetworkStore } from "@/hooks/useNetworkStore";
 import { useTheme } from "@/hooks/useThemeStore";
 import { useUserStore } from "@/hooks/useUserStore";
 import { withAlpha } from "@/themes/color";
@@ -47,6 +48,9 @@ export default function DocumentModal({
     const theme = useTheme();
     const colors = extras?.colors || (theme.colors as any);
     const userAccessToken = useUserStore((state) => state.token);
+    const isConnected = useNetworkStore(
+        (state) => state.activeNetworkStatus.isConnected
+    );
     const [downloadProgress, setDownloadProgress] = useState<
         Record<string | number, number>
     >({});
@@ -142,7 +146,9 @@ export default function DocumentModal({
                 color={colors?.text?.secondary}
                 style={{ marginBottom: 6 }}
             >
-                Note du dev: maintenir pour télécharger
+                {isConnected === false
+                    ? "Connexion requise pour télécharger les documents."
+                    : "Note du dev: maintenir pour télécharger"}
             </Text>
             <FlatList
                 data={documents}

@@ -1,4 +1,8 @@
+import { Text } from "@/components";
 import { FlatDay } from "@/features/timetable";
+import { useNetworkStore } from "@/hooks/useNetworkStore";
+import { useTheme } from "@/hooks/useThemeStore";
+import { WifiOff } from "lucide-react-native";
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { FlatList, ScrollView, View } from "react-native";
 import { DayViewBreak, DayViewCourse } from "./DayViewCards";
@@ -92,6 +96,11 @@ function DayPager({
     onExtendBackward,
 }: DayPagerProps) {
     const [containerWidth, setContainerWidth] = useState(0);
+    const { colors } = useTheme();
+    const isConnected = useNetworkStore(
+        (state) => state.activeNetworkStatus.isConnected
+    );
+    const isOffline = isConnected === false;
     const listRef = useRef<FlatList>(null);
     const currentIndex = useRef(index);
 
@@ -115,6 +124,7 @@ function DayPager({
 
     const checkThresholds = useCallback(
         (targetIndex: number) => {
+            if (isOffline) return;
             // Antérieur à J-3 (3 jours ou moins depuis le début)
             if (targetIndex <= 3) {
                 onExtendBackward?.();
@@ -124,7 +134,7 @@ function DayPager({
                 onExtendForward?.();
             }
         },
-        [days.length, onExtendBackward, onExtendForward]
+        [isOffline, days.length, onExtendBackward, onExtendForward]
     );
 
     useEffect(() => {
@@ -170,6 +180,21 @@ function DayPager({
                 e.nativeEvent.contentOffset.x / snapInterval
             );
 
+            if (nextIndex >= days.length) {
+                const lastIndex = Math.max(0, days.length - 1);
+                isProgrammaticScrollRef.current = true;
+                currentIndex.current = lastIndex;
+                listRef.current?.scrollToOffset({
+                    offset: lastIndex * snapInterval,
+                    animated: true,
+                });
+                const lastDay = days[lastIndex];
+                useTimetablePagerStore
+                    .getState()
+                    .setBoth(lastIndex, lastDay ? isLeaveDay(lastDay) : false);
+                return;
+            }
+
             const nextDay = days[nextIndex];
             const isLeave = nextDay ? isLeaveDay(nextDay) : false;
             useTimetablePagerStore.getState().setBoth(nextIndex, isLeave);
@@ -207,6 +232,41 @@ function DayPager({
         [snapInterval]
     );
 
+    const offlineFooter = useMemo(() => {
+        if (!isOffline || pageWidth === 0) return null;
+        return (
+            <View
+                style={{
+                    width: Math.round(pageWidth * 0.6),
+                    marginLeft: PAGE_GAP,
+                    flex: 1,
+                    alignItems: "flex-start",
+                    justifyContent: "center",
+                    paddingLeft: 12,
+                    paddingRight: 20,
+                    gap: 8,
+                }}
+            >
+                <WifiOff size={26} color={colors.text.secondary} />
+                <Text
+                    preset="body.lg"
+                    weight="medium"
+                    align="left"
+                    color={colors.text.primary}
+                >
+                    Hors connexion
+                </Text>
+                <Text
+                    preset="body.sm"
+                    align="left"
+                    color={colors.text.secondary}
+                >
+                    Reconnectez-vous pour voir la suite.
+                </Text>
+            </View>
+        );
+    }, [isOffline, pageWidth, colors.text.primary, colors.text.secondary]);
+
     return (
         <View
             style={{ flex: 1, width: "100%" }}
@@ -219,6 +279,7 @@ function DayPager({
                     keyExtractor={keyExtractor}
                     renderItem={renderItem}
                     ItemSeparatorComponent={PageSeparator}
+                    ListFooterComponent={offlineFooter}
                     getItemLayout={getItemLayout}
                     initialScrollIndex={index >= 0 ? index : 0}
                     horizontal

@@ -1,13 +1,15 @@
 import { GoBackHeader, ScreenStack, Text } from "@/components";
 import { File as FileIcon } from "@/components/svg";
 import { useMessageContent } from "@/features/messaging/hooks/useMessaging";
+import type { FormattedMessage, MessageAttachment } from "@/features/messaging/types";
 import { downloadDocument, openDocument } from "@/helpers/documents/documentsHelper";
+import { useNetworkStore } from "@/hooks/useNetworkStore";
 import { useTheme } from "@/hooks/useThemeStore";
 import { routesNames } from "@/router/config/routesNames";
 import { withAlpha } from "@/themes/color";
 import { FONT_FAMILIES } from "@/themes/tokens";
 import { formatDate } from "@/utils/date";
-import { memo, useCallback, useMemo, useState } from "react";
+import { memo, type ComponentType, useCallback, useMemo, useState } from "react";
 import {
     ActivityIndicator,
     TouchableOpacity,
@@ -18,17 +20,26 @@ import { ScrollView } from "react-native-gesture-handler";
 import RenderHTML, { defaultSystemFonts } from "react-native-render-html";
 
 const systemFonts = [...defaultSystemFonts, ...Object.values(FONT_FAMILIES.baloo)];
+const GoBackHeaderView = GoBackHeader as ComponentType<any>;
 
-const RECOVERY_MODE_BY_TYPE = {
+const RECOVERY_MODE_BY_TYPE: Record<string, "recipient" | "sender" | undefined> = {
     received: "recipient",
     sent: "sender",
-    draft: null, // TODO: handle drafts
-    archived: null, // TODO: handle achived messages
+    draft: undefined,
+    archived: undefined,
 };
 
-const File = memo(({ item, progress, colors, onOpen, onDownload }) => {
+interface FileProps {
+    item: MessageAttachment;
+    progress: number | null;
+    colors: any;
+    onOpen: (item: MessageAttachment) => void;
+    onDownload: (item: MessageAttachment) => void;
+}
+
+const File = memo(({ item, progress, colors, onOpen, onDownload }: FileProps) => {
     const { colors: themeColors } = useTheme();
-    const { id, libelle, type, taille: size } = item;
+    const { libelle } = item;
     const ext = libelle.slice(libelle.lastIndexOf(".") + 1).toLowerCase();
 
     return (
@@ -89,41 +100,55 @@ const File = memo(({ item, progress, colors, onOpen, onDownload }) => {
     );
 });
 
-export default function MessagingDetails({ route }) {
-    const { token = "", message = {} } = route?.params || {};
+interface MessagingDetailsProps {
+    route?: {
+        params?: {
+            token?: string;
+            message?: FormattedMessage;
+        };
+    };
+}
+
+export default function MessagingDetails({ route }: MessagingDetailsProps) {
+    const { token = "", message } = route?.params || {};
     const {
         id: messageId,
-        type: typeOfRecovery,
-        answered,
-        canAnswer,
-        date,
-        files,
-        folder,
-        read,
-        recipientType,
-        sender,
-        subject,
-        transferred,
+        type: typeOfRecovery = "received",
+        date = "",
+        files = [],
+        read = true,
+        sender = {
+            id: null,
+            fullName: "Inconnu",
+            firstName: "",
+            lastName: "",
+            initials: "?",
+            role: null,
+        },
+        subject = "",
     } = message || {};
-    const recoveryMode = RECOVERY_MODE_BY_TYPE[typeOfRecovery] ?? null;
+    const recoveryMode = RECOVERY_MODE_BY_TYPE[typeOfRecovery] ?? "recipient";
 
     const {
         data: messageContent,
         isLoading,
         isError,
     } = useMessageContent(token, messageId, recoveryMode);
+    const isConnected = useNetworkStore(
+        (state) => state.activeNetworkStatus.isConnected
+    );
     const { colors } = useTheme();
     const { width } = useWindowDimensions();
 
-    const [downloadProgress, setDownloadProgress] = useState({});
+    const [downloadProgress, setDownloadProgress] = useState<Record<string | number, number>>({});
 
     const tagsStyles = useMemo(
         () => ({
-            u: { textDecorationLine: "underline" },
-            i: { fontStyle: "italic" },
-            a: { textDecorationLine: "underline", color: colors.brand.primary },
-            strong: { fontFamily: FONT_FAMILIES.baloo.bold, fontWeight: "normal" },
-            b: { fontFamily: FONT_FAMILIES.baloo.bold, fontWeight: "normal" },
+            u: { textDecorationLine: "underline" as const },
+            i: { fontStyle: "italic" as const },
+            a: { textDecorationLine: "underline" as const, color: colors.brand.primary },
+            strong: { fontFamily: FONT_FAMILIES.baloo.bold, fontWeight: "normal" as const },
+            b: { fontFamily: FONT_FAMILIES.baloo.bold, fontWeight: "normal" as const },
         }),
         [colors.brand.primary]
     );
@@ -153,7 +178,7 @@ export default function MessagingDetails({ route }) {
     );
 
     const handleOpen = useCallback(
-        (item) =>
+        (item: MessageAttachment) =>
             openDocument(
                 { fileName: item.libelle, fileType: item.type, fileId: item.id },
                 token,
@@ -163,7 +188,7 @@ export default function MessagingDetails({ route }) {
     );
 
     const handleDownload = useCallback(
-        (item) =>
+        (item: MessageAttachment) =>
             downloadDocument(
                 { fileName: item.libelle, fileType: item.type, fileId: item.id },
                 token,
@@ -184,15 +209,28 @@ export default function MessagingDetails({ route }) {
 
     if (isError || !messageContent) {
         return (
-            <View style={{ padding: 16 }}>
-                <Text>Une erreur est survenue lors du chargement du message.</Text>
-            </View>
+            <ScreenStack horizontalSpacing={14}>
+                <GoBackHeaderView
+                    headerTitle={"Retour aux messages"}
+                    backArrow={{ color: colors.text.primary, size: 24 }}
+                    height={33}
+                    backgroundColor={colors.background.app}
+                    fallbackRoute={routesNames.client.messaging.content}
+                />
+                <View style={{ flex: 1, alignItems: "center", justifyContent: "center", padding: 24 }}>
+                    <Text preset="body.lg" align="center" color={colors.text.secondary}>
+                        {isConnected === false
+                            ? "Contenu du message non disponible hors connexion."
+                            : "Une erreur est survenue lors du chargement du message."}
+                    </Text>
+                </View>
+            </ScreenStack>
         );
     }
 
     return (
         <ScreenStack horizontalSpacing={14}>
-            <GoBackHeader
+            <GoBackHeaderView
                 headerTitle={"Retour aux messages"}
                 backArrow={{ color: colors.text.primary, size: 24 }}
                 height={33}
@@ -300,4 +338,3 @@ export default function MessagingDetails({ route }) {
         </ScreenStack>
     );
 }
-
