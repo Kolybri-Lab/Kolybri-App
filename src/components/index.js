@@ -1,5 +1,5 @@
 // core
-export { Text } from "./core";
+export { Text, TextInput } from "./core";
 export { default as Stack } from "./core/Stack";
 
 // layout

@@ -13,7 +13,7 @@ const MorphingText = ({
     value,
     duration = 250,
     translateDistance = 6,
-    style,
+    style = undefined,
     ...textProps
 }) => {
     const [displayedValue, setDisplayedValue] = useState(value);
