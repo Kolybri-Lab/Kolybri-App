@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { ScrollView, TouchableOpacity, View } from "react-native";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Pressable, ScrollView, TouchableOpacity, View } from "react-native";
 
 import { Text } from "@/components/core";
+import { KolybriFreeLottie } from "@/components/lottie";
 import { Plus } from "lucide-react-native";
 import { motivationSentences } from "@/constants/features/homeworksConfig";
 import HomeworkCard from "@/features/homeworks/components/HomeworkCard";
@@ -18,7 +19,6 @@ import { ScreenStack } from "@/components";
 import { useHomeworks } from "@/features/homeworks";
 import { useCustomDataStore } from "@/hooks/useCustomDataStore";
 import { useUserStore } from "@/hooks/useUserStore";
-import { objectsEqual } from "@/utils/json";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTheme } from "@/hooks/useThemeStore";
 import Animated, { LinearTransition } from "react-native-reanimated";
@@ -40,8 +40,10 @@ export default function HomeworksContent() {
     const { dispatch } = useHomework();
 
     const mergedHomeworks = useMemo(() => {
-        if (!homeworksData) return null;
-        const merged = JSON.parse(JSON.stringify(homeworksData));
+        if (!homeworksData && customHomeworksData.length === 0) return null;
+        const merged = homeworksData
+            ? JSON.parse(JSON.stringify(homeworksData))
+            : {};
         customHomeworksData.forEach((hw) => {
             if (!merged[hw.date]) {
                 merged[hw.date] = [];
@@ -73,6 +75,7 @@ export default function HomeworksContent() {
         documents: [],
     });
     const [expandedHomeworkId, setExpandedHomeworkId] = useState(null);
+    const freeAnimRef = useRef(null);
 
     const handleItemPress = useCallback((id) => {
         setExpandedHomeworkId((prev) => (prev === id ? null : id));
@@ -106,6 +109,20 @@ export default function HomeworksContent() {
         if (!activeDate || !mergedHomeworks) return [];
         return mergedHomeworks[activeDate] || [];
     }, [activeDate, mergedHomeworks]);
+
+    const hasDates = Boolean(homeworksDates && Object.keys(homeworksDates).length > 0);
+    const isEmpty =
+        !isLoading &&
+        ((isDataEmpty && customHomeworksData.length === 0) ||
+            !hasDates ||
+            (Boolean(activeDate) && displayTasks.length === 0));
+
+    useEffect(() => {
+        if (isEmpty) {
+            freeAnimRef.current?.reset();
+            freeAnimRef.current?.play(6, 60);
+        }
+    }, [isEmpty]);
 
     const completedTasks = useMemo(() => {
         return displayTasks.filter(({ isDone }) => isDone === "done");
@@ -142,57 +159,50 @@ export default function HomeworksContent() {
                 documents={documentModal.documents}
             />
             <ScreenStack>
-                <ScrollView
-                    showsVerticalScrollIndicator={false}
-                    contentContainerStyle={{
-                        paddingBottom: 40,
-                    }}
-                >
-                    <HomeworkProgress
-                        completedCount={completedTasks.length}
-                        totalCount={displayTasks.length}
-                        progression={progression}
-                        encouragementSentence={encouragementSentence}
-                    />
-
-                    <HomeworkDatesRow
-                        homeworksDates={homeworksDates}
-                        activeDate={activeDate}
-                        setActiveDate={setActiveDate}
-                        mergedHomeworks={mergedHomeworks}
-                    />
-
+                {isEmpty ? (
                     <View
                         style={{
+                            flex: 1,
+                            alignItems: "center",
+                            justifyContent: "center",
                             paddingHorizontal: 24,
-                            gap: 10,
+                            paddingBottom: 40,
+                            gap: 14,
+                            paddingTop: 20,
                         }}
-                        key={activeDate}
                     >
-                        {objectsEqual({}, homeworksData) && (
-                            <Text>
-                                Chouette, vous n'avez pas de devoirs donnés par votre
-                                établissement !
-                                <Text preset="body.sm" color={colors.text.secondary}>
-                                    (annonce immonde a revoir et penser a faire un
-                                    compteur de devoir etab et devoirs custom)
-                                </Text>
-                            </Text>
-                        )}
-                        {displayTasks.map((homework) => (
-                            <HomeworkCard
-                                key={homework.id}
-                                dispatch={dispatch}
-                                homework={homework}
-                                isExpanded={expandedHomeworkId === homework.id}
-                                onToggleExpand={() => handleItemPress(homework.id)}
-                                onOpenDocuments={(documents) =>
-                                    setDocumentModal({ open: true, documents })
-                                }
+                        <Text
+                            preset="heading.section"
+                            weight="bold"
+                            align="center"
+                        >
+                            Nous n'avons pas trouvé de devoir ! Tu es libre !
+                        </Text>
+                        <Pressable
+                            onPress={() => freeAnimRef.current?.play(10, 60)}
+                            style={{
+                                alignItems: "center",
+                                justifyContent: "center",
+                            }}
+                        >
+                            <KolybriFreeLottie
+                                ref={freeAnimRef}
+                                loop={false}
+                                speed={1.35}
+                                style={{
+                                    width: 280,
+                                    height: 280,
+                                }}
                             />
-                        ))}
-                        <AnimatedTouchableOpacity
-                            layout={LinearTransition.springify()}
+                        </Pressable>
+                        <Text
+                            preset="body.md"
+                            align="center"
+                            color={colors.text.secondary}
+                        >
+                            Un devoir oublié par ton prof ? Ajoute-le ci-dessous !
+                        </Text>
+                        <TouchableOpacity
                             style={{
                                 paddingHorizontal: 6,
                                 paddingVertical: 3,
@@ -200,7 +210,7 @@ export default function HomeworksContent() {
                                 borderRadius: 12,
                                 width: 55,
                                 alignItems: "center",
-                                alignSelf: "center",
+                                marginTop: 4,
                             }}
                             onPress={() =>
                                 dispatch({ type: "OPEN_NEW_HOMEWORK_MODAL" })
@@ -211,9 +221,72 @@ export default function HomeworksContent() {
                                 color={colors.text.onBrand}
                                 strokeWidth={3}
                             />
-                        </AnimatedTouchableOpacity>
+                        </TouchableOpacity>
                     </View>
-                </ScrollView>
+                ) : (
+                    <ScrollView
+                        showsVerticalScrollIndicator={false}
+                        contentContainerStyle={{
+                            paddingBottom: 40,
+                        }}
+                    >
+                        <HomeworkProgress
+                            completedCount={completedTasks.length}
+                            totalCount={displayTasks.length}
+                            progression={progression}
+                            encouragementSentence={encouragementSentence}
+                        />
+
+                        <HomeworkDatesRow
+                            homeworksDates={homeworksDates}
+                            activeDate={activeDate}
+                            setActiveDate={setActiveDate}
+                            mergedHomeworks={mergedHomeworks}
+                        />
+
+                        <View
+                            style={{
+                                paddingHorizontal: 24,
+                                gap: 10,
+                            }}
+                            key={activeDate}
+                        >
+                            {displayTasks.map((homework) => (
+                                <HomeworkCard
+                                    key={homework.id}
+                                    dispatch={dispatch}
+                                    homework={homework}
+                                    isExpanded={expandedHomeworkId === homework.id}
+                                    onToggleExpand={() => handleItemPress(homework.id)}
+                                    onOpenDocuments={(documents) =>
+                                        setDocumentModal({ open: true, documents })
+                                    }
+                                />
+                            ))}
+                            <AnimatedTouchableOpacity
+                                layout={LinearTransition.springify()}
+                                style={{
+                                    paddingHorizontal: 6,
+                                    paddingVertical: 3,
+                                    backgroundColor: colors.brand.primary,
+                                    borderRadius: 12,
+                                    width: 55,
+                                    alignItems: "center",
+                                    alignSelf: "center",
+                                }}
+                                onPress={() =>
+                                    dispatch({ type: "OPEN_NEW_HOMEWORK_MODAL" })
+                                }
+                            >
+                                <Plus
+                                    size={24}
+                                    color={colors.text.onBrand}
+                                    strokeWidth={3}
+                                />
+                            </AnimatedTouchableOpacity>
+                        </View>
+                    </ScrollView>
+                )}
             </ScreenStack>
         </>
     );
