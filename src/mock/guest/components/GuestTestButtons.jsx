@@ -32,7 +32,7 @@ export default function GuestTestButtons() {
                 gap: 14,
             }}
         >
-            <Text size={16} color={colors.text.primary}>
+            <Text preset="heading.section" size={16} color={colors.text.primary}>
                 🧪 Panneau de Test Développeur
             </Text>
 
@@ -58,9 +58,10 @@ export default function GuestTestButtons() {
                 }}
             >
                 <Text
+                    preset="control.sm"
                     size={13}
+                    align="center"
                     color={colors.brand.primary}
-                    style={{ textAlign: "center", fontFamily: "SemiBold" }}
                 >
                     🔁 Redémarrer l'application
                 </Text>

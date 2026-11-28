@@ -45,8 +45,8 @@ export default function A2fSelectableModal({
                 />
             </View>
             <Text
-                size={16}
-                weight={selectedItem === item && "bold"}
+                preset="control.md"
+                weight={selectedItem === item ? "bold" : undefined}
                 color={colors.brand.primary}
             >
                 {item}
@@ -71,6 +71,8 @@ export default function A2fSelectableModal({
                     ]}
                 >
                     <Text
+                        preset="heading.section"
+                        align="center"
                         style={[
                             styles.a2fText,
                             {
@@ -84,17 +86,20 @@ export default function A2fSelectableModal({
                         Authentification à deux facteurs
                     </Text>
                     <Text
-                        style={[
-                            styles.a2fTextInfo,
-                            {
-                                color: colors.brand.primary,
-                            },
-                        ]}
+                        preset="body.md"
+                        color={colors.brand.primary}
+                        style={styles.a2fTextInfo}
                     >
                         Ce formulaire est une mesure de sécurité mise en place par
                         EcoleDirecte afin de vérifier votre identité.
                     </Text>
-                    <Text style={[styles.question]}>{question}</Text>
+                    <Text
+                        preset="heading.section"
+                        align="center"
+                        style={styles.question}
+                    >
+                        {question}
+                    </Text>
                     <View style={{ alignItems: "center" }}>
                         <FlatList
                             data={items}
@@ -108,7 +113,7 @@ export default function A2fSelectableModal({
                     </View>
 
                     {emptyError && (
-                        <Text style={{ color: colors.state.warning }}>ERREUR</Text>
+                        <Text color={colors.state.warning}>ERREUR</Text>
                     )}
                     <View
                         style={[
@@ -129,10 +134,9 @@ export default function A2fSelectableModal({
                             style={styles.button}
                         >
                             <Text
-                                style={[
-                                    styles.buttonText,
-                                    { color: colors.brand.primary },
-                                ]}
+                                preset="control.md"
+                                color={colors.brand.primary}
+                                style={styles.buttonText}
                             >
                                 Annuler
                             </Text>
@@ -142,11 +146,12 @@ export default function A2fSelectableModal({
                             style={styles.button}
                         >
                             <Text
+                                preset="control.md"
+                                color={colors.text.onBrand}
                                 style={[
                                     styles.buttonSubmit,
                                     {
                                         backgroundColor: colors.brand.primary,
-                                        color: colors.text.onBrand,
                                     },
                                 ]}
                             >
@@ -175,25 +180,12 @@ const styles = StyleSheet.create({
         overflow: "hidden",
     },
     question: {
-        fontSize: 20,
         marginTop: 18,
         marginBottom: 20,
         marginHorizontal: 42,
-        fontWeight: "bold",
-        textAlign: "center",
     },
     flatList: {
         maxHeight: 280,
-    },
-    item: {
-        flexDirection: "row",
-        marginVertical: 5,
-    },
-    itemText: {
-        fontSize: 16,
-    },
-    selectedText: {
-        fontSize: 18,
     },
     buttonsContainer: {
         position: "relative",
@@ -208,11 +200,9 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     buttonText: {
-        fontSize: 16,
         marginLeft: 46,
     },
     buttonSubmit: {
-        fontSize: 16,
         paddingHorizontal: 18,
         paddingVertical: 6,
         borderRadius: 10,
@@ -230,15 +220,9 @@ const styles = StyleSheet.create({
 
         borderWidth: 2,
     },
-    renderItemText: {
-        fontSize: 16,
-    },
 
     a2fText: {
-        textAlign: "center",
         paddingVertical: 22,
-        fontWeight: 600,
-        fontSize: 20,
     },
     a2fTextInfo: { marginHorizontal: 17, marginVertical: 8 },
 });

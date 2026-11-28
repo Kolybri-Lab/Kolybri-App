@@ -11,6 +11,7 @@ export default function Section({
     totalLength = 0,
     radiusExt = 12,
     backgroundColor,
+    textColor,
     radiusInt = 5,
     label,
     subtitle,
@@ -44,11 +45,16 @@ export default function Section({
             >
                 {icon}
                 <View>
-                    <Text preset="title2">{label}</Text>
+                    <Text preset="cardTitle.md" color={textColor}>
+                        {label}
+                    </Text>
                     {subtitle ? (
                         <Text
-                            preset="label2"
-                            color={withAlpha(colors.text.primary, 0.5)}
+                            preset="body.md"
+                            color={withAlpha(
+                                textColor ?? colors.text.primary,
+                                textColor ? 0.75 : 0.5
+                            )}
                         >
                             {subtitle}
                         </Text>

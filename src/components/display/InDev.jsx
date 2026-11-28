@@ -23,11 +23,11 @@ export default function InDev({}) {
                     },
                 ]}
             >
-                <Text align="center" preset="body1" color={mainColor}>
+                <Text align="center" preset="body.lg" color={mainColor}>
                     Fonctionnalité en cours de développement...
                 </Text>
 
-                <Text align="center" preset="body1" color={mainColor}>
+                <Text align="center" preset="body.lg" color={mainColor}>
                     Rejoignez le{" "}
                     <LinkText href={CONFIG.discordInviteLink} color={mainColor}>
                         serveur Discord d'Kolybri

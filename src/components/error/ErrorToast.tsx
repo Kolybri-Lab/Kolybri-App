@@ -2,7 +2,6 @@ import React, { useMemo, useEffect, useState, useCallback } from "react";
 import {
     View,
     TouchableOpacity,
-    Text,
     StyleSheet,
     Dimensions,
     DevSettings,
@@ -18,9 +17,11 @@ import Animated, {
 } from "react-native-reanimated";
 import { TriangleAlert, X, RefreshCw, ServerOff } from "lucide-react-native";
 import { useQueryClient } from "@tanstack/react-query";
+import { Text } from "@/components/core";
 import { useErrorStore } from "@/hooks/useErrorStore";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import { useTheme } from "@/hooks/useThemeStore";
+import { FONT_FAMILIES } from "@/themes/tokens";
 import { AppError, EnrichedAppError } from "@/types/errors";
 import { getApiMessage } from "@/constants/api/codes";
 
@@ -302,12 +303,17 @@ export function AnimatedTitle({
     return (
         <Animated.Text
             numberOfLines={1}
+            maxFontSizeMultiplier={1.2}
             style={[
                 {
+                    fontFamily: isOpen
+                        ? FONT_FAMILIES.baloo.bold
+                        : FONT_FAMILIES.baloo.medium,
                     fontSize: startFontSize,
+                    lineHeight: Math.round(startFontSize * (20 / 14)),
                     color: colors.state.warning,
                     marginTop: -1,
-                    fontWeight: isOpen ? "bold" : "normal",
+                    includeFontPadding: false,
                 },
                 titleStyle,
             ]}
@@ -335,11 +341,11 @@ export function AnimatedIndication({
             exiting={FadeOut.duration(150)}
         >
             <Text
-                numberOfLines={1}
-                style={{
-                    fontSize: 11,
-                    color: colors.text.secondary,
-                }}
+                preset="meta.sm"
+                size={11}
+                color={colors.text.secondary}
+                oneLine
+                maxFontSizeMultiplier={1.2}
             >
                 {indication}
             </Text>
@@ -455,7 +461,13 @@ export function ActionButton({
                     alignItems: "center",
                 }}
             >
-                <Text style={{ color: colors.brand.primary, fontSize: 14, }}>
+                <Text
+                    preset="control.sm"
+                    weight="medium"
+                    color={colors.brand.primary}
+                    oneLine
+                    maxFontSizeMultiplier={1.2}
+                >
                     Ignorer
                 </Text>
             </TouchableOpacity>
@@ -470,7 +482,13 @@ export function ActionButton({
                     alignItems: "center",
                 }}
             >
-                <Text style={{ color: colors.text.onBrand, fontSize: 14 }}>
+                <Text
+                    preset="control.sm"
+                    weight="medium"
+                    color={colors.text.onBrand}
+                    oneLine
+                    maxFontSizeMultiplier={1.2}
+                >
                     Réessayer
                 </Text>
             </TouchableOpacity>
@@ -488,21 +506,20 @@ export function ErrorDescription({ type }: { type: string }) {
     return (
         <>
             <Text
+                preset="cardTitle.md"
                 style={{
-                    color: colors.text.primary,
-                    fontSize: 16,
                     marginBottom: 10,
                     marginTop: 5,
                 }}
             >
                 Ce n'est pas une erreur bloquante
             </Text>
-            <Text style={{ color: colors.text.secondary, fontSize: 12 }}>
+            <Text preset="body.sm" color={colors.text.secondary}>
                 Mais de multiples erreurs comme celle ci constituent un problème mais
                 c'est inoffensif.
             </Text>
             {description && (
-                <Text style={{ color: colors.text.secondary, fontSize: 12 }}>
+                <Text preset="body.sm" color={colors.text.secondary}>
                     {description}
                 </Text>
             )}
@@ -527,19 +544,18 @@ export function ErrorDetails({ error }: { error: AppError }) {
             }}
         >
             {code != undefined && (
-                <Text style={{ color: colors.text.primary, fontSize: 14 }}>
+                <Text preset="body.md">
                     Code : {code}
                 </Text>
             )}
             {signification != undefined && (
-                <Text style={{ color: colors.text.primary, fontSize: 14 }}>
+                <Text preset="body.md">
                     Signification : {signification}
                 </Text>
             )}
             <Text
+                preset="body.md"
                 style={{
-                    color: colors.text.primary,
-                    fontSize: 14,
                     marginTop: code != undefined ? 10 : 0,
                 }}
             >

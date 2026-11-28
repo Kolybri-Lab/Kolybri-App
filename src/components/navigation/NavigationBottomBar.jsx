@@ -221,9 +221,10 @@ const TabButton = memo(
                         />
                     </Animated.View>
                     <MorphingText
-                        preset="label3"
+                        preset="control.xs"
                         weight={isFocused ? "bold" : "medium"}
                         color={components.tabBar.active}
+                        maxFontSizeMultiplier={1.15}
                         value={isFocused ? (ROUTES_NAMES[route.name] ?? "N/A") : ""}
                         style={{ letterSpacing: 0.8, width: "100%" }}
                     />

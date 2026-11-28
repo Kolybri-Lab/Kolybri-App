@@ -190,7 +190,8 @@ function Selector({
                     style={({ pressed }) => ({
                         backgroundColor: colors.surface.default,
                         paddingHorizontal: 20,
-                        paddingVertical: 4,
+                        paddingVertical: 7,
+                        minHeight: 40,
                         borderRadius: type === "dropdown" ? 14 : 50,
                         flexShrink: 1,
                         minWidth: 0,
@@ -201,7 +202,8 @@ function Selector({
                     })}
                 >
                     <MorphingText
-                        style={{ fontFamily: "SemiBold", fontSize }}
+                        preset="control.lg"
+                        size={fontSize}
                         duration={250}
                         translateDistance={4}
                         value={displayedText}
@@ -283,15 +285,13 @@ function Selector({
                                     })}
                                 >
                                     <Text
-                                        style={{
-                                            fontFamily: isSelected
-                                                ? "SemiBold"
-                                                : "Medium",
-                                            fontSize: 16,
-                                            color: isSelected
+                                        preset="control.md"
+                                        weight={isSelected ? "semibold" : "medium"}
+                                        color={
+                                            isSelected
                                                 ? colors.brand.primary
-                                                : colors.text.primary,
-                                        }}
+                                                : colors.text.primary
+                                        }
                                     >
                                         {optName}
                                     </Text>

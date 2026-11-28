@@ -66,10 +66,11 @@ export default function SharePopup({ navigation }) {
                 </View>
 
                 <Text
+                    preset="heading.section"
                     size={18}
+                    weight="bold"
                     align="center"
                     style={{
-                        fontWeight: "700",
                         marginBottom: 8,
                     }}
                 >
@@ -77,12 +78,11 @@ export default function SharePopup({ navigation }) {
                 </Text>
 
                 <Text
-                    size={14}
+                    preset="body.md"
+                    color={colors.text.secondary}
                     align="center"
                     style={{
-                        color: colors.text.secondary,
                         marginBottom: 24,
-                        lineHeight: 20,
                     }}
                 >
                     Plus vous êtes nombreux à utiliser l'app, plus elle est utile
@@ -103,12 +103,7 @@ export default function SharePopup({ navigation }) {
                     })}
                     onPress={handleShare}
                 >
-                    <Text
-                        size={15}
-                        style={{
-                            fontWeight: "600",
-                        }}
-                    >
+                    <Text preset="control.md" color={colors.text.onBrand}>
                         Partager avec ma classe
                     </Text>
                 </Pressable>
@@ -118,7 +113,7 @@ export default function SharePopup({ navigation }) {
                     hitSlop={8}
                     style={{ opacity: 0.4 }}
                 >
-                    <Text size={14}>Plus tard</Text>
+                    <Text preset="control.sm">Plus tard</Text>
                 </Pressable>
             </View>
         </View>

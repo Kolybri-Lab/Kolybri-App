@@ -9,7 +9,8 @@ export default function Subtitle({ children, ...props }) {
         <Text
             style={UiStyles.subtitle}
             color={theme.colors.brand.primary}
-            preset="title2"
+            preset="heading.section"
+            size={16}
             oneLine
             {...props}
         >

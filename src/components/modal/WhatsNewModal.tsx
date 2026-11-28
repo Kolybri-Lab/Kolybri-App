@@ -1,9 +1,10 @@
+import { Text } from "@/components/core";
 import { useTheme } from "@/hooks/useThemeStore";
 import { AnnouncementItem, WhatsNewItem } from "@/hooks/useWhatsNew";
 import { isInternalUrl, openUrl } from "@/utils/url";
 import * as Application from "expo-application";
 import { Link } from "lucide-react-native";
-import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Modal, Pressable, ScrollView, StyleSheet, View } from "react-native";
 
 type Props = {
     item: WhatsNewItem | null;
@@ -76,15 +77,11 @@ export default function WhatsNewModal({ item, dismiss }: Props) {
                                     }}
                                 >
                                     <Text
-                                        numberOfLines={1}
-                                        ellipsizeMode="tail"
-                                        style={{
-                                            color: colors.text.onBrand,
-                                            fontFamily: "SemiBold",
-                                            fontSize: 13,
-                                            includeFontPadding: false,
-                                            flexShrink: 1,
-                                        }}
+                                        preset="control.sm"
+                                        size={13}
+                                        color={colors.text.onBrand}
+                                        oneLine
+                                        style={{ flexShrink: 1 }}
                                     >
                                         {item.announcement.link.label}
                                     </Text>
@@ -98,14 +95,11 @@ export default function WhatsNewModal({ item, dismiss }: Props) {
                             </Pressable>
                         ) : (
                             <Text
-                                numberOfLines={1}
-                                style={{
-                                    color: colors.text.secondary,
-                                    fontSize: 13,
-                                    fontFamily: "Medium",
-                                    marginLeft: 6,
-                                    flexShrink: 1,
-                                }}
+                                preset="meta.sm"
+                                size={13}
+                                color={colors.text.secondary}
+                                oneLine
+                                style={{ marginLeft: 6, flexShrink: 1 }}
                             >
                                 v{Application.nativeApplicationVersion ?? "0.0.0"}
                             </Text>
@@ -126,13 +120,10 @@ export default function WhatsNewModal({ item, dismiss }: Props) {
                             })}
                         >
                             <Text
-                                numberOfLines={1}
-                                style={{
-                                    color: colors.brand.primary,
-                                    fontSize: 13,
-                                    fontFamily: "SemiBold",
-                                    includeFontPadding: false,
-                                }}
+                                preset="control.sm"
+                                size={13}
+                                color={colors.brand.primary}
+                                oneLine
                             >
                                 Fermer
                             </Text>
@@ -149,10 +140,10 @@ function AnnouncementLayout({ announcement }: { announcement: AnnouncementItem }
     return (
         <View style={{ flexShrink: 1 }}>
             <Text
+                preset="heading.page"
+                size={22}
+                weight="semibold"
                 style={{
-                    fontFamily: "SemiBold",
-                    fontSize: 22,
-                    color: colors.text.primary,
                     marginLeft: 6,
                     marginBottom: 8,
                 }}
@@ -169,13 +160,9 @@ function AnnouncementLayout({ announcement }: { announcement: AnnouncementItem }
                 showsVerticalScrollIndicator={false}
             >
                 <Text
-                    style={{
-                        color: colors.text.secondary,
-                        fontSize: 14,
-                        lineHeight: 20,
-                        textAlign: "left",
-                        fontFamily: "Medium",
-                    }}
+                    preset="body.md"
+                    color={colors.text.secondary}
+                    align="left"
                 >
                     {announcement.message}
                 </Text>
