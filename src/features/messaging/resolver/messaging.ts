@@ -189,6 +189,13 @@ const formatMode = {
     sender: "expediteur",
 };
 
+function getCurrentSchoolYear(): string {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth(); // 0-indexed: 8 = September
+    return month >= 8 ? `${year}-${year + 1}` : `${year - 1}-${year}`;
+}
+
 export async function messageContentResolver({
     token,
     messageId,
@@ -201,7 +208,7 @@ export async function messageContentResolver({
                 headers: { "X-Token": token },
                 method: "POST",
                 body: {
-                    anneeMessages: "2026-2027",
+                    anneeMessages: getCurrentSchoolYear(),
                 },
             }
         );

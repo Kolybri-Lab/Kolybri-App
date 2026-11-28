@@ -1,11 +1,12 @@
 import type { Week } from "@/features/timetable";
 import timetableResolver from "@/features/timetable/resolver/timetable";
-import { useAuthStore } from "@/hooks/useAuthStore";
-import { useSubjectStore } from "@/hooks/useSubjectStore";
 import { useCurrentTime } from "@/hooks/useCurrentTime";
-import { useTheme } from "@/hooks/useThemeStore";
-import { useUserStore } from "@/hooks/useUserStore";
-import { useQueries } from "@tanstack/react-query";
+import {
+    getStoreSubjectColor,
+    useSubjectColorDependencies,
+} from "@/services/query/subjectColors";
+import { useAccountQueryContext } from "@/services/query/useAccountQuery";
+import { onlineManager, useQueries } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import isoWeek from "dayjs/plugin/isoWeek";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -17,17 +18,15 @@ const DEFAULT_RANGE = { min: -1, max: 1 };
 const countCourses = (w: Week) =>
     w.days.reduce((total, d) => total + d.courses.length, 0);
 
-export function useTimetable(token?: string, selectedDate?: string) {
+export function useTimetable(token?: string | null, selectedDate?: string) {
     const [range, setRange] = useState(DEFAULT_RANGE);
-    const { isDark } = useTheme();
-    const officialVersion = useSubjectStore((state) => state.officialVersion);
-
-    const storeUserId = useUserStore((state) => state.profile?.id);
-    const storeToken = useUserStore((state) => state.token);
-    const isBooting = useAuthStore((state) => state.isBooting);
-
-    const activeUserId = storeUserId;
-    const activeToken = token || storeToken;
+    const { isDark, officialVersion } = useSubjectColorDependencies();
+    const {
+        userId: activeUserId,
+        token: activeToken,
+        isEnabled,
+        isRestoring,
+    } = useAccountQueryContext(token);
 
     const { date: todayDate } = useCurrentTime();
 
@@ -72,8 +71,6 @@ export function useTimetable(token?: string, selectedDate?: string) {
         return arr;
     }, [baseMonday, range.min, range.max]);
 
-    const isEnabled = Boolean(activeUserId && activeToken && !isBooting);
-
     const queries = useQueries({
         queries: weekMondays.map((mondayDate) => ({
             queryKey: ["timetable", activeUserId, mondayDate] as const,
@@ -86,23 +83,26 @@ export function useTimetable(token?: string, selectedDate?: string) {
         })),
     });
 
-    const firstQueryLoading = Boolean(
-        queries[0]?.isLoading || queries[0]?.isFetching
+    const firstQueryBusy = Boolean(
+        !isEnabled ||
+        queries[0]?.isPending ||
+        queries[0]?.isFetching
     );
-    const lastQueryLoading = Boolean(
-        queries[queries.length - 1]?.isLoading ||
+    const lastQueryBusy = Boolean(
+        !isEnabled ||
+        queries[queries.length - 1]?.isPending ||
         queries[queries.length - 1]?.isFetching
     );
 
     const extendForward = useCallback(() => {
-        if (lastQueryLoading) return;
+        if (lastQueryBusy || !onlineManager.isOnline()) return;
         setRange((r) => ({ ...r, max: r.max + 1 }));
-    }, [lastQueryLoading]);
+    }, [lastQueryBusy]);
 
     const extendBackward = useCallback(() => {
-        if (firstQueryLoading) return;
+        if (firstQueryBusy || !onlineManager.isOnline()) return;
         setRange((r) => ({ ...r, min: r.min - 1 }));
-    }, [firstQueryLoading]);
+    }, [firstQueryBusy]);
 
     const dataUpdatedAtKey = queries.map((q) => q.dataUpdatedAt).join(",");
 
@@ -118,8 +118,6 @@ export function useTimetable(token?: string, selectedDate?: string) {
             }
         }
 
-        const getSubjectColor = useSubjectStore.getState().getSubjectColor;
-
         return [...byFrom.values()]
             .sort((a, b) => a.from.date.localeCompare(b.from.date))
             .map((week) => ({
@@ -128,7 +126,7 @@ export function useTimetable(token?: string, selectedDate?: string) {
                     ...day,
                     courses: day.courses.map((course) => ({
                         ...course,
-                        color: getSubjectColor(course.codeMatiere),
+                        color: getStoreSubjectColor(course.codeMatiere),
                     })),
                 })),
             }));
@@ -140,7 +138,9 @@ export function useTimetable(token?: string, selectedDate?: string) {
         extendForward,
         extendBackward,
         resetRange,
-        isLoading: queries.some((q) => q.isLoading),
+        isLoading:
+            queries.some((q) => q.isLoading) ||
+            (isRestoring && allWeeks.length === 0),
         isError: queries.some((q) => q.isError),
         range,
     };

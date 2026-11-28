@@ -1,6 +1,7 @@
 import messagingResolver, {
     messageContentResolver,
 } from "@/features/messaging/resolver/messaging";
+import { useAccountQueryContext } from "@/services/query/useAccountQuery";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { MessageContent, ResolvedMessaging } from "../types";
 
@@ -17,14 +18,19 @@ const PAGINATION_KEY_MAP = {
     archived: "archivedCount",
 } as const;
 
-export function useMessaging(token: string, options: UseMessagingOptions = {}) {
+export function useMessaging(
+    token?: string | null,
+    options: UseMessagingOptions = {}
+) {
     const { typeOfRecovery = "received", binderId = 0, itemsPerPage = 20 } = options;
+    const { userId, token: activeToken, isEnabled, isRestoring } =
+        useAccountQueryContext(token);
 
-    return useInfiniteQuery<ResolvedMessaging>({
-        queryKey: ["messaging", typeOfRecovery, binderId],
+    const query = useInfiniteQuery<ResolvedMessaging>({
+        queryKey: ["messaging", userId, typeOfRecovery, binderId],
         queryFn: ({ pageParam = 0 }) =>
             messagingResolver({
-                token,
+                token: activeToken!,
                 page: pageParam as number,
                 itemsPerPage,
                 typeOfRecovery,
@@ -62,23 +68,36 @@ export function useMessaging(token: string, options: UseMessagingOptions = {}) {
 
             return allPages.length;
         },
-        enabled: Boolean(token),
+        enabled: isEnabled,
     });
+
+    return {
+        ...query,
+        isLoading: query.isLoading || (isRestoring && query.data === undefined),
+    };
 }
 
 export function useMessageContent(
-    token: string,
+    token: string | null | undefined,
     messageId: number | string | undefined,
     mode: "recipient" | "sender" = "recipient"
 ) {
-    return useQuery<MessageContent>({
-        queryKey: ["message", messageId, mode],
+    const { userId, token: activeToken, isEnabled, isRestoring } =
+        useAccountQueryContext(token);
+
+    const query = useQuery<MessageContent>({
+        queryKey: ["message", userId, messageId, mode],
         queryFn: () =>
             messageContentResolver({
-                token,
+                token: activeToken!,
                 messageId: messageId!,
                 mode,
             }) as Promise<MessageContent>,
-        enabled: Boolean(token) && messageId !== undefined,
+        enabled: isEnabled && messageId !== undefined,
     });
+
+    return {
+        ...query,
+        isLoading: query.isLoading || (isRestoring && query.data === undefined),
+    };
 }
