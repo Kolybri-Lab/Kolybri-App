@@ -1,7 +1,7 @@
 import type { Theme as NavigationTheme } from "@react-navigation/native";
 
 import { Theme } from "@/types";
-import { fontFamily } from "./tokens";
+import { FONT_FAMILIES } from "./tokens";
 
 // Convertit NOTRE thème en thème React Navigation (v7).
 export function toNavigationTheme(theme: Theme): NavigationTheme {
@@ -17,11 +17,10 @@ export function toNavigationTheme(theme: Theme): NavigationTheme {
             notification: colors.state.warning,
         },
         fonts: {
-            regular: { fontFamily: fontFamily.body, fontWeight: "400" },
-            medium: { fontFamily: fontFamily.bodyMedium, fontWeight: "500" },
-            bold: { fontFamily: fontFamily.heading, fontWeight: "700" },
-            heavy: { fontFamily: fontFamily.heading, fontWeight: "900" },
+            regular: { fontFamily: FONT_FAMILIES.baloo.regular, fontWeight: "normal" },
+            medium: { fontFamily: FONT_FAMILIES.baloo.medium, fontWeight: "normal" },
+            bold: { fontFamily: FONT_FAMILIES.baloo.bold, fontWeight: "normal" },
+            heavy: { fontFamily: FONT_FAMILIES.baloo.extrabold, fontWeight: "normal" },
         },
     };
 }
-

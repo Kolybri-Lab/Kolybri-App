@@ -1,4 +1,4 @@
-import type { TextStyle } from "react-native";
+import type { Theme } from "@/types";
 
 // Échelle de 4/8 px, identique à la grille Figma.
 export const spacing = {
@@ -17,14 +17,43 @@ export const radius = {
     pill: 999,
 } as const;
 
-// Sur Android, `fontWeight` est ignoré avec une police personnalisée :
-// il faut UN fichier de police par graisse.
-// Remplacez par les vrais noms de vos fichiers (ex. "Luciole-Bold", "Lexend-Medium").
-export const fontFamily = {
-    heading: "Luciole-Regular",
-    body: "Lexend-Regular",
-    bodyMedium: "Lexend-Regular",
+// Sur Android, `fontWeight` est ignoré (ou provoque un fallback système) avec une police
+// personnalisée : chaque graisse correspond à un fichier .ttf distinct enregistré dans assets/fonts/fonts.ts.
+export const FONT_FAMILIES = {
+    baloo: {
+        regular: "Regular",
+        medium: "Medium",
+        semibold: "SemiBold",
+        bold: "Bold",
+        extrabold: "ExtraBold",
+    },
+    petrona: {
+        regular: "Petrona-Regular",
+        medium: "Petrona-Medium",
+        semibold: "Petrona-SemiBold",
+        bold: "Petrona-Bold",
+        extrabold: "Petrona-ExtraBold",
+    },
+    luciole: {
+        regular: "Luciole-Regular",
+        medium: "Luciole-Regular",
+        semibold: "Luciole-Regular",
+        bold: "Luciole-Regular",
+        extrabold: "Luciole-Regular",
+    },
 } as const;
+
+export type FontFamily = keyof typeof FONT_FAMILIES;
+export type FontWeight = keyof typeof FONT_FAMILIES.baloo;
+export type TextColorRole = keyof Theme["colors"]["text"];
+
+export function resolveFontFamily(
+    family: FontFamily = "baloo",
+    weight: FontWeight = "medium",
+): string {
+    const weights = FONT_FAMILIES[family] ?? FONT_FAMILIES.baloo;
+    return weights[weight] ?? weights.medium;
+}
 
 // Ombres : le noir est le même dans les deux thèmes, seule l'intensité change.
 // (`shadow` ne fait plus partie de `Theme`, on le dérive de `theme.isDark`.)
@@ -33,14 +62,44 @@ export const getShadow = (isDark: boolean) => ({
     opacity: isDark ? 0.3 : 0.14,
 });
 
-// Variantes de texte : on choisit un rôle, pas une taille.
-export const typography = {
-    display: { fontFamily: fontFamily.heading, fontSize: 40, lineHeight: 48 },
-    title: { fontFamily: fontFamily.heading, fontSize: 28, lineHeight: 32 },
-    heading: { fontFamily: fontFamily.heading, fontSize: 20, lineHeight: 24 },
-    body: { fontFamily: fontFamily.body, fontSize: 16, lineHeight: 24 },
-    label: { fontFamily: fontFamily.bodyMedium, fontSize: 14, lineHeight: 20 },
-    caption: { fontFamily: fontFamily.body, fontSize: 12, lineHeight: 16 },
-} as const satisfies Record<string, TextStyle>;
+export type TypographyToken = {
+    readonly fontSize: number;
+    readonly lineHeight: number;
+    readonly weight: FontWeight;
+    readonly defaultColor: TextColorRole;
+};
 
-export type TypographyVariant = keyof typeof typography;
+// Grille typographique V3 : 7 types sémantiques dérivés selon la densité/taille de chaque carte.
+// Le champ `defaultColor` prépare la passe couleurs par profil (initialisé à "primary" partout).
+export const typography = {
+    "heading.hero": { fontSize: 32, lineHeight: 40, weight: "bold", defaultColor: "primary" },
+    "heading.page": { fontSize: 24, lineHeight: 30, weight: "bold", defaultColor: "primary" },
+    "heading.section": { fontSize: 20, lineHeight: 26, weight: "semibold", defaultColor: "primary" },
+
+    "cardTitle.lg": { fontSize: 18, lineHeight: 24, weight: "bold", defaultColor: "primary" },
+    "cardTitle.md": { fontSize: 16, lineHeight: 22, weight: "semibold", defaultColor: "primary" },
+    "cardTitle.sm": { fontSize: 14, lineHeight: 18, weight: "bold", defaultColor: "primary" },
+
+    "metric.xl": { fontSize: 32, lineHeight: 40, weight: "bold", defaultColor: "primary" },
+    "metric.lg": { fontSize: 26, lineHeight: 33, weight: "bold", defaultColor: "primary" },
+    "metric.md": { fontSize: 22, lineHeight: 28, weight: "bold", defaultColor: "primary" },
+    "metric.sm": { fontSize: 16, lineHeight: 22, weight: "semibold", defaultColor: "primary" },
+    "metric.xs": { fontSize: 14, lineHeight: 18, weight: "medium", defaultColor: "primary" },
+
+    "body.lg": { fontSize: 16, lineHeight: 22, weight: "medium", defaultColor: "primary" },
+    "body.md": { fontSize: 14, lineHeight: 20, weight: "medium", defaultColor: "primary" },
+    "body.sm": { fontSize: 12, lineHeight: 16, weight: "medium", defaultColor: "primary" },
+
+    "control.lg": { fontSize: 20, lineHeight: 26, weight: "semibold", defaultColor: "primary" },
+    "control.md": { fontSize: 16, lineHeight: 22, weight: "semibold", defaultColor: "primary" },
+    "control.sm": { fontSize: 14, lineHeight: 18, weight: "semibold", defaultColor: "primary" },
+    "control.xs": { fontSize: 12, lineHeight: 16, weight: "medium", defaultColor: "primary" },
+
+    "badge.md": { fontSize: 14, lineHeight: 18, weight: "semibold", defaultColor: "primary" },
+    "badge.sm": { fontSize: 12, lineHeight: 16, weight: "semibold", defaultColor: "primary" },
+
+    "meta.md": { fontSize: 14, lineHeight: 18, weight: "medium", defaultColor: "primary" },
+    "meta.sm": { fontSize: 12, lineHeight: 16, weight: "medium", defaultColor: "primary" },
+} as const satisfies Record<string, TypographyToken>;
+
+export type TypographyPreset = keyof typeof typography;
