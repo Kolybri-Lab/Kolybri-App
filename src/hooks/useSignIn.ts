@@ -1,6 +1,6 @@
 import { getApiMessage } from "@/constants/api/codes";
 import { GUEST_CREDENTIALS } from "@/constants/config";
-import { queryClient } from "@/provider/QueryProvider";
+import { mmkvPersister, queryClient } from "@/provider/QueryProvider";
 import authService from "@/services/login/authService";
 import { handleA2fSubmit } from "@/services/login/tools/a2fHandler";
 import storeDatas from "@/services/login/tools/storeLoginDatas";
@@ -122,6 +122,7 @@ export const useSignIn = () => {
         useCustomDataStore.getState().reset();
         useErrorStore.getState().clearAll();
         queryClient.clear();
+        await mmkvPersister.removeClient();
     }, [resetAuth]);
 
     useEffect(() => {

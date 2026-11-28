@@ -1,14 +1,20 @@
 import { useErrorStore } from "@/hooks/useErrorStore";
-import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
+import { useUserStore } from "@/hooks/useUserStore";
+import { toggleHomeworkInApi } from "@/features/homeworks/resolver/homeworks";
 import {
     defaultShouldDehydrateQuery,
+    hydrate,
     MutationCache,
     QueryCache,
     QueryClient,
 } from "@tanstack/react-query";
+import type { PersistedClient, Persister } from "@tanstack/react-query-persist-client";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import dayjs from "dayjs";
 import { createMMKV } from "react-native-mmkv";
+
+const CACHE_MAX_AGE = 1000 * 60 * 60 * 24 * 7; // 7 days (survives school holidays offline)
+const PERSIST_KEY = "REACT_QUERY_OFFLINE_CACHE";
 
 export const queryClient = new QueryClient({
     queryCache: new QueryCache({
@@ -29,9 +35,9 @@ export const queryClient = new QueryClient({
     }),
     defaultOptions: {
         queries: {
-            staleTime: 1000 * 60 * 60, // 1h
-            gcTime: 1000 * 60 * 60 * 24 * 7, // 1 week
-            placeholderData: (previousData) => previousData,
+            staleTime: 1000 * 60 * 30, // 30 minutes
+            gcTime: CACHE_MAX_AGE,
+            placeholderData: (previousData: unknown) => previousData,
             retry: (failureCount, error: any) => {
                 if (
                     error?.type === "auth" ||
@@ -47,19 +53,46 @@ export const queryClient = new QueryClient({
     },
 });
 
+queryClient.setMutationDefaults(["toggleHomework"], {
+    mutationFn: ({ id, state }: { id: number; state: boolean }) =>
+        toggleHomeworkInApi({
+            token: useUserStore.getState().token ?? "",
+            id,
+            state,
+        }),
+});
+
 const mmkv = createMMKV({ id: "query-cache" });
 
-const mmkvPersister = createAsyncStoragePersister({
-    storage: {
-        getItem: (key) => mmkv.getString(key) ?? null,
-        setItem: (key, value) => {
-            mmkv.set(key, value);
-        },
-        removeItem: (key) => {
-            mmkv.remove(key);
-        },
+function readPersistedClientSync(): PersistedClient | undefined {
+    try {
+        const raw = mmkv.getString(PERSIST_KEY);
+        if (!raw) return undefined;
+        return JSON.parse(raw) as PersistedClient;
+    } catch {
+        return undefined;
+    }
+}
+
+export const mmkvPersister: Persister = {
+    persistClient: (client: PersistedClient) => {
+        try {
+            mmkv.set(PERSIST_KEY, JSON.stringify(client));
+        } catch (error) {
+            console.warn("Failed to persist query cache to MMKV:", error);
+        }
     },
-});
+    restoreClient: () => readPersistedClientSync(),
+    removeClient: () => {
+        mmkv.remove(PERSIST_KEY);
+    },
+};
+
+// Synchronous initial hydration so cached queries are available on the very first render
+const initialCache = readPersistedClientSync();
+if (initialCache && Date.now() - initialCache.timestamp <= CACHE_MAX_AGE) {
+    hydrate(queryClient, initialCache.clientState);
+}
 
 export function QueryProvider({ children }: { children: React.ReactNode }) {
     return (
@@ -67,7 +100,7 @@ export function QueryProvider({ children }: { children: React.ReactNode }) {
             client={queryClient}
             persistOptions={{
                 persister: mmkvPersister,
-                maxAge: 1000 * 60 * 60 * 24 * 7,
+                maxAge: CACHE_MAX_AGE,
                 dehydrateOptions: {
                     shouldDehydrateQuery: (query) => {
                         if (query.queryKey[0] === "timetable") {

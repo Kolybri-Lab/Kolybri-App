@@ -71,9 +71,15 @@ export default async function fetchApi<T>(
 
         const data = await convertApiResponse(apiResponse);
 
+        if (!data) {
+            throw {
+                message: "Réponse invalide du serveur",
+                isNetworkError: true,
+            };
+        }
+
         // Si le serveur ED renvoie un code d'erreur applicatif (différent de 200 et du 250 A2F)
         if (
-            data &&
             typeof data.code === "number" &&
             data.code !== 200 &&
             data.code !== 250
@@ -83,8 +89,9 @@ export default async function fetchApi<T>(
         }
 
         const isDataEmpty =
-            JSON.stringify(data?.data) === "{}" ||
-            JSON.stringify(data?.data) === "[]";
+            data.data == null ||
+            JSON.stringify(data.data) === "{}" ||
+            JSON.stringify(data.data) === "[]";
 
         return {
             ...data,
