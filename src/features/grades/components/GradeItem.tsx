@@ -1,4 +1,4 @@
-import { Text as CoreText } from "@/components/core";
+import { Text } from "@/components/core";
 import {
     BestGrade,
     EqualToDisciplineAverage,
@@ -11,7 +11,6 @@ import { formatGradeText } from "@/features/grades/utils/helpers";
 import { useTheme } from "@/hooks/useThemeStore";
 import { TouchableOpacity, View } from "react-native";
 import Grade from "../models/Grade";
-const Text = CoreText as any;
 
 interface GradeItemProps {
     grade: Grade;
@@ -72,7 +71,12 @@ export default function GradeItem({ grade, dispatch }: GradeItemProps) {
                     borderWidth: 1,
                 }}
             >
-                <Text style={{ flexShrink: 1 }} oneLine preset="label2">
+                <Text
+                    style={{ flexShrink: 1 }}
+                    oneLine
+                    preset="cardTitle.sm"
+                    weight="medium"
+                >
                     {grade.libelle}
                 </Text>
                 <View
@@ -91,14 +95,14 @@ export default function GradeItem({ grade, dispatch }: GradeItemProps) {
                             );
                         })}
                 </View>
-                <Text preset="label1">
+                <Text preset="metric.sm">
                     {grade.notSignificant
                         ? `(${formatGradeText(grade.data?.grade)})`
                         : formatGradeText(grade.data?.grade)}
                     {grade.data?.outOf !== 20 &&
                         grade.data?.outOf !== null &&
                         grade.data?.outOf !== undefined && (
-                            <Text preset="label3">{`/${grade.data.outOf}`}</Text>
+                            <Text preset="meta.sm">{`/${grade.data.outOf}`}</Text>
                         )}
                 </Text>
             </View>

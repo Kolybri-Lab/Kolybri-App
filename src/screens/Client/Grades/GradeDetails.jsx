@@ -92,7 +92,7 @@ export default function GradeDetails({ route }) {
                     }}
                 >
                     <View style={{ flexDirection: "column", maxWidth: "70%" }}>
-                        <Text preset="label1">{grade.libelle}</Text>
+                        <Text preset="cardTitle.md">{grade.libelle}</Text>
                         <Teachers teachers={discipline.teachers} />
                     </View>
                     <View
@@ -103,7 +103,7 @@ export default function GradeDetails({ route }) {
                             paddingVertical: 4,
                         }}
                     >
-                        <Text preset="h3">
+                        <Text preset="metric.md">
                             {formatGradeText(
                                 discipline.getWeightedAverage() ??
                                     discipline.averageDatas?.userAverage
@@ -126,7 +126,7 @@ export default function GradeDetails({ route }) {
                         padding: 14,
                     }}
                 >
-                    <Text preset="h2" color={colors.brand.primary}>
+                    <Text preset="heading.page" color={colors.brand.primary}>
                         Informations
                     </Text>
 
@@ -163,11 +163,11 @@ export default function GradeDetails({ route }) {
                             marginBottom: 10,
                         }}
                     >
-                        <Text preset="label2">
+                        <Text preset="body.md">
                             · Type d'évaluation :{" "}
                             {grade.homeworkType || "Non spécifié"}
                         </Text>
-                        <Text preset="label2">
+                        <Text preset="body.md">
                             · Date : {formatFrenchDate(grade.date)}
                         </Text>
                     </View>
@@ -183,7 +183,8 @@ export default function GradeDetails({ route }) {
                                         marginBottom: 4,
                                     }}
                                     color={colors.text.primary} // EDIT
-                                    preset="body1"
+                                    preset="cardTitle.md"
+                                    weight="medium"
                                 >
                                     {item?.name}
                                 </Text>
@@ -199,7 +200,7 @@ export default function GradeDetails({ route }) {
                                             flex: 1,
                                         }}
                                         color={colors.text.secondary} // EDIT
-                                        preset="body2"
+                                        preset="body.md"
                                     >
                                         {item?.description}
                                     </Text>
@@ -210,7 +211,7 @@ export default function GradeDetails({ route }) {
                                             flexShrink: 1,
                                         }}
                                         align="right"
-                                        preset="label2"
+                                        preset="meta.md"
                                         color={item?.value?.color}
                                     >
                                         {item?.value?.label}
@@ -230,7 +231,7 @@ const Teachers = ({ teachers = [] }) => {
     const { colors } = useTheme();
     if (safeTeachers.length > 1) {
         return safeTeachers.map((teacher, i) => (
-            <Text key={i} oneLine preset="label2" color={colors.text.secondary}>
+            <Text key={i} oneLine preset="meta.md" color={colors.text.secondary}>
                 - {teacher}
             </Text>
         ));
@@ -238,14 +239,14 @@ const Teachers = ({ teachers = [] }) => {
 
     if (safeTeachers.length === 1) {
         return (
-            <Text oneLine preset="label2" color={colors.text.secondary}>
+            <Text oneLine preset="meta.md" color={colors.text.secondary}>
                 {safeTeachers[0]}
             </Text>
         );
     }
 
     return (
-        <Text preset="label3" color={colors.text.secondary}>
+        <Text preset="meta.sm" color={colors.text.secondary}>
             Aucun enseignant pour cette discipline
         </Text>
     );
@@ -276,13 +277,15 @@ const Cards = ({ datas }) => {
                     }}
                 >
                     <Text
-                        preset="label2"
+                        preset="meta.md"
                         numberOfLines={2}
                         color={colors.text.secondary} // EDIT
                     >
                         {card.label}
                     </Text>
-                    <Text preset="h3">{card.value}</Text>
+                    <Text preset="metric.md">
+                        {card.value}
+                    </Text>
                 </View>
             ))}
         </>

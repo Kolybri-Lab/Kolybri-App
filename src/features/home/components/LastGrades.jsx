@@ -98,13 +98,11 @@ const GradeCard = ({ disciplineColor, disciplineName, data, index, count }) => {
             ]}
         >
             <Text
+                preset="cardTitle.sm"
                 align="left"
                 oneLine
-                style={{
-                    color: disciplineColor,
-                    fontSize: 14,
-                    fontFamily: "Bold",
-                }}
+                color={disciplineColor}
+                maxFontSizeMultiplier={1.15}
             >
                 {disciplineName.toUpperCase()}
             </Text>
@@ -119,24 +117,23 @@ const GradeCard = ({ disciplineColor, disciplineName, data, index, count }) => {
                 }}
             >
                 <Text
-                    style={{ fontSize: 22, fontFamily: "Bold" }}
+                    preset="metric.md"
                     color={withAlpha(disciplineColor, 0.9)}
-                    //color={colors.text.secondary}
+                    maxFontSizeMultiplier={1.15}
                 >
                     {formatGradeText(data.grade)}
                     <Text
-                        style={{ fontFamily: "Medium", fontSize: 12 }}
+                        preset="meta.sm"
                         color={colors.text.secondary}
+                        maxFontSizeMultiplier={1.15}
                     >
                         /{data.outOf}
                     </Text>
                 </Text>
                 <Text
+                    preset="meta.sm"
                     color={colors.text.secondary}
-                    style={{
-                        fontFamily: "Medium",
-                        fontSize: 12,
-                    }}
+                    maxFontSizeMultiplier={1.15}
                 >
                     ({data.coef})
                 </Text>

@@ -1,4 +1,4 @@
-import { Text as CoreText } from "@/components/core";
+import { Text } from "@/components/core";
 import { formatGradeText } from "@/features/grades/utils/helpers";
 import { useTheme } from "@/hooks/useThemeStore";
 import { withAlpha } from "@/themes/color";
@@ -17,7 +17,6 @@ import Grade from "../models/Grade";
 import GradeItem from "./GradeItem";
 import SimpleFlamme from "./SimpleFlamme";
 import SimulatedGradeItem from "./SimulatedGradeItem";
-const Text = CoreText as any;
 
 interface DisciplineItemProps {
     discipline: Discipline;
@@ -179,14 +178,15 @@ export default function DisciplineItem({
                                 size={50}
                             />
                             <Text
+                                preset="metric.md"
+                                weight="semibold"
                                 align="center"
                                 // White text over the orange/gray flame SVG
-                                color={"white"}
+                                color="white"
+                                maxFontSizeMultiplier={1.15}
                                 style={{
                                     marginTop: -43,
                                     marginLeft: -2,
-                                    fontSize: 22,
-                                    fontFamily: "SemiBold",
                                 }}
                             >
                                 {discipline.streakCount}
@@ -201,21 +201,17 @@ export default function DisciplineItem({
                             }}
                         >
                             <Text
+                                preset="cardTitle.lg"
                                 oneLine
-                                style={{
-                                    fontFamily: "Bold",
-                                    fontSize: 18,
-                                    color: discipline.color,
-                                }}
+                                color={discipline.color}
                             >
                                 {discipline.libelle}
                             </Text>
                             {teachersText.length > 0 && (
                                 <Text
+                                    preset="meta.md"
                                     style={{
                                         opacity: 0.72,
-                                        fontFamily: "Medium",
-                                        fontSize: 14,
                                         marginTop: -3,
                                     }}
                                     oneLine
@@ -241,10 +237,10 @@ export default function DisciplineItem({
                         }}
                     >
                         <Text
+                            preset="metric.lg"
+                            color={discipline.color}
+                            maxFontSizeMultiplier={1.15}
                             style={{
-                                color: discipline.color,
-                                fontFamily: "Bold",
-                                fontSize: 26,
                                 marginTop: -1,
                             }}
                         >
@@ -277,9 +273,9 @@ export default function DisciplineItem({
                                     marginBottom: 10,
                                 }}
                             >
-                                <Text style={{ marginBottom: 8 }}>{label}</Text>
+                                <Text preset="meta.md" style={{ marginBottom: 8 }}>{label}</Text>
                                 <View style={boxStyle}>
-                                    <Text preset="label2">
+                                    <Text preset="metric.xs">
                                         {formatGradeText(value)}
                                     </Text>
                                 </View>
@@ -327,7 +323,7 @@ export default function DisciplineItem({
                                     borderRadius: 20,
                                 }}
                             >
-                                <Text preset="h3" align="center" marginTop={-3}>
+                                <Text preset="control.lg" size={24} weight="bold" align="center">
                                     +
                                 </Text>
                             </View>

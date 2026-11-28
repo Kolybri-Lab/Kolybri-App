@@ -5,7 +5,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import {
     Pressable,
     StyleSheet,
-    TextInput,
     TouchableOpacity,
     View,
 } from "react-native";
@@ -19,7 +18,7 @@ import {
 import { Account, Discord, Github, Kolybri } from "@/components/svg";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { Text } from "@/components/core";
+import { Text, TextInput } from "@/components/core";
 import { getApiMessage } from "@/constants/api/codes";
 import { useSignIn } from "@/hooks/useSignIn";
 import { routesNames } from "@/router/config/routesNames";
@@ -120,13 +119,13 @@ export default function LoginScreen() {
                     <View style={{ marginTop: 40 }}>
                         <Kolybri size={98} />
                     </View>
-                    <MaskedView maskElement={<Text preset="h1">Kolybri</Text>}>
+                    <MaskedView maskElement={<Text preset="heading.hero">Kolybri</Text>}>
                         <LinearGradient
                             colors={[theme.logo.textFrom, theme.logo.textTo]}
                             start={{ x: 1, y: 0 }}
                             end={{ x: 0, y: 0 }}
                         >
-                            <Text preset="h1" style={{ opacity: 0 }}>
+                            <Text preset="heading.hero" style={{ opacity: 0 }}>
                                 Kolybri
                             </Text>
                         </LinearGradient>
@@ -232,7 +231,7 @@ export default function LoginScreen() {
                         transform: [{ scale: 1.2 }],
                     }}
                 >
-                    <Text preset="label2">{"Se connecter      ➜"}</Text>
+                    <Text preset="control.sm" weight="medium">{"Se connecter      ➜"}</Text>
                 </TouchableOpacity>
             </View>
             {apiError && (
@@ -257,7 +256,8 @@ export default function LoginScreen() {
                         style={[styles.privacyPolicy]}
                         align="center"
                         color={theme.colors.brand.primary}
-                        preset="body2"
+                        preset="control.sm"
+                        weight="medium"
                     >
                         Politique de confidentialité et Conditions d'utilisation
                     </Text>

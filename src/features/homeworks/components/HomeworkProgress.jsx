@@ -44,7 +44,7 @@ export default function HomeworkProgress({
                     borderRadius: 9,
                 }}
             >
-                <Text align="center" preset="h3">
+                <Text align="center" preset="metric.md">
                     {completedCount}/{totalCount}
                 </Text>
             </View>
@@ -55,7 +55,7 @@ export default function HomeworkProgress({
                 }}
             />
 
-            <Text preset="custom1" align="center" color={colors.text.secondary}>
+            <Text preset="body.md" align="center" color={colors.text.secondary}>
                 {textSentence}
             </Text>
         </SafeAreaView>

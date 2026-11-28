@@ -80,9 +80,10 @@ export default function HomeScreen() {
                         >
                             {localPhotoUri == undefined ? (
                                 <Text
-                                    preset="h4"
+                                    preset="heading.section"
                                     size={26}
-                                    style={{ fontFamily: "Petrona-SemiBold" }}
+                                    family="petrona"
+                                    weight="semibold"
                                 >
                                     {name[0]}
                                 </Text>
@@ -103,29 +104,32 @@ export default function HomeScreen() {
                                 flexDirection: "row",
                                 justifyContent: "space-between",
                                 alignItems: "flex-start",
+                                marginTop: 10,
                             }}
                         >
                             <View style={{ flex: 1, marginRight: 10 }}>
                                 <Text
+                                    preset="heading.hero"
                                     size={26}
+                                    weight="medium"
                                     color={withAlpha(colors.text.primary, 0.4)}
-                                    style={{ fontFamily: "Medium", lineHeight: 25 }}
+                                    style={{ lineHeight: 25 }}
                                 >
                                     {greetingMessage}
                                 </Text>
                                 <Text
+                                    preset="heading.hero"
                                     size={38}
-                                    style={{
-                                        fontFamily: "Petrona-SemiBold",
-                                        letterSpacing: 0.3,
-                                    }}
+                                    family="petrona"
+                                    weight="semibold"
+                                    style={{ letterSpacing: 0.3 }}
                                 >
                                     {name} 👋
                                 </Text>
                             </View>
                         </View>
                     </SafeAreaView>
-                    <View style={{ gap: 26 }}>
+                    <View style={{ gap: 26, marginTop: 10 }}>
                         <ActiveCourseCard />
                         <View style={{ gap: 3 }}>
                             <GeneralAveragePreview gradesData={gradesData} />

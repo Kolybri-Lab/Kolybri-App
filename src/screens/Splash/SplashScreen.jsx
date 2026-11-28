@@ -5,7 +5,9 @@ import { Text } from "@/components/core";
 const SplashScreen = () => {
     return (
         <View style={styles.container}>
-            <Text preset="h2">Bienvenue</Text>
+            <Text preset="heading.page" color="#FFFFFF">
+                Bienvenue
+            </Text>
             <ActivityIndicator size="large" color="#fff" />
         </View>
     );

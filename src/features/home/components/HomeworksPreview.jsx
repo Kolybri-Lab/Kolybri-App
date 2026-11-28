@@ -95,7 +95,7 @@ const DateHeader = ({ date, meta, progress }) => {
                 alignItems: "center",
             }}
         >
-            <Text style={{ fontSize: 18, fontFamily: "SemiBold" }}>
+            <Text preset="heading.section" size={18}>
                 {(meta?.long ?? `POUR ${formatFrenchDate(date)}`).toUpperCase()}
             </Text>
             {/* <Text style={{ fontSize: 18, fontFamily: "Bold", color: colors.brand.primary }}>
@@ -159,10 +159,10 @@ const Homework = ({ homework, index, countForDate }) => {
                 }}
             >
                 <Text
+                    preset="cardTitle.lg"
+                    weight="semibold"
                     style={{
                         flexShrink: 0,
-                        fontSize: 18,
-                        fontFamily: "SemiBold",
                         maxWidth: "40%",
                     }}
                     oneLine
@@ -173,19 +173,15 @@ const Homework = ({ homework, index, countForDate }) => {
                 <View style={{ flex: 1, flexShrink: 1, minWidth: 0 }}>
                     {homework.isCustom ? (
                         <Text
-                            style={{
-                                color: withAlpha(colors.text.primary, 0.55),
-                                fontSize: 14,
-                                fontFamily: "Medium",
-                                flexShrink: 1,
-                            }}
-
+                            preset="body.md"
+                            color={withAlpha(colors.text.primary, 0.55)}
+                            style={{ flexShrink: 1 }}
                             oneLine
                         >
                             {homework.homeworksContent.content}
                         </Text>
                     ) : (
-                        <Text oneLine color={colors.text.secondary}>
+                        <Text preset="body.md" oneLine color={colors.text.secondary}>
                             {homework.plainText}
                         </Text>
                     )}
@@ -195,21 +191,18 @@ const Homework = ({ homework, index, countForDate }) => {
             {homework.isEvaluation && (
                 <View
                     style={{
-                        flexShrink: 1,
+                        flexShrink: 0,
                         backgroundColor: colors.brand.primary,
                         borderRadius: 10,
                         paddingHorizontal: 8,
                         paddingVertical: 2,
                         marginRight: -8,
-                        flexShrink: 0,
                     }}
                 >
                     <Text
-                        style={{
-                            color: colors.text.onBrand,
-                            fontFamily: "SemiBold",
-                            fontSize: 13,
-                        }}
+                        preset="badge.sm"
+                        size={13}
+                        color={colors.text.onBrand}
                     >
                         Contrôle
                     </Text>

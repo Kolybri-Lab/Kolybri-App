@@ -71,7 +71,7 @@ export default function PlusScreen({ route }) {
             <View style={{ gap: 3 }}>
                 <Text
                     style={{ marginBottom: 12 }}
-                    preset="label2"
+                    preset="meta.md"
                     color={colors.text.secondary}
                 >
                     Informations
@@ -96,7 +96,7 @@ export default function PlusScreen({ route }) {
                 <Text
                     style={{ marginBottom: 12 }}
                     color={colors.text.secondary}
-                    preset="label2"
+                    preset="meta.md"
                 >
                     Debug
                 </Text>
@@ -126,7 +126,7 @@ export default function PlusScreen({ route }) {
                         opacity: toastOpacity,
                     }}
                 >
-                    <Text preset="label1">🫣 Hey petit malin 🫣</Text>
+                    <Text preset="control.md">🫣 Hey petit malin 🫣</Text>
                 </Animated.View>
             )}
         </SettingSectionLayout>

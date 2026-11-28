@@ -4,7 +4,6 @@ import { Break, Course } from "@/features/timetable";
 import { isLunchBreak } from "@/features/timetable/utils/sort";
 import { useTheme } from "@/hooks/useThemeStore";
 import { withAlpha } from "@/themes/color";
-import { fontFamily } from "@/themes/tokens";
 import { Coffee, ForkKnife, MapPin } from "lucide-react-native";
 import { memo, useMemo } from "react";
 import { View } from "react-native";
@@ -89,16 +88,14 @@ function CourseCardItem({
                             }}
                         />
                         <Text
+                            preset={isMulti ? "cardTitle.sm" : "cardTitle.md"}
+                            weight="semibold"
                             color={course.color}
+                            decoration={
+                                course.states?.cancelled ? "line-through" : "none"
+                            }
                             oneLine
-                            style={{
-                                flex: 1,
-                                fontFamily: "SemiBold",
-                                fontSize: isMulti ? 14 : 16,
-                                textDecorationLine: course.states?.cancelled
-                                    ? "line-through"
-                                    : "none",
-                            }}
+                            style={{ flex: 1 }}
                         >
                             {course.libelle}
                         </Text>
@@ -108,14 +105,14 @@ function CourseCardItem({
                             style={{
                                 backgroundColor: colors.surface.default,
                                 paddingHorizontal: 10,
+                                paddingVertical: 2,
                                 borderRadius: 50,
                                 flexShrink: 0,
                             }}
                         >
                             <Text
-                                size={14}
+                                preset="badge.md"
                                 color={colors.text.secondary}
-                                style={{ fontFamily: "SemiBold" }}
                             >
                                 {course.schedules.duration.text.replace(":", "h")}
                             </Text>
@@ -143,9 +140,9 @@ function CourseCardItem({
                                 size={isMulti ? 13 : 15}
                             />
                             <Text
-                                color={colors.text.secondary}
+                                preset={isMulti ? "meta.sm" : "meta.md"}
                                 size={isMulti ? 13 : 15}
-                                style={{ fontFamily: "Medium" }}
+                                color={colors.text.secondary}
                                 oneLine
                             >
                                 {course.teacher}
@@ -167,9 +164,9 @@ function CourseCardItem({
                                 size={isMulti ? 13 : 15}
                             />
                             <Text
-                                color={colors.text.secondary}
+                                preset={isMulti ? "meta.sm" : "meta.md"}
                                 size={isMulti ? 13 : 15}
-                                style={{ fontFamily: "Medium" }}
+                                color={colors.text.secondary}
                                 oneLine
                             >
                                 {course.room}
@@ -214,14 +211,10 @@ function DayViewCourseComponent({ course }: DayViewCourseProps) {
                     justifyContent: "space-between",
                 }}
             >
-                <Text size={16} style={{ fontFamily: "Medium" }}>
+                <Text preset="meta.md" size={16}>
                     {startTime}
                 </Text>
-                <Text
-                    size={14}
-                    color={colors.text.secondary}
-                    style={{ fontFamily: "Medium" }}
-                >
+                <Text preset="meta.md" color={colors.text.secondary}>
                     {endTime}
                 </Text>
             </View>
@@ -282,15 +275,16 @@ function DayViewBreakComponent({ breakItem: breakItem }: DayViewBreakProps) {
                 </View>
                 <View style={{ justifyContent: "space-between" }}>
                     <Text
-                        style={{ fontFamily: "SemiBold", lineHeight: 16 }}
-                        size={14}
+                        preset="cardTitle.sm"
+                        weight="semibold"
+                        style={{ lineHeight: 18 }}
                     >
                         {lunchBreak ? "Pause méridienne" : "Pause"}
                     </Text>
                     <Text
-                        size={12}
+                        preset="meta.sm"
+                        weight="semibold"
                         color={colors.text.secondary}
-                        style={{ fontFamily: "SemiBold", lineHeight: 16 }}
                     >{`${breakItem.schedules.start.time} - ${breakItem.schedules.end.time}`}</Text>
                 </View>
             </View>
@@ -298,15 +292,14 @@ function DayViewBreakComponent({ breakItem: breakItem }: DayViewBreakProps) {
                 style={{
                     backgroundColor: colors.brand.primary,
                     alignSelf: "center",
-                    paddingVertical: 8,
+                    paddingVertical: 4,
                     paddingHorizontal: 10,
                     borderRadius: 50,
                 }}
             >
                 <Text
-                    size={14}
+                    preset="badge.md"
                     color={colors.text.onBrand}
-                    style={{ fontFamily: "SemiBold", lineHeight: 12 }}
                 >
                     {breakItem.schedules.duration.text.replace(":", "h")}
                 </Text>

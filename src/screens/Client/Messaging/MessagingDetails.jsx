@@ -5,6 +5,7 @@ import { downloadDocument, openDocument } from "@/helpers/documents/documentsHel
 import { useTheme } from "@/hooks/useThemeStore";
 import { routesNames } from "@/router/config/routesNames";
 import { withAlpha } from "@/themes/color";
+import { FONT_FAMILIES } from "@/themes/tokens";
 import { formatDate } from "@/utils/date";
 import { memo, useCallback, useMemo, useState } from "react";
 import {
@@ -14,7 +15,9 @@ import {
     View,
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import RenderHTML from "react-native-render-html";
+import RenderHTML, { defaultSystemFonts } from "react-native-render-html";
+
+const systemFonts = [...defaultSystemFonts, ...Object.values(FONT_FAMILIES.baloo)];
 
 const RECOVERY_MODE_BY_TYPE = {
     received: "recipient",
@@ -77,7 +80,7 @@ const File = memo(({ item, progress, colors, onOpen, onDownload }) => {
                     <FileIcon fill={colors.text.primary} size={23} extention={ext} />
                 </View>
                 <View style={{ flex: 1 }}>
-                    <Text preset="label2" decoration="underline">
+                    <Text preset="cardTitle.sm" weight="medium" decoration="underline">
                         {libelle}
                     </Text>
                 </View>
@@ -119,7 +122,8 @@ export default function MessagingDetails({ route }) {
             u: { textDecorationLine: "underline" },
             i: { fontStyle: "italic" },
             a: { textDecorationLine: "underline", color: colors.brand.primary },
-            strong: { fontWeight: 700 },
+            strong: { fontFamily: FONT_FAMILIES.baloo.bold, fontWeight: "normal" },
+            b: { fontFamily: FONT_FAMILIES.baloo.bold, fontWeight: "normal" },
         }),
         [colors.brand.primary]
     );
@@ -127,6 +131,9 @@ export default function MessagingDetails({ route }) {
     const baseStyle = useMemo(
         () => ({
             color: colors.text.primary,
+            fontFamily: FONT_FAMILIES.baloo.medium,
+            fontSize: 16,
+            lineHeight: 22,
         }),
         [colors.text.primary]
     );
@@ -137,6 +144,7 @@ export default function MessagingDetails({ route }) {
                 contentWidth={width}
                 source={{ html: messageContent?.content ?? "" }}
                 ignoredDomTags={["script", "iframe", "object", "o:p"]}
+                systemFonts={systemFonts}
                 baseStyle={baseStyle}
                 tagsStyles={tagsStyles}
             />
@@ -192,7 +200,7 @@ export default function MessagingDetails({ route }) {
                 fallbackRoute={routesNames.client.messaging.content}
             />
             <ScrollView showsVerticalScrollIndicator={false}>
-                <Text preset="h3" style={{ marginBottom: 10, marginTop: 20 }}>
+                <Text preset="heading.page" style={{ marginBottom: 10, marginTop: 20 }}>
                     Sujet : {subject}
                 </Text>
 
@@ -233,20 +241,23 @@ export default function MessagingDetails({ route }) {
                                     flexShrink: 0,
                                 }}
                             >
-                                <Text preset="label1" color={colors.text.onBrand}>
+                                <Text preset="control.md" color={colors.text.onBrand}>
                                     {sender.initials ?? "??"}
                                 </Text>
                             </View>
                             <View>
                                 <Text
-                                    preset="label2"
+                                    preset="cardTitle.md"
                                     numberOfLines={1}
-                                    style={{ flexShrink: 1 }}
+                                    style={{
+                                        flexShrink: 1,
+                                        textTransform: "uppercase",
+                                    }}
                                 >
                                     {sender.fullName}
                                 </Text>
                                 <Text
-                                    preset="label2"
+                                    preset="meta.md"
                                     numberOfLines={1}
                                     style={{ flexShrink: 0 }}
                                 >

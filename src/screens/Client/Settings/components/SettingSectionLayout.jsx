@@ -16,10 +16,10 @@ export default function SettingSectionLayout({
         >
             <GoBackHeader />
             <View style={{ marginBottom: 38, marginTop: 8, gap: 6 }}>
-                <Text preset="h1" style={{ fontFamily: "Petrona-Bold" }}>
+                <Text preset="heading.hero" family="petrona">
                     {label}
                 </Text>
-                <Text preset="label2" color={withAlpha(colors.text.primary, 0.5)}>
+                <Text preset="body.md" color={withAlpha(colors.text.primary, 0.5)}>
                     {subtitle}
                 </Text>
             </View>

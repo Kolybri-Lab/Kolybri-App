@@ -1,6 +1,6 @@
+import { Text } from "@/components/core";
 import { FlameOrangeLottie, FlamePurpleLottie } from "@/components/lottie";
-import { useTheme } from "@/hooks/useThemeStore";
-import { StyleSheet, Text, View, useWindowDimensions } from "react-native";
+import { StyleSheet, View, useWindowDimensions } from "react-native";
 
 const ASPECT_RATIO = 1.34;
 
@@ -25,7 +25,6 @@ export default function GradeFlame({
     style,
 }: GradeFlameProps) {
     const { width: windowWidth } = useWindowDimensions();
-    const { colors } = useTheme();
     const FlameLottie = FLAME_COMPONENTS[color] || FLAME_COMPONENTS.orange;
 
     let finalWidth: number;
@@ -55,28 +54,28 @@ export default function GradeFlame({
             />
             {value !== undefined && (
                 <Text
-                    style={[
-                        styles.flammeText,
-                        {
-                            fontSize: Math.round(28 * scale),
-                            marginTop: Math.round(92 * scale),
-                            marginLeft: Math.round(-5 * scale),
-                        },
-                    ]}
+                    preset="metric.md"
+                    size={Math.round(28 * scale)}
+                    // Intentional fixed white text over the flame SVG illustration
+                    color="#FFFFFF"
+                    maxFontSizeMultiplier={1.15}
+                    style={{
+                        marginTop: Math.round(92 * scale),
+                        marginLeft: Math.round(-5 * scale),
+                    }}
                 >
                     {value}
                 </Text>
             )}
             {label && (
                 <Text
-                    style={[
-                        styles.flammeSubText,
-                        {
-                            fontSize: Math.round(24 * scale),
-                            marginTop: Math.round(28 * scale),
-                            color: colors.text.primary,
-                        },
-                    ]}
+                    preset="meta.md"
+                    size={Math.round(24 * scale)}
+                    weight="semibold"
+                    maxFontSizeMultiplier={1.15}
+                    style={{
+                        marginTop: Math.round(28 * scale),
+                    }}
                 >
                     {label}
                 </Text>
@@ -92,13 +91,5 @@ const styles = StyleSheet.create({
     },
     flamme: {
         position: "absolute",
-    },
-    flammeText: {
-        fontWeight: "bold",
-        // Intentional fixed white text over the flame SVG illustration
-        color: "#FFFFFF",
-    },
-    flammeSubText: {
-        fontFamily: "SemiBold",
     },
 });

@@ -80,7 +80,7 @@ export default function HomeworkCard({
                 width: "100%",
                 borderRadius: 20,
                 overflow: "hidden",
-                paddingTop: 17,
+                paddingTop: 13,
                 paddingHorizontal: 20,
                 borderColor: homework.discipline?.color || "grey",
                 borderWidth: isExpanded ? 1 : 0,
@@ -107,12 +107,9 @@ export default function HomeworkCard({
                         }}
                     >
                         <Text
+                            preset="cardTitle.lg"
                             oneLine
-                            style={{
-                                fontSize: 18,
-                                fontFamily: "Bold",
-                                color: homework.discipline?.color || "grey",
-                            }}
+                            color={homework.discipline?.color || "grey"}
                         >
                             {homework.discipline.name}
                         </Text>
@@ -127,24 +124,15 @@ export default function HomeworkCard({
                                 }}
                             >
                                 <Text
-                                    style={{
-                                        color: colors.text.onBrand,
-                                        fontSize: 14,
-                                        fontFamily: "SemiBold",
-                                    }}
+                                    preset="badge.md"
+                                    color={colors.text.onBrand}
                                 >
                                     Contrôle
                                 </Text>
                             </View>
                         )}
                     </View>
-                    <Text
-                        style={{
-                            fontSize: 12,
-                            fontFamily: "Medium",
-                            color: colors.text.primary,
-                        }}
-                    >
+                    <Text preset="meta.sm">
                         {homework.discipline.teacher}
                     </Text>
                 </View>
@@ -174,14 +162,7 @@ export default function HomeworkCard({
                     }}
                 />
 
-                <Text
-                    style={{
-                        color: colors.text.primary,
-                        padding: 12,
-                        fontSize: 14,
-                        fontFamily: "Lexend-Regular",
-                    }}
-                >
+                <Text preset="body.md" style={{ padding: 12 }}>
                     {homework.plainText}
                 </Text>
 
@@ -208,13 +189,7 @@ export default function HomeworkCard({
                     backgroundColor: colors.surface.default,
                 }}
             >
-                <Text
-                    style={{
-                        fontSize: 12,
-                        fontFamily: "Medium",
-                        color: colors.text.primary,
-                    }}
-                >
+                <Text preset="meta.sm">
                     Donnée le {formatShortDate(homework.givenOn)}
                 </Text>
                 {isExpanded && (

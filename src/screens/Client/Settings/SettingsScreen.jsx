@@ -163,7 +163,7 @@ export default function SettingsScreen({}) {
                         onPress={() => navigation.goBack()}
                     >
                         <Cross size={ICON_SIZE} fill={colors.text.primary} />
-                        <Text preset="h4">Paramètres</Text>
+                        <Text preset="heading.section">Paramètres</Text>
                     </Pressable>
                 </SafeAreaView>
                 <View
@@ -189,8 +189,10 @@ export default function SettingsScreen({}) {
                         >
                             {!profile?.localPhotoUri ? (
                                 <Text
-                                    preset="h4"
-                                    style={{ fontFamily: "Petrona-SemiBold" }}
+                                    preset="heading.section"
+                                    size={18}
+                                    family="petrona"
+                                    weight="semibold"
                                 >
                                     {profile?.name?.[0] ?? ""}
                                 </Text>
@@ -208,12 +210,13 @@ export default function SettingsScreen({}) {
                         </View>
                         <View>
                             <Text
-                                preset="label1"
-                                style={{ fontFamily: "Petrona-ExtraBold" }}
+                                preset="cardTitle.md"
+                                family="petrona"
+                                weight="extrabold"
                             >
                                 {profile?.name} {profile?.surname}
                             </Text>
-                            <Text preset="label2">{profile?.schoolName}</Text>
+                            <Text preset="meta.md">{profile?.schoolName}</Text>
                         </View>
                     </View>
 
@@ -316,7 +319,7 @@ export default function SettingsScreen({}) {
                 </View>
                 <View style={{ flex: 1, gap: 2 }}>
                     <Text
-                        preset="label2"
+                        preset="meta.md"
                         style={{ marginTop: 26 }}
                         color={colors.text.primary}
                     >
@@ -324,7 +327,7 @@ export default function SettingsScreen({}) {
                     </Text>
                     <SettingsSection options={accountOptions} />
                     <Text
-                        preset="label2"
+                        preset="meta.md"
                         style={{ marginTop: 26 }}
                         color={colors.text.primary}
                     >
@@ -332,7 +335,7 @@ export default function SettingsScreen({}) {
                     </Text>
                     <SettingsSection options={appOptions} />
                     <Text
-                        preset="label2"
+                        preset="meta.md"
                         style={{ marginTop: 26 }}
                         color={colors.text.primary}
                     >
@@ -342,11 +345,12 @@ export default function SettingsScreen({}) {
                     <View style={{ marginTop: 28, marginBottom: 18 }}>
                         <Section
                             label={"Se déconnecter"}
+                            textColor={colors.text.onBrand}
                             icon={
                                 <Power
                                     size={18}
-                                    opacity={0.6}
-                                    fill={colors.text.primary}
+                                    opacity={0.85}
+                                    fill={colors.text.onBrand}
                                 />
                             }
                             onPress={signOut}
@@ -367,7 +371,7 @@ export default function SettingsScreen({}) {
                             borderRadius: 20,
                         }}
                     >
-                        <Text preset="label3" color={colors.text.secondary}>
+                        <Text preset="body.sm" color={colors.text.secondary}>
                             Le meilleur reste à venir...
                         </Text>
                     </View>

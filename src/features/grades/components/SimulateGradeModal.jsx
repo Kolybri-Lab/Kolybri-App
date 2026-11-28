@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { ScrollView, TextInput, TouchableOpacity, View } from "react-native";
+import { ScrollView, TouchableOpacity, View } from "react-native";
 
-import { Text } from "@/components/core";
+import { Text, TextInput } from "@/components/core";
 import { useTheme } from "@/hooks/useThemeStore";
 import { withAlpha } from "@/themes/color";
 import { getTodayDateString } from "@/utils/date";
@@ -143,15 +143,15 @@ export default function AddGradeModal({ visible, disciplineCodes }) {
                 />
 
                 <View style={{ marginBottom: 24 }}>
-                    <Text preset="h2">Ajouter une note</Text>
-                    <Text style={{ marginTop: 4 }} preset="body2">
+                    <Text preset="heading.page">Ajouter une note</Text>
+                    <Text style={{ marginTop: 4 }} preset="body.md">
                         Simulez une note pour voir son impact
                     </Text>
                 </View>
 
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <View style={{ marginBottom: 20 }}>
-                        <Text style={{ marginBottom: 8 }} preset="label1">
+                        <Text style={{ marginBottom: 8 }} preset="control.md">
                             Note
                         </Text>
                         <View style={{ flexDirection: "row", gap: 12 }}>
@@ -182,7 +182,7 @@ export default function AddGradeModal({ visible, disciplineCodes }) {
                             </View>
                             <Text
                                 style={{ alignSelf: "center", opacity: 0.5 }}
-                                preset="h4"
+                                preset="body.lg"
                             >
                                 /
                             </Text>
@@ -215,7 +215,7 @@ export default function AddGradeModal({ visible, disciplineCodes }) {
                     </View>
 
                     <View style={{ marginBottom: 20 }}>
-                        <Text style={{ marginBottom: 8 }} preset="label1">
+                        <Text style={{ marginBottom: 8 }} preset="control.md">
                             Coefficient
                         </Text>
                         <View
@@ -266,7 +266,8 @@ export default function AddGradeModal({ visible, disciplineCodes }) {
                                         }}
                                     >
                                         <Text
-                                            preset="label2"
+                                            preset="control.sm"
+                                            weight="medium"
                                             color={
                                                 isActive
                                                     ? colors.text.onBrand
@@ -294,7 +295,7 @@ export default function AddGradeModal({ visible, disciplineCodes }) {
                             flex: 1,
                         }}
                     >
-                        <Text preset="body2" color={colors.state.warning}>
+                        <Text preset="body.md" color={colors.state.warning}>
                             ⚠️ La note ne peut pas être supérieure au barème
                         </Text>
                     </View>
@@ -311,7 +312,7 @@ export default function AddGradeModal({ visible, disciplineCodes }) {
                             alignItems: "center",
                         }}
                     >
-                        <Text preset="label1">Annuler</Text>
+                        <Text preset="control.md">Annuler</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         disabled={!canSubmit}
@@ -325,7 +326,7 @@ export default function AddGradeModal({ visible, disciplineCodes }) {
                         }}
                         onPress={handleSubmit}
                     >
-                        <Text preset="label1" color={colors.text.onBrand}>
+                        <Text preset="control.md" color={colors.text.onBrand}>
                             Simuler
                         </Text>
                     </TouchableOpacity>

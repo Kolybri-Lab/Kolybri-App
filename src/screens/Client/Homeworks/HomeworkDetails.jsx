@@ -11,6 +11,7 @@ import {
 import { useTheme } from "@/hooks/useThemeStore";
 import { useUserStore } from "@/hooks/useUserStore";
 import { routesNames } from "@/router/config/routesNames";
+import { FONT_FAMILIES } from "@/themes/tokens";
 import { formatFrenchDate } from "@/utils/date";
 import { useNavigation } from "@react-navigation/native";
 import { useMemo, useState } from "react";
@@ -20,8 +21,10 @@ import {
     useWindowDimensions,
     View,
 } from "react-native";
-import RenderHTML from "react-native-render-html";
+import RenderHTML, { defaultSystemFonts } from "react-native-render-html";
 import { GoBackHeader, Modal } from "../../../components";
+
+const systemFonts = [...defaultSystemFonts, ...Object.values(FONT_FAMILIES.baloo)];
 
 export default function HomeworkDetails({ route }) {
     const { homeworksData = {} } = route?.params || {};
@@ -57,7 +60,8 @@ export default function HomeworkDetails({ route }) {
         () => ({
             u: { textDecorationLine: "underline" },
             i: { fontStyle: "italic" },
-            strong: { fontWeight: 700 },
+            strong: { fontFamily: FONT_FAMILIES.baloo.bold, fontWeight: "normal" },
+            b: { fontFamily: FONT_FAMILIES.baloo.bold, fontWeight: "normal" },
         }),
         []
     );
@@ -65,6 +69,9 @@ export default function HomeworkDetails({ route }) {
     const baseStyle = useMemo(
         () => ({
             color: colors.text.primary,
+            fontFamily: FONT_FAMILIES.baloo.medium,
+            fontSize: 16,
+            lineHeight: 22,
         }),
         [colors.text.primary]
     );
@@ -75,6 +82,7 @@ export default function HomeworkDetails({ route }) {
                 contentWidth={width}
                 source={{ html: homeworkContent }}
                 ignoredDomTags={["script", "iframe", "object"]}
+                systemFonts={systemFonts}
                 baseStyle={baseStyle}
                 tagsStyles={tagsStyles}
             />
@@ -88,6 +96,7 @@ export default function HomeworkDetails({ route }) {
                 contentWidth={width}
                 source={{ html: homework.decodedHTMLCourseContent }}
                 ignoredDomTags={["script", "iframe", "object"]}
+                systemFonts={systemFonts}
                 baseStyle={baseStyle}
                 tagsStyles={tagsStyles}
             />
@@ -148,7 +157,9 @@ export default function HomeworkDetails({ route }) {
                         }}
                     >
                         <Text
-                            preset="title1"
+                            preset="heading.section"
+                            size={18}
+                            weight="bold"
                             align="center"
                             decoration="underline"
                             style={{ marginBottom: 20 }}
@@ -184,7 +195,7 @@ export default function HomeworkDetails({ route }) {
                                     flex: 1,
                                 }}
                             >
-                                <Text preset="label2">
+                                <Text preset="body.md">
                                     Vous êtes dans un devoir personnalisé
                                 </Text>
                             </View>
@@ -205,7 +216,8 @@ export default function HomeworkDetails({ route }) {
                                     >
                                         <Text
                                             align="center"
-                                            preset="label2"
+                                            preset="control.sm"
+                                            weight="medium"
                                             color={colors.brand.primary}
                                         >
                                             Documents (
@@ -230,7 +242,8 @@ export default function HomeworkDetails({ route }) {
                                 >
                                     <Text
                                         align="center"
-                                        preset="label2"
+                                        preset="control.sm"
+                                        weight="medium"
                                         color={colors.brand.primary}
                                     >
                                         Contenu séance

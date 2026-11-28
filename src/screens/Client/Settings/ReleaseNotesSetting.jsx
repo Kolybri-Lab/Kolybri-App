@@ -254,12 +254,8 @@ export default function ReleaseNotesScreen({ route }) {
                                             }}
                                         >
                                             <Text
-                                                style={{
-                                                    color: versionStyle.textColor,
-                                                    fontFamily: "SemiBold",
-                                                    fontSize: 12,
-                                                    includeFontPadding: false,
-                                                }}
+                                                preset="badge.sm"
+                                                color={versionStyle.textColor}
                                             >
                                                 v{release.version}
                                             </Text>
@@ -267,9 +263,8 @@ export default function ReleaseNotesScreen({ route }) {
 
                                         {release.date && (
                                             <Text
-                                                size={12}
+                                                preset="meta.sm"
                                                 color={colors.text.secondary}
-                                                style={{ fontFamily: "Medium" }}
                                             >
                                                 {formatDate(release.date)}
                                             </Text>
@@ -278,12 +273,8 @@ export default function ReleaseNotesScreen({ route }) {
 
                                     {showTitle && (
                                         <Text
-                                            style={{
-                                                fontSize: 16,
-                                                fontFamily: "SemiBold",
-                                                color: colors.text.primary,
-                                                marginTop: 1,
-                                            }}
+                                            preset="cardTitle.md"
+                                            style={{ marginTop: 1 }}
                                         >
                                             {release.title}
                                         </Text>
@@ -320,25 +311,24 @@ export default function ReleaseNotesScreen({ route }) {
                                                                     }}
                                                                 >
                                                                     <Text
-                                                                        style={{
-                                                                            color: badge.text,
-                                                                            fontSize: 11,
-                                                                            fontFamily:
-                                                                                "SemiBold",
-                                                                        }}
+                                                                        preset="badge.sm"
+                                                                        size={11}
+                                                                        color={badge.text}
                                                                     >
                                                                         {badge.label}
                                                                     </Text>
                                                                 </View>
 
                                                                 <Text
+                                                                    preset="body.sm"
+                                                                    size={13}
+                                                                    color={
+                                                                        colors.text
+                                                                            .secondary
+                                                                    }
                                                                     style={{
                                                                         flex: 1,
-                                                                        fontSize: 13,
                                                                         lineHeight: 18,
-                                                                        color: colors
-                                                                            .text
-                                                                            .secondary,
                                                                     }}
                                                                 >
                                                                     {change.text}

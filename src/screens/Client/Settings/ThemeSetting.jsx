@@ -147,7 +147,9 @@ const ThemeOption = memo(function ThemeOption({
             {Icon ? (
                 <Icon size={size} fill={selected ? activeColor : idleColor} />
             ) : (
-                <Text preset="label2">{label}</Text>
+                <Text preset="control.sm" weight="medium" color={selected ? activeColor : idleColor}>
+                    {label}
+                </Text>
             )}
         </Pressable>
     );

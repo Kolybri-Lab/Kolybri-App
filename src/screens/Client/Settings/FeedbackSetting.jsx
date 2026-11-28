@@ -1,4 +1,4 @@
-import { Switch, Text } from "@/components";
+import { Switch, Text, TextInput } from "@/components";
 import { SendingCheckLottie } from "@/components/lottie";
 import { useTheme } from "@/hooks/useThemeStore";
 import { useUserStore } from "@/hooks/useUserStore";
@@ -15,7 +15,6 @@ import {
     Platform,
     Pressable,
     ScrollView,
-    TextInput,
     View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -184,11 +183,11 @@ export default function FeedbackScreen({ route }) {
                             style={{ width: 140, height: 140 }}
                         />
                     </View>
-                    <Text preset="title1" align="center">
+                    <Text preset="heading.section" size={18} weight="bold" align="center">
                         Merci pour votre retour !
                     </Text>
                     <Text
-                        preset="body1"
+                        preset="body.lg"
                         color={withAlpha(colors.text.primary, 0.6)}
                         align="center"
                     >
@@ -212,7 +211,7 @@ export default function FeedbackScreen({ route }) {
                             marginTop: 16,
                         }}
                     >
-                        <Text preset="label1" color={colors.text.onBrand}>
+                        <Text preset="control.md" color={colors.text.onBrand}>
                             Retour aux paramètres
                         </Text>
                     </Pressable>
@@ -228,7 +227,7 @@ export default function FeedbackScreen({ route }) {
         >
             <ScrollView contentContainerStyle={{ gap: 16, flex: 1 }}>
                 <View style={{ gap: 8 }}>
-                    <Text preset="label1">Sur quoi porte votre retour ?</Text>
+                    <Text preset="control.md">Sur quoi porte votre retour ?</Text>
                     <ScrollView
                         horizontal
                         contentContainerStyle={{ gap: 8 }}
@@ -255,7 +254,8 @@ export default function FeedbackScreen({ route }) {
                                     }}
                                 >
                                     <Text
-                                        preset="body1"
+                                        preset="control.md"
+                                        weight="medium"
                                         color={
                                             isActive
                                                 ? colors.brand.primary
@@ -278,8 +278,8 @@ export default function FeedbackScreen({ route }) {
                             gap: 6,
                         }}
                     >
-                        <Text preset="label1">Titre</Text>
-                        <Text preset="title1" color={colors.brand.primary}>
+                        <Text preset="control.md">Titre</Text>
+                        <Text preset="control.md" size={18} weight="bold" color={colors.brand.primary}>
                             *
                         </Text>
                     </View>
@@ -307,7 +307,7 @@ export default function FeedbackScreen({ route }) {
                                 0.4
                             )}
                         />
-                        <Text preset="body3" align="right">
+                        <Text preset="meta.sm" align="right">
                             {formValues.message.length}/{TITLE_MAX_LENGTH}
                         </Text>
                     </View>
@@ -321,8 +321,8 @@ export default function FeedbackScreen({ route }) {
                             gap: 6,
                         }}
                     >
-                        <Text preset="label1">Votre message</Text>
-                        <Text preset="title1" color={colors.brand.primary}>
+                        <Text preset="control.md">Votre message</Text>
+                        <Text preset="control.md" size={18} weight="bold" color={colors.brand.primary}>
                             *
                         </Text>
                     </View>
@@ -353,13 +353,13 @@ export default function FeedbackScreen({ route }) {
                             )}
                         />
                         <View style={{ flexDirection: "row" }}>
-                            <Text preset="body3" style={{ flexShrink: 1 }}>
+                            <Text preset="body.sm" style={{ flexShrink: 1 }}>
                                 Note: si vous souhaitez un retour de notre part
                                 pensez à indiquer un moyen de contact dans votre
                                 message (Discord, e-mail, etc)
                             </Text>
                             <Text
-                                preset="body3"
+                                preset="meta.sm"
                                 align="right"
                                 style={{ flexShrink: 0 }}
                             >
@@ -391,10 +391,10 @@ export default function FeedbackScreen({ route }) {
                         }}
                     >
                         <View style={{ gap: 2 }}>
-                            <Text preset="label1">
+                            <Text preset="control.md">
                                 Informations techniques envoyées
                             </Text>
-                            <Text preset="body3">
+                            <Text preset="body.sm">
                                 Elles aident les developpeurs à corriger les
                                 problèmes.{"\n"}
                                 Choisissez ce que vous partagez.
@@ -424,7 +424,7 @@ export default function FeedbackScreen({ route }) {
                             opacity: isSending ? 0.6 : 1,
                         }}
                     >
-                        <Text preset="label1" color={colors.text.onBrand}>
+                        <Text preset="control.md" color={colors.text.onBrand}>
                             {isSending ? "En cours d'envoi..." : "Envoyer"}
                         </Text>
                     </Pressable>
@@ -463,8 +463,8 @@ function Option({
                 }}
             >
                 <View style={{ gap: 2, flex: 1 }}>
-                    <Text preset="body1">{title}</Text>
-                    <Text preset="body3" color={withAlpha(colors.text.primary, 0.5)}>
+                    <Text preset="cardTitle.md" weight="medium">{title}</Text>
+                    <Text preset="body.sm" color={withAlpha(colors.text.primary, 0.5)}>
                         {subtitle}
                     </Text>
                 </View>
@@ -480,7 +480,7 @@ function Option({
                             borderRadius: 8,
                         }}
                     >
-                        <Text preset="body3" opacity={0.5}>
+                        <Text preset="badge.sm" weight="medium" color={colors.text.secondary}>
                             🔒 toujours incluse
                         </Text>
                     </View>

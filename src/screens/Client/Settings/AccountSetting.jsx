@@ -1,9 +1,9 @@
-import { Text } from "@/components";
+import { Text, TextInput } from "@/components";
 import { useTheme } from "@/hooks/useThemeStore";
 import { useUserStore } from "@/hooks/useUserStore";
 import { withAlpha } from "@/themes/color";
 import { useEffect, useRef, useState } from "react";
-import { Pressable, TextInput, View } from "react-native";
+import { Pressable, View } from "react-native";
 import SettingSectionLayout from "./components/SettingSectionLayout";
 
 export default function AccountScreen({ route }) {
@@ -50,7 +50,7 @@ export default function AccountScreen({ route }) {
                     }}
                     onPress={() => nameInputRef.current?.focus()}
                 >
-                    <Text preset="title1">Prénom</Text>
+                    <Text preset="control.md" size={18} weight="bold">Prénom</Text>
                     <TextInput
                         ref={nameInputRef}
                         value={profileDatas.name}
@@ -81,7 +81,7 @@ export default function AccountScreen({ route }) {
                     }}
                     onPress={() => surnameInputRef.current?.focus()}
                 >
-                    <Text preset="title1">Nom</Text>
+                    <Text preset="control.md" size={18} weight="bold">Nom</Text>
                     <TextInput
                         ref={surnameInputRef}
                         value={profileDatas.surname}
@@ -96,7 +96,7 @@ export default function AccountScreen({ route }) {
                         }
                     />
                 </Pressable>
-                <Text preset="label3" style={{ opacity: 0.4 }}>
+                <Text preset="body.sm" style={{ opacity: 0.4 }}>
                     Note: la modification du nom et prénom n'impacte pas votre compte
                     Ecole Directe. Tout reste local.
                 </Text>
@@ -122,7 +122,7 @@ export default function AccountScreen({ route }) {
                             setAbleToValidate(false);
                         }}
                     >
-                        <Text preset="label1" color={colors.text.onBrand}>
+                        <Text preset="control.md" color={colors.text.onBrand}>
                             Valider les modifications
                         </Text>
                     </Pressable>

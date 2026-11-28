@@ -1,4 +1,4 @@
-import { Text } from "@/components/core";
+import { Text, TextInput } from "@/components/core";
 import { useTheme } from "@/hooks/useThemeStore";
 import { withAlpha } from "@/themes/color";
 import { formatDate } from "@/utils/date";
@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import {
     Platform,
     ScrollView,
-    TextInput,
     TouchableOpacity,
     View,
 } from "react-native";
@@ -186,12 +185,12 @@ export default function NewHomeworkModal({ visible, defaultDate }) {
                     </View>
                 )}
                 <View style={{ marginBottom: 12 }}>
-                    <Text preset="h2">Ajouter un devoir</Text>
+                    <Text preset="heading.page">Ajouter un devoir</Text>
                     <Text
                         style={{
                             marginTop: 4,
                         }}
-                        preset="body2"
+                        preset="body.md"
                     >
                         Ajouter un devoir pour s'épargner l'agenda !
                     </Text>
@@ -259,7 +258,7 @@ export default function NewHomeworkModal({ visible, defaultDate }) {
                             }
                         >
                             <Text
-                                preset="label1"
+                                preset="control.md"
                                 color={
                                     homeworkDatas.isEvaluation
                                         ? colors.text.onBrand
@@ -279,7 +278,7 @@ export default function NewHomeworkModal({ visible, defaultDate }) {
                     keyboardShouldPersistTaps="handled"
                 >
                     <View style={{ marginBottom: 20 }}>
-                        <Text style={{ marginBottom: 8 }} preset="label1">
+                        <Text style={{ marginBottom: 8 }} preset="control.md">
                             Matière
                         </Text>
                         <View
@@ -313,7 +312,7 @@ export default function NewHomeworkModal({ visible, defaultDate }) {
                     </View>
 
                     <View style={{}}>
-                        <Text style={{ marginBottom: 8 }} preset="label1">
+                        <Text style={{ marginBottom: 8 }} preset="control.md">
                             Tâche à faire
                         </Text>
                         <View
@@ -358,7 +357,7 @@ export default function NewHomeworkModal({ visible, defaultDate }) {
                             alignItems: "center",
                         }}
                     >
-                        <Text preset="label1">Annuler</Text>
+                        <Text preset="control.md">Annuler</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={{
@@ -370,7 +369,7 @@ export default function NewHomeworkModal({ visible, defaultDate }) {
                         }}
                         onPress={handleCreate}
                     >
-                        <Text preset="label1" color={colors.text.onBrand}>
+                        <Text preset="control.md" color={colors.text.onBrand}>
                             Ajouter
                         </Text>
                     </TouchableOpacity>

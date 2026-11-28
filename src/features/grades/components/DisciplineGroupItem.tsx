@@ -1,7 +1,6 @@
 import React from "react";
 import { View } from "react-native";
-import { Text as CoreText } from "@/components/core";
-const Text = CoreText as any;
+import { Text } from "@/components/core";
 import { formatGradeText } from "@/features/grades/utils/helpers";
 import Discipline from "../models/Discipline";
 import DisciplineItem from "./DisciplineItem";
@@ -44,9 +43,11 @@ export default function DisciplineGroupItem({
                     paddingVertical: 2,
                 }}
             >
-                <Text style={{ fontFamily: "SemiBold", fontSize: 20 }}>{title}</Text>
+                <Text preset="heading.section">
+                    {title}
+                </Text>
                 {userAverage !== null && userAverage !== undefined && (
-                    <Text style={{ fontFamily: "SemiBold", fontSize: 20 }}>
+                    <Text preset="metric.md" size={20} weight="semibold">
                         {formatGradeText(userAverage)}
                     </Text>
                 )}

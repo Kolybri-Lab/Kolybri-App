@@ -171,8 +171,9 @@ export default function ActiveCourseCard() {
                             }}
                         />
                         <Text
+                            preset="badge.md"
+                            size={16}
                             color={colors.brand.primary}
-                            style={{ fontFamily: "SemiBold", fontSize: 16 }}
                         >
                             {isLastCourseOfTheDay
                                 ? "DERNIER COURS DE LA JOURNÉE !"
@@ -198,7 +199,7 @@ export default function ActiveCourseCard() {
             )}
             {nextCourseKnown && (
                 <View>
-                    {!inClass && (
+                    {/*{!inClass && (
                         <View
                             style={{
                                 flexDirection: "row",
@@ -206,14 +207,11 @@ export default function ActiveCourseCard() {
                                 marginLeft: 6,
                             }}
                         >
-                            <Text
-                                color={colors.text.primary}
-                                style={{ fontFamily: "SemiBold", fontSize: 16 }}
-                            >
+                            <Text preset="badge.md" size={16}>
                                 PROCHAIN COURS
                             </Text>
                         </View>
-                    )}
+                    )}*/}
                     <TouchableOpacity
                         onPress={() => {
                             haptic();
@@ -258,8 +256,9 @@ const Course = ({ course, progression, isLast }) => {
                 }}
             >
                 <Text
+                    preset="meta.md"
                     color={colors.text.secondary}
-                    style={{ fontFamily: "Medium", fontSize: 14, lineHeight: 18 }}
+                    style={{ lineHeight: 18 }}
                 >
                     {course.schedules.start.time}
                 </Text>
@@ -272,8 +271,9 @@ const Course = ({ course, progression, isLast }) => {
                     }}
                 />
                 <Text
+                    preset="meta.md"
                     color={colors.text.secondary}
-                    style={{ fontFamily: "Medium", fontSize: 14, lineHeight: 18 }}
+                    style={{ lineHeight: 18 }}
                 >
                     {course.schedules.end.time}
                 </Text>
@@ -297,14 +297,10 @@ const Course = ({ course, progression, isLast }) => {
                     }}
                 >
                     <Text
+                        preset="cardTitle.lg"
                         oneLine
                         color={textColor}
-                        style={{
-                            flexShrink: 1,
-                            fontFamily: "Bold",
-                            fontSize: 18,
-                            lineHeight: 24,
-                        }}
+                        style={{ flexShrink: 1 }}
                     >
                         {course.libelle}
                     </Text>
@@ -323,12 +319,9 @@ const Course = ({ course, progression, isLast }) => {
                             size={22}
                         />
                         <Text
+                            preset="meta.md"
+                            size={16}
                             color={colors.text.secondary}
-                            style={{
-                                fontFamily: "Medium",
-                                fontSize: 16,
-                                lineHeight: 20,
-                            }}
                         >
                             {course.schedules.end.time}
                         </Text>
@@ -373,8 +366,9 @@ const NextCourse = ({ course, inClass }) => {
                 }}
             >
                 <Text
+                    preset="meta.md"
                     color={colors.text.secondary}
-                    style={{ fontFamily: "Medium", fontSize: 14, lineHeight: 18 }}
+                    style={{ lineHeight: 18 }}
                 >
                     {course.schedules.start.time}
                 </Text>
@@ -387,8 +381,9 @@ const NextCourse = ({ course, inClass }) => {
                     }}
                 />
                 <Text
+                    preset="meta.md"
                     color={colors.text.secondary}
-                    style={{ fontFamily: "Medium", fontSize: 14, lineHeight: 18 }}
+                    style={{ lineHeight: 18 }}
                 >
                     {course.schedules.end.time}
                 </Text>
@@ -400,14 +395,11 @@ const NextCourse = ({ course, inClass }) => {
                     paddingVertical: 12,
                     paddingLeft: 24,
                     paddingRight: 16,
-                    justifyContent: "space-between",
+                    justifyContent: "center",
+                    gap: 2,
                 }}
             >
-                <Text
-                    oneLine
-                    color={colors.text.primary}
-                    style={{ fontSize: 18, fontFamily: "Bold" }}
-                >
+                <Text preset="cardTitle.lg" oneLine>
                     {course.libelle}
                 </Text>
 
@@ -420,26 +412,18 @@ const NextCourse = ({ course, inClass }) => {
                     }}
                 >
                     <Text
+                        preset="meta.md"
                         oneLine
                         color={colors.text.secondary}
-                        style={{
-                            flexShrink: 1,
-                            fontSize: 15,
-                            fontFamily: "Medium",
-                            lineHeight: 15,
-                        }}
+                        style={{ flexShrink: 1 }}
                     >
                         {course.teacher ?? "Pas de prof."}
                     </Text>
                     <Text
+                        preset="meta.md"
                         oneLine
                         color={colors.text.secondary}
-                        style={{
-                            flexShrink: 0,
-                            fontSize: 15,
-                            fontFamily: "Medium",
-                            lineHeight: 15,
-                        }}
+                        style={{ flexShrink: 0 }}
                     >
                         {course.room ?? "Aucune salle"}
                     </Text>
@@ -477,21 +461,19 @@ const AnyCourse = () => {
                     flexShrink: 0,
                 }}
             >
-                <Text style={{ fontSize: 24 }}>🎉</Text>
+                <Text preset="heading.page">🎉</Text>
             </View>
             <View style={{ flex: 1 }}>
                 <Text
-                    style={{
-                        fontFamily: "Bold",
-                        fontSize: 17,
-                        marginBottom: 2,
-                    }}
+                    preset="cardTitle.lg"
+                    size={17}
+                    style={{ marginBottom: 2 }}
                 >
                     Aucun cours pour le moment
                 </Text>
                 <Text
+                    preset="body.md"
                     color={withAlpha(colors.text.primary, 0.6)}
-                    style={{ fontFamily: "Medium", fontSize: 14 }}
                 >
                     Profites-en pour souffler un peu 😌
                 </Text>

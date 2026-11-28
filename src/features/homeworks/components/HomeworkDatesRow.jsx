@@ -51,21 +51,17 @@ export const HomeworkDateItem = memo(
                     activeOpacity={0.7}
                 >
                     <Text
-                        style={{
-                            fontSize: 20,
-                            fontFamily: "SemiBold",
-                            color: isEvaluation ? colors.state.warning : colors.text.primary,
-                        }}
+                        preset="control.lg"
+                        color={isEvaluation ? colors.state.warning : colors.text.primary}
+                        maxFontSizeMultiplier={1.15}
                     >
                         {contracted[1]}
                     </Text>
                     <Text
-                        style={{
-                            fontSize: 20,
-                            fontFamily: "SemiBold",
-                            color: isEvaluation ? colors.state.warning : colors.text.primary,
-                            marginTop: -12,
-                        }}
+                        preset="control.lg"
+                        color={isEvaluation ? colors.state.warning : colors.text.primary}
+                        maxFontSizeMultiplier={1.15}
+                        style={{ marginTop: -2 }}
                     >
                         {contracted[0]}
                     </Text>

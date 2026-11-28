@@ -36,9 +36,9 @@ export default function DaySummary({ day }: DaySummaryProps) {
     if (!infos)
         return (
             <Text
+                preset="meta.md"
+                weight="semibold"
                 color={colors.text.secondary}
-                style={{ fontFamily: "SemiBold" }}
-                size={15}
             >
                 {isLeaveDay
                     ? "Aucun cours trouvé. Tu es libre !"
@@ -49,44 +49,44 @@ export default function DaySummary({ day }: DaySummaryProps) {
     return (
         <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
             <Text
+                preset="meta.md"
+                weight="semibold"
                 color={colors.text.secondary}
-                style={{ fontFamily: "SemiBold" }}
-                size={15}
             >{`${totalCourses} cours · ${infos.firstHour} - ${infos.lastHour}`}</Text>
             <Text
+                preset="badge.md"
+                weight="medium"
                 color={
                     infos.totalCancelled > 0
                         ? colors.text.onBrand
                         : colors.text.secondary
                 }
-                size={15}
                 style={{
                     backgroundColor:
                         infos.totalCancelled > 0
                             ? colors.state.warning
                             : colors.surface.default,
                     paddingVertical: 2,
-                    paddingHorizontal: 14,
+                    paddingHorizontal: 10,
                     borderRadius: 50,
-                    fontFamily: "Medium",
                 }}
             >{`${infos.totalCancelled} annulé${infos.totalCancelled > 1 ? "s" : ""}`}</Text>
             <Text
+                preset="badge.md"
+                weight="medium"
                 color={
                     infos.totalEdited > 0
                         ? colors.text.onBrand
                         : colors.text.secondary
                 }
-                size={15}
                 style={{
                     backgroundColor:
                         infos.totalEdited > 0
                             ? colors.brand.primary
                             : colors.surface.default,
                     paddingVertical: 2,
-                    paddingHorizontal: 14,
+                    paddingHorizontal: 10,
                     borderRadius: 50,
-                    fontFamily: "Medium",
                 }}
             >{`${infos.totalEdited} modifié${infos.totalEdited > 1 ? "s" : ""}`}</Text>
         </View>

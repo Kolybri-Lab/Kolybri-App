@@ -1,4 +1,5 @@
 import { useTheme } from "@/hooks/useThemeStore";
+import { FONT_FAMILIES } from "@/themes/tokens";
 import { useEffect } from "react";
 import { Pressable, View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
@@ -187,7 +188,15 @@ function Tab({
                 ]}
             >
                 <Animated.Text
-                    style={[{ fontFamily: "SemiBold", fontSize: 16 }, textStyle]}
+                    style={[
+                        {
+                            fontFamily: FONT_FAMILIES.baloo.semibold,
+                            fontSize: 16,
+                            lineHeight: 22,
+                            includeFontPadding: false,
+                        },
+                        textStyle,
+                    ]}
                 >
                     {label}
                 </Animated.Text>

@@ -1,4 +1,4 @@
-import { ScreenStack, Selector, Text } from "@/components";
+import { ScreenStack, Selector, Text, TextInput } from "@/components";
 import { Search } from "@/components/svg";
 import { useMessaging } from "@/features/messaging";
 import { useHaptic } from "@/hooks/useHaptics";
@@ -15,7 +15,6 @@ import {
     FlatList,
     RefreshControl,
     StyleSheet,
-    TextInput,
     TouchableOpacity,
     View,
 } from "react-native";
@@ -189,7 +188,7 @@ export default function MessagingContent() {
                         >
                             <Search size={18} fill={colors.text.primary} />
                             <Text
-                                preset="label1"
+                                preset="control.md"
                                 numberOfLines={1}
                                 adjustsFontSizeToFit
                                 minimumFontScale={0.8}
@@ -246,7 +245,7 @@ export default function MessagingContent() {
                 }}
             >
                 <Text
-                    preset="h3"
+                    preset="heading.page"
                     oneLine
                     style={{ marginBottom: 18, flexShrink: 0 }}
                 >
@@ -344,7 +343,7 @@ const MessageItem = memo(({ item, index, navigation, messages, token }) => {
                     flexShrink: 0,
                 }}
             >
-                <Text preset="label1" color={colors.text.onBrand}>
+                <Text preset="control.md" color={colors.text.onBrand}>
                     {item.sender.initials ?? "??"}
                 </Text>
             </View>
@@ -357,7 +356,11 @@ const MessageItem = memo(({ item, index, navigation, messages, token }) => {
                         justifyContent: "space-between",
                     }}
                 >
-                    <Text preset="title2" oneLine style={{ flexShrink: 1 }}>
+                    <Text
+                        preset="cardTitle.md"
+                        oneLine
+                        style={{ flexShrink: 1, textTransform: "uppercase" }}
+                    >
                         {item.sender.fullName}
                     </Text>
                     <View
@@ -369,7 +372,7 @@ const MessageItem = memo(({ item, index, navigation, messages, token }) => {
                     >
                         <Text
                             oneLine
-                            preset="label2"
+                            preset="meta.md"
                             style={{ flexShrink: 0, marginLeft: 20 }}
                         >
                             {formatDate(new Date(item.date), "fullDate")}
@@ -386,7 +389,7 @@ const MessageItem = memo(({ item, index, navigation, messages, token }) => {
                         )}
                     </View>
                 </View>
-                <Text preset="body2" oneLine>
+                <Text preset="body.md" oneLine>
                     {item.subject}
                 </Text>
             </View>

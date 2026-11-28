@@ -68,27 +68,36 @@ export default function DataAndConfidentialityScreen({ route }) {
                     marginBottom: 28,
                 }}
             >
-                <Text align="justify" preset="body2">
-                    <Text preset="label1" decoration="underline">
+                <Text align="justify" preset="body.md" color={colors.text.onBrand}>
+                    <Text
+                        preset="control.md"
+                        decoration="underline"
+                        color={colors.text.onBrand}
+                    >
                         Information
                     </Text>
                     : Cette application n'est connectée à aucun service tiers, à
                     l'exception d'École Directe, dont elle dépend pour son
                     fonctionnement.
                 </Text>
-                <Text preset="body2">
+                <Text preset="body.md" color={colors.text.onBrand}>
                     Aucune donnée, qu'elle soit personnelle ou technique, n'est
                     collectée sans le consentement de l'utilisateur, stockée ou
                     transmise à des services tiers, qu'ils nous appartiennent ou non.
                 </Text>
-                <Text preset="label1" align="center" decoration="underline">
+                <Text
+                    preset="control.md"
+                    align="center"
+                    decoration="underline"
+                    color={colors.text.onBrand}
+                >
                     Votre vie privée est notre priorité.
                 </Text>
             </View>
 
             <View style={{ gap: 18 }}>
                 <View>
-                    <Text preset="label1" style={{ marginBottom: 8 }}>
+                    <Text preset="control.md" style={{ marginBottom: 8 }}>
                         Télécharger vos données personnalisées
                     </Text>
                     <View
@@ -143,7 +152,7 @@ export default function DataAndConfidentialityScreen({ route }) {
                             ) : (
                                 <Download size={18} color={colors.text.onBrand} />
                             )}
-                            <Text preset="label1" color={colors.text.onBrand}>
+                            <Text preset="control.md" color={colors.text.onBrand}>
                                 {isLoading
                                     ? "Téléchargement..."
                                     : isSuccess
@@ -154,7 +163,7 @@ export default function DataAndConfidentialityScreen({ route }) {
                     </View>
                 </View>
                 <View>
-                    <Text preset="label1" style={{ marginBottom: 8 }}>
+                    <Text preset="control.md" style={{ marginBottom: 8 }}>
                         Jeton d'API actuel
                     </Text>
                     <Section

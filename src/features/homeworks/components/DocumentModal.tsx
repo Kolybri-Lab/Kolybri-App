@@ -1,5 +1,5 @@
 import { Modal } from "@/components";
-import { Text as CoreText } from "@/components/core";
+import { Text } from "@/components/core";
 import { File } from "@/components/svg";
 import {
     downloadDocument,
@@ -12,7 +12,6 @@ import { withAlpha } from "@/themes/color";
 import React, { useCallback, useState } from "react";
 import { ListRenderItemInfo, TouchableOpacity, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
-const Text = CoreText as any;
 
 export interface HomeworkDocument {
     id: number | string;
@@ -109,8 +108,8 @@ export default function DocumentModal({
                         }}
                     >
                         <View style={{ flex: 1 }}>
-                            <Text preset="label2">{libelle}</Text>
-                            <Text preset="label3">{assignUnit(size)}</Text>
+                            <Text preset="cardTitle.sm" weight="medium">{libelle}</Text>
+                            <Text preset="meta.sm">{assignUnit(size)}</Text>
                         </View>
                         <File fill={colors.text.primary} size={25} extention={ext} />
                     </View>
@@ -135,11 +134,11 @@ export default function DocumentModal({
 
     return (
         <Modal visible={visible} handleClose={onClose}>
-            <Text preset="title1" style={{ marginBottom: 12 }}>
+            <Text preset="heading.section" size={18} weight="bold" style={{ marginBottom: 12 }}>
                 Documents associés
             </Text>
             <Text
-                preset="label3"
+                preset="body.sm"
                 color={colors?.text?.secondary}
                 style={{ marginBottom: 6 }}
             >

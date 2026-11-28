@@ -47,17 +47,11 @@ export default function GeneralAveragePreview({ gradesData }) {
                 alignItems: "center",
                 justifyContent: "space-between",
                 paddingHorizontal: 20,
-                paddingVertical: 10,
+                paddingVertical: 15,
             }}
         >
             <View style={{}}>
-                <Text
-                    style={{
-                        color: colors.text.primary,
-                        fontSize: 18,
-                        fontFamily: "Bold",
-                    }}
-                >
+                <Text preset="cardTitle.lg">
                     {"Moyenne Générale".toUpperCase()}
                 </Text>
                 <View
@@ -67,7 +61,7 @@ export default function GeneralAveragePreview({ gradesData }) {
                         gap: 8,
                     }}
                 >
-                    <Text preset="label2" color={colors.text.secondary}>
+                    <Text preset="meta.md" color={colors.text.secondary}>
                         {gradesData.activePeriod.periodName}
                     </Text>
                     <View
@@ -78,13 +72,14 @@ export default function GeneralAveragePreview({ gradesData }) {
                             backgroundColor: colors.text.secondary,
                         }}
                     />
-                    <Text preset="label2" color={colors.text.secondary}>
+                    <Text preset="meta.md" color={colors.text.secondary}>
                         {currentTime.date.split("-")[0]}
                     </Text>
                 </View>
             </View>
             <Text
-                style={{ fontFamily: "Bold", fontSize: 32, marginTop: 3 }}
+                preset="metric.xl"
+                style={{ marginTop: 3 }}
                 color={colors.brand.primary}
             >
                 {formatGradeText(generalAverage)}

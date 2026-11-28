@@ -21,8 +21,12 @@ import {
 const GITHUB_REPO = "as2pick/EcoleDirectePlus-Mobile";
 const MAIN_DEVS_LOGINS = ["as2pick", "Lucilus78"];
 
-const Paragraph = ({ children }) => {
-    return <Text style={styles.paragraph}>{children}</Text>;
+const Paragraph = ({ style, children }) => {
+    return (
+        <Text preset="body.md" style={[styles.paragraph, style]}>
+            {children}
+        </Text>
+    );
 };
 
 const Link = ({ href, isPeople = false, children }) => {
@@ -30,6 +34,8 @@ const Link = ({ href, isPeople = false, children }) => {
     return (
         <LinkText
             href={String(href)}
+            preset="body.md"
+            weight="semibold"
             color={colors.brand.primary}
             underline={isPeople}
         >
@@ -104,9 +110,13 @@ export default function PrivacyPolicyScreen() {
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View>
                     <Title>Politique de confidentialité – Kolybri</Title>
-                    <Paragraph style={{ fontStyle: "italic" }}>
+                    <Text
+                        preset="meta.md"
+                        color={colors.text.secondary}
+                        style={styles.paragraph}
+                    >
                         Dernière mise à jour : 12 septembre 2026
-                    </Paragraph>
+                    </Text>
 
                     <Subtitle>1. Présentation</Subtitle>
                     <Paragraph>
@@ -634,9 +644,13 @@ export default function PrivacyPolicyScreen() {
                         marginTop: 14,
                     }}
                 >
-                    <Text>Copyleft 2026</Text>
+                    <Text preset="meta.sm" color={colors.text.secondary}>
+                        Copyleft 2026
+                    </Text>
                     <CopyLeft size={17} />
-                    <Text>Kolybri</Text>
+                    <Text preset="meta.sm" color={colors.text.secondary}>
+                        Kolybri
+                    </Text>
                 </SafeAreaView>
             </ScrollView>
         </ScreenStack>

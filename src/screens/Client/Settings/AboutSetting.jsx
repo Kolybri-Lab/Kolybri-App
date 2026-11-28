@@ -59,7 +59,7 @@ export default function AboutScreen({ route }) {
                         marginBottom: 20,
                     }}
                 >
-                    <Text preset="body1" align="center">
+                    <Text preset="body.lg" align="center">
                         Kolybri simplifie l'accès à vos données École Directe grâce à
                         une interface moderne, rapide et respectueuse de votre vie
                         privée. Aucune donnée n'est collectée ni revendue : votre
@@ -70,7 +70,7 @@ export default function AboutScreen({ route }) {
 
             <View style={{ gap: 4, flex: 1, justifyContent: "center" }}>
                 <Text
-                    preset="label2"
+                    preset="meta.md"
                     style={{ marginTop: 26 }}
                     color={colors.text.primary}
                 >
@@ -111,7 +111,7 @@ export default function AboutScreen({ route }) {
                     <Link size={24} fill={withAlpha(colors.text.primary, 0.3)} />
                 </Section>
                 <Text
-                    preset="label2"
+                    preset="meta.md"
                     style={{ marginTop: 26 }}
                     color={colors.text.primary}
                 >
@@ -225,13 +225,13 @@ export default function AboutScreen({ route }) {
                     marginVertical: 20,
                 }}
             >
-                <Text preset="label1" align="center">
+                <Text preset="body.lg" weight="semibold" align="center">
                     Cette application à été designé, concue et développée par des
                     étudiant français avec
                 </Text>
                 <Heart fill={"hsl(0, 70%, 60%)"} color={"transparent"} size={30} />
                 <Text
-                    weight="light"
+                    weight="regular"
                     size={7}
                     color={withAlpha(colors.text.primary, 0.14)}
                 >

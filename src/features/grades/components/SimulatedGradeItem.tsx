@@ -1,7 +1,6 @@
 import React from "react";
 import { TouchableOpacity, View } from "react-native";
-import { Text as CoreText } from "@/components/core";
-const Text = CoreText as any;
+import { Text } from "@/components/core";
 import { formatGradeText } from "@/features/grades/utils/helpers";
 import { useTheme } from "@/hooks/useThemeStore";
 import { withAlpha } from "@/themes/color";
@@ -40,15 +39,20 @@ export default function SimulatedGradeItem({
                 });
             }}
         >
-            <Text style={{ flexShrink: 1 }} oneLine preset="label2">
+            <Text
+                style={{ flexShrink: 1 }}
+                oneLine
+                preset="cardTitle.sm"
+                weight="medium"
+            >
                 {grade.libelle}
             </Text>
-            <Text preset="label1">
+            <Text preset="metric.sm">
                 {formatGradeText(grade.data?.grade)}
                 {grade.data?.outOf !== 20 &&
                     grade.data?.outOf !== null &&
                     grade.data?.outOf !== undefined && (
-                        <Text preset="label3">
+                        <Text preset="meta.sm">
                             {`/${grade.data.outOf}`}
                         </Text>
                     )}
