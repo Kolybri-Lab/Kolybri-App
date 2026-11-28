@@ -29,7 +29,7 @@ const UI_BADGES: Record<string, any> = {
 
 export default function GradeItem({ grade, dispatch }: GradeItemProps) {
     const { colors } = useTheme() as any;
-    const softColor = colors?.brand?.soft ?? "hsl(240, 95%, 85%)";
+    const softColor = colors.brand.soft;
 
     let backgroundColor = softColor;
     switch (grade.actionOnStreak) {
@@ -37,14 +37,16 @@ export default function GradeItem({ grade, dispatch }: GradeItemProps) {
             backgroundColor = softColor;
             break;
         case "up":
+            // Fixed amber tint for streak-up grade cards
             backgroundColor = "hsla(36, 100%, 34%, .35)";
             break;
         case "previous up":
+            // Fixed muted tint for previous streak-up grade cards
             backgroundColor = "hsla(36, 10%, 41%, .3)";
             break;
     }
 
-    const borderColor = colors?.border?.subtle ?? "hsla(240, 62%, 58%, 0.2)";
+    const borderColor = colors.border.subtle;
 
     return (
         <TouchableOpacity

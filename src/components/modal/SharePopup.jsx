@@ -33,6 +33,7 @@ export default function SharePopup({ navigation }) {
         <View
             style={{
                 flex: 1,
+                // Intentional fixed dark scrim for modal backdrop
                 backgroundColor: "rgba(0,0,0,0.5)",
                 justifyContent: "center",
                 alignItems: "center",

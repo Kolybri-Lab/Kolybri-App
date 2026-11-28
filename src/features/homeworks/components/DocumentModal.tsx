@@ -8,6 +8,7 @@ import {
 import { assignUnit } from "@/features/homeworks/utils/homeworks";
 import { useTheme } from "@/hooks/useThemeStore";
 import { useUserStore } from "@/hooks/useUserStore";
+import { withAlpha } from "@/themes/color";
 import React, { useCallback, useState } from "react";
 import { ListRenderItemInfo, TouchableOpacity, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
@@ -90,7 +91,7 @@ export default function DocumentModal({
                                 top: 0,
                                 bottom: 0,
                                 width: `${prog}%`,
-                                backgroundColor: "#4CAF5066",
+                                backgroundColor: withAlpha(colors.brand.primary, 0.4),
                                 borderRadius: 9,
                             }}
                         />

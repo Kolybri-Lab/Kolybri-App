@@ -103,7 +103,7 @@ export default function AccountScreen({ route }) {
                 {ableToValidate && (
                     <Pressable
                         style={{
-                            backgroundColor: "green",
+                            backgroundColor: colors.brand.primary,
                             justifyContent: "center",
                             alignItems: "center",
                             paddingVertical: 12,
@@ -122,7 +122,9 @@ export default function AccountScreen({ route }) {
                             setAbleToValidate(false);
                         }}
                     >
-                        <Text preset="label1">Valider les modifications</Text>
+                        <Text preset="label1" color={colors.text.onBrand}>
+                            Valider les modifications
+                        </Text>
                     </Pressable>
                 )}
             </View>

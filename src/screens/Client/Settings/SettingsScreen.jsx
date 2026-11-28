@@ -184,7 +184,6 @@ export default function SettingsScreen({}) {
                                 height: 50,
                                 alignItems: "center",
                                 justifyContent: "center",
-                                backgroundColor: "hsla(0, 0%, 100%, 0.3)",
                                 overflow: "hidden",
                             }}
                         >
@@ -353,14 +352,14 @@ export default function SettingsScreen({}) {
                             onPress={signOut}
                             index={0}
                             totalLength={1}
-                            backgroundColor="hsla(0, 47%, 55%, .8)"
+                            backgroundColor={withAlpha(colors.state.warning, 0.8)}
                         />
                     </View>
                 </View>
                 <SafeAreaView edges={["bottom"]} style={{ marginBottom: 20 }}>
                     <View
                         style={{
-                            backgroundColor: "hsla(0, 0%, 0%, 0.25)",
+                            backgroundColor: withAlpha(colors.surface.raised,0.6),
                             paddingVertical: 12,
                             paddingHorizontal: 14,
                             alignItems: "center",
@@ -368,7 +367,7 @@ export default function SettingsScreen({}) {
                             borderRadius: 20,
                         }}
                     >
-                        <Text preset="label3" color="hsla(0, 0%, 100%, .6)">
+                        <Text preset="label3" color={colors.text.secondary}>
                             Le meilleur reste à venir...
                         </Text>
                     </View>

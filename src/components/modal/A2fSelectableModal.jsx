@@ -107,7 +107,9 @@ export default function A2fSelectableModal({
                         />
                     </View>
 
-                    {emptyError && <Text style={{ color: "red" }}>ERREUR</Text>}
+                    {emptyError && (
+                        <Text style={{ color: colors.state.warning }}>ERREUR</Text>
+                    )}
                     <View
                         style={[
                             styles.buttonsContainer,
@@ -163,6 +165,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
+        // Intentional fixed dark scrim for modal backdrop
         backgroundColor: "rgba(0, 0, 0, 0.5)",
         height: 200,
     },
@@ -191,7 +194,6 @@ const styles = StyleSheet.create({
     },
     selectedText: {
         fontSize: 18,
-        color: "#fff",
     },
     buttonsContainer: {
         position: "relative",

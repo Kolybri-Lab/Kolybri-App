@@ -20,6 +20,7 @@ import { TriangleAlert, X, RefreshCw, ServerOff } from "lucide-react-native";
 import { useQueryClient } from "@tanstack/react-query";
 import { useErrorStore } from "@/hooks/useErrorStore";
 import { useAuthStore } from "@/hooks/useAuthStore";
+import { useTheme } from "@/hooks/useThemeStore";
 import { AppError, EnrichedAppError } from "@/types/errors";
 import { getApiMessage } from "@/constants/api/codes";
 
@@ -80,6 +81,7 @@ export function ErrorToast({ onPressDismiss }: ErrorToastProps) {
                         left: -1000,
                         right: -1000,
                         bottom: -1000,
+                        // Intentional fixed dark scrim for expanded toast backdrop
                         backgroundColor: "rgba(0, 0, 0, 0.5)",
                         zIndex: 997,
                     }}
@@ -133,6 +135,7 @@ export const ToastItem = React.memo(function ToastItem({
     onToggleExpand: () => void;
     onDismiss: (id: string) => void;
 }) {
+    const { colors } = useTheme();
     const { id, durationMs, error } = enrichedError;
     const translateY = useSharedValue(0);
     const [hasBeenOpened, setHasBeenOpened] = useState(false);
@@ -180,11 +183,11 @@ export const ToastItem = React.memo(function ToastItem({
             style={[
                 {
                     borderRadius: 14,
-                    backgroundColor: "#0C0C20",
+                    backgroundColor: colors.surface.default,
                     marginBottom: 8,
                     zIndex: isOpen ? 1000 : 999,
                     overflow: "hidden",
-                    borderColor: "red",
+                    borderColor: colors.state.warning,
                     borderWidth: 1.5,
                 },
                 containerStyle,
@@ -243,6 +246,7 @@ export function ToastExpandedContent({
     id: string;
     onDismiss: (id: string) => void;
 }) {
+    const { colors } = useTheme();
     if (!isOpen) return null;
 
     return (
@@ -254,7 +258,7 @@ export function ToastExpandedContent({
                 paddingBottom: 24,
                 paddingTop: 10,
                 borderTopWidth: 1,
-                borderColor: "rgba(255, 255, 255, 0.1)",
+                borderColor: colors.text.raised,
                 gap: 6,
             }}
         >
@@ -280,6 +284,7 @@ export function AnimatedTitle({
     startFontSize?: number;
     endFontSize?: number;
 }) {
+    const { colors } = useTheme();
     const fontSizeValue = useSharedValue(startFontSize);
 
     useEffect(() => {
@@ -300,7 +305,7 @@ export function AnimatedTitle({
             style={[
                 {
                     fontSize: startFontSize,
-                    color: "red",
+                    color: colors.state.warning,
                     marginTop: -1,
                     fontWeight: isOpen ? "bold" : "normal",
                 },
@@ -321,6 +326,7 @@ export function AnimatedIndication({
     isOpen: boolean;
     hasBeenOpened: boolean;
 }) {
+    const { colors } = useTheme();
     if (isOpen) return null;
 
     return (
@@ -332,7 +338,7 @@ export function AnimatedIndication({
                 numberOfLines={1}
                 style={{
                     fontSize: 11,
-                    color: "rgba(255,255,255, .8)",
+                    color: colors.text.secondary,
                 }}
             >
                 {indication}
@@ -354,6 +360,7 @@ export function AnimatedButtons({
     onRefresh?: () => void;
     onDismiss?: (id: string) => void;
 }) {
+    const { colors } = useTheme();
     if (isOpen) return null;
 
     return (
@@ -370,23 +377,28 @@ export function AnimatedButtons({
                 onPress={onRefresh ?? (() => console.log("Refresh"))}
                 hitSlop={10}
             >
-                <RefreshCw color="#6382FF" strokeWidth={3} />
+                <RefreshCw color={colors.brand.primary} strokeWidth={3} />
             </TouchableOpacity>
             <TouchableOpacity
                 onPress={() => onDismiss && onDismiss(id)}
                 hitSlop={10}
             >
-                <X color="#7A7A7A" strokeWidth={3} />
+                <X color={colors.text.secondary} strokeWidth={3} />
             </TouchableOpacity>
         </Animated.View>
     );
 }
 
 export function ErrorIcon({ type }: { type?: string }) {
+    const { colors } = useTheme();
     if (type === "api-business") {
-        return <ServerOff size={32} color="red" strokeWidth={2.5} />;
+        return (
+            <ServerOff size={32} color={colors.state.warning} strokeWidth={2.5} />
+        );
     }
-    return <TriangleAlert color="red" strokeWidth={2.5} size={32} />;
+    return (
+        <TriangleAlert size={32} color={colors.state.warning} strokeWidth={2.5} />
+    );
 }
 
 export function ActionButton({
@@ -399,6 +411,7 @@ export function ActionButton({
     onDismiss: (id: string) => void;
 }) {
     const queryClient = useQueryClient();
+    const { colors } = useTheme();
 
     const handleLightweightRefresh = async () => {
         onDismiss(id);
@@ -437,12 +450,14 @@ export function ActionButton({
                     height: 27,
                     borderRadius: 6,
                     borderWidth: 1,
-                    borderColor: "#6382FF",
+                    borderColor: colors.brand.primary,
                     justifyContent: "center",
                     alignItems: "center",
                 }}
             >
-                <Text style={{ color: "#FFFFFF", fontSize: 14 }}>Ignorer</Text>
+                <Text style={{ color: colors.brand.primary, fontSize: 14, }}>
+                    Ignorer
+                </Text>
             </TouchableOpacity>
             <TouchableOpacity
                 onPress={handleRetry}
@@ -450,18 +465,21 @@ export function ActionButton({
                     width: "45%",
                     height: 27,
                     borderRadius: 6,
-                    backgroundColor: "#6382FF",
+                    backgroundColor: colors.brand.primary,
                     justifyContent: "center",
                     alignItems: "center",
                 }}
             >
-                <Text style={{ color: "#FFFFFF", fontSize: 14 }}>Réessayer</Text>
+                <Text style={{ color: colors.text.onBrand, fontSize: 14 }}>
+                    Réessayer
+                </Text>
             </TouchableOpacity>
         </View>
     );
 }
 
 export function ErrorDescription({ type }: { type: string }) {
+    const { colors } = useTheme();
     let description =
         type === "api-business"
             ? "Le serveur d’école directe n’a pas répondu correctement. Les données affichées sont donc les anciennes et pourraient être légèrement obsolètes."
@@ -471,7 +489,7 @@ export function ErrorDescription({ type }: { type: string }) {
         <>
             <Text
                 style={{
-                    color: "white",
+                    color: colors.text.primary,
                     fontSize: 16,
                     marginBottom: 10,
                     marginTop: 5,
@@ -479,18 +497,21 @@ export function ErrorDescription({ type }: { type: string }) {
             >
                 Ce n'est pas une erreur bloquante
             </Text>
-            <Text style={{ color: "white", fontSize: 12 }}>
+            <Text style={{ color: colors.text.secondary, fontSize: 12 }}>
                 Mais de multiples erreurs comme celle ci constituent un problème mais
                 c'est inoffensif.
             </Text>
             {description && (
-                <Text style={{ color: "white", fontSize: 12 }}>{description}</Text>
+                <Text style={{ color: colors.text.secondary, fontSize: 12 }}>
+                    {description}
+                </Text>
             )}
         </>
     );
 }
 
 export function ErrorDetails({ error }: { error: AppError }) {
+    const { colors } = useTheme();
     const code = "code" in error ? error.code : undefined;
     const signification = code != undefined ? getApiMessage(code) : undefined;
 
@@ -502,20 +523,22 @@ export function ErrorDetails({ error }: { error: AppError }) {
                 padding: 6,
                 borderTopWidth: 0.5,
                 borderBottomWidth: 0.5,
-                borderColor: "rgba(255,255,255, .6)",
+                borderColor: colors.text.raised,
             }}
         >
             {code != undefined && (
-                <Text style={{ color: "white", fontSize: 14 }}>Code : {code}</Text>
+                <Text style={{ color: colors.text.primary, fontSize: 14 }}>
+                    Code : {code}
+                </Text>
             )}
             {signification != undefined && (
-                <Text style={{ color: "white", fontSize: 14 }}>
+                <Text style={{ color: colors.text.primary, fontSize: 14 }}>
                     Signification : {signification}
                 </Text>
             )}
             <Text
                 style={{
-                    color: "white",
+                    color: colors.text.primary,
                     fontSize: 14,
                     marginTop: code != undefined ? 10 : 0,
                 }}

@@ -254,6 +254,7 @@ function Selector({
                                     offsetY: 0,
                                     blurRadius: 14,
                                     spreadDistance: 3,
+                                    // Intentional neutral black drop-shadow
                                     color: `hsla(0, 0%, 0%, ${isDark ? 0.3 : 0.14})`,
                                 },
                             ],

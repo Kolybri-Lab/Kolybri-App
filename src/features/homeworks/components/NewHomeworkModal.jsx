@@ -129,6 +129,7 @@ export default function NewHomeworkModal({ visible, defaultDate }) {
                 style={[
                     {
                         flex: 1,
+                        // Intentional fixed dark scrim for modal backdrop
                         backgroundColor: "rgba(0,0,0,0.7)",
                     },
                     backdropStyle,
@@ -170,14 +171,14 @@ export default function NewHomeworkModal({ visible, defaultDate }) {
                 {error && (
                     <View
                         style={{
-                            backgroundColor: "hsla(0, 70%, 50%, 0.2)",
+                            backgroundColor: withAlpha(colors.state.warning, 0.2),
                             marginHorizontal: 60,
                             paddingVertical: 12,
                             borderRadius: 10,
                             justifyContent: "center",
                             alignItems: "center",
                             borderWidth: 1,
-                            borderColor: "hsla(0, 70%, 50%, 0.5)",
+                            borderColor: withAlpha(colors.state.warning, 0.5),
                             marginBottom: 10,
                         }}
                     >
@@ -243,7 +244,7 @@ export default function NewHomeworkModal({ visible, defaultDate }) {
                         <TouchableOpacity
                             style={{
                                 backgroundColor: homeworkDatas.isEvaluation
-                                    ? "hsl(0, 54%, 57%)"
+                                    ? colors.state.warning
                                     : colors.surface.default,
                                 alignSelf: "center",
                                 paddingHorizontal: 14,
@@ -257,7 +258,16 @@ export default function NewHomeworkModal({ visible, defaultDate }) {
                                 }))
                             }
                         >
-                            <Text preset="label1">Contrôle</Text>
+                            <Text
+                                preset="label1"
+                                color={
+                                    homeworkDatas.isEvaluation
+                                        ? colors.text.onBrand
+                                        : colors.text.primary
+                                }
+                            >
+                                Contrôle
+                            </Text>
                         </TouchableOpacity>
                     </View>
                 </View>

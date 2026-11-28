@@ -107,7 +107,7 @@ const DateHeader = ({ date, meta, progress }) => {
                 delay={700}
                 color={
                     progress === 1
-                        ? "hsl(149, 64%, 52%)"
+                        ? colors.state.success
                         : components.progressBar.progress
                 }
                 style={{

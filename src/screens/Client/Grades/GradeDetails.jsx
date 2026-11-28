@@ -245,7 +245,7 @@ const Teachers = ({ teachers = [] }) => {
     }
 
     return (
-        <Text preset="label3" color={"hsl(320, 52%, 55%)"} /* EDIT */>
+        <Text preset="label3" color={colors.text.secondary}>
             Aucun enseignant pour cette discipline
         </Text>
     );

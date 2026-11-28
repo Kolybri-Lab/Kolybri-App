@@ -1,4 +1,4 @@
-import { DropDownMenu, Section, Text } from "@/components";
+import { Section, Selector, Text } from "@/components";
 import { Key } from "@/components/svg";
 import { downloadCustomData } from "@/helpers/documents/customDataAction";
 import { useCustomDataStore } from "@/hooks/useCustomDataStore";
@@ -61,7 +61,7 @@ export default function DataAndConfidentialityScreen({ route }) {
         <SettingSectionLayout label={label}>
             <View
                 style={{
-                    backgroundColor: "hsla(0, 100%, 73%, 0.5)",
+                    backgroundColor: withAlpha(colors.state.warning, 0.7),
                     padding: 16,
                     borderRadius: 18,
                     gap: 6,
@@ -100,7 +100,8 @@ export default function DataAndConfidentialityScreen({ route }) {
                         }}
                     >
                         <View style={{ flex: 1 }}>
-                            <DropDownMenu
+                            <Selector
+                                type="dropdown"
                                 options={[
                                     {
                                         id: "custom_homeworks",
@@ -113,7 +114,7 @@ export default function DataAndConfidentialityScreen({ route }) {
                                 ]}
                                 value={selectedCustomData}
                                 minWidth="100%"
-                                customButtonStyle={{ height: 48 }}
+                                fontSize={15}
                                 onSelect={(value) => setSelectedCustomData(value)}
                             />
                         </View>
@@ -126,10 +127,10 @@ export default function DataAndConfidentialityScreen({ route }) {
                                 alignItems: "center",
                                 gap: 6,
                                 backgroundColor: isDisabled
-                                    ? "#C4C4C4"
+                                    ? withAlpha(colors.text.primary, 0.2)
                                     : isSuccess
-                                      ? "hsl(121, 56%, 34%)"
-                                      : "hsl(121, 34%, 27%)",
+                                      ? colors.state.success
+                                      : colors.brand.primary,
                                 opacity: pressed ? 0.85 : 1,
                                 height: 48,
                                 justifyContent: "center",
@@ -138,11 +139,11 @@ export default function DataAndConfidentialityScreen({ route }) {
                             })}
                         >
                             {isSuccess ? (
-                                <Check size={18} color="white" />
+                                <Check size={18} color={colors.text.onBrand} />
                             ) : (
-                                <Download size={18} color="white" />
+                                <Download size={18} color={colors.text.onBrand} />
                             )}
-                            <Text preset="label1" style={{ color: "white" }}>
+                            <Text preset="label1" color={colors.text.onBrand}>
                                 {isLoading
                                     ? "Téléchargement..."
                                     : isSuccess

@@ -102,6 +102,7 @@ export default function AddGradeModal({ visible, disciplineCodes }) {
         >
             <Animated.View
                 style={[
+                    // Intentional fixed dark scrim for modal backdrop
                     { flex: 1, backgroundColor: "rgba(0,0,0,0.7)" },
                     backdropStyle,
                 ]}
@@ -134,7 +135,7 @@ export default function AddGradeModal({ visible, disciplineCodes }) {
                     style={{
                         width: 50,
                         height: 5,
-                        backgroundColor: "hsla(240, 20%, 60%, 0.4)",
+                        backgroundColor: colors.text.onBrand,
                         borderRadius: 3,
                         alignSelf: "center",
                         marginBottom: 24,
@@ -284,16 +285,16 @@ export default function AddGradeModal({ visible, disciplineCodes }) {
                 {isGradeAboveScale && (
                     <View
                         style={{
-                            backgroundColor: "hsla(0, 70%, 50%, 0.2)",
+                            backgroundColor: withAlpha(colors.state.warning, 0.2),
                             borderRadius: 10,
                             padding: 12,
                             marginBottom: 20,
                             borderWidth: 1,
-                            borderColor: "hsla(0, 70%, 50%, 0.5)",
+                            borderColor: withAlpha(colors.state.warning, 0.5),
                             flex: 1,
                         }}
                     >
-                        <Text preset="body2" color="hsla(0, 70%, 70%, 1)">
+                        <Text preset="body2" color={colors.state.warning}>
                             ⚠️ La note ne peut pas être supérieure au barème
                         </Text>
                     </View>

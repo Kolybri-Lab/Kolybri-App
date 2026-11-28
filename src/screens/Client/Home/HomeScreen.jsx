@@ -61,13 +61,13 @@ export default function HomeScreen() {
                                 borderRadius: 16,
                                 marginBottom: 18,
                                 opacity: 0.85,
-                                borderColor: "hsla(0, 0%, 100%, 0.6)",
+                                borderColor: colors.border.subtle,
                                 borderWidth: 1.5,
                                 width: 46,
                                 height: 46,
                                 alignItems: "center",
                                 justifyContent: "center",
-                                backgroundColor: "hsla(0, 0%, 100%, 0.3)",
+                                backgroundColor: colors.surface.default,
                             }}
                             onPress={() =>
                                 navigation.navigate(

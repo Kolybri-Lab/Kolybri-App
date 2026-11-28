@@ -344,7 +344,7 @@ const MessageItem = memo(({ item, index, navigation, messages, token }) => {
                     flexShrink: 0,
                 }}
             >
-                <Text preset="label1" style={{ color: "white" }}>
+                <Text preset="label1" color={colors.text.onBrand}>
                     {item.sender.initials ?? "??"}
                 </Text>
             </View>
@@ -379,7 +379,7 @@ const MessageItem = memo(({ item, index, navigation, messages, token }) => {
                                 style={{
                                     width: 10,
                                     height: 10,
-                                    backgroundColor: "hsla(0, 0%, 100%, 1)",
+                                    backgroundColor: colors.brand.primary,
                                     borderRadius: 5,
                                 }}
                             />

@@ -407,6 +407,7 @@ const getShiftedTimetable = (requestedMonday?: string) => {
             typeCours: "COURS",
             start_date: testStartTime,
             end_date: testEndTime,
+            // Mock guest course color
             color: "#3b82f6",
             dispensable: false,
             dispense: 0,

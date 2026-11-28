@@ -1,6 +1,7 @@
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { Text } from "@/components/core";
 
+// Intentional fixed colors: rendered during native splash before ThemeProvider/theme store is ready
 const SplashScreen = () => {
     return (
         <View style={styles.container}>

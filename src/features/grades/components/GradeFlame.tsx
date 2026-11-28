@@ -95,6 +95,7 @@ const styles = StyleSheet.create({
     },
     flammeText: {
         fontWeight: "bold",
+        // Intentional fixed white text over the flame SVG illustration
         color: "#FFFFFF",
     },
     flammeSubText: {

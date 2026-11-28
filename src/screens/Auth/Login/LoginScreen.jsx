@@ -199,13 +199,12 @@ export default function LoginScreen() {
                                     {passwordVisible ? (
                                         <EyeIcon
                                             size={26}
-
-                                            color="hsl(222, 54%, 75%)"
+                                            color={theme.colors.brand.primary}
                                         />
                                     ) : (
                                         <EyeClosedIcon
                                             size={26}
-                                            color="hsl(222, 54%, 75%)"
+                                            color={theme.colors.brand.primary}
                                         />
                                     )}
                                 </Pressable>
@@ -307,7 +306,7 @@ const createStyles = (theme, caseColor) =>
             zIndex: 1,
             justifyContent: "center",
             alignItems: "center",
-            backgroundColor: "rgb(10, 10, 10)",
+            backgroundColor: theme.colors.background.app,
         },
         form: {
             marginTop: 26,

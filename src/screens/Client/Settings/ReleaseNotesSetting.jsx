@@ -53,6 +53,7 @@ const getVersionStyle = (version, index, colors) => {
     };
 };
 
+// Intentional fixed semantic badge colors for release note categories
 const getBadgeStyle = (type, colors) => {
     switch (type) {
         case "new":
@@ -219,8 +220,7 @@ export default function ReleaseNotesScreen({ route }) {
                                                     height: 6,
                                                     borderRadius: 4,
                                                     backgroundColor:
-                                                        colors.text.onBrand ??
-                                                        "#FFFFFF",
+                                                        colors.text.onBrand,
                                                 }}
                                             />
                                         )}

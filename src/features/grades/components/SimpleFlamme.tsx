@@ -12,6 +12,7 @@ export default function SimpleFlamme({
     const computedWidth = width || (size ? size : 51);
     const computedHeight = height || (size ? (size * 68) / 51 : 68);
 
+    // Intentional fixed palette for the flame illustration (white fills below are SVG mask/clip primitives)
     const lightColor = color === "orange" ? "#F4BB86" : "#BDBDBD";
     const darkColor = color === "orange" ? "#F28931" : "#919191";
 

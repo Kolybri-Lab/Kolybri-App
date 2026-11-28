@@ -54,13 +54,17 @@ export default function DaySummary({ day }: DaySummaryProps) {
                 size={15}
             >{`${totalCourses} cours · ${infos.firstHour} - ${infos.lastHour}`}</Text>
             <Text
-                color={colors.text.onBrand}
+                color={
+                    infos.totalCancelled > 0
+                        ? colors.text.onBrand
+                        : colors.text.secondary
+                }
                 size={15}
                 style={{
                     backgroundColor:
                         infos.totalCancelled > 0
                             ? colors.state.warning
-                            : "hsl(215, 28%, 17%)",
+                            : colors.surface.default,
                     paddingVertical: 2,
                     paddingHorizontal: 14,
                     borderRadius: 50,
@@ -68,13 +72,17 @@ export default function DaySummary({ day }: DaySummaryProps) {
                 }}
             >{`${infos.totalCancelled} annulé${infos.totalCancelled > 1 ? "s" : ""}`}</Text>
             <Text
-                color={colors.text.onBrand}
+                color={
+                    infos.totalEdited > 0
+                        ? colors.text.onBrand
+                        : colors.text.secondary
+                }
                 size={15}
                 style={{
                     backgroundColor:
                         infos.totalEdited > 0
                             ? colors.brand.primary
-                            : "hsl(215, 28%, 17%)",
+                            : colors.surface.default,
                     paddingVertical: 2,
                     paddingHorizontal: 14,
                     borderRadius: 50,

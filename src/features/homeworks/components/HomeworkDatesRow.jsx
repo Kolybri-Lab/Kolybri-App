@@ -43,7 +43,7 @@ export const HomeworkDateItem = memo(
                             backgroundColor: colors.surface.default,
                             borderRadius: 16,
                             borderWidth: allTasksCompleted ? 1.5 : 0,
-                            borderColor: "#129e43",
+                            borderColor: colors.state.success,
                         },
                         animatedStyle,
                     ]}
@@ -54,7 +54,7 @@ export const HomeworkDateItem = memo(
                         style={{
                             fontSize: 20,
                             fontFamily: "SemiBold",
-                            color: isEvaluation ? "#ff4b4b" : colors.text.primary,
+                            color: isEvaluation ? colors.state.warning : colors.text.primary,
                         }}
                     >
                         {contracted[1]}
@@ -63,7 +63,7 @@ export const HomeworkDateItem = memo(
                         style={{
                             fontSize: 20,
                             fontFamily: "SemiBold",
-                            color: isEvaluation ? "#ff4b4b" : colors.text.primary,
+                            color: isEvaluation ? colors.state.warning : colors.text.primary,
                             marginTop: -12,
                         }}
                     >

@@ -3,9 +3,6 @@ export { Text } from "./core";
 export { default as Stack } from "./core/Stack";
 
 // layout
-export { default as BottomSheet } from "./layout/BottomSheet";
-export { default as DropDownMenu } from "./layout/DropDownMenu";
-export { default as Onboarding } from "./layout/Onboarding";
 export { default as Screen, default as ScreenStack } from "./layout/ScreenStack";
 export { default as ScrollableStack } from "./layout/ScrollableStack";
 

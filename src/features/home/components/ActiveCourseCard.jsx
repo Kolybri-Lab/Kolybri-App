@@ -149,7 +149,6 @@ export default function ActiveCourseCard() {
     }
 
     const message = nextCourseKnown ? "EN COURS" : "DERNIER COURS CONNU";
-    const color = nextCourseKnown ? colors.brand.primary : "hsla(295, 64%, 71%, 1)";
 
     return (
         <View style={{ width: "100%", gap: 8 }}>

@@ -173,7 +173,7 @@ export default function HomeworksContent() {
                             <Text>
                                 Chouette, vous n'avez pas de devoirs donnés par votre
                                 établissement !
-                                <Text preset="label3" color="grey">
+                                <Text preset="label3" color={colors.text.secondary}>
                                     (annonce immonde a revoir et penser a faire un
                                     compteur de devoir etab et devoirs custom)
                                 </Text>

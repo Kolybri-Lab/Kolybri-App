@@ -3,6 +3,8 @@ import { TouchableOpacity, View } from "react-native";
 import { Text as CoreText } from "@/components/core";
 const Text = CoreText as any;
 import { formatGradeText } from "@/features/grades/utils/helpers";
+import { useTheme } from "@/hooks/useThemeStore";
+import { withAlpha } from "@/themes/color";
 import Grade from "../models/Grade";
 
 interface SimulatedGradeItemProps {
@@ -14,6 +16,8 @@ export default function SimulatedGradeItem({
     grade,
     dispatch,
 }: SimulatedGradeItemProps) {
+    const { colors } = useTheme();
+
     return (
         <TouchableOpacity
             activeOpacity={0.7}
@@ -22,11 +26,11 @@ export default function SimulatedGradeItem({
                 marginHorizontal: 20,
                 justifyContent: "space-between",
                 alignItems: "center",
-                backgroundColor: "hsla(206, 60%, 28%, 0.4)",
+                backgroundColor: withAlpha(colors.brand.primary, 0.15),
                 paddingHorizontal: 14,
                 paddingVertical: 8,
                 borderRadius: 10,
-                borderColor: "hsl(206, 60%, 48%)",
+                borderColor: colors.brand.primary,
                 borderWidth: 1,
             }}
             onPress={() => {

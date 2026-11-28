@@ -117,9 +117,9 @@ export default function DisciplineItem({
         { label: "Min", value: discipline.averageDatas?.minAverage },
     ];
 
-    const mainColor = colors?.surface?.default ?? "hsla(240, 11%, 20%, 1.00)";
-    const secondaryColor = colors?.surface?.default ?? "hsl(240, 27%, 16%)";
-    const txt1Color = colors?.text?.primary ?? colors?.text?.primary ?? "#FFFFFF";
+    const mainColor = colors.surface.default;
+    const secondaryColor = colors.surface.default;
+    const txt1Color = colors.text.primary;
 
     const boxStyle = {
         backgroundColor: withAlpha(mainColor, 0.3),
@@ -180,6 +180,7 @@ export default function DisciplineItem({
                             />
                             <Text
                                 align="center"
+                                // White text over the orange/gray flame SVG
                                 color={"white"}
                                 style={{
                                     marginTop: -43,

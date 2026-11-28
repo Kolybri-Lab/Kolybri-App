@@ -18,6 +18,7 @@ import { parseNumber } from "../utils/averages";
 import { streakDataInjectedIntoGrades } from "../utils/streaks";
 
 
+// Intentional fixed semantic colors for curriculum skill acquisition levels
 const SKILL_LEVELS: Record<string, SkillLevel> = {
     "1": { label: "Non acquis",           color: "hsl(0, 40%, 50%)" },
     "2": { label: "Partiellement acquis", color: "hsl(60, 70%, 40%)" },

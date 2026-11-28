@@ -39,6 +39,7 @@ export default function OverLoader({
         backgroundColor: interpolateColor(
             backgroundProgress.value,
             [0, 1],
+            // Intentional fixed dark overlay gradient
             ["rgba(10, 10, 10, 0)", `rgba(10, 10, 10, ${bgOpacityValue})`]
         ),
     }));

@@ -55,7 +55,7 @@ export default function Switch({ value, onValueChange }) {
                             width: 22,
                             height: 22,
                             borderRadius: 50,
-                            backgroundColor: "white",
+                            backgroundColor: colors.text.onBrand,
                         },
                         thumbStyle,
                     ]}

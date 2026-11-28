@@ -121,18 +121,16 @@ export default function HomeworkCard({
                                 style={{
                                     paddingTop: 1,
                                     paddingHorizontal: 8,
-                                    borderWidth: 1,
-                                    borderRadius: 7,
-                                    borderColor: withAlpha("#F87171", 0.2),
-                                    backgroundColor: withAlpha("#F87171", 0.12),
+                                    borderRadius: 10,
+                                    backgroundColor: colors.brand.primary,
                                     flexShrink: 0,
                                 }}
                             >
                                 <Text
                                     style={{
-                                        color: "#F87171",
+                                        color: colors.text.onBrand,
                                         fontSize: 14,
-                                        fontFamily: "Medium",
+                                        fontFamily: "SemiBold",
                                     }}
                                 >
                                     Contrôle
@@ -249,7 +247,7 @@ export default function HomeworkCard({
                                 style={{ margin: -2 }}
                                 hitSlop={8}
                             >
-                                <Trash2 size={20} color="#F87171" />
+                                <Trash2 size={20} color={colors.state.warning} />
                             </TouchableOpacity>
                         )}
                     </Animated.View>

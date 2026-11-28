@@ -47,7 +47,7 @@ const File = memo(({ item, progress, colors, onOpen, onDownload }) => {
                         top: 0,
                         bottom: 0,
                         width: `${progress}%`,
-                        backgroundColor: "hsla(122, 39%, 49%, 0.40)",
+                        backgroundColor: withAlpha(themeColors.state.success, 0.4),
                         borderRadius: 9,
                     }}
                 />
@@ -118,10 +118,10 @@ export default function MessagingDetails({ route }) {
         () => ({
             u: { textDecorationLine: "underline" },
             i: { fontStyle: "italic" },
-            a: { textDecorationLine: "underline", color: "hsl(207, 77%, 51%)" },
+            a: { textDecorationLine: "underline", color: colors.brand.primary },
             strong: { fontWeight: 700 },
         }),
-        []
+        [colors.brand.primary]
     );
 
     const baseStyle = useMemo(
@@ -233,7 +233,7 @@ export default function MessagingDetails({ route }) {
                                     flexShrink: 0,
                                 }}
                             >
-                                <Text preset="label1" style={{ color: "white" }}>
+                                <Text preset="label1" color={colors.text.onBrand}>
                                     {sender.initials ?? "??"}
                                 </Text>
                             </View>

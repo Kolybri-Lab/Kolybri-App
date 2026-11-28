@@ -204,7 +204,7 @@ export default function FeedbackScreen({ route }) {
                             });
                         }}
                         style={{
-                            backgroundColor: "#7C83EB",
+                            backgroundColor: colors.brand.primary,
                             paddingVertical: 14,
                             paddingHorizontal: 28,
                             borderRadius: 14,
@@ -212,7 +212,9 @@ export default function FeedbackScreen({ route }) {
                             marginTop: 16,
                         }}
                     >
-                        <Text preset="label1">Retour aux paramètres</Text>
+                        <Text preset="label1" color={colors.text.onBrand}>
+                            Retour aux paramètres
+                        </Text>
                     </Pressable>
                 </SafeAreaView>
             </SettingSectionLayout>
@@ -277,7 +279,7 @@ export default function FeedbackScreen({ route }) {
                         }}
                     >
                         <Text preset="label1">Titre</Text>
-                        <Text preset="title1" color="hsl(236, 74%, 70%)">
+                        <Text preset="title1" color={colors.brand.primary}>
                             *
                         </Text>
                     </View>
@@ -320,7 +322,7 @@ export default function FeedbackScreen({ route }) {
                         }}
                     >
                         <Text preset="label1">Votre message</Text>
-                        <Text preset="title1" color="hsl(236, 74%, 70%)">
+                        <Text preset="title1" color={colors.brand.primary}>
                             *
                         </Text>
                     </View>
@@ -370,7 +372,7 @@ export default function FeedbackScreen({ route }) {
                 <View
                     style={{
                         height: 2,
-                        backgroundColor: "hsla(0, 0%, 100%, .3)",
+                        backgroundColor: colors.border.subtle,
                         marginVertical: 10,
                     }}
                 />
@@ -410,7 +412,7 @@ export default function FeedbackScreen({ route }) {
                             />
                         ))}
                     </View>
-                    {error && <Text color="hsl(5, 33%, 52%)">{error}</Text>}
+                    {error && <Text color={colors.state.warning}>{error}</Text>}
                     <Pressable
                         onPress={sendFeedback}
                         disabled={isSending}
